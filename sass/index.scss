@@ -86,6 +86,7 @@ h1 {
   text-align: center;
   top: 0;
   width: 100%;
+
   a {
     color: invert($accent-color);
     font-weight: bold;
@@ -93,6 +94,11 @@ h1 {
     display: block;
     text-decoration: none;
     width: 25%;
+    @extend %transition-s;
+    &:hover {
+      color: $accent-color-3;
+      @extend %transition-s;
+    }
   }
 }
 
