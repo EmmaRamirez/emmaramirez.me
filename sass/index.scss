@@ -1,9 +1,104 @@
 // this is the index :]
+@import "_normalize.scss";
 @import url(https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700italic,700);
-$main-color: #eee;
-$text-color: #222;
+$main-color: #efefef;
+$accent-color: #222;
+
+:root {
+  //font-size: 10px;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body, html {
+  min-height: 100%;
+}
 
 body {
   background: $main-color;
+  //background: linear-gradient(to bottom, $main-color, white);
+  color: $accent-color;
   font-family: "PT Sans", Arial;
+}
+
+header {
+  padding: 1rem;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 2.5rem;
+  font-size: 4rem;
+}
+
+.header__link {
+  color: $accent-color;
+  text-decoration: none;
+}
+
+.header__links {
+  align-content: space-around;
+  align-items: center;
+  display: flex;
+  flex-flow: row;
+
+  padding: 1rem;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 100%;
+  a {
+    color: $accent-color;
+    font-weight: bold;
+    align-content: space-around;
+    display: block;
+    text-decoration: none;
+    width: 25%;
+  }
+}
+
+header, main, footer {
+  margin: 0 auto;
+  position: relative;
+  width: 60rem;
+}
+
+ul {
+  list-style-type: none;
+
+}
+
+
+
+main {
+
+}
+
+footer {
+  height: 10rem;
+}
+
+
+
+
+
+
+
+.post {
+  padding: 2rem;
+  h2 {
+    font-size: 2em;
+  }
+  p {
+    font-size: 1.25em;
+    line-height: 1.2;
+  }
+  &.featured {
+    font-size: 140%;
+
+  }
 }
