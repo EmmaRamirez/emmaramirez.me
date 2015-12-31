@@ -1,8 +1,25 @@
 // this is the index :]
 @import "_normalize.scss";
 @import url(https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700italic,700);
-$main-color: #efefef;
+$main-color: #131A1C;
+$main-color: #F5F3ED;
+
+$accent-color: #eee;
 $accent-color: #222;
+
+$accent-color-2: #222;
+$link-color: white;
+
+
+$accent-color-3: #E32967;
+$accent-color-4: #E329DD;
+
+%transition-s {
+  transition: 250ms all ease-in;
+}
+%transition-m {
+  transition: 500ms all ease-in;
+}
 
 :root {
   //font-size: 10px;
@@ -20,14 +37,32 @@ body, html {
 
 body {
   background: $main-color;
-  //background: linear-gradient(to bottom, $main-color, white);
+  background: linear-gradient(to bottom, $accent-color-3, $accent-color-4);
   color: $accent-color;
   font-family: "PT Sans", Arial;
+  &::before {
+    background: $accent-color-2;
+    content: '';
+    display: block;
+    height: .5rem;
+    width: 100%;
+  }
 }
 
 header {
+  color: invert($accent-color);
+  height: 20rem;
   padding: 1rem;
   text-align: center;
+  z-index: 1;
+}
+
+iframe {
+  left: 0;
+  position: absolute;
+  top: -3rem;
+  width: 100%;
+  z-index: 0;
 }
 
 h1 {
@@ -36,7 +71,7 @@ h1 {
 }
 
 .header__link {
-  color: $accent-color;
+  color: invert($accent-color);
   text-decoration: none;
 }
 
@@ -52,7 +87,7 @@ h1 {
   top: 0;
   width: 100%;
   a {
-    color: $accent-color;
+    color: invert($accent-color);
     font-weight: bold;
     align-content: space-around;
     display: block;
@@ -61,7 +96,7 @@ h1 {
   }
 }
 
-header, main, footer {
+header, footer {
   margin: 0 auto;
   position: relative;
   width: 60rem;
@@ -75,21 +110,29 @@ ul {
 
 
 main {
-
+  //background: white;
 }
 
 footer {
   height: 10rem;
 }
-
-
-
-
-
-
-
-.post {
+main {
+  width: 100%;
+}
+.posts {
+  flex-flow: wrap;
+  align-content: space-between;
+  display: flex;
   padding: 2rem;
+}
+.post {
+  background: white;
+  border-radius: 4px;
+  margin: .5rem;
+  padding: 2rem;
+  position: relative;
+  width: calc(20% - 1rem);
+  @extend %transition-s;
   h2 {
     font-size: 2em;
   }
@@ -98,7 +141,24 @@ footer {
     line-height: 1.2;
   }
   &.featured {
+    //border-left: 4px solid $accent-color-2;
     font-size: 140%;
 
   }
+  &:hover {
+    //background: white;
+    @extend %transition-s;
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+///
