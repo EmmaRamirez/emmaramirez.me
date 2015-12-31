@@ -1,1 +1,9 @@
 // this is the index :]
+@import url(https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700italic,700);
+$main-color: #eee;
+$text-color: #222;
+
+body {
+  background: $main-color;
+  font-family: "PT Sans", Arial;
+}
