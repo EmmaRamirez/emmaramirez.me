@@ -11,8 +11,8 @@ $accent-color-2: #222;
 $link-color: white;
 
 
-$accent-color-3: #E32967;
-$accent-color-4: #E329DD;
+$accent-color-3: #eee;
+$accent-color-4: #29307D;
 
 %transition-s {
   transition: 250ms all ease-in;
@@ -37,7 +37,7 @@ body, html {
 
 body {
   background: $main-color;
-  background: linear-gradient(to bottom, $accent-color-3, $accent-color-4);
+  //background: linear-gradient(to bottom, $accent-color-3, $accent-color-4);
   color: $accent-color;
   font-family: "PT Sans", Arial;
   &::before {
@@ -50,8 +50,8 @@ body {
 }
 
 header {
+  background: $accent-color;
   color: invert($accent-color);
-  height: 20rem;
   padding: 1rem;
   text-align: center;
   z-index: 1;
@@ -117,6 +117,7 @@ ul {
 
 main {
   //background: white;
+
 }
 
 footer {
@@ -126,18 +127,23 @@ main {
   width: 100%;
 }
 .posts {
-  flex-flow: wrap;
-  align-content: space-between;
-  display: flex;
+  //background: $accent-color-2;
+  // flex-flow: wrap;
+  // align-content: space-between;
+  // display: flex;
+
   padding: 2rem;
+  margin: 0 auto;
+  width: 60rem;
 }
 .post {
   background: white;
-  border-radius: 4px;
+  border: 1px solid transparent;
+  //border-radius: 4px;
   margin: .5rem;
   padding: 2rem;
   position: relative;
-  width: calc(20% - 1rem);
+  //width: calc(20% - 1rem);
   @extend %transition-s;
   h2 {
     font-size: 2em;
@@ -149,15 +155,32 @@ main {
   &.featured {
     //border-left: 4px solid $accent-color-2;
     font-size: 140%;
-
+    margin-left: -1rem;
+    width: calc(100% + 2rem);
   }
   &:hover {
     //background: white;
+    border: 1px solid darken($main-color, 15%);
     @extend %transition-s;
   }
 }
 
+.tag {
+  $n: 10;
+  //background: $accent-color-4;
+  color: $main-color;
+  display: inline-block;
+  margin: .5rem .25rem .25rem 0;
+  font-size: .8em;
+  padding: .25rem;
+  @for $i from 1 through $n {
+    &:nth-of-type(#{$i}) {
 
+      //background: hsl((360 / $i), 60%, 40%);
+      background: rgb(80, 120, (255 / $i) + 100);
+    }
+  }
+}
 
 
 
