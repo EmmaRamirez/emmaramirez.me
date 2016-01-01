@@ -1,6 +1,8 @@
 // this is the index :]
 @import "_normalize.scss";
 @import url(https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700italic,700);
+
+$alpha-black: rgba(0, 0, 0, 0.6);
 $main-color: #131A1C;
 $main-color: #F5F3ED;
 
@@ -37,16 +39,20 @@ body, html {
 
 body {
   background: $main-color;
+  background-image: linear-gradient($alpha-black, $alpha-black), url('https://images.unsplash.com/photo-1449168013943-3a15804bb41c?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=1958d4bfb59a246c6092ff0daabd284b');
+  background-size: cover;
+  //border: .5rem solid $accent-color-2;
   //background: linear-gradient(to bottom, $accent-color-3, $accent-color-4);
   color: $accent-color;
   font-family: "PT Sans", Arial;
-  &::before {
-    background: $accent-color-2;
-    content: '';
-    display: block;
-    height: .5rem;
-    width: 100%;
-  }
+  // &::before {
+  //   background: $accent-color-2;
+  //   content: '';
+  //   display: block;
+  //   height: .5rem;
+  //   width: 100%;
+  // }
+  overflow-x: hidden;
 }
 
 header {
@@ -57,12 +63,14 @@ header {
   z-index: 1;
 }
 
-iframe {
-  left: 0;
-  position: absolute;
-  top: -3rem;
-  width: 100%;
-  z-index: 0;
+.sidebar {
+  background: $accent-color;
+  color: invert($accent-color);
+  height: 100%;
+  padding: 1rem;
+  position: fixed;
+  text-align: center;
+  width: 30vw;
 }
 
 h1 {
@@ -70,12 +78,12 @@ h1 {
   font-size: 4rem;
 }
 
-.header__link {
+.sidebar__heading {
   color: invert($accent-color);
   text-decoration: none;
 }
 
-.header__links {
+.sidebar__links {
   align-content: space-around;
   align-items: center;
   display: flex;
@@ -117,7 +125,7 @@ ul {
 
 main {
   //background: white;
-
+  margin-left: 15vw;
 }
 
 footer {
@@ -138,7 +146,7 @@ main {
 }
 .post {
   background: white;
-  border: 1px solid transparent;
+  //border: 1px solid transparent;
   //border-radius: 4px;
   margin: .5rem;
   padding: 2rem;
@@ -160,7 +168,7 @@ main {
   }
   &:hover {
     //background: white;
-    border: 1px solid darken($main-color, 15%);
+    //border: 1px solid darken($main-color, 15%);
     @extend %transition-s;
   }
 }
