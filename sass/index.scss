@@ -39,9 +39,9 @@ body, html {
 
 body {
   background: $main-color;
-  background-attachment: fixed;
-  background-image: linear-gradient($alpha-black, $alpha-black), url('https://images.unsplash.com/photo-1449168013943-3a15804bb41c?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=1958d4bfb59a246c6092ff0daabd284b');
-  background-size: cover;
+  // background-attachment: fixed;
+  // background-image: linear-gradient($alpha-black, $alpha-black), url('https://images.unsplash.com/photo-1449168013943-3a15804bb41c?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=1958d4bfb59a246c6092ff0daabd284b');
+  // background-size: cover;
   //border: .5rem solid $accent-color-2;
   //background: linear-gradient(to bottom, $accent-color-3, $accent-color-4);
   color: $accent-color;
@@ -65,7 +65,7 @@ header {
 }
 
 .sidebar {
-  background: $accent-color;
+  background: $alpha-black;
   color: invert($accent-color);
   height: 100%;
   padding: 1rem;
@@ -79,22 +79,22 @@ h1 {
   font-size: 4rem;
 }
 
-.sidebar__heading {
+header > a {
   color: invert($accent-color);
   text-decoration: none;
 }
 
-.sidebar__links {
+.header__links {
   align-content: space-around;
   align-items: center;
   display: flex;
   flex-flow: row;
-
+  margin-left: 15%;
   padding: 1rem;
   position: absolute;
   text-align: center;
   top: 0;
-  width: 100%;
+  width: 70%;
 
   a {
     color: invert($accent-color);
@@ -114,7 +114,7 @@ h1 {
 header, footer {
   margin: 0 auto;
   position: relative;
-  width: 60rem;
+  //width: 60rem;
 }
 
 ul {
@@ -126,7 +126,7 @@ ul {
 
 main {
   //background: white;
-  margin-left: 15vw;
+  //margin-left: 15vw;
 }
 
 footer {
