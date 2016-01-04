@@ -1,41 +1,8 @@
 {
-  "name": "emmaramirez.me",
-  "version": "0.0.1",
-  "description": "my website :)",
-  "main": "index.js",
-  "scripts": {
-    "build": "babel src -d lib"
+  "dependencies": {
+    "moment": "2.3.x",
+    "underscore": "1.4.x",
+    "typogr": "0.5.x"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EmmaRamirez/emmaramirez.me.git"
-  },
-  "keywords": [
-    "emma",
-    "blog"
-  ],
-  "author": "Emma Ramirez",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/EmmaRamirez/emmaramirez.me/issues"
-  },
-  "homepage": "https://github.com/EmmaRamirez/emmaramirez.me#readme",
-  "devDependencies": {
-    "babel-cli": "^6.3.17",
-    "babel-preset-es2015": "^6.3.13",
-    "browser-sync": "^2.10.1",
-    "gulp": "^3.9.0",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-babel": "^6.1.1",
-    "gulp-sass": "^2.1.1",
-    "gulp-sourcemaps": "^1.6.0"
-  },
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
-  },
-  "jshintConfig": {
-    "esnext": "true"
-  }
+  "private": "true"
 }
