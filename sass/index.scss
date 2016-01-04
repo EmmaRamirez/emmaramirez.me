@@ -138,13 +138,13 @@ main {
 }
 .posts {
   //background: $accent-color-2;
-  // flex-flow: wrap;
-  // align-content: space-between;
-  // display: flex;
+  flex-flow: wrap;
+  align-content: space-between;
+  display: flex;
 
   padding: 2rem;
   margin: 0 auto;
-  width: 60rem;
+  width: 80rem;
 }
 .post {
   background: white;
@@ -153,7 +153,7 @@ main {
   margin: .5rem;
   padding: 2rem;
   position: relative;
-  //width: calc(20% - 1rem);
+  width: calc(50% - 1rem);
   @extend %transition-s;
   h2 {
     font-size: 2em;
@@ -165,8 +165,8 @@ main {
   &.featured {
     //border-left: 4px solid $accent-color-2;
     font-size: 140%;
-    margin-left: -1rem;
-    width: calc(100% + 2rem);
+
+    width: calc(100%);
   }
   &:hover {
     //background: white;
