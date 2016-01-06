@@ -3,8 +3,16 @@
     font-size: 2rem;
     padding: 2rem;
     header {
-      @extend %reset-link;
-      
+      a {
+        @extend %reset-link;
+        &:hover {
+          color: tomato;
+        }
+      }
+
+    }
+    .date {
+      font-style: italic;
     }
     .content {
       display: none;
