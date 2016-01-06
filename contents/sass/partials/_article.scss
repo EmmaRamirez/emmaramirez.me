@@ -1,0 +1,13 @@
+.article {
+  &.intro {
+    font-size: 2rem;
+    padding: 2rem;
+    header {
+      @extend %reset-link;
+      
+    }
+    .content {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+.header {
+  background: #222;
+  padding: 2vw;
+  width: 100%;
+  a {
+    @extend %reset-link;
+    color: #eee;
+  }
+}
