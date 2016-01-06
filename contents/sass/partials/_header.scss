@@ -1,13 +1,36 @@
 .header {
   background: #222;
   border-bottom: 1px solid #333;
-  letter-spacing: .5rem;
+
   padding: 2vw;
-  text-transform: uppercase;
+
 
   width: 100%;
   a {
     @extend %reset-link;
     color: #eee;
+  }
+}
+
+.header-link {
+  letter-spacing: .5rem;
+  text-transform: uppercase;
+}
+
+.header-link, .header-link-group {
+  display: inline-block;
+}
+
+.header-link-group {
+  a, a:hover {
+    @extend %transition-s;
+  }
+  a {
+    display: inline-block;
+    margin: 0 .5rem;
+    padding: .5rem;
+    &:hover {
+      background: tomato;
+    }
   }
 }
