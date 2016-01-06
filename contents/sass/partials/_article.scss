@@ -9,7 +9,10 @@
           color: tomato;
         }
       }
+      &:hover {
+        //background: #eee;
 
+      }
     }
     .date {
       font-style: italic;
@@ -17,5 +20,21 @@
     .content {
       display: none;
     }
+  }
+}
+
+
+.article-detail {
+  .content {
+    font-size: 1.8rem;
+    line-height: 1.4;
+    margin: 0 auto;
+    width: 80rem;
+    p {
+      margin-top: 1rem;
+    }
+  }
+  code {
+    font-size: 1.2rem;
   }
 }
