@@ -26,12 +26,17 @@
     @extend %transition-s;
   }
   a {
-    border-radius: 4px;
+    //border-radius: 4px;
     display: inline-block;
     margin: 0 .5rem;
     padding: .5rem;
+    -webkit-clip-path: polygon(7% 15%, 93% 0, 97% 89%, 1% 100%);
+clip-path: polygon(7% 15%, 93% 0, 97% 89%, 1% 100%);
+
     &:hover {
       background: tomato;
+      -webkit-clip-path: polygon(7% 6%, 94% 12%, 100% 95%, 5% 89%);
+      clip-path: polygon(7% 6%, 94% 12%, 100% 95%, 5% 89%);
     }
   }
 }

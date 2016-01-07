@@ -3,7 +3,10 @@
     font-size: 2rem;
     padding: 2rem;
     header {
-      a {
+      h2 {
+        //display: inline-block;
+      }
+      h2 a {
         @extend %reset-link;
         &:hover {
           color: tomato;

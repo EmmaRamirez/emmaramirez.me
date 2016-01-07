@@ -16,6 +16,9 @@ block header
   p.author
     | #{ 'Written by ' }
     mixin author(page.metadata.author)
+  - var tags = env.helpers.getTagsFromArticle(page)
+  //- each tag in tags
+  //-   a.big-tag(href=env.helpers.getTagHome(tag).url)= tag
 
 block content
   article.article
@@ -23,4 +26,4 @@ block content
 
 block prepend footer
   div.nav
-    a(href=contents.index.url) « Full blog
+    a(href=contents.index.url) « Home
