@@ -11,7 +11,7 @@
 }
 
 .tomorrow-orange, pre .number, pre .preprocessor, pre .built_in, pre .literal, pre .params, pre .constant {
-  color: #de935f;
+  color: #e4b741;
 }
 
 .tomorrow-yellow, pre .class, pre .ruby .class .title, pre .css .rules .attribute {
@@ -19,7 +19,7 @@
 }
 
 .tomorrow-green, pre .string, pre .value, pre .inheritance, pre .header, pre .ruby .symbol, pre .xml .cdata {
-  color: #b5bd68;
+  color: #aadf53;
 }
 
 .tomorrow-aqua, pre .css .hexcolor {
@@ -31,15 +31,14 @@
 }
 
 .tomorrow-purple, pre .keyword, pre .javascript .function {
-  color: #b294bb;
+  color: #3bc2cb;
 }
 
 pre code {
   display: block;
-  background: #1d1f21;
+  background: #161a1d;
   color: #c5c8c6;
   font-family: Menlo, Monaco, Consolas, monospace;
   line-height: 1.5;
-  border: 1px solid #ccc;
   padding: 10px;
 }
