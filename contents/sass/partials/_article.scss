@@ -55,6 +55,13 @@
     h1:not(.article-heading) {
       font-size: 2rem;
     }
+    blockquote {
+      color: #222;
+      font-size: 1.45rem;
+      font-style: italic;
+      font-weight: bold;
+      line-height: 1.8;
+    }
   }
   code {
     font-size: 1rem;
