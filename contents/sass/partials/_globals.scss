@@ -2,4 +2,7 @@ body {
   background: #FFFBF4;
   font-family: 'Lato', sans-serif;
   min-height: 100%;
+  &.article-detail {
+    background: #fff;
+  }
 }

@@ -30,7 +30,3 @@ block content
       | #{ ' by ' }
       mixin author(page.metadata.author)
     section.content!= typogr(page.html).typogrify()
-
-block prepend footer
-  div.nav
-    a(href=contents.index.url) « Home
