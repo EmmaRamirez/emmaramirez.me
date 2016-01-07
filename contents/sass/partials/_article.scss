@@ -33,6 +33,15 @@
     margin: 1.5rem;
     text-align: center;
   }
+  .byline {
+    color: #ccc;
+    font-size: 1.125rem;
+    font-style: italic;
+    text-align: center;
+    a {
+      @extend %reset-link;
+    }
+  }
   .content {
     font-family: 'Droid Serif', serif;
     font-size: 1.3125rem;
@@ -48,17 +57,21 @@
     }
   }
   code {
-    font-size: 1.2rem;
+    font-size: 1rem;
     position: relative;
-    &::before {
-      background: #eee;
-      color: #222;
-
-      content: attr(class);
-      display: block;
-      font-size: .85rem;
-
-      position: absolute;
-    }
+    // &::before {
+    //   background: #eee;
+    //   bottom: 100%;
+    //   color: #222;
+    //
+    //   content: attr(lang);
+    //   display: block;
+    //   font-size: .85rem;
+    //   left: 0%;
+    //
+    //   position: absolute;
+    //
+    //   width: 100%;
+    // }
   }
 }
