@@ -1,4 +1,1 @@
-
-# Blog
-
-The default [wintersmith](https://github.com/jnordberg/wintersmith) template
+This is my blog. Major WIP here. Check out gh-pages branches for the online version.

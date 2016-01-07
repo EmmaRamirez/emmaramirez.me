@@ -1,8 +1,6 @@
 body {
-  background: #FFFBF4;
+  background: $body-color;
+  //color: #eee;
   font-family: 'Lato', sans-serif;
   min-height: 100%;
-  &.article-detail {
-    background: #fff;
-  }
 }
