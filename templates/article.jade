@@ -21,8 +21,14 @@ block prepend title
 //-   //-   a.big-tag(href=env.helpers.getTagHome(tag).url)= tag
 
 block content
+  include author
   article.article
     h1.article-heading= page.title
+    p.byline 
+      | #{ 'Written on ' }
+      span= moment.utc(page.date).format('MMMM DD, YYYY')
+      | #{ ' by ' }
+      mixin author(page.metadata.author)
     section.content!= typogr(page.html).typogrify()
 
 block prepend footer
