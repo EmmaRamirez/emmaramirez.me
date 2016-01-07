@@ -23,9 +23,5 @@
   },
   "paginator": {
     "perPage": 10
-  },
-  "tag": {
-    "template": "tag-index.jade",
-    "perPage": 4
   }
 }

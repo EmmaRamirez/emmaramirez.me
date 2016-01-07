@@ -10,18 +10,19 @@ block prepend head
 block prepend title
   | #{ page.title + ' - '}
 
-block header
-  include author
-  h1= page.title
-  p.author
-    | #{ 'Written by ' }
-    mixin author(page.metadata.author)
-  - var tags = env.helpers.getTagsFromArticle(page)
-  //- each tag in tags
-  //-   a.big-tag(href=env.helpers.getTagHome(tag).url)= tag
+//- block header
+//-   include author
+//-   //h1= page.title
+//-   p.author
+//-     | #{ 'Written by ' }
+//-     mixin author(page.metadata.author)
+//-   - var tags = env.helpers.getTagsFromArticle(page)
+//-   //- each tag in tags
+//-   //-   a.big-tag(href=env.helpers.getTagHome(tag).url)= tag
 
 block content
   article.article
+    h1.article-heading= page.title
     section.content!= typogr(page.html).typogrify()
 
 block prepend footer
