@@ -1,1 +1,0 @@
-{"version":3,"sources":["index.js"],"names":[],"mappings":";;AAAA,IAAM,KAAK,GAAG,OAAO,CAAC;;AAEtB,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC","file":"index.js","sourcesContent":["const hello = 'Hello';\r\n\r\nconsole.log(hello);\r\n"],"sourceRoot":"/source/"}
