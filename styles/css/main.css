@@ -222,12 +222,15 @@ a {
   flex-basis: 20%;
 }
 .site-nav .nav-item-link {
+  color: #446056;
   display: block;
   padding: 1vw;
   text-align: center;
+  transition: 250ms all;
 }
 .site-nav .nav-item-link:hover {
   background: #d6cdb6;
+  transition: 250ms all;
 }
 .site-content {
   margin: 8vh auto;
@@ -269,7 +272,9 @@ a {
   line-height: 1.4;
   text-align: center;
 }
-.site-footer,
+.site-footer {
+  margin: 5vw;
+}
 .site-portrait {
   background-blend-mode: luminosity;
   background-image: url("../../img/pineapple.jpg"), linear-gradient(#699484, #e6e0d2);
@@ -279,8 +284,16 @@ a {
   width: 6rem;
   transition: 250ms all;
 }
-.site-footer:hover,
 .site-portrait:hover {
   background-blend-mode: normal;
   transition: 250ms all;
+}
+.site-bg-canvas {
+  background: #e6e0d2;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: -1;
 }
