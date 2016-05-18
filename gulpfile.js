@@ -1,22 +1,11 @@
 var gulp = require('gulp'),
-    watch = require('gulp-watch'),
     stylus = require('gulp-stylus'),
-    marked = require('marked'),
-    pug = require('pug'),
-    pugFilters = require('pug-filters'),
-    gulpPug = require('gulp-pug'),
-    jstransformer = require('jstransformer'),
-    jstransformerMarked = require('jstransformer-marked'),
     typescript = require('gulp-typescript'),
     concat = require('gulp-concat'),
     tsProject = typescript.createProject('tsconfig.json'),
-    sourcemaps = require('gulp-sourcemaps');
+    sourcemaps = require('gulp-sourcemaps'),
+    server = require('gulp-server-livereload');
 
-// pug.filters.markdown = function (str, option) {
-//   return marked(str, options);
-// };
-
-//jstransformer(jstransformerMarked);
 
 gulp.task('stylus', function () {
   return gulp.src('./styles/styl/main.styl')
@@ -27,18 +16,9 @@ gulp.task('stylus', function () {
           .pipe(gulp.dest('./styles/css/'));
 });
 
-gulp.task('html', function () {
-  return gulp.src('./articles/**/*.pug')
-          //.pipe(watch('./articles/**/*.pug'))
-          .pipe(gulpPug({
-            pug: pug
-          }))
-          .pipe(gulp.dest('./articles/'));
-});
-
 gulp.task('scripts', function () {
   var typescriptResult = tsProject.src()
-      .pipe(watch('./lib/*.ts'))
+      //.pipe(watch('./lib/*.ts'))
       .pipe(typescript(tsProject))
       .pipe(sourcemaps.init())
       .pipe(typescript({
@@ -47,7 +27,14 @@ gulp.task('scripts', function () {
   return typescriptResult.js.pipe(concat('bundle.js'))
                             .pipe(sourcemaps.write())
                             .pipe(gulp.dest('dist/js'));
-})
+});
 
-
-gulp.task('default', ['stylus', 'html', 'scripts']);
+gulp.task('webserver', function () {
+  gulp.src('.')
+    .pipe(server({
+      defaultFile: 'index.html',
+      livereload: true,
+      directoryListing: true,
+      open: true
+    }));
+});
