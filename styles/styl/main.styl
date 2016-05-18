@@ -45,9 +45,12 @@ t = transparent;
     font-size: 1.8rem;
     letter-spacing: 4px;
     text-align: center;
+    text-shadow: -1px 1px 0 t;
     text-transform: uppercase;
+    {transition-s}
     &:hover
       color: darken(b, 10%);
+      text-shadow: -1px 1px 0 a;
       {transition-s}
   .article-date
     color: b;
@@ -63,8 +66,13 @@ t = transparent;
 .site-footer
 
 .site-portrait
-  background-image: url('../../img/pineapple.jpg');
+  background-blend-mode: luminosity;
+  background-image: url('../../img/pineapple.jpg'), linear-gradient(b, a);
   background-size: cover;
   height: 6rem;
   margin: 0 auto;
   width: 6rem;
+  {transition-s}
+  &:hover
+    background-blend-mode: normal;
+    {transition-s}

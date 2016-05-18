@@ -226,10 +226,13 @@ a {
   font-size: 1.8rem;
   letter-spacing: 4px;
   text-align: center;
+  text-shadow: -1px 1px 0 transparent;
   text-transform: uppercase;
+  transition: 250ms all;
 }
 .site-article .article-heading:hover {
   color: #5e8577;
+  text-shadow: -1px 1px 0 #e6e0d2;
   transition: 250ms all;
 }
 .site-article .article-date {
@@ -246,9 +249,16 @@ a {
 }
 .site-footer,
 .site-portrait {
-  background-image: url("../../img/pineapple.jpg");
+  background-blend-mode: luminosity;
+  background-image: url("../../img/pineapple.jpg"), linear-gradient(#699484, #e6e0d2);
   background-size: cover;
   height: 6rem;
   margin: 0 auto;
   width: 6rem;
+  transition: 250ms all;
+}
+.site-footer:hover,
+.site-portrait:hover {
+  background-blend-mode: normal;
+  transition: 250ms all;
 }
