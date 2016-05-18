@@ -4,15 +4,18 @@ import Article = require('./article');
 let articles:Article[] = [
   {
     title: 'Intro to Typescript',
-    description: 'A description of this article.'
+    description: 'A description of this article.',
+    date: ''
   },
   {
     title: 'Using Typescript with Webpack',
-    description: 'Another article of sorts.'
+    description: 'Another article of sorts.',
+    date: ''
   },
   {
     title: 'Mastering Interfaces, Abstracts in Typescript',
-    description: 'This will guide you into using interfaces and abstracts in Typescript.'
+    description: 'This will guide you into using interfaces and abstracts in Typescript.',
+    date: ''
   }
 ];
 
