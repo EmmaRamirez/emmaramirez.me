@@ -25,10 +25,11 @@ function createPosts():string {
   let posts:string = '';
 
   for (let i = 0; i < articles.length; ++i) {
+    let link = 'articles/' + articles[i].title.toLowerCase().replace(/,/g, '').replace(/\s+/g, '-');
     posts += `
     <article class='site-article'>
       <h2 class='article-heading'>
-        <a href='#'>${articles[i].title}</a>
+        <a href='${link}'>${articles[i].title}</a>
       </h2>
       <p class='article-description'>
         ${articles[i].description}
@@ -42,4 +43,8 @@ function addPosts():void {
   content.innerHTML = createPosts();
 }
 
-addPosts();
+function init():void {
+  addPosts();
+}
+
+init();
