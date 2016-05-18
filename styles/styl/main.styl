@@ -1,10 +1,21 @@
 a = rgb(230, 224, 210);
 b = rgb(105, 148, 132);
+c = rgb(105, 148, 166);
+
+body, html {
+  height: 100%;
+  overflow-y: hidden;
+}
 
 body {
-  background: b;
+
   //color: #eee;
   font-family: 'Helvetica', sans-serif;
+}
+
+header {
+  background: b;
+  background: linear-gradient(-45deg, b, c);
 }
 
 h1 {
@@ -12,7 +23,7 @@ h1 {
 
   font-size: 4rem;
   letter-spacing: 5px;
-  margin-top: 10%;
+  //margin-top: 10%;
   text-align: center;
   text-transform: uppercase;
 }
