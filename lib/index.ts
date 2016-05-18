@@ -19,6 +19,12 @@ class Dot {
 
 let articles:Article[] = [
   {
+    title: 'New Site Design!',
+    description: 'A rundown of the new design of my website.',
+    date: '2016-05-18',
+    time: '10:37am'
+  },
+  {
     title: 'Intro to Typescript',
     description: 'A description of this article.',
     date: '2016-05-18',
@@ -50,7 +56,7 @@ function createPosts():string {
   let posts:string = '';
 
   for (let i = 0; i < articles.length; ++i) {
-    let link = 'articles/' + articles[i].title.toLowerCase().replace(/,/g, '').replace(/\s+/g, '-');
+    let link = 'articles/' + articles[i].title.toLowerCase().replace(/!/g, '').replace(/,/g, '').replace(/\s+/g, '-');
     posts += `
     <article class='site-article'>
       <h2 class='article-heading'>

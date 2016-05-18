@@ -1,0 +1,40 @@
+@import 'vars'
+@import 'blocks'
+
+.contains-article
+  .site-article
+    border: none !important;
+    &:hover
+      border: 1px solid t;
+
+.site-article
+  border: 1px solid t;
+  margin: 1vw;
+  padding: 1rem;
+  {transition-s}
+  &:hover
+    //background: a;
+    border: 1px solid b;
+    {transition-s}
+  .article-heading
+    color: b;
+    font-size: 1.8rem;
+    letter-spacing: 4px;
+    text-align: center;
+    text-shadow: -1px 1px 0 t;
+    text-transform: uppercase;
+    {transition-s}
+    &:hover
+      color: darken(b, 10%);
+      text-shadow: -1px 1px 0 a;
+      {transition-s}
+  .article-date
+    color: b;
+    font-size: .9rem;
+    text-align: center;
+  .article-description
+    font-family: 'Slabo 27px';
+    font-size: 1.2rem;
+    font-style: italic;
+    line-height: 1.4;
+    text-align: center;
