@@ -13,6 +13,11 @@ body {
   font-family: 'Helvetica', sans-serif;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 header {
   background: b;
   background: linear-gradient(-45deg, b, c);
@@ -44,10 +49,24 @@ h2 {
   text-align: center;
   text-shadow: -2px 2px 0 b;
   text-transform: uppercase;
+  &:hover {
+    color: b;
+    text-shadow: -2px 2px 0 a;
+  }
 }
 
 footer {
   padding: 2rem;
+}
+
+.tags {
+  .tag {
+    color: b;
+    margin: 0 4px;
+    &:hover {
+      color: darken(b, 15%);
+    }
+  }
 }
 
 .portrait {
@@ -63,7 +82,7 @@ footer {
 
 p {
   //color: a;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin: 2rem auto;
   padding: 1rem;
   text-align: center;

@@ -1,10 +1,11 @@
 {
   "name": "emmaramirez.me",
-  "version": "0.0.1",
-  "description": "my personal website",
+  "version": "0.0.0",
+  "description": "my personal website/blog",
   "main": "index.js",
   "dependencies": {
-    "pug": "^2.0.0-alpha7"
+    "gulp-markdown": "^1.2.0",
+    "gulp-markdown-docs": "^0.1.5"
   },
   "devDependencies": {},
   "scripts": {
@@ -15,9 +16,10 @@
     "url": "git+https://github.com/EmmaRamirez/emmaramirez.me.git"
   },
   "keywords": [
-    "website",
+    "emma",
+    "ramirez",
     "blog",
-    "emma"
+    "website"
   ],
   "author": "Emma Ramirez",
   "license": "MIT",
