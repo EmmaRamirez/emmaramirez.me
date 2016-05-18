@@ -1,8 +1,5 @@
-interface Article {
+export interface Article {
   title: string;
-  description: string;
-  date: string;
-  time: string;
+  link: string;
+  date?: Date;
 }
-
-export = Article;

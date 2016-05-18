@@ -18,6 +18,8 @@
     "pug-filters": "^1.2.1"
   },
   "devDependencies": {
+    "gulp-livereload": "^3.8.1",
+    "gulp-server-livereload": "^1.7.4",
     "jasmine": "^2.0.0"
   },
   "scripts": {
