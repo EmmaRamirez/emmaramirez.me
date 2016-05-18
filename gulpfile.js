@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
     stylus = require('gulp-stylus'),
+    pug = require('gulp-pug'),
     typescript = require('gulp-typescript'),
     concat = require('gulp-concat'),
     tsProject = typescript.createProject('tsconfig.json'),
@@ -11,6 +12,12 @@ gulp.task('stylus', function () {
           .pipe(stylus())
           .pipe(sourcemaps.write('.'))
           .pipe(gulp.dest('./styles/css/'));
+});
+
+gulp.task('html', function () {
+  return gulp.src('./articles/**/*.pug')
+          .pipe(pug())
+          .pipe(gulp.dest('./articles/'));
 });
 
 gulp.task('scripts', function () {
@@ -27,4 +34,4 @@ gulp.task('scripts', function () {
 
 //gulp.task('sroucemaps')
 
-gulp.task('default', ['stylus', 'scripts']);
+gulp.task('default', ['stylus', 'html', 'scripts']);
