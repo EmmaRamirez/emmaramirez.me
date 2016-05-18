@@ -1,75 +1,57 @@
+@import 'normalize'
+@import 'global'
+
 a = rgb(230, 224, 210);
 b = rgb(105, 148, 132);
 c = rgb(105, 148, 166);
 
-body, html {
-  height: 100%;
-  //overflow-y: hidden;
-}
 
-body {
 
-  //color: #eee;
-  font-family: 'Helvetica', sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-header {
+.site-header
   background: b;
   background: linear-gradient(-45deg, b, c);
-}
+  left: 0;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
 
-h1 {
+.site-heading
   color: a;
-
-  font-size: 4rem;
+  font-size: 2rem;
   letter-spacing: 5px;
-  //margin-top: 10%;
+  margin: 0;
   text-align: center;
   text-transform: uppercase;
-}
 
-article {
+article
   border: 4px solid b;
   color: darken(a, 15%);
   margin: 2rem;
   padding: 2rem;
 
-}
-
-h2 {
-
+h2
   font-size: 2rem;
   letter-spacing: 5px;
   //margin-top: 10%;
   text-align: center;
   text-shadow: -2px 2px 0 b;
   text-transform: uppercase;
-  &:hover {
+  &:hover
     color: b;
     text-shadow: -2px 2px 0 a;
-  }
-}
 
-footer {
+footer
   padding: 2rem;
-}
 
-.tags {
-  .tag {
+.tags
+  .tag
     color: b;
     margin: 0 4px;
-    &:hover {
+    &:hover
       color: darken(b, 15%);
-    }
-  }
-}
 
-.portrait {
+.portrait
   background-image: url('../../img/pineapple.jpg');
   background-size: cover;
   border: 4px solid a;
@@ -78,13 +60,11 @@ footer {
   float: left;
   height: 10rem;
   width: 10rem;
-}
 
-p {
+p
   //color: a;
   font-size: 1.25rem;
   margin: 2rem auto;
   padding: 1rem;
   text-align: center;
   max-width: 40rem;
-}
