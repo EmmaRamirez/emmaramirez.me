@@ -6,6 +6,7 @@
 a = rgb(230, 224, 210);
 b = rgb(105, 148, 132);
 c = rgb(105, 148, 166);
+t = transparent;
 
 
 
@@ -31,12 +32,24 @@ c = rgb(105, 148, 166);
   max-width: 60vw;
 
 .site-article
+  border: 1px solid t;
+  margin: 1vw;
+  padding: 1rem;
+  {transition-s}
+  &:hover
+    background: a;
+    border: 1px solid b;
+    {transition-s}
   .article-heading
     color: b;
     font-size: 1.8rem;
     letter-spacing: 4px;
     text-align: center;
     text-transform: uppercase;
+    &:hover
+      color: darken(b, 10%);
+      {transition-s}
   .article-description
     font-size: 1.2rem;
     line-height: 1.4;
+    text-align: center;

@@ -211,6 +211,17 @@ a {
   margin: 8vh auto;
   max-width: 60vw;
 }
+.site-article {
+  border: 1px solid transparent;
+  margin: 1vw;
+  padding: 1rem;
+  transition: 250ms all;
+}
+.site-article:hover {
+  background: #e6e0d2;
+  border: 1px solid #699484;
+  transition: 250ms all;
+}
 .site-article .article-heading {
   color: #699484;
   font-size: 1.8rem;
@@ -218,7 +229,12 @@ a {
   text-align: center;
   text-transform: uppercase;
 }
+.site-article .article-heading:hover {
+  color: #5e8577;
+  transition: 250ms all;
+}
 .site-article .article-description {
   font-size: 1.2rem;
   line-height: 1.4;
+  text-align: center;
 }

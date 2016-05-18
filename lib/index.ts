@@ -1,16 +1,45 @@
 
 import Article = require('./article');
+//import articles = require('./articles');
+
+let articles:Article[] = [
+  {
+    title: 'Intro to Typescript',
+    description: 'A description of this article.'
+  },
+  {
+    title: 'Using Typescript with Webpack',
+    description: 'Another article of sorts.'
+  },
+  {
+    title: 'Mastering Interfaces, Abstracts in Typescript',
+    description: 'This will guide you into using interfaces and abstracts in Typescript.'
+  }
+];
+
 
 // Selectors
 let content:HTMLElement = <HTMLElement>document.querySelector('.site-content');
 
-let articles:Article[] = [
-  {
-    title: 'Hello',
-    description: 'A description of this article.'
-  },
-  {
-    title: 'Goodbye',
-    description: 'Another article of sorts.'
+function createPosts():string {
+  let posts:string = '';
+
+  for (let i = 0; i < articles.length; ++i) {
+    posts += `
+    <article class='site-article'>
+      <h2 class='article-heading'>
+        <a href='#'>${articles[i].title}</a>
+      </h2>
+      <p class='article-description'>
+        ${articles[i].description}
+      </p>
+    </article>`;
   }
-]
+  return posts;
+}
+
+function addPosts():void {
+  content.innerHTML = createPosts();
+}
+
+addPosts();
