@@ -1,14 +1,8 @@
 //@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,700italic,400italic|Slabo+27px);
+@import 'vars'
 @import 'normalize'
 @import 'blocks'
 @import 'global'
-@import 'article'
-
-a = rgb(230, 224, 210);
-b = rgb(105, 148, 132);
-c = rgb(105, 148, 166);
-t = transparent;
-
 
 .site-header
   background: b;
@@ -52,6 +46,38 @@ t = transparent;
 .site-content
   margin: 8vh auto;
   max-width: 60vw;
+
+.site-article
+  border: 1px solid t;
+  margin: 1vw;
+  padding: 1rem;
+  {transition-s}
+  &:hover
+    //background: a;
+    border: 1px solid b;
+    {transition-s}
+  .article-heading
+    color: b;
+    font-size: 1.8rem;
+    letter-spacing: 4px;
+    text-align: center;
+    text-shadow: -1px 1px 0 t;
+    text-transform: uppercase;
+    {transition-s}
+    &:hover
+      color: darken(b, 10%);
+      text-shadow: -1px 1px 0 a;
+      {transition-s}
+  .article-date
+    color: b;
+    font-size: .9rem;
+    text-align: center;
+  .article-description
+    font-family: 'Slabo 27px';
+    font-size: 1.2rem;
+    font-style: italic;
+    line-height: 1.4;
+    text-align: center;
 
 .site-footer
   margin: 5vw;

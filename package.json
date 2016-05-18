@@ -10,13 +10,18 @@
     "gulp-pug": "^3.0.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-stylus": "^2.3.1",
-    "gulp-typescript": "^2.13.4"
+    "gulp-typescript": "^2.13.4",
+    "jstransformer": "0.0.4",
+    "jstransformer-marked": "^1.0.1",
+    "marked": "^0.3.5",
+    "pug-filters": "^1.2.1"
   },
   "devDependencies": {
     "jasmine": "^2.0.0"
   },
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine",
+    "stylus": "-w styles/styl/main.styl -o styles/css/main.css"
   },
   "repository": {
     "type": "git",

@@ -5,8 +5,8 @@ html(lang='en')
     link(href='../../styles/css/main.css', rel='stylesheet')
   body
     include ../_includes/header.pug
-    article.site-article
-      h1.article-heading Intro to Typescript!
-      section.article-intro
-        
+    include ../_includes/article-header.pug
+    +article-header('Intro to Typescript')
+      section.article-content
+        include index.md
     include ../_includes/footer.pug

@@ -1,10 +1,21 @@
 var gulp = require('gulp'),
     stylus = require('gulp-stylus'),
-    pug = require('gulp-pug'),
+    marked = require('marked'),
+    pug = require('pug'),
+    pugFilters = require('pug-filters'),
+    gulpPug = require('gulp-pug'),
+    jstransformer = require('jstransformer'),
+    jstransformerMarked = require('jstransformer-marked'),
     typescript = require('gulp-typescript'),
     concat = require('gulp-concat'),
     tsProject = typescript.createProject('tsconfig.json'),
     sourcemaps = require('gulp-sourcemaps');
+
+// pug.filters.markdown = function (str, option) {
+//   return marked(str, options);
+// };
+
+//jstransformer(jstransformerMarked);
 
 gulp.task('stylus', function () {
   return gulp.src('./styles/styl/main.styl')
@@ -16,7 +27,9 @@ gulp.task('stylus', function () {
 
 gulp.task('html', function () {
   return gulp.src('./articles/**/*.pug')
-          .pipe(pug())
+          .pipe(gulpPug({
+            pug: pug
+          }))
           .pipe(gulp.dest('./articles/'));
 });
 
