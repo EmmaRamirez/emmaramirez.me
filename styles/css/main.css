@@ -190,12 +190,6 @@ a {
   color: inherit;
   text-decoration: none;
 }
-.contains-article .site-article {
-  border: none !important;
-}
-.contains-article .site-article:hover {
-  border: 1px solid transparent;
-}
 .site-article {
   border: 1px solid transparent;
   margin: 1vw;
@@ -203,7 +197,6 @@ a {
   transition: 250ms all;
 }
 .site-article:hover {
-  border: 1px solid #699484;
   transition: 250ms all;
 }
 .site-article .article-heading {
