@@ -244,3 +244,11 @@ a {
   line-height: 1.4;
   text-align: center;
 }
+.site-footer,
+.site-portrait {
+  background-image: url("../../img/pineapple.jpg");
+  background-size: cover;
+  height: 6rem;
+  margin: 0 auto;
+  width: 6rem;
+}
