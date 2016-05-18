@@ -1,7 +1,6 @@
 body,
 html {
   height: 100%;
-  overflow-y: hidden;
 }
 body {
   font-family: 'Helvetica', sans-serif;
@@ -17,18 +16,33 @@ h1 {
   text-align: center;
   text-transform: uppercase;
 }
+article {
+  border: 4px solid #699484;
+  color: #cec3a8;
+  margin: 2rem;
+  padding: 2rem;
+}
+h2 {
+  font-size: 2rem;
+  letter-spacing: 5px;
+  text-align: center;
+  text-shadow: -2px 2px 0 #699484;
+  text-transform: uppercase;
+}
+footer {
+  padding: 2rem;
+}
 .portrait {
   background-image: url("../../img/pineapple.jpg");
   background-size: cover;
   border: 4px solid #e6e0d2;
   border: 4px solid #597e70;
   border-radius: 50%;
-  margin: 0 auto;
-  height: 16rem;
-  width: 16rem;
+  float: left;
+  height: 10rem;
+  width: 10rem;
 }
 p {
-  color: #e6e0d2;
   font-size: 1.5rem;
   margin: 2rem auto;
   padding: 1rem;
