@@ -1,0 +1,30 @@
+body {
+  background: #699484;
+  font-family: 'Helvetica', sans-serif;
+}
+h1 {
+  color: #e6e0d2;
+  font-size: 4rem;
+  letter-spacing: 5px;
+  margin-top: 10%;
+  text-align: center;
+  text-transform: uppercase;
+}
+.portrait {
+  background-image: url("../../img/pineapple.jpg");
+  background-size: cover;
+  border: 4px solid #e6e0d2;
+  border: 4px solid #597e70;
+  border-radius: 50%;
+  margin: 0 auto;
+  height: 16rem;
+  width: 16rem;
+}
+p {
+  color: #e6e0d2;
+  font-size: 1.5rem;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+  max-width: 40rem;
+}
