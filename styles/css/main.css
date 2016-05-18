@@ -218,7 +218,6 @@ a {
   transition: 250ms all;
 }
 .site-article:hover {
-  background: #e6e0d2;
   border: 1px solid #699484;
   transition: 250ms all;
 }
@@ -234,7 +233,9 @@ a {
   transition: 250ms all;
 }
 .site-article .article-description {
+  font-family: 'Slabo 27px';
   font-size: 1.2rem;
+  font-style: italic;
   line-height: 1.4;
   text-align: center;
 }

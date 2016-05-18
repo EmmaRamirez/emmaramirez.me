@@ -1,4 +1,3 @@
-
 import Article = require('./article');
 //import articles = require('./articles');
 
@@ -17,9 +16,13 @@ let articles:Article[] = [
   }
 ];
 
+interface Element {
+  content:HTMLElement;
+}
 
-// Selectors
-let content:HTMLElement = <HTMLElement>document.querySelector('.site-content');
+let elements:Element = {
+  content: <HTMLElement>document.querySelector('.site-content')
+}
 
 function createPosts():string {
   let posts:string = '';
@@ -40,7 +43,7 @@ function createPosts():string {
 }
 
 function addPosts():void {
-  content.innerHTML = createPosts();
+  elements.content.innerHTML = createPosts();
 }
 
 function init():void {
