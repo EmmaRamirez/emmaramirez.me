@@ -195,7 +195,6 @@ a {
   background: linear-gradient(-45deg, #699484, #6994a6);
   left: 0;
   margin: 0;
-  position: fixed;
   top: 0;
   width: 100%;
 }
@@ -204,8 +203,31 @@ a {
   font-size: 2rem;
   letter-spacing: 5px;
   margin: 0;
+  padding: 1vw;
   text-align: center;
   text-transform: uppercase;
+}
+.site-nav {
+  background: #e6e0d2;
+}
+.site-nav .site-nav-items {
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.site-nav .nav-item {
+  flex-basis: 20%;
+}
+.site-nav .nav-item-link {
+  display: block;
+  padding: 1vw;
+  text-align: center;
+}
+.site-nav .nav-item-link:hover {
+  background: #d6cdb6;
 }
 .site-content {
   margin: 8vh auto;
