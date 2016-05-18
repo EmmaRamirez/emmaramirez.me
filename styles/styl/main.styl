@@ -1,3 +1,4 @@
+//@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,700italic,400italic|Slabo+27px);
 @import 'normalize'
 @import 'global'
 
@@ -24,47 +25,17 @@ c = rgb(105, 148, 166);
   text-align: center;
   text-transform: uppercase;
 
-article
-  border: 4px solid b;
-  color: darken(a, 15%);
-  margin: 2rem;
-  padding: 2rem;
+.site-content
+  margin: 8vh auto;
+  max-width: 60vw;
 
-h2
-  font-size: 2rem;
-  letter-spacing: 5px;
-  //margin-top: 10%;
-  text-align: center;
-  text-shadow: -2px 2px 0 b;
-  text-transform: uppercase;
-  &:hover
+.site-article
+  .article-heading
     color: b;
-    text-shadow: -2px 2px 0 a;
-
-footer
-  padding: 2rem;
-
-.tags
-  .tag
-    color: b;
-    margin: 0 4px;
-    &:hover
-      color: darken(b, 15%);
-
-.portrait
-  background-image: url('../../img/pineapple.jpg');
-  background-size: cover;
-  border: 4px solid a;
-  border: 4px solid darken(b, 15%);
-  border-radius: 50%;
-  float: left;
-  height: 10rem;
-  width: 10rem;
-
-p
-  //color: a;
-  font-size: 1.25rem;
-  margin: 2rem auto;
-  padding: 1rem;
-  text-align: center;
-  max-width: 40rem;
+    font-size: 1.8rem;
+    letter-spacing: 4px;
+    text-align: center;
+    text-transform: uppercase;
+  .article-description
+    font-size: 1.2rem;
+    line-height: 1.4;
