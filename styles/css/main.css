@@ -232,6 +232,11 @@ a {
   color: #5e8577;
   transition: 250ms all;
 }
+.site-article .article-date {
+  color: #699484;
+  font-size: 0.9rem;
+  text-align: center;
+}
 .site-article .article-description {
   font-family: 'Slabo 27px';
   font-size: 1.2rem;

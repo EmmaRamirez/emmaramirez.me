@@ -5,17 +5,20 @@ let articles:Article[] = [
   {
     title: 'Intro to Typescript',
     description: 'A description of this article.',
-    date: ''
+    date: '2016-05-18',
+    time: '08:44'
   },
   {
     title: 'Using Typescript with Webpack',
     description: 'Another article of sorts.',
-    date: ''
+    date: '2016-05-18',
+    time: '08:44'
   },
   {
     title: 'Mastering Interfaces, Abstracts in Typescript',
     description: 'This will guide you into using interfaces and abstracts in Typescript.',
-    date: ''
+    date: '2016-05-18',
+    time: '09:22'
   }
 ];
 
@@ -37,6 +40,9 @@ function createPosts():string {
       <h2 class='article-heading'>
         <a href='${link}'>${articles[i].title}</a>
       </h2>
+      <h3 class='article-date'>
+        Posted ${articles[i].date} on ${articles[i].time}am
+      </h3>
       <p class='article-description'>
         ${articles[i].description}
       </p>
