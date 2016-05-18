@@ -7,6 +7,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-markdown": "^1.2.0",
     "gulp-markdown-docs": "^0.1.5",
+    "gulp-pug": "^3.0.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-stylus": "^2.3.1",
     "gulp-typescript": "^2.13.4"
