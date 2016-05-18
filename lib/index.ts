@@ -6,24 +6,24 @@ let articles:Article[] = [
     title: 'Intro to Typescript',
     description: 'A description of this article.',
     date: '2016-05-18',
-    time: '08:44'
+    time: '08:47am'
   },
   {
     title: 'Using Typescript with Webpack',
     description: 'Another article of sorts.',
     date: '2016-05-18',
-    time: '08:44'
+    time: '08:47am'
   },
   {
     title: 'Mastering Interfaces, Abstracts in Typescript',
     description: 'This will guide you into using interfaces and abstracts in Typescript.',
     date: '2016-05-18',
-    time: '09:22'
+    time: '08:46am'
   }
 ];
 
 interface Element {
-  content:HTMLElement;
+  content: HTMLElement;
 }
 
 let elements:Element = {
@@ -41,7 +41,7 @@ function createPosts():string {
         <a href='${link}'>${articles[i].title}</a>
       </h2>
       <h3 class='article-date'>
-        Posted ${articles[i].date} on ${articles[i].time}am
+        Posted on ${articles[i].date} at ${articles[i].time}
       </h3>
       <p class='article-description'>
         ${articles[i].description}
