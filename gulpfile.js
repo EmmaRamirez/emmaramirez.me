@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    watch = require('gulp-watch'),
     stylus = require('gulp-stylus'),
     marked = require('marked'),
     pug = require('pug'),
@@ -19,6 +20,7 @@ var gulp = require('gulp'),
 
 gulp.task('stylus', function () {
   return gulp.src('./styles/styl/main.styl')
+          //.pipe(watch('./styles/styl/*.styl'))
           .pipe(sourcemaps.init())
           .pipe(stylus())
           .pipe(sourcemaps.write('.'))
@@ -27,6 +29,7 @@ gulp.task('stylus', function () {
 
 gulp.task('html', function () {
   return gulp.src('./articles/**/*.pug')
+          //.pipe(watch('./articles/**/*.pug'))
           .pipe(gulpPug({
             pug: pug
           }))
@@ -35,6 +38,7 @@ gulp.task('html', function () {
 
 gulp.task('scripts', function () {
   var typescriptResult = tsProject.src()
+      .pipe(watch('./lib/*.ts'))
       .pipe(typescript(tsProject))
       .pipe(sourcemaps.init())
       .pipe(typescript({
@@ -45,6 +49,5 @@ gulp.task('scripts', function () {
                             .pipe(gulp.dest('dist/js'));
 })
 
-//gulp.task('sroucemaps')
 
 gulp.task('default', ['stylus', 'html', 'scripts']);

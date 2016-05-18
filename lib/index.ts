@@ -1,22 +1,6 @@
 import Article = require('./article');
 //import Dot = require('./dot');
 
-class Dot {
-  x: number;
-  y: number;
-
-  create (ctx:any) {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, .5, 0, Math.PI * 2, false);
-    ctx.fill();
-  }
-
-  constructor(x:number, y:number) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
 let articles:Article[] = [
   {
     title: 'New Site Design!',
