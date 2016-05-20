@@ -3,6 +3,7 @@
 @import 'normalize'
 @import 'blocks'
 @import 'global'
+@import 'nav'
 @import 'article'
 
 .site-header
@@ -23,27 +24,6 @@
   text-align: center;
   text-transform: uppercase;
 
-.site-nav
-  background: a;
-  .site-nav-items
-    align-items: center;
-    display: flex;
-    justify-content: space-around;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  .nav-item
-    flex-basis: 20%;
-  .nav-item-link
-    color: darken(b, 35%);
-    display: block;
-    padding: 1vw;
-    text-align: center;
-    {transition-s}
-    &:hover
-      background: darken(a, 10%);
-      {transition-s}
-
 .site-content
   margin: 8vh auto;
   max-width: 60vw;
@@ -52,9 +32,15 @@
   list-style-type: none;
 
 .site-article-list-item
-  font-family: 'Slabo 27px', serif;
   font-size: 1.8rem;
+  font-weight: bold;
   padding: 1rem;
+
+.site-article-list-link
+  {transition-s}
+  &:hover
+    color: b;
+    {transition-s}
 
 .site-footer
   margin: 5vw;
