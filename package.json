@@ -1,0 +1,45 @@
+{
+  "name": "emmaramirez.me",
+  "version": "0.0.0",
+  "description": "my personal website/blog",
+  "main": "index.js",
+  "dependencies": {
+    "gulp-concat": "^2.6.0",
+    "gulp-markdown": "^1.2.0",
+    "gulp-markdown-docs": "^0.1.5",
+    "gulp-pug": "^3.0.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-stylus": "^2.3.1",
+    "gulp-typescript": "^2.13.4",
+    "gulp-watch": "^4.3.5",
+    "jstransformer": "0.0.4",
+    "jstransformer-marked": "^1.0.1",
+    "marked": "^0.3.5",
+    "pug-filters": "^1.2.1"
+  },
+  "devDependencies": {
+    "gulp-livereload": "^3.8.1",
+    "gulp-server-livereload": "^1.7.4",
+    "jasmine": "^2.0.0"
+  },
+  "scripts": {
+    "test": "jasmine",
+    "stylus": "-w styles/styl/main.styl -o styles/css/main.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmmaRamirez/emmaramirez.me.git"
+  },
+  "keywords": [
+    "emma",
+    "ramirez",
+    "blog",
+    "website"
+  ],
+  "author": "Emma Ramirez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EmmaRamirez/emmaramirez.me/issues"
+  },
+  "homepage": "https://github.com/EmmaRamirez/emmaramirez.me#readme"
+}
