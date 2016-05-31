@@ -25,6 +25,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-livereload": "^3.8.1",
     "gulp-markdown": "^1.2.0",
+    "gulp-pug": "^3.0.2",
     "gulp-server-livereload": "^1.7.4",
     "gulp-stylus": "^2.4.0",
     "gulp-uglify": "^1.5.3",

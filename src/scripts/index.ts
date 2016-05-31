@@ -5,19 +5,22 @@ let articles:Article[] = [
     link: 'posts/article-title',
     title: 'This is an article',
     dateTime: '2016-05-31 08:39am',
-    description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.'
+    description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
+    tags: ['javascript', 'es6']
   },
   {
     link: 'posts/article-title',
     title: 'This is also an article',
     dateTime: '2016-05-31 08:39am',
-    description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.'
+    description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
+    tags: []
   },
   {
     link: 'posts/article-title',
     title: 'Stylus: A Master Guide',
     dateTime: '2016-05-31 08:39am',
-    description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.'
+    description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
+    tags: ['stylus', 'css']
   }
 ];
 
@@ -27,6 +30,12 @@ let settings:any = {
 };
 
 function createArticle(article:Article):string {
+  let tagString = '';
+  if (typeof article.tags.length !== 'undefined') {
+    for (let i = 0; i < article.tags.length; i++) {
+      tagString += `<div class='site-article-tag' data-tag='${article.tags[i]}'>${article.tags[i]}</div>`;
+    }
+  }
   let articleTemplate = `
     <article class='site-article'>
       <header>
@@ -35,6 +44,7 @@ function createArticle(article:Article):string {
       </header>
       <div class='content'>
         <p>${article.description}</p>
+        <div class='tag-container'>${tagString}</div>
       </div>
     </article>`;
   return articleTemplate;
