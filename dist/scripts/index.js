@@ -1,3 +1,0 @@
-var articles = [];
-
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLElBQUksUUFBUSxHQUFTLEVBQUUsQ0FBQyIsImZpbGUiOiJpbmRleC5qcyIsInNvdXJjZXNDb250ZW50IjpbImxldCBhcnRpY2xlczphbnlbXSA9IFtdO1xyXG4iXSwic291cmNlUm9vdCI6Ii9zb3VyY2UvIn0=

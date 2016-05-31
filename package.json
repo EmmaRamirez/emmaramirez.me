@@ -21,6 +21,7 @@
     "copy-webpack-plugin": "^3.0.1",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.0",
     "gulp-livereload": "^3.8.1",
     "gulp-markdown": "^1.2.0",

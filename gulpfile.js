@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    clean = require('gulp-clean'),
     sourcemaps = require('gulp-sourcemaps'),
     concat = require('gulp-concat'),
     markdown = require('gulp-markdown'),
@@ -7,7 +8,6 @@ var gulp = require('gulp'),
     stylus = require('gulp-stylus'),
     webserver = require('gulp-webserver'),
     uglify = require('gulp-uglify');
-
 
 gulp.task('styles', function () {
   return gulp.src('src/styles/index.styl')
@@ -21,6 +21,11 @@ gulp.task('html', function () {
   return gulp.src('src/index.html')
           .pipe(gulp.dest('./dist'))
 });
+
+gulp.task('img', function () {
+  return gulp.src('src/img/*.jpg')
+          .pipe(gulp.dest('./dist/img'))
+})
 
 gulp.task('markdown', function () {
   return gulp.src('src/posts/**/*.md')
@@ -56,4 +61,4 @@ gulp.task('watch', function () {
   gulp.watch('src/posts/**/*.md', ['markdown']);
 });
 
-gulp.task('default', ['styles', 'scripts', 'html', 'markdown', 'watch']);
+gulp.task('default', ['styles', 'scripts', 'html', 'img', 'markdown', 'watch']);

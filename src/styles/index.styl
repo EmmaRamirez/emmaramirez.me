@@ -2,17 +2,17 @@
 @import 'normalize.styl'
 
 body
-  background: white
+  background: #222
   color: #222;
 
 .site-header
   background: linear-gradient(to left, $seafoam, $seafoam2);
   color: darken($seafoam, 45%);
-  padding: .5rem;
+  color: #333;
+  padding: 1rem;
   .site-heading
     margin: 0;
     text-align: center;
-    padding-top: 1rem;
   .site-heading-subtitle
     font-size: 1.25rem;
     font-style: italic;
@@ -20,31 +20,51 @@ body
     padding: .25rem;
 
 .site-main
-  margin: 0 auto;
+  //background: #333;
+  margin: 4rem auto;
   max-width: 60rem;
   padding: 2vw;
 
 .site-article
+  padding: 1rem;
   .site-article-date-time
-    color: #333;
+    color: #ddd;
+    display: inline-block;
     text-align: center;
+    width: 100%;
   .site-article-heading
     font-size: 2.2rem;
     margin-bottom: .25rem;
     text-align: center;
     a
-      color: #222;
+      color: #eee;
       text-decoration: none;
       transition: 250ms all;
       &:hover
         color: darken($seafoam, 45%);
         transition: 250ms all;
   .content
+    color: #eee;
     font-size: 1.2rem;
     line-height: 1.4;
+    text-indent: 2rem;
 
 
 .site-footer
+  margin-bottom: 1vh;
   .site-footer-text
     color: darken($seafoam, 25%);
     text-align: center;
+  .site-portrait
+    border: 1px solid $seafoam;
+    background: linear-gradient(to left, rgba($seafoam, 0.5), rgba($seafoam2, 0.5)), url('../img/pineapple.jpg');
+    background-blend-mode: color;
+    background-size: cover;
+    height: 10rem;
+    margin: 0 auto;
+    transition: 300ms all;
+    width: 10rem;
+    &:hover
+      background-blend-mode: normal;
+      cursor: pointer;
+      transition: 300ms all;
