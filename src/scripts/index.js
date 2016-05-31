@@ -8,11 +8,11 @@ var articles = [
         tags: ['javascript', 'es6', 'css']
     },
     {
-        link: 'posts/article-title',
+        link: 'posts/new-article',
         title: 'This is also an article',
         dateTime: '2016-05-31 08:39am',
         description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-        tags: []
+        tags: ['webpack', 'gulp', 'video games']
     },
     {
         link: 'posts/article-title',
@@ -20,7 +20,14 @@ var articles = [
         dateTime: '2016-05-31 08:39am',
         description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
         tags: ['stylus', 'css']
-    }
+    },
+    {
+        link: 'posts/article-title',
+        title: 'React & Typescript: A Match Made in JS Heaven',
+        dateTime: '2016-05-31 08:39am',
+        description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
+        tags: ['react', 'typescript']
+    },
 ];
 var settings = {
     displayDescription: true
