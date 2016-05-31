@@ -34,7 +34,8 @@
   },
   "scripts": {
     "test": "jasmine",
-    "stylus": "stylus ./src/styles/index.styl -o ./dist/styles/index.css"
+    "stylus": "stylus ./src/styles/index.styl -o ./dist/styles/index.css",
+    "build": "gulp"
   },
   "repository": {
     "type": "git",
