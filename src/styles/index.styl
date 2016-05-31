@@ -49,14 +49,29 @@ body
     line-height: 1.4;
     p
       text-indent: 2rem;
+  .tag-container
+    //align-content: center;
+    align-content: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    //margin: .25rem auto;
+    margin: .25rem;
+    width: 100%;
   .site-article-tag
     background: darken($seafoam2, 35%);
     display: inline-block;
+    font-size: 12px;
     margin: 0 .25rem;
     padding: .25rem;
-    &[data-tag='javascript']
-      background: #E8E523;
+    &[data-tag='javascript'],
+    &[data-tag='es6']
+      background: $javascript;
       color: #333;
+    &[data-tag='css']
+      background: $css;
+    &[data-tag='stylus']
+      background: $stylus;
 
 
 .site-footer

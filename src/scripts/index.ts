@@ -6,7 +6,7 @@ let articles:Article[] = [
     title: 'This is an article',
     dateTime: '2016-05-31 08:39am',
     description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-    tags: ['javascript', 'es6']
+    tags: ['javascript', 'es6', 'css']
   },
   {
     link: 'posts/article-title',
@@ -41,10 +41,10 @@ function createArticle(article:Article):string {
       <header>
         <h3 class='site-article-heading'><a href='${article.link}'>${article.title}</a></h3>
         <span class='site-article-date-time'>${article.dateTime}</span>
+        <div class='tag-container'>${tagString}</div>
       </header>
       <div class='content'>
         <p>${article.description}</p>
-        <div class='tag-container'>${tagString}</div>
       </div>
     </article>`;
   return articleTemplate;
