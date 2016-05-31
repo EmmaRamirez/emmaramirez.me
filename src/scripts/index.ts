@@ -94,8 +94,8 @@ function createSingleArticle(article:Article) {
 
 function appendArticle() {
   let content = <HTMLElement>document.querySelector('.site-main-article');
-  let article;
-  let id;
+  let article:Article;
+  let id:any;
   if (content !== null) {
     id = content.getAttribute('data-id');
     for (let i = 0; i < articles.length; i++) {
