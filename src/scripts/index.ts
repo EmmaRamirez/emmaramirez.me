@@ -13,7 +13,8 @@ let articles:Article[] = [
     title: 'This is also an article',
     dateTime: '2016-05-31 08:39am',
     description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-    tags: ['webpack', 'gulp', 'video games']
+    tags: ['webpack', 'gulp', 'video games'],
+    id: 1
   },
   {
     link: 'posts/article-title',
@@ -59,13 +60,58 @@ function createArticle(article:Article):string {
 
 function appendArticles():void {
   let content = <HTMLElement>document.querySelector('.site-main');
-  for (let i = 0; i < articles.length; i++) {
-    content.innerHTML += createArticle(articles[i]);
+  if (content !== null) {
+    for (let i = 0; i < articles.length; i++) {
+      content.innerHTML += createArticle(articles[i]);
+    }
   }
+}
+
+function createSingleArticle(article:Article) {
+  let tagString = '';
+  if (typeof article.tags.length !== 'undefined') {
+    for (let i = 0; i < article.tags.length; i++) {
+      tagString += `<div class='site-article-tag' data-tag='${article.tags[i]}'>${article.tags[i]}</div>`;
+    }
+  }
+  let articleTemplate = `
+    <article>
+      <header class='article-header'>
+        <h1 class='article-heading'>${article.title}</h1>
+        <h2 class='article-date-time'>${article.dateTime}</h2>
+        <div class='tag-container'>${tagString}</div>
+      </header>
+      <main class='article-main'>
+
+      </main>
+      <footer class='article-footer'>
+
+      </footer>
+    </article>
+  `;
+  return articleTemplate;
+}
+
+function appendArticle() {
+  let content = <HTMLElement>document.querySelector('.site-main-article');
+  let article;
+  let id;
+  if (content !== null) {
+    id = content.getAttribute('data-id');
+    for (let i = 0; i < articles.length; i++) {
+      if (id === articles[i].id) {
+        article = articles[i];
+      }
+    }
+    content.innerHTML += createSingleArticle(article);
+  }
+
+  console.log(id);
 }
 
 function init():void {
   appendArticles();
+  appendArticle();
 }
 
 init();

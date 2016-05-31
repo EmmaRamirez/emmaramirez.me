@@ -12,7 +12,8 @@ var articles = [
         title: 'This is also an article',
         dateTime: '2016-05-31 08:39am',
         description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-        tags: ['webpack', 'gulp', 'video games']
+        tags: ['webpack', 'gulp', 'video games'],
+        id: 1
     },
     {
         link: 'posts/article-title',
@@ -44,11 +45,39 @@ function createArticle(article) {
 }
 function appendArticles() {
     var content = document.querySelector('.site-main');
-    for (var i = 0; i < articles.length; i++) {
-        content.innerHTML += createArticle(articles[i]);
+    if (content !== null) {
+        for (var i = 0; i < articles.length; i++) {
+            content.innerHTML += createArticle(articles[i]);
+        }
     }
+}
+function createSingleArticle(article) {
+    var tagString = '';
+    if (typeof article.tags.length !== 'undefined') {
+        for (var i = 0; i < article.tags.length; i++) {
+            tagString += "<div class='site-article-tag' data-tag='" + article.tags[i] + "'>" + article.tags[i] + "</div>";
+        }
+    }
+    var articleTemplate = "\n    <article>\n      <header class='article-header'>\n        <h1 class='article-heading'>" + article.title + "</h1>\n        <h2 class='article-date-time'>" + article.dateTime + "</h2>\n        <div class='tag-container'>" + tagString + "</div>\n      </header>\n      <main class='article-main'>\n\n      </main>\n      <footer class='article-footer'>\n\n      </footer>\n    </article>\n  ";
+    return articleTemplate;
+}
+function appendArticle() {
+    var content = document.querySelector('.site-main-article');
+    var article;
+    var id;
+    if (content !== null) {
+        id = content.getAttribute('data-id');
+        for (var i = 0; i < articles.length; i++) {
+            if (id === articles[i].id) {
+                article = articles[i];
+            }
+        }
+        content.innerHTML += createSingleArticle(article);
+    }
+    console.log(id);
 }
 function init() {
     appendArticles();
+    appendArticle();
 }
 init();

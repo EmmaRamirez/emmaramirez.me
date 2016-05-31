@@ -4,4 +4,5 @@ export interface Article {
   dateTime: string;
   description: string;
   tags?: string[];
+  id?: number;
 }
