@@ -1,0 +1,45 @@
+@import 'variables.styl'
+@import 'normalize.styl'
+
+body
+  background: white
+  color: #222;
+
+.site-header
+  background: linear-gradient(to left, $seafoam, $seafoam2);
+  color: darken($seafoam, 45%);
+  padding: .5rem;
+  .site-heading
+    margin: 0;
+    text-align: center;
+    padding-top: 1rem;
+  .site-heading-subtitle
+    font-size: 1.25rem;
+    font-style: italic;
+    font-weight: 100;
+    padding: .25rem;
+
+.site-main
+  margin: 0 auto;
+  max-width: 60rem;
+  padding: 2vw;
+
+.site-article
+  header h3
+    font-size: 2.2rem;
+    margin-bottom: .25rem;
+    a
+      color: #222;
+      text-decoration: none;
+      transition: 250ms all;
+      &:hover
+        color: darken($seafoam, 45%);
+        transition: 250ms all;
+  .content
+    font-size: 1.2rem;
+    line-height: 1.4;
+
+.site-footer
+  .site-footer-text
+    color: darken($seafoam, 25%);
+    text-align: center;
