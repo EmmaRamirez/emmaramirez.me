@@ -1,1 +1,1 @@
-let articles = [];
+let articles:any[] = [];

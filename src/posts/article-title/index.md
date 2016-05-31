@@ -15,26 +15,14 @@
     <main class='site-main'>
       <article class='site-article'>
         <header>
-          <h3 class='site-article-heading'><a href='posts/article-title/index.html'>Article Title: Long and Expansive Subtitlte</a></h3>
+          <h3><a href='posts/article-title'>Article Title: Long and Expansive Subtitlte</a></h3>
           <span class='site-article-date-time'>12:45 at 5am</span>
         </header>
-        <div class='content'>
-          <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.</p>
-        </div>
-      </article>
-      <article class='site-article'>
-        <header>
-          <h3 class='site-article-heading'><a href=''>Article Title: Long and Expansive Subtitlte</a></h3>
-          <span class='site-article-date-time'>12:45 at 5am</span>
-        </header>
-        <div class='content'>
-          <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.</p>
-        </div>
+         # Here's the Content Ayyy
       </article>
     </main>
     <footer class='site-footer'>
       <p class='site-footer-text'>Made with &hearts; by Emma</p>
     </footer>
-    <script src='scripts/bundle.js'></script>
   </body>
 </html>

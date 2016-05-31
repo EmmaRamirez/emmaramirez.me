@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     concat = require('gulp-concat'),
+    markdown = require('gulp-markdown'),
     ts = require('gulp-typescript'),
     tsProject = ts.createProject('tsconfig.json'),
     stylus = require('gulp-stylus'),
@@ -21,6 +22,12 @@ gulp.task('html', function () {
           .pipe(gulp.dest('./dist'))
 });
 
+gulp.task('markdown', function () {
+  return gulp.src('src/posts/**/*.md')
+          .pipe(markdown())
+          .pipe(gulp.dest('dist/posts'));
+});
+
 gulp.task('webserver', function () {
   gulp.src('dist')
       .pipe(webserver({
@@ -38,6 +45,7 @@ gulp.task('scripts', function () {
             noImplicitAny: true
           }))
           .pipe(sourcemaps.write())
+          .pipe(concat('bundle.js'))
           .pipe(gulp.dest('dist/scripts'))
 });
 
@@ -45,6 +53,7 @@ gulp.task('watch', function () {
   gulp.watch('src/scripts/*.ts', ['scripts']);
   gulp.watch('src/styles/*.styl', ['styles']);
   gulp.watch('src/index.html', ['html']);
+  gulp.watch('src/posts/**/*.md', ['markdown']);
 });
 
-gulp.task('default', ['styles', 'scripts', 'html', 'watch']);
+gulp.task('default', ['styles', 'scripts', 'html', 'markdown', 'watch']);
