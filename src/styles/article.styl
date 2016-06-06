@@ -1,7 +1,44 @@
 @import 'variables.styl';
 
+.site-main-article
+  margin: 4rem auto;
+  max-width: 60rem;
+  padding: 2vw;
+
 .article-header
 
 .article-heading
   color: #eee;
+  font-size: 4rem;
+  margin: 0;
   text-align: center;
+
+.article-date-time
+  color: #666;
+  //display: block;
+  font-size: .9rem;
+  margin: .5rem;
+
+.article-author
+  font-size .9rem;
+  img
+    border-radius: 50%;
+    height: 1rem;
+    vertical-align: middle;
+
+.article-content
+  font-family: 'Georgia';
+  font-size: 1.4rem;
+  line-height: 1.4;
+  text-align: left;
+  p:nth-of-type(1)::first-line
+    font-size: 1.6rem;
+    font-style: italic;
+  .img-container
+    margin: 0 auto;
+    max-height: 500px;
+    img
+      display: block;
+      height: 100%;
+      margin: 0 auto;
+      width: auto;

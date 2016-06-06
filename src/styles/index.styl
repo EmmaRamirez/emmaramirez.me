@@ -2,10 +2,16 @@
 @import 'normalize.styl'
 @import 'article.styl'
 
+body,
+html
+  height: 100%;
+
 body
-  border-bottom: 4px solid darken($seafoam, 50%);
   background: #222
   color: #222;
+
+.site-link
+  text-decoration: none;
 
 .site-header
   background: linear-gradient(to left, $seafoam, $seafoam2);
