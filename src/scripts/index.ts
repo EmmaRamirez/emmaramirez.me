@@ -4,9 +4,9 @@ let articles:Article[] = [
   {
     link: 'posts/my-first-day-at-npmjs',
     title: 'My First Day at npmjs',
-    dateTime: '2016-05-31 08:39am',
+    dateTime: '2016-06-06 04:47:22pm',
     description: '',
-    tags: ['npm', 'personal']
+    tags: ['npm', 'true ventures', 'personal']
   },
   // {
   //   link: 'posts/new-article',
@@ -52,7 +52,7 @@ function createArticle(article:Article):string {
         <div class='tag-container'>${tagString}</div>
       </header>
       <div class='content'>
-        <p>${article.description}</p>
+        <p>${settings.displayDescription ? article.description : ''}</p>
       </div>
     </article>`;
   return articleTemplate;

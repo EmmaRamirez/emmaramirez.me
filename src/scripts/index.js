@@ -1,33 +1,11 @@
 "use strict";
 var articles = [
     {
-        link: 'posts/article-title',
-        title: 'This is an article',
-        dateTime: '2016-05-31 08:39am',
-        description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-        tags: ['javascript', 'es6', 'css']
-    },
-    {
-        link: 'posts/new-article',
-        title: 'This is also an article',
-        dateTime: '2016-05-31 08:39am',
-        description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-        tags: ['webpack', 'gulp', 'video games'],
-        id: 1
-    },
-    {
-        link: 'posts/article-title',
-        title: 'Stylus: A Master Guide',
-        dateTime: '2016-05-31 08:39am',
-        description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-        tags: ['stylus', 'css']
-    },
-    {
-        link: 'posts/article-title',
-        title: 'React & Typescript: A Match Made in JS Heaven',
-        dateTime: '2016-05-31 08:39am',
-        description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-        tags: ['react', 'typescript']
+        link: 'posts/my-first-day-at-npmjs',
+        title: 'My First Day at npmjs',
+        dateTime: '2016-06-06 04:47:22pm',
+        description: '',
+        tags: ['npm', 'true ventures', 'personal']
     },
 ];
 var settings = {
@@ -40,7 +18,7 @@ function createArticle(article) {
             tagString += "<div class='site-article-tag' data-tag='" + article.tags[i] + "'>" + article.tags[i] + "</div>";
         }
     }
-    var articleTemplate = "\n    <article class='site-article'>\n      <header>\n        <h3 class='site-article-heading'><a href='" + article.link + "'>" + article.title + "</a></h3>\n        <span class='site-article-date-time'>" + article.dateTime + "</span>\n        <div class='tag-container'>" + tagString + "</div>\n      </header>\n      <div class='content'>\n        <p>" + article.description + "</p>\n      </div>\n    </article>";
+    var articleTemplate = "\n    <article class='site-article'>\n      <header>\n        <h3 class='site-article-heading'><a href='" + article.link + "'>" + article.title + "</a></h3>\n        <span class='site-article-date-time'>" + article.dateTime + "</span>\n        <div class='tag-container'>" + tagString + "</div>\n      </header>\n      <div class='content'>\n        <p>" + (settings.displayDescription ? article.description : '') + "</p>\n      </div>\n    </article>";
     return articleTemplate;
 }
 function appendArticles() {

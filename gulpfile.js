@@ -61,7 +61,7 @@ gulp.task('watch', function () {
   gulp.watch('src/scripts/*.ts', ['scripts']);
   gulp.watch('src/styles/*.styl', ['styles']);
   gulp.watch('src/index.html', ['html']);
-  gulp.watch('src/posts/**/*.pug', ['markdown']);
+  gulp.watch('src/posts/**/*.pug', ['markdown', 'img']);
 });
 
 gulp.task('default', ['styles', 'scripts', 'html', 'img', 'markdown', 'watch']);

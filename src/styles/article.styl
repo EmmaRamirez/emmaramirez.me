@@ -1,26 +1,32 @@
 @import 'variables.styl';
 
 .site-main-article
-  margin: 4rem auto;
+  margin: 1rem auto;
+  margin-bottom: 4rem;
   max-width: 60rem;
   padding: 2vw;
 
-.article-header
-
 .article-heading
-  color: #eee;
+  color: $text;
   font-size: 4rem;
   margin: 0;
   text-align: center;
+  .npm-logo
+    height: 5rem;
+    vertical-align: bottom;
+
+.article-metadata
+  text-align: center;
 
 .article-date-time
-  color: #666;
-  //display: block;
+  color: lighten($text, 30%);
+    //display: block;
   font-size: .9rem;
   margin: .5rem;
 
 .article-author
   font-size .9rem;
+  width: 100%;
   img
     border-radius: 50%;
     height: 1rem;
@@ -31,14 +37,32 @@
   font-size: 1.4rem;
   line-height: 1.4;
   text-align: left;
+  a
+    border-bottom: 1px solid transparent;
+    color: $seafoam;
+    text-decoration: none;
+    &:hover
+      border-bottom: 1px solid $seafoam;
+      color: darken($seafoam, 15%);
+      transition: 500ms all;
   p:nth-of-type(1)::first-line
     font-size: 1.6rem;
     font-style: italic;
   .img-container
-    margin: 0 auto;
-    max-height: 500px;
+    margin: 1rem auto;
+    max-height: 400px;
+    &.tall-img
+      max-height: 800px;
     img
       display: block;
       height: 100%;
       margin: 0 auto;
       width: auto;
+  .caption
+    color: #999;
+    display: block;
+    font-size: 1rem;
+    font-style: italic;
+    text-align: center;
+    padding: .25rem;
+    width: 100%;
