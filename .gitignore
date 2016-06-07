@@ -2,3 +2,4 @@
 ./src/scripts/*.js
 ./dist
 /dist/
+npm-debug.log
