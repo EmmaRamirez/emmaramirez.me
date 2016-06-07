@@ -2,11 +2,20 @@ import { Article } from './interface.article';
 
 let articles:Article[] = [
   // {
+  //   link: 'posts/ten-things-you-may-not-know-about-npm',
+  //   title: 'Ten Things You May Not Know About npm',
+  //   dateTime: '2016-06-07 10:08:43am',
+  //   description: '',
+  //   tags: ['npm', 'javascrit'],
+  //   draft: true
+  // },
+  // {
   //   link: 'posts/getting-running-with-typescript',
   //   title: 'Getting Running with Typescript',
   //   dateTime: '2016-06-07 12:13:19am',
   //   description: '',
-  //   tags: ['typescript', 'javascript']
+  //   tags: ['typescript', 'javascript'],
+  //   draft: true
   // },
   {
     link: 'posts/my-first-day-at-npmjs',
@@ -15,28 +24,6 @@ let articles:Article[] = [
     description: '',
     tags: ['npm', 'true ventures', 'personal']
   },
-  // {
-  //   link: 'posts/new-article',
-  //   title: 'This is also an article',
-  //   dateTime: '2016-05-31 08:39am',
-  //   description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-  //   tags: ['webpack', 'gulp', 'video games'],
-  //   id: 1
-  // },
-  // {
-  //   link: 'posts/article-title',
-  //   title: 'Stylus: A Master Guide',
-  //   dateTime: '2016-05-31 08:39am',
-  //   description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-  //   tags: ['stylus', 'css']
-  // },
-  // {
-  //   link: 'posts/article-title',
-  //   title: 'React & Typescript: A Match Made in JS Heaven',
-  //   dateTime: '2016-05-31 08:39am',
-  //   description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-  //   tags: ['react', 'typescript']
-  // },
 ];
 
 
@@ -51,6 +38,7 @@ function createArticle(article:Article):string {
       tagString += `<div class='site-article-tag' data-tag='${article.tags[i]}'>${article.tags[i]}</div>`;
     }
   }
+
   let articleTemplate = `
     <article class='site-article'>
       <header>
@@ -62,6 +50,8 @@ function createArticle(article:Article):string {
         <p>${settings.displayDescription ? article.description : ''}</p>
       </div>
     </article>`;
+
+
   return articleTemplate;
 }
 

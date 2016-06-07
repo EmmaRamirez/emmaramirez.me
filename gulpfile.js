@@ -11,7 +11,7 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify');
 
 gulp.task('styles', function () {
-  return gulp.src('src/styles/index.styl')
+  return gulp.src('styles/index.styl')
           .pipe(sourcemaps.init())
           .pipe(stylus())
           .pipe(sourcemaps.write())
@@ -24,20 +24,20 @@ gulp.task('html', function () {
 });
 
 gulp.task('img', function () {
-  return gulp.src(['src/img/*.jpg', 'src/img/*.png', 'src/img/*.JPG'])
+  return gulp.src(['img/*.jpg', 'img/*.png', 'img/*.JPG'])
           .pipe(gulp.dest('./dist/img'))
 })
 
 gulp.task('markdown', function () {
-  return gulp.src('src/posts/**/*.pug')
+  return gulp.src('posts/**/*.pug')
           .pipe(pug({
             pretty: true
           }))
-          .pipe(gulp.dest('dist/posts'));
+          .pipe(gulp.dest('posts'));
 });
 
 gulp.task('webserver', function () {
-  gulp.src('dist')
+  gulp.src('index.html')
       .pipe(webserver({
         livereload: true,
         port: 8080,
@@ -47,7 +47,7 @@ gulp.task('webserver', function () {
 });
 
 gulp.task('scripts', function () {
-  return gulp.src('src/scripts/*.ts')
+  return gulp.src('scripts/*.ts')
           .pipe(sourcemaps.init())
           .pipe(ts({
             noImplicitAny: true
@@ -58,10 +58,10 @@ gulp.task('scripts', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('src/scripts/*.ts', ['scripts']);
-  gulp.watch('src/styles/*.styl', ['styles']);
-  gulp.watch('src/index.html', ['html']);
-  gulp.watch('src/posts/**/*.pug', ['markdown', 'img']);
+  gulp.watch('scripts/*.ts', ['scripts']);
+  gulp.watch('styles/*.styl', ['styles']);
+  gulp.watch('index.html', ['html']);
+  gulp.watch('posts/**/*.pug', ['markdown', 'img']);
 });
 
-gulp.task('default', ['styles', 'scripts', 'html', 'img', 'markdown', 'watch']);
+gulp.task('default', ['styles', 'scripts', 'img', 'markdown', 'watch']);

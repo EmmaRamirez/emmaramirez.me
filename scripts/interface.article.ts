@@ -5,4 +5,5 @@ export interface Article {
   description: string;
   tags?: string[];
   id?: number;
+  draft?: boolean;
 }
