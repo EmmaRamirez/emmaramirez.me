@@ -1,13 +1,10 @@
 {
-    "compilerOptions": {
-        "noImplicitAny": true,
-        "removeComments": false,
-        "preserveConstEnums": true,
-        "sourceMap": true,
-        "module": "commonjs"
-    },
-    "exclude": [
-        "node_modules",
-        "wwwroot"
-    ]
+  "CompilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": "false",
+    "noImplicitAny": "true",
+  },
+  "compileOnSave": "false",
+  "buildOnSave": "false"
 }
