@@ -2,6 +2,13 @@ import { Article } from './interface.article';
 
 let articles:Article[] = [
   {
+    link: 'posts/getting-running-with-typescript',
+    title: 'Getting Running with Typescript',
+    dateTime: '',
+    description: '',
+    tags: ['typescript', 'javascript']
+  },
+  {
     link: 'posts/my-first-day-at-npmjs',
     title: 'My First Day at npmjs',
     dateTime: '2016-06-06 04:47:22pm',
