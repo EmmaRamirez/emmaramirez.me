@@ -9,14 +9,13 @@ let articles:Article[] = [
   //   tags: ['npm', 'javascrit'],
   //   draft: true
   // },
-  // {
-  //   link: 'posts/getting-running-with-typescript',
-  //   title: 'Getting Running with Typescript',
-  //   dateTime: '2016-06-07 12:13:19am',
-  //   description: '',
-  //   tags: ['typescript', 'javascript'],
-  //   draft: true
-  // },
+  {
+    link: 'posts/getting-running-with-typescript',
+    title: 'Getting Running with Typescript',
+    dateTime: '2016-06-07 12:13:19am',
+    description: '',
+    tags: ['typescript', 'javascript'],
+  },
   {
     link: 'posts/my-first-day-at-npmjs',
     title: 'My First Day at npmjs',
