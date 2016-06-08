@@ -1,0 +1,67 @@
+doctype html(lang='en')
+head
+  meta(charset='utf-8')
+  link(href='https://fonts.googleapis.com/css?family=Roboto:400,700,700italic,400italic|Slabo+27px', rel='stylesheet', type='text/css')
+  title &#x1F34D; My First Day at npmjs | Code is Sweet: A Blog About Javascript
+  link(rel='stylesheet', href='../../dist/styles/index.css')
+  link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css')
+body
+  a(class='site-link', href='../..')
+    header.site-header
+      h1.site-heading &#x1F34D; CODE IS SWEET &#x1F34D;
+      h2.site-heading.site-heading-subtitle a blog by Emma Ramirez
+  main.site-main-article(data-id='2')
+    header.article-header
+      h1.article-heading Build Tools &amp; Typescript
+      .article-metadata
+        span.article-author
+          | by Emma Ramirez&nbsp;
+          img(src='../../img/me.jpg')
+        span.article-date-time 2016-06-06 04:47:22pm
+      span.article-content
+        p
+        | Typescript has, seemingly overnight, blown up onto the development scene. With over one million downloads monthly over npm, Typescript is now the most popular compile-to-javascript language. It makes sense, too, after all, Typescript bears a lot of features that make Javascript more stable&mdash;and in my opinion, more fun&mdash;to write. This article covers different builds in Typescript using Grunt, Gulp, Webpack, and SystemJS. This tutorial assuems you've played around with Typescript before and you understand some of ES6, but you can probably get by even if you don't. It also assumes you have&nbsp;
+        a(href='https://nodejs.org/en/') node and npm
+        | &nbsp;installed.
+        ul
+          li
+            a(href='#vanilla') Vanilla
+          li
+            a(href='#grunt') Grunt
+          li
+            a(href='#gulp') Gulp
+          li
+            a(href='#webpack') Webpack
+          li
+            a(href='#systemjs') SystemJS
+        h2 Downloading Typescript
+        p
+          | Getting Typescript, if you don't already, is pretty easy. Just run
+          code npm install typescript -g
+          | or, you're itching for the next release,
+          code npm install typescript@latest -g
+          | The -g ensures that it is installed globally, but you will most likely want it locally in your projects as well. We'll cover that later.
+        h2 Straight Compile
+        p First, let's start with our folder structure for this example:
+        pre
+          code(class='html')
+            | |-- index.html
+            | |-- scripts/
+            | `---- hello-world.ts
+        p Then, in your hello-world.ts file, write this:
+        pre
+          code(class='javascript', data-filename='scripts/hello-world.ts')
+            | function Hello (message:string = universe):void {
+            |   return `Hello ${string}!`;
+            | }
+            | document.body.textContent = Hello('world');
+
+
+
+  footer.site-footer
+    p.site-footer-text Made with &hearts; by Emma
+    //- .site-portrait
+  script(src='../../dist/scripts/bundle.js')
+  script(src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js')
+  script(type='text/javascript').
+    hljs.initHighlighting();

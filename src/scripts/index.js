@@ -1,13 +1,6 @@
 "use strict";
 var articles = [
     {
-        link: 'posts/build-tools-and-typescript',
-        title: 'Build Tools & Typescript',
-        dateTime: '2016-06-07 12:13:19am',
-        description: '',
-        tags: ['typescript', 'javascript', 'gulp', 'webpack', 'systemjs'],
-    },
-    {
         link: 'posts/my-first-day-at-npmjs',
         title: 'My First Day at npmjs',
         dateTime: '2016-06-06 04:47:22pm',

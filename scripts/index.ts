@@ -10,11 +10,11 @@ let articles:Article[] = [
   //   draft: true
   // },
   {
-    link: 'posts/getting-running-with-typescript',
-    title: 'Getting Running with Typescript',
+    link: 'posts/build-tools-and-typescript',
+    title: 'Build Tools & Typescript',
     dateTime: '2016-06-07 12:13:19am',
     description: '',
-    tags: ['typescript', 'javascript'],
+    tags: ['typescript', 'javascript', 'gulp', 'webpack', 'systemjs'],
   },
   {
     link: 'posts/my-first-day-at-npmjs',
