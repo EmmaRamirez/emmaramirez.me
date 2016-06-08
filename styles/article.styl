@@ -45,6 +45,31 @@
       border-bottom: 1px solid $seafoam;
       color: darken($seafoam, 15%);
       transition: 500ms all;
+  h3, h2
+    font-family: sans-serif;
+  code
+    //background: #eee;
+    border: 1px solid #ddd;
+    font-family: sans-serif;
+    font-size: 1rem;
+    display: block;
+    margin: .25rem .5rem;
+    padding: .75rem;
+    position: relative;
+    &[data-filename]
+      padding-top: 1.75rem;
+    &[data-filename]::before
+      content: attr(data-filename);
+      background: darken($body, 2%);
+      color: $text;
+      display: block;
+      font-size: .9rem;
+      left: 0;
+      padding: .25rem;
+      position: absolute;
+      user-select: none;
+      top: 0rem;
+      width: 100%;
   p:nth-of-type(1)::first-line
     font-size: 1.6rem;
     font-style: italic;
