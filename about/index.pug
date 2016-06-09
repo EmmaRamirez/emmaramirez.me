@@ -1,0 +1,29 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,700,700italic,400italic|Slabo+27px', rel='stylesheet', type='text/css')
+    // <link href='styles/css/main.css' rel='stylesheet'>
+    title 🍍 Emma Ramirez | Code is Sweet: a Blog about Javascript
+    link(rel='stylesheet', href='dist/styles/index.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css')
+  body
+    header.site-header
+      .site-heading-wrapper
+        h1.site-heading
+          img.pineapple-icon(src='img/pineapple.svg')
+          |  CODE IS SWEET
+          img.pineapple-icon(src='img/pineapple.svg')
+      .btn.btn-main-link
+        a(href='') Home
+      .btn.btn-main-link
+        a(href='') About
+      .btn.btn-main-link
+        a(href='') Projects
+      .search-container
+        input(type='search', placeholder='search')
+        i.fa.fa-search.search-icon
+    main.site-main
+    footer.site-footer
+      p.site-footer-text Made with ♥ by Emma
+    script(src='dist/scripts/bundle.js')

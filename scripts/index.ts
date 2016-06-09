@@ -1,21 +1,35 @@
 import { Article } from './interface.article';
 
 let articles:Article[] = [
+  {
+    link: 'posts/deprecating-bower-is-not-the-answer',
+    title: 'Deprecating Bower is Not the Answer',
+    dateTime: '2016-06-09 02:18:24am',
+    description: '',
+    tags: ['bower', 'npm', 'javascript', 'open source', 'opinion'],
+  },
   // {
   //   link: 'posts/ten-things-you-may-not-know-about-npm',
   //   title: 'Ten Things You May Not Know About npm',
   //   dateTime: '2016-06-07 10:08:43am',
   //   description: '',
-  //   tags: ['npm', 'javascrit'],
+  //   tags: ['npm', 'javascript'],
   //   draft: true
   // },
-  {
-    link: 'posts/build-tools-and-typescript',
-    title: 'Build Tools & Typescript',
-    dateTime: '2016-06-07 12:13:19am',
-    description: '',
-    tags: ['typescript', 'javascript', 'gulp', 'webpack', 'systemjs'],
-  },
+  // {
+  //   link: 'posts/do-types-really-matter',
+  //   title: 'Do Types Really Matter?',
+  //   dateTime: '2016-06-09 01:11:41am',
+  //   description: '',
+  //   tags: ['javascript', 'types', 'computer science']
+  // },
+  // {
+  //   link: 'posts/build-tools-and-typescript',
+  //   title: 'Build Tools & Typescript',
+  //   dateTime: '2016-06-07 12:13:19am',
+  //   description: '',
+  //   tags: ['typescript', 'javascript', 'gulp', 'webpack', 'systemjs'],
+  // },
   {
     link: 'posts/my-first-day-at-npmjs',
     title: 'My First Day at npmjs',

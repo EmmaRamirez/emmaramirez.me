@@ -8,14 +8,14 @@
 </head>
 <body><a class="site-link" href="../..">
     <header class="site-header">
-      <h1 class="site-heading">&#x1F34D; CODE IS SWEET &#x1F34D;</h1>
+      <h1 class="site-heading"><img class="pineapple-icon" src="../../img/pineapple.svg"/> CODE IS SWEET<img class="pineapple-icon" src="../../img/pineapple.svg"/></h1>
       <h2 class="site-heading site-heading-subtitle">a blog by Emma Ramirez</h2>
     </header></a>
   <main class="site-main-article" data-id="2">
     <header class="article-header">
       <h1 class="article-heading">Build Tools &amp; Typescript</h1>
       <div class="article-metadata"><span class="article-author">by Emma Ramirez&nbsp;<img src="../../img/me.jpg"/></span><span class="article-date-time">2016-06-06 04:47:22pm</span></div><span class="article-content">
-        <p></p>Typescript has, seemingly overnight, blown up onto the development scene. With over one million downloads monthly over npm, Typescript is now the most popular compile-to-javascript language. It makes sense, too, after all, Typescript bears a lot of features that make Javascript more stable&mdash;and in my opinion, more fun&mdash;to write. This article covers different builds in Typescript using Grunt, Gulp, Webpack, and SystemJS. This tutorial assuems you've played around with Typescript before and you understand some of ES6, but you can probably get by even if you don't. It also assumes you have&nbsp;<a href="https://nodejs.org/en/">node and npm</a>&nbsp;installed.
+        <p></p>Typescript has, seemingly overnight, blown up onto the development scene. With over one million downloads monthly over npm, Typescript is now the most popular compile-to-javascript language. It makes sense, too, after all, Typescript bears a lot of features that make Javascript more stable&mdash;and in my opinion, more fun&mdash;to write. This article covers different builds in Typescript using Grunt, Gulp, Webpack, and SystemJS. This tutorial assumes you've played around with Typescript before and you understand some of ES6, but you can probably get by even if you don't. It also assumes you have&nbsp;<a href="https://nodejs.org/en/">node and npm</a>&nbsp;installed.
         <ul>
           <li><a href="#vanilla">Vanilla</a></li>
           <li><a href="#grunt">Grunt</a></li>
@@ -31,7 +31,7 @@
 |-- scripts/
 `---- hello-world.ts</code></pre>
         <p>Then, in your hello-world.ts file, write this:</p>
-        <pre><code class="javascript" data-filename="scripts/hello-world.ts">function Hello (message:string = universe):void {
+        <pre><code class="javascript" data-filename="scripts/hello-world.ts">function Hello (message:string = universe):string {
   return `Hello ${string}!`;
 }
 document.body.textContent = Hello('world');</code></pre></span>

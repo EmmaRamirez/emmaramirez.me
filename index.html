@@ -1,25 +1,37 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
   <head>
-    <meta charset='utf-8'>
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,700italic,400italic|Slabo+27px' rel='stylesheet' type='text/css'>
-    <!-- <link href='styles/css/main.css' rel='stylesheet'> -->
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,700italic,400italic|Slabo+27px" rel="stylesheet" type="text/css">
+    <!-- <link href='styles/css/main.css' rel='stylesheet'>-->
     <title>🍍 Emma Ramirez | Code is Sweet: a Blog about Javascript</title>
-    <link rel='stylesheet' href='dist/styles/index.css'>
+    <link rel="stylesheet" href="dist/styles/index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
   </head>
   <body>
-    <header class='site-header'>
-      <h1 class='site-heading'>🍍 CODE IS SWEET 🍍</h1>
-      <h2 class='site-heading site-heading-subtitle'>a blog by Emma Ramirez</h2>
+    <header class="site-header">
+      <div class="site-heading-wrapper">
+        <h1 class="site-heading"><img class="pineapple-icon" src="img/pineapple.svg"> CODE IS SWEET<img class="pineapple-icon" src="img/pineapple.svg"></h1>
+      </div>
+      <div class="btn btn-main-link"><a href="">Home</a></div>
+      <div class="btn btn-main-link"><a href="">About</a></div>
+      <div class="btn btn-main-link"><a href="">Projects</a></div>
+      <div class="search-container">
+        <input type="search" placeholder="search"><i class="fa fa-search search-icon"></i>
+      </div>
     </header>
-    <main class='site-main'>
-
-
-    </main>
-    <footer class='site-footer'>
-      <p class='site-footer-text'>Made with &hearts; by Emma</p>
-      <!-- <div class='site-portrait'></div> -->
+    <main class="site-main"></main>
+    <footer class="site-footer">
+      <p class="site-footer-text">Made with ♥ by Emma</p>
     </footer>
-    <script src='dist/scripts/bundle.js'></script>
+    <script src="dist/scripts/bundle.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-79007755-1', 'auto');
+      ga('send', 'pageview');
+    </script>
   </body>
 </html>

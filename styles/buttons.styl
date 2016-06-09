@@ -1,0 +1,29 @@
+@import 'variables.styl'
+
+.btn-bar
+  align-items: center;
+  align-content: center;
+  display: flex;
+  justify-content: center;
+
+.btn
+  align-self: center;
+  background: rgba(black, 0.1);
+  border-radius: 4px;
+  color: $body;
+  display: inline-block;
+  font-size: 1.25rem;
+  margin: 0 .25rem;
+  min-width: 15%;
+  text-decoration: none;
+  padding: .5rem;
+  text-align: center;
+  transition: 100ms all;
+  &:hover, &.active
+    background: rgba(black, 0.2);
+    transition: 100ms all;
+
+.btn a
+  color: inherit;
+  display: block;
+  text-decoration: inherit;

@@ -1,11 +1,11 @@
 "use strict";
 var articles = [
     {
-        link: 'posts/build-tools-and-typescript',
-        title: 'Build Tools & Typescript',
-        dateTime: '2016-06-07 12:13:19am',
+        link: 'posts/deprecating-bower-is-not-the-answer',
+        title: 'Deprecating Bower is Not the Answer',
+        dateTime: '2016-06-09 02:18:24am',
         description: '',
-        tags: ['typescript', 'javascript', 'gulp', 'webpack', 'systemjs'],
+        tags: ['bower', 'npm', 'javascript', 'open source', 'opinion'],
     },
     {
         link: 'posts/my-first-day-at-npmjs',
