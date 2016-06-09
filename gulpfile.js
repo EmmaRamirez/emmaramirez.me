@@ -27,6 +27,14 @@ gulp.task('index', function () {
               .pipe(gulp.dest('.'));
 });
 
+gulp.task('about', function () {
+  return gulp.src('about/index.pug')
+              .pipe(pug({
+                pretty: true
+              }))
+              .pipe(gulp.dest('./about'));
+});
+
 gulp.task('img', function () {
   return gulp.src(['img/*.jpg', 'img/*.png', 'img/*.JPG'])
           .pipe(gulp.dest('./dist/img'));
@@ -65,7 +73,8 @@ gulp.task('watch', function () {
   gulp.watch('scripts/*.ts', ['scripts']);
   gulp.watch('styles/*.styl', ['styles']);
   gulp.watch('index.pug', ['index']);
+  gulp.watch('about/index.pug', ['about']);
   gulp.watch('posts/**/*.pug', ['markdown', 'img']);
 });
 
-gulp.task('default', ['styles', 'scripts', 'img', 'markdown', 'index', 'watch']);
+gulp.task('default', ['styles', 'scripts', 'img', 'markdown', 'about', 'index', 'watch']);
