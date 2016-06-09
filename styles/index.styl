@@ -1,7 +1,9 @@
 @import 'variables.styl'
 @import 'normalize.styl'
 @import 'article.styl'
+@import 'buttons.styl'
 @import 'highlight-hemisu.styl'
+@import 'search.styl'
 
 body,
 html
@@ -15,11 +17,21 @@ body
   text-decoration: none;
 
 .site-header
+  align-content: space-between;
   background: linear-gradient(to left, $seafoam, $seafoam2);
   border-bottom: 4px solid darken($seafoam, 50%);
   color: darken($seafoam, 45%);
   color: #333;
+  display: flex;
+  justify-content: center;
+  left: 0;
   padding: 1rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  .site-heading-wrapper
+    align-self: flex-end;
   .site-heading
     margin: 0;
     text-align: center;
@@ -36,16 +48,18 @@ body
   padding: 2vw;
 
 .site-article
+  border-bottom: 1px solid #eee;
   padding: 1rem;
+  position: relative;
   .site-article-date-time
     color: #ddd;
     display: inline-block;
-    text-align: center;
+    text-align: right;
+    position: absolute;
     width: 100%;
   .site-article-heading
     font-size: 2.2rem;
-    margin-bottom: .25rem;
-    text-align: center;
+    margin-bottom: .5rem;
     a
       color: $text;
       text-decoration: none;
@@ -64,9 +78,9 @@ body
     align-content: center;
     align-items: center;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     //margin: .25rem auto;
-    margin: .25rem;
+    //margin: .25rem;
     width: 100%;
   .site-article-tag
     background: darken($seafoam2, 35%);
@@ -74,6 +88,9 @@ body
     font-size: 12px;
     margin: 0 .25rem;
     padding: .25rem;
+    for num in (1..10)
+      &:nth-of-type({num})
+        opacity: 1 - num * .1;
 
 
 .site-footer
@@ -90,3 +107,6 @@ body
     margin: 0 auto;
     transition: 300ms all;
     width: 10rem;
+
+.pineapple-icon
+  height: 2rem;

@@ -1,0 +1,31 @@
+.search-container
+  position: relative;
+
+input[type='search']
+  background: rgba(black, 0.1);
+  border: 0 solid transparent;
+  border-radius: 4px;
+  color: $body;
+  display: inline-block;
+  display: none;
+  font-size: 1.25rem;
+  margin: 0 .25rem;
+  min-width: 15%;
+  text-decoration: none;
+  padding: .5rem;
+  padding-right: 2rem;
+  text-align: center;
+  transition: 100ms all;
+  &::-webkit-input-placeholder
+    color: #eee;
+  &::-moz-placeholder
+    color: #eee;
+  &::-ms-input-placeholder
+    color: #eee;
+
+.search-icon
+  color: #eee;
+  font-size: 2.25rem;
+  right: 1rem;
+  position: absolute;
+  top: .5rem;
