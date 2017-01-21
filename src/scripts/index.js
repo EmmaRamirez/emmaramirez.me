@@ -1,13 +1,5 @@
 "use strict";
-var articles = [
-    {
-        link: 'posts/my-first-day-at-npmjs',
-        title: 'My First Day at npmjs',
-        dateTime: '2016-06-06 04:47:22pm',
-        description: '',
-        tags: ['npm', 'true ventures', 'personal']
-    },
-];
+var articles = [];
 var settings = {
     displayDescription: true
 };

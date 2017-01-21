@@ -8,13 +8,13 @@ let articles:Article[] = [
   //   description: '',
   //   tags: ['typescript', 'javascript']
   // },
-  {
-    link: 'posts/my-first-day-at-npmjs',
-    title: 'My First Day at npmjs',
-    dateTime: '2016-06-06 04:47:22pm',
-    description: '',
-    tags: ['npm', 'true ventures', 'personal']
-  },
+  // {
+  //   link: 'posts/my-first-day-at-npmjs',
+  //   title: 'My First Day at npmjs',
+  //   dateTime: '2016-06-06 04:47:22pm',
+  //   description: '',
+  //   tags: ['npm', 'true ventures', 'personal']
+  // },
   // {
   //   link: 'posts/new-article',
   //   title: 'This is also an article',
