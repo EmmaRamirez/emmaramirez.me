@@ -34,7 +34,7 @@
     "gulp-uglify": "^2.0.1",
     "gulp-webserver": "^0.9.1",
     "jasmine": "^2.0.0",
-    "style-loader": "^0.13.1",
+    "style-loader": "^0.15.0",
     "stylus-loader": "^2.1.0",
     "ts-loader": "^2.0.1"
   },
