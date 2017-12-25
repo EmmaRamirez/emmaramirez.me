@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const copyWebpackPlugin = require('copy-webpack-plugin');
+const shellWebpackPlugin = require('webpack-shell-plugin');
 
 module.exports = {
     entry: './src/index.ts',
@@ -31,6 +32,9 @@ module.exports = {
                 from: './src/index.html',
                 to: './public/index.html'
             }]
-        )
+        ),
+        new shellWebpackPlugin({
+            onBuildStart: ['node ./scripts/build']
+        })
     ]
 }

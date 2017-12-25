@@ -39,6 +39,6 @@ marked.setOptions({
 });
 
 const convertToMarkdown = (data, file) => fs.writeFile(`../public/posts/${file.split('.')[0]}.html`, (marked(data)), err =>  {
-    if (err) throw err;
+    if (err) console.error(err);
     console.log(`Converted ${file} to hml`);
 });
