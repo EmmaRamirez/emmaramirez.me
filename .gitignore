@@ -1,0 +1,15 @@
+/node_modules/
+./dist
+/dist/
+npm-debug.log
+dist
+.git
+build
+target
+./build
+./target
+./target/**
+./target/*.json
+./target/debug
+deubg
+./src/_drafts

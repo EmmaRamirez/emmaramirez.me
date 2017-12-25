@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "strictNullChecks": true,
+        "noLib": false,
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": false,
+        "allowJs": true,
+        "lib": [
+          "dom",
+          "dom.iterable",
+          "es2017",
+          "es2017.object",
+          "es2017.sharedmemory"
+        ],
+        "typeRoots": [
+          "./node_modules/@types"
+        ],
+        "baseUrl": "./src"
+      },
+      "exclude": [
+        "node_modules",
+        "./node_modules/@types"
+      ],
+      "compileOnSave": false
+  }
