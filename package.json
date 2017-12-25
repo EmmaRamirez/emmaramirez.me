@@ -1,0 +1,25 @@
+{
+  "name": "emmaramirez.me",
+  "version": "1.0.0",
+  "description": "emma's personal website",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmmaRamirez/emmaramirez.me.git"
+  },
+  "keywords": [
+    "website",
+    "emma"
+  ],
+  "author": "Emma Ramirez <ramirez.emma.g@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EmmaRamirez/emmaramirez.me/issues"
+  },
+  "homepage": "https://github.com/EmmaRamirez/emmaramirez.me#readme"
+}
