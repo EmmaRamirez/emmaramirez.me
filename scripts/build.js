@@ -7,14 +7,27 @@ fse.remove(path.join(__dirname, '../public/posts'), err => {
     fs.mkdir(path.join(__dirname, '../public/posts'), err => { if (err) throw err });
 });
 
-const files = fs.readdir(path.join(__dirname, '../src/posts'), (err, files) => {
-    readFiles(files);
+const noop = () => {};
+
+const extension = (element) => {
+    const extName = path.extname(element);
+    return extName === '.md';
+};
+
+const isDirectory = source => fs.lstatSync(source).isDirectory();
+const getDirectories = source => fs.readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
+
+const directories = getDirectories(path.resolve(__dirname, '../src/posts'));
+
+directories.forEach(dir => fs.readdir(path.resolve(__dirname, dir), (err, files) => {
+    readFiles(dir, files);
+}));
+
+const readFiles = (dir, files) => files.filter(extension).forEach(file => {
+    const data = fs.readFileSync(path.join(dir, file), 'utf8');
+    convertToMarkdown(data, file);
 });
 
-const readFiles = files => files.forEach(file => fs.readFile(path.join(__dirname, '../src/posts/test.md'), { encoding: 'utf8' }, (err, data) => {
-    if (err) throw err;
-    convertToMarkdown(data, file);
-}));
 
 marked.setOptions({
     gfm: true,
