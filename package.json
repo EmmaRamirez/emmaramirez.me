@@ -8,6 +8,7 @@
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.7",
     "fs-extra": "^5.0.0",
+    "jest": "^22.0.4",
     "marked": "^0.3.9",
     "path": "^0.12.7",
     "resolve-url-loader": "^2.2.1",
@@ -23,7 +24,7 @@
   },
   "scripts": {
     "build": "node ./scripts/build",
-    "test": "exit 0",
+    "test": "jest",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
