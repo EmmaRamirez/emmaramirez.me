@@ -1,10 +1,12 @@
 {
   "name": "emmaramirez.me",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "emma's personal website",
   "main": "index.js",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^2.6.2"
+  },
   "scripts": {
     "test": "exit 0"
   },

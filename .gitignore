@@ -13,3 +13,5 @@ target
 ./target/debug
 deubg
 ./src/_drafts
+__drafts
+.cache
