@@ -3,3 +3,5 @@ node_js:
   - "8.9.1"
 os:
   - linux
+service_name: travis
+repo_token: qkhf8hbJy0BD9NYmTVBWQHYLq8FQ5rDal
