@@ -3,11 +3,18 @@
   "version": "0.1.0",
   "description": "emma's personal website",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "fs-extra": "^5.0.0",
+    "marked": "^0.3.9",
+    "path": "^0.12.7",
+    "tslint": "^5.8.0",
+    "tslint-microsoft-contrib": "^5.0.1"
+  },
   "devDependencies": {
     "typescript": "^2.6.2"
   },
   "scripts": {
+    "build": "node ./scripts/build",
     "test": "exit 0"
   },
   "repository": {
