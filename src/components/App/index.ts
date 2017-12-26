@@ -1,15 +1,24 @@
+import { State } from 'state';
 import { Header } from 'components/Header';
 import { Item, List } from 'components/List';
 
 export class App {
-    public Header:Header;
+    public Header: Header;
+    public theme: '☀️' | '🌙';
 
     constructor() {
         this.Header = new Header((event:Event, element:HTMLElement) => {
+            const targetNode = document.body;
             if (element.textContent === '🌙') {
-                element.textContent = '☀️';
-            } else {
+                this.theme = '🌙';
                 element.textContent = '🌙';
+                this.theme = '☀️';
+                element.textContent = '☀️';
+                if (targetNode) targetNode.className = 'dark';
+            } else {
+                this.theme = '🌙';
+                element.textContent = '🌙';
+                if (targetNode) targetNode.className = 'light';
             }
         });
     }
@@ -27,8 +36,8 @@ export class App {
         return [
             {
                 link: '',
-                title: 'smeargle',
-                description: 'a palette manager'
+                title: 'clickopolis',
+                description: 'an incremental empire management game'
             }
         ];
     }
@@ -43,6 +52,7 @@ export class App {
                     <h2>Projects</h2>
                     ${ new List(this.getProjectItems(), { target: '_blank' }).render() }
                 </div>
+                <img style='display: block; margin: 0 auto' src='https://media.giphy.com/media/HPkQKOjUTnfhK/giphy.gif' />
             </div>
         `;
     }
