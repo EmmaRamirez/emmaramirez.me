@@ -3,7 +3,7 @@
         "target": "es6",
         "module": "commonjs",
         "declaration": false,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "removeComments": true,
         "strictNullChecks": true,
         "noLib": false,

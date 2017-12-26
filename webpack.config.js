@@ -8,6 +8,10 @@ module.exports = {
     output: {
         filename: './public/bundle.js'
     },
+    resolve: {
+        modules: ['./src'],
+        extensions: ['.ts', '.js']
+    },
     module: {
         rules: [
             {
@@ -16,7 +20,7 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
-                test: /\.styl?u?s$/,
+                test: /\.styl$/,
                 loaders: [
                     { loader: 'style-loader' },
                     { loader: 'css-loader' },
@@ -33,8 +37,8 @@ module.exports = {
                 to: './public/index.html'
             }]
         ),
-        new shellWebpackPlugin({
-            onBuildStart: ['node ./scripts/build']
-        })
+        // new shellWebpackPlugin({
+        //     onBuildEnd: ['node ./scripts/build']
+        // })
     ]
 }

@@ -1,5 +1,9 @@
-import { render } from 'utils';
+import { App } from 'components';
+import { render, Nullable } from 'utils';
 
-const endpoint = document.getElementById('app');
+import './reset.styl';
+import './global.styl';
 
-render(`<div>Hey</div>`, endpoint);
+const endpoint:Nullable<HTMLElement> = document.getElementById('app');
+
+render(`${new App().render()}`, endpoint);
