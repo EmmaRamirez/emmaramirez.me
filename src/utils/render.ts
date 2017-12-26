@@ -1,5 +1,6 @@
 import { Nullable } from './Nullable';
 
-export const render = (data:string, endpoint:Nullable<HTMLElement>) => {
-    if (endpoint != null) endpoint.innerHTML = data;
+export const render = (component:any, endpoint:Nullable<HTMLElement>, callback:(component:any) => void) => {
+    if (endpoint != null) endpoint.innerHTML = `${component.render()}`;
+    setTimeout(() => callback(component), 1000);
 };
