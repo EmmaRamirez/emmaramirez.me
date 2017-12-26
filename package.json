@@ -24,8 +24,10 @@
     "semantic-release": "^11.0.2"
   },
   "scripts": {
-    "build": "node ./scripts/build",
+    "build": "webpack",
+    "build:watch": "webpack --watch",
     "test": "jest",
+    "lint": "tslint -c tsconfig.json",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
