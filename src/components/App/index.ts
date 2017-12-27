@@ -25,9 +25,13 @@ export class App {
 
     private getWritingItems():Item[] {
         return [
+            // {
+            //     link: '',
+            //     title: 'On Joining (And Leaving) a Techstars Company'
+            // }
             {
-                link: '',
-                title: 'On Joining (And Leaving) a Techstars Company'
+                link: '#',
+                title: 'None yet'
             }
         ];
     }
@@ -35,7 +39,7 @@ export class App {
     private getProjectItems():Item[] {
         return [
             {
-                link: '',
+                link: 'https://github.com/Clickopolis',
                 title: 'clickopolis',
                 description: 'an incremental empire management game'
             }
