@@ -43,8 +43,19 @@ export class App {
                     ${ new List(this.getWritingItems()).render() }
                     <h2>Projects</h2>
                     ${ new List(this.getProjectItems(), { target: '_blank' }).render() }
+                    <img style='display: block; margin: 3rem auto' src='./palms.webp' />
+                    <br />
+                    <h2>Elsewhere</h2>
+                    <a title='github' style='margin: .25rem' href='https://github.com/EmmaRamirez/emmaramirez.me'>
+                        <img alt='github' src='./github.svg' height='32' />
+                    </a>
+                    <a title='keybase' style='margin: .25rem' href='https://keybase.io/emmaramirez'>
+                        <img alt='keybase' src='./keybase.svg' height='32' />
+                    </a>
+                    <a title='twitter' style='margin: .25rem' href='https://twitter.com/emmagramirez'>
+                        <img alt='twitter' src='./twitter.svg' height='32' />
+                    </a>
                 </div>
-                <img style='display: block; margin: 0 auto' src='./palms.webp' />
             </div>
         `;
     }
