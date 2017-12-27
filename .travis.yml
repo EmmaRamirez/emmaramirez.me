@@ -1,7 +1,10 @@
 language: node_js
+cache:
+  directories:
+    - ~/.npm
 node_js:
-  - "8.9.1"
-os:
-  - linux
+  - '9'
+after_success:
+  - npm run semantic-release
 service_name: travis
 repo_token: qkhf8hbJy0BD9NYmTVBWQHYLq8FQ5rDal
