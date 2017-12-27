@@ -21,8 +21,9 @@
     "webpack-shell-plugin": "^0.5.0"
   },
   "devDependencies": {
-    "typescript": "^2.6.2",
-    "semantic-release": "^11.0.2"
+    "cz-conventional-changelog": "^2.1.0",
+    "semantic-release": "^11.0.2",
+    "typescript": "^2.6.2"
   },
   "scripts": {
     "build": "webpack",
@@ -44,5 +45,10 @@
   "bugs": {
     "url": "https://github.com/EmmaRamirez/emmaramirez.me/issues"
   },
-  "homepage": "https://github.com/EmmaRamirez/emmaramirez.me#readme"
+  "homepage": "https://github.com/EmmaRamirez/emmaramirez.me#readme",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }

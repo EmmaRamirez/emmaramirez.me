@@ -4,6 +4,7 @@ export interface Item {
     link: string;
     title: string;
     description?: string;
+    wip?: boolean;
 }
 
 export interface ListOptions {
@@ -27,9 +28,10 @@ export class List {
                     return `
                         <li class='list-item' data-key=${key}>
                             <a href='${item.link}' target=${this.options.target}>${item.title}</a>
+                            ${ item.wip ? `<span class='item-wip-badge'>WIP</span>` : '' }
                             ${ item.description ? `<span class='item-description'>${item.description}</span>` : '' }
                         </li>`;
-                })
+                }).join('')
             }
             </ul>
         `;

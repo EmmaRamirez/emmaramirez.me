@@ -43,7 +43,7 @@ export class App {
                     <h2>Projects</h2>
                     ${ new List(this.getProjectItems(), { target: '_blank' }).render() }
                 </div>
-                <img style='display: block; margin: 0 auto' src='https://media.giphy.com/media/HPkQKOjUTnfhK/giphy.gif' />
+                <img style='display: block; margin: 0 auto' src='./palms.webp' />
             </div>
         `;
     }
