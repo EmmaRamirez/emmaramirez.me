@@ -17,6 +17,7 @@ describe('App', () => {
     const app2 = new App(data);
     expect(app1.data.projects.length).toBe(0);
     expect(app2.data.projects.length).toBe(data.projects.length);
+    expect(app2.data.links.length).toBe(data.links.length);
   });
 
   it('contains a Header', () => {
