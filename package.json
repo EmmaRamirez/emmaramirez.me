@@ -4,6 +4,7 @@
   "description": "emma's personal website",
   "main": "index.js",
   "dependencies": {
+    "@types/jest": "^21.1.9",
     "awesome-typescript-loader": "^3.4.1",
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.7",
@@ -15,6 +16,7 @@
     "style-loader": "^0.19.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
+    "ts-jest": "^22.0.0",
     "tslint": "^5.8.0",
     "tslint-microsoft-contrib": "^5.0.1",
     "webpack": "^3.10.0",
@@ -28,7 +30,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "test": "jest",
+    "test": "jest --coverage",
     "lint": "tslint -c tsconfig.json",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
@@ -50,6 +52,27 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleNameMapper": {
+      "^.+\\.(css|styl|sass|scss|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js"
+    },
+    "modulePaths": [
+      "/src"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ]
   },
   "private": false
 }
