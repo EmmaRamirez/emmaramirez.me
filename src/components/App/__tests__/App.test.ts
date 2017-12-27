@@ -1,10 +1,25 @@
 import { App } from '..';
 
+const data = require('data.json');
+
 declare var describe: any;
 
 describe('App', () => {
-    it('it renders', () => {
+    it('renders', () => {
         const app = new App();
-        expect(app).toBeDefined();
+        expect(app.render()).toBeDefined();
+    });
+
+    it('can contain data', () => {
+        const app1 = new App();
+        const app2 = new App(data);
+        expect(app1.data.projects.length).toBe(0);
+        expect(app2.data.projects.length).toBe(data.projects.length);
+    });
+
+    it('contains a Header', () => {
+        const app = new App(data);
+        expect(app.Header).toBeDefined();
+        expect(typeof app.Header.render()).toBe('string');
     });
 });

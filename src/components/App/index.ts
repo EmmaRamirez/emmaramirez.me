@@ -8,7 +8,7 @@ export class App {
     public Header: Header;
     public theme: '☀️' | '🌙';
 
-    constructor() {
+    constructor(public data?:any) {
         this.Header = new Header((event:Event, element:HTMLElement) => {
             const targetNode = document.body;
             if (element.textContent === '🌙') {
@@ -23,14 +23,15 @@ export class App {
                 if (targetNode) targetNode.className = 'light';
             }
         });
+        this.data = data || { articles: [], projects: [] };
     }
 
     private getWritingItems():Item[] {
-        return data.articles;
+        return this.data.articles;
     }
 
     private getProjectItems():Item[] {
-        return data.projects;
+        return this.data.projects;
     }
 
     public render() {
