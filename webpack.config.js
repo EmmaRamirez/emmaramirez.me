@@ -37,8 +37,8 @@ module.exports = {
                 to: './docs/index.html'
             }]
         ),
-        // new shellWebpackPlugin({
-        //     onBuildEnd: ['node ./scripts/build']
-        // })
+        new shellWebpackPlugin({
+            onBuildEnd: ['node ./scripts/build']
+        })
     ]
 }

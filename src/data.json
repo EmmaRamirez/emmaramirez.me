@@ -1,0 +1,16 @@
+{
+    "articles": [
+        {
+            "link": "#",
+            "title": "None Yet"
+        }
+    ],
+
+    "projects": [
+        {
+            "link": "https://github.com/Clickopolis",
+            "title": "clickopolis",
+            "description": "an incremental empire management game"
+        }
+    ]
+}

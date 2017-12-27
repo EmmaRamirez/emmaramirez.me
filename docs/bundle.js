@@ -582,9 +582,9 @@ exports.List = List;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const components_1 = __webpack_require__(5);
-const utils_1 = __webpack_require__(12);
-__webpack_require__(15);
-__webpack_require__(17);
+const utils_1 = __webpack_require__(13);
+__webpack_require__(16);
+__webpack_require__(18);
 const endpoint = document.getElementById('app');
 const app = new components_1.App();
 utils_1.render(app, endpoint, app => app.postRender());
@@ -614,6 +614,7 @@ __export(__webpack_require__(3));
 Object.defineProperty(exports, "__esModule", { value: true });
 const Header_1 = __webpack_require__(2);
 const List_1 = __webpack_require__(3);
+const data = __webpack_require__(12);
 class App {
     constructor() {
         this.Header = new Header_1.Header((event, element) => {
@@ -635,21 +636,10 @@ class App {
         });
     }
     getWritingItems() {
-        return [
-            {
-                link: '#',
-                title: 'None yet'
-            }
-        ];
+        return data.articles;
     }
     getProjectItems() {
-        return [
-            {
-                link: 'https://github.com/Clickopolis',
-                title: 'clickopolis',
-                description: 'an incremental empire management game'
-            }
-        ];
+        return data.projects;
     }
     render() {
         return `
@@ -859,19 +849,25 @@ exports.push([module.i, ".list {\n  font-size: 1.25rem;\n  list-style-type: none
 
 /***/ }),
 /* 12 */
+/***/ (function(module, exports) {
+
+module.exports = {"articles":[{"link":"#","title":"None Yet"}],"projects":[{"link":"https://github.com/Clickopolis","title":"clickopolis","description":"an incremental empire management game"}]}
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var noop_1 = __webpack_require__(13);
+var noop_1 = __webpack_require__(14);
 exports.noop = noop_1.noop;
-var render_1 = __webpack_require__(14);
+var render_1 = __webpack_require__(15);
 exports.render = render_1.render;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -881,7 +877,7 @@ exports.noop = () => { };
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -895,13 +891,13 @@ exports.render = (component, endpoint, callback) => {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(16);
+var content = __webpack_require__(17);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -926,7 +922,7 @@ if(false) {
 }
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -940,13 +936,13 @@ exports.push([module.i, "html,\nbody,\ndiv,\nspan,\nobject,\niframe,\nh1,\nh2,\n
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(18);
+var content = __webpack_require__(19);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -971,7 +967,7 @@ if(false) {
 }
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);

@@ -2,6 +2,8 @@ import { State } from 'state';
 import { Header } from 'components/Header';
 import { Item, List } from 'components/List';
 
+const data = require('data.json');
+
 export class App {
     public Header: Header;
     public theme: '☀️' | '🌙';
@@ -24,26 +26,11 @@ export class App {
     }
 
     private getWritingItems():Item[] {
-        return [
-            // {
-            //     link: '',
-            //     title: 'On Joining (And Leaving) a Techstars Company'
-            // }
-            {
-                link: '#',
-                title: 'None yet'
-            }
-        ];
+        return data.articles;
     }
 
     private getProjectItems():Item[] {
-        return [
-            {
-                link: 'https://github.com/Clickopolis',
-                title: 'clickopolis',
-                description: 'an incremental empire management game'
-            }
-        ];
+        return data.projects;
     }
 
     public render() {
