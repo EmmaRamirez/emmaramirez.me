@@ -55,6 +55,8 @@ export class App {
                     <a title='twitter' style='margin: .25rem' href='https://twitter.com/emmagramirez'>
                         <img alt='twitter' src='./twitter.svg' height='32' />
                     </a>
+                    <div class='monospace'>Bitcoin: 16mM8fFqLsAFZ9J6v1Efr3Ba8mT18RuZLW</div>
+                    <div class='monospace'>Ethereum: 0x67cee0981f84Cc86A0eC7491e2d19cd8476d0A42</div>
                 </div>
             </div>
         `;
