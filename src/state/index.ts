@@ -1,7 +1,7 @@
 export interface State {
-    theme: '☀️' | '🌙';
+  theme: "☀️" | "🌙";
 }
 
-export const State:State = {
-    theme: '☀️'
+export const State: State = {
+  theme: "☀️"
 };

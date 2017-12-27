@@ -35,6 +35,7 @@
     "build:watch": "webpack --watch",
     "test": "jest --coverage",
     "lint": "tslint -c tsconfig.json",
+    "format": "prettier \"*/**/*.ts\" --ignore-path ./.prettierignore --write",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {

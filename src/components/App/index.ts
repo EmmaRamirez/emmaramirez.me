@@ -1,47 +1,49 @@
-import { State } from 'state';
-import { Header } from 'components/Header';
-import { Item, List } from 'components/List';
+import { State } from "state";
+import { Header } from "components/Header";
+import { Item, List } from "components/List";
 
-const data = require('data.json');
+const data = require("data.json");
 
 export class App {
-    public Header: Header;
-    public theme: '☀️' | '🌙';
+  public Header: Header;
+  public theme: "☀️" | "🌙";
 
-    constructor(public data?:any) {
-        this.theme = '🌙';
-        this.Header = new Header((event:Event, element:HTMLElement) => {
-            const targetNode = document.body;
-            if (element.textContent === '🌙') {
-                this.theme = '☀️';
-                element.textContent = '☀️';
-                if (targetNode) targetNode.className = 'dark';
-            } else {
-                this.theme = '🌙';
-                element.textContent = '🌙';
-                if (targetNode) targetNode.className = 'light';
-            }
-        });
-        this.data = data || { articles: [], projects: [] };
-    }
+  constructor(public data?: any) {
+    this.theme = "🌙";
+    this.Header = new Header((event: Event, element: HTMLElement) => {
+      const targetNode = document.body;
+      if (element.textContent === "🌙") {
+        this.theme = "☀️";
+        element.textContent = "☀️";
+        if (targetNode) targetNode.className = "dark";
+      } else {
+        this.theme = "🌙";
+        element.textContent = "🌙";
+        if (targetNode) targetNode.className = "light";
+      }
+    });
+    this.data = data || { articles: [], projects: [] };
+  }
 
-    private getWritingItems():Item[] {
-        return this.data.articles;
-    }
+  private getWritingItems(): Item[] {
+    return this.data.articles;
+  }
 
-    private getProjectItems():Item[] {
-        return this.data.projects;
-    }
+  private getProjectItems(): Item[] {
+    return this.data.projects;
+  }
 
-    public render() {
-        return `
+  public render() {
+    return `
             <div class='app'>
-                ${ this.Header.render() }
+                ${this.Header.render()}
                 <div class='posts'>
                     <h2>Writing</h2>
-                    ${ new List(this.getWritingItems()).render() }
+                    ${new List(this.getWritingItems()).render()}
                     <h2>Projects</h2>
-                    ${ new List(this.getProjectItems(), { target: '_blank' }).render() }
+                    ${new List(this.getProjectItems(), {
+                      target: "_blank"
+                    }).render()}
                     <img style='display: block; margin: 3rem auto' src='./palms.webp' />
                     <br />
                     <h2>Elsewhere</h2>
@@ -59,9 +61,9 @@ export class App {
                 </div>
             </div>
         `;
-    }
+  }
 
-    public postRender() {
-        this.Header.postRender();
-    }
+  public postRender() {
+    this.Header.postRender();
+  }
 }
