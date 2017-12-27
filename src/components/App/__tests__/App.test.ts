@@ -8,6 +8,8 @@ describe('App', () => {
     it('renders', () => {
         const app = new App();
         expect(app.render()).toBeDefined();
+        expect(typeof app.render()).toBe('string');
+        expect(app.theme).toEqual('🌙');
     });
 
     it('can contain data', () => {

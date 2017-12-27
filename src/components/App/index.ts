@@ -9,11 +9,10 @@ export class App {
     public theme: '☀️' | '🌙';
 
     constructor(public data?:any) {
+        this.theme = '🌙';
         this.Header = new Header((event:Event, element:HTMLElement) => {
             const targetNode = document.body;
             if (element.textContent === '🌙') {
-                this.theme = '🌙';
-                element.textContent = '🌙';
                 this.theme = '☀️';
                 element.textContent = '☀️';
                 if (targetNode) targetNode.className = 'dark';
@@ -46,13 +45,13 @@ export class App {
                     <img style='display: block; margin: 3rem auto' src='./palms.webp' />
                     <br />
                     <h2>Elsewhere</h2>
-                    <a title='github' style='margin: .25rem' href='https://github.com/EmmaRamirez/emmaramirez.me'>
+                    <a class='elsewhere-link' title='github' style='margin: .25rem' href='https://github.com/EmmaRamirez/emmaramirez.me'>
                         <img alt='github' src='./github.svg' height='32' />
                     </a>
-                    <a title='keybase' style='margin: .25rem' href='https://keybase.io/emmaramirez'>
+                    <a class='elsewhere-link' title='keybase' style='margin: .25rem' href='https://keybase.io/emmaramirez'>
                         <img alt='keybase' src='./keybase.svg' height='32' />
                     </a>
-                    <a title='twitter' style='margin: .25rem' href='https://twitter.com/emmagramirez'>
+                    <a class='elsewhere-link' title='twitter' style='margin: .25rem' href='https://twitter.com/emmagramirez'>
                         <img alt='twitter' src='./twitter.svg' height='32' />
                     </a>
                     <div class='monospace'>Bitcoin: 16mM8fFqLsAFZ9J6v1Efr3Ba8mT18RuZLW</div>
