@@ -23,5 +23,20 @@
             "description": "a nuzlocke documentation engine",
             "wip": true
         }
+    ],
+
+    "links": [
+        {
+            "link": "https://github.com/EmmaRamirez/emmaramirez.me",
+            "name": "github"
+        },
+        {
+            "link": "https://keybase.io/emmaramirez",
+            "name": "keybase"
+        },
+        {
+            "link": "https://twitter.com/emmagramirez",
+            "name": "twitter"
+        }
     ]
 }

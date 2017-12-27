@@ -1,4 +1,4 @@
-import "./Header.styl";
+import './Header.styl';
 
 export class Header {
   constructor(public onStyleSwitch: (e: Event, element: HTMLElement) => void) {
@@ -6,9 +6,9 @@ export class Header {
   }
 
   public postRender() {
-    const sss = document.querySelector(".site-style-switcher");
+    const sss = document.querySelector('.site-style-switcher');
     if (sss != null)
-      sss.addEventListener("click", e =>
+      sss.addEventListener('click', e =>
         this.onStyleSwitch(e, sss as HTMLElement)
       );
   }

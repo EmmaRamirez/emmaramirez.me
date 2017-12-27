@@ -1,4 +1,4 @@
-import { Nullable } from "./Nullable";
+import { Nullable } from './Nullable';
 
 export const render = (
   component: any,

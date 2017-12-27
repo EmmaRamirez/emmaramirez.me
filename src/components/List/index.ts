@@ -1,4 +1,4 @@
-import "./List.styl";
+import './List.styl';
 
 export interface Item {
   link: string;
@@ -8,7 +8,7 @@ export interface Item {
 }
 
 export interface ListOptions {
-  target?: "_blank" | "_self" | "_parent" | "_top";
+  target?: '_blank' | '_self' | '_parent' | '_top';
 }
 
 export class List {
@@ -18,7 +18,7 @@ export class List {
   constructor(items: Item[], options?: ListOptions) {
     if (options == null) options = {};
     this.items = items;
-    this.options = { target: "_self", ...options };
+    this.options = { target: '_self', ...options };
   }
   public render() {
     return `
@@ -33,18 +33,18 @@ export class List {
                             ${
                               item.wip
                                 ? `<span class='item-wip-badge'>WIP</span>`
-                                : ""
+                                : ''
                             }
                             ${
                               item.description
                                 ? `<span class='item-description'>${
                                     item.description
                                   }</span>`
-                                : ""
+                                : ''
                             }
                         </li>`;
               })
-              .join("")}
+              .join('')}
             </ul>
         `;
   }
