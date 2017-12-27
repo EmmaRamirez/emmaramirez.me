@@ -5,9 +5,9 @@ const marked = require('marked');
 
 const config = require('../website.config');
 
-fse.remove(path.join(__dirname, '../public/posts'), err => {
-    fs.mkdir(path.join(__dirname, '../public/posts'), err => { if (err) throw err });
-});
+// fse.remove(path.join(__dirname, '../docs/posts'), err => {
+//     fs.mkdir(path.join(__dirname, '../docs/posts'), err => { if (err) throw err });
+// });
 
 const noop = () => {};
 
@@ -38,7 +38,7 @@ marked.setOptions({
     smartypants: true
 });
 
-const convertToMarkdown = (data, file) => fs.writeFile(`../public/posts/${file.split('.')[0]}.html`, (marked(data)), err =>  {
+const convertToMarkdown = (data, file) => fs.writeFile(`./docs/posts/${file.split('.')[0]}.html`, (marked(data)), err =>  {
     if (err) console.error(err);
     console.log(`Converted ${file} to hml`);
 });

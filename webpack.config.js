@@ -6,7 +6,7 @@ const shellWebpackPlugin = require('webpack-shell-plugin');
 module.exports = {
     entry: './src/index.ts',
     output: {
-        filename: './public/bundle.js'
+        filename: './docs/bundle.js'
     },
     resolve: {
         modules: ['./src'],
@@ -34,7 +34,7 @@ module.exports = {
         new copyWebpackPlugin(
             [{
                 from: './src/index.html',
-                to: './public/index.html'
+                to: './docs/index.html'
             }]
         ),
         // new shellWebpackPlugin({
