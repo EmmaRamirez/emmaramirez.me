@@ -39,6 +39,7 @@ module.exports = {
         ),
         new shellWebpackPlugin({
             onBuildEnd: ['node ./scripts/build']
-        })
+        }),
+        new webpack.optimize.UglifyJsPlugin({})
     ]
 }
