@@ -26,25 +26,38 @@ export class App {
     this.data = data || { articles: [], projects: [], links: [] };
   }
 
+  public appBody() {
+    if (document.body.className === 'markdown-body') {
+      const md = document.getElementById('markdown');
+      const markdown = (md ? md : { innerHTML: false }).innerHTML;
+      (md ? md : { innerHTML: false }).innerHTML = '';
+      return markdown;
+    }
+    return `
+      <div class='posts'>
+          <h2>Writing</h2>
+          ${new List(this.data.articles).render()}
+          <h2>Projects</h2>
+          ${new List(this.data.projects, {
+            target: '_blank'
+          }).render()}
+          <img style='display: block; margin: 3rem auto' src='./palms.webp' />
+          <br />
+          <h2>Elsewhere</h2>
+          ${new ElsewhereLinks(this.data.links, {
+            target: '_blank'
+          }).render()}
+          <div class='monospace'>Bitcoin: 16mM8fFqLsAFZ9J6v1Efr3Ba8mT18RuZLW</div>
+          <div class='monospace'>Ethereum: 0x67cee0981f84Cc86A0eC7491e2d19cd8476d0A42</div>
+      </div>`;
+  }
+
   public render() {
     return `
             <div class='app'>
                 ${this.Header.render()}
-                <div class='posts'>
-                    <h2>Writing</h2>
-                    ${new List(this.data.articles).render()}
-                    <h2>Projects</h2>
-                    ${new List(this.data.projects, {
-                      target: '_blank'
-                    }).render()}
-                    <img style='display: block; margin: 3rem auto' src='./palms.webp' />
-                    <br />
-                    <h2>Elsewhere</h2>
-                    ${new ElsewhereLinks(this.data.links, {
-                      target: '_blank'
-                    }).render()}
-                    <div class='monospace'>Bitcoin: 16mM8fFqLsAFZ9J6v1Efr3Ba8mT18RuZLW</div>
-                    <div class='monospace'>Ethereum: 0x67cee0981f84Cc86A0eC7491e2d19cd8476d0A42</div>
+                <div class='blog-post'>
+                  ${this.appBody()}
                 </div>
             </div>
         `;
