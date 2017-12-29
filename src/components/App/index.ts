@@ -7,22 +7,24 @@ const data = require('data.json');
 
 export class App {
   public Header: Header;
-  public theme: '☀️' | '🌙';
+  public theme: '☀️' | '🌙' | string;
 
   constructor(public data?: any) {
-    this.theme = '🌙';
+    this.theme = localStorage.getItem('theme') || '🌙';
     this.Header = new Header((event: Event, element: HTMLElement) => {
       const targetNode = document.body;
       if (element.textContent === '🌙') {
         this.theme = '☀️';
         element.textContent = '☀️';
         if (targetNode) targetNode.className = 'dark';
+        localStorage.setItem('theme', '🌙');
       } else {
         this.theme = '🌙';
         element.textContent = '🌙';
         if (targetNode) targetNode.className = 'light';
+        localStorage.setItem('theme', '☀️');
       }
-    });
+    }, this.theme);
     this.data = data || { articles: [], projects: [], links: [] };
   }
 

@@ -5,6 +5,7 @@ const data = require('data.json');
 declare var describe: any;
 
 describe('App', () => {
+
   it('renders', () => {
     const app = new App();
     expect(app.render()).toBeDefined();
