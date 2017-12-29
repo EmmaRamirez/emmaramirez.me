@@ -2,6 +2,7 @@ const fse = require('fs-extra');
 const fs = require('fs');
 const path = require('path');
 const marked = require('marked');
+const chalk = require('chalk');
 
 const config = require('../website.config');
 
@@ -62,11 +63,13 @@ const buildBlogPost = data => {
                 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
                 <link rel="icon" href="/favicon.ico" type="image/x-icon">
                 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+                <link href="../../code-theme.css" rel="stylesheet">
             </head>
             <body class='markdown-body'>
                 <div id='markdown' style='color:white'>${marked(data)}</div>
                 <div id='app'></div>
                 <script src='../../bundle.js'></script>
+                <script src="../../rainbow-custom.min.js"></script>
             </body>
         </html>`;
 }
@@ -77,6 +80,6 @@ const convertToMarkdown = (data, file) => {
     const blogPost = buildBlogPost(data);
     fs.writeFile(`./docs/posts/${fileName}/index.html`, blogPost, err =>  {
         if (err) console.error(err);
-        console.log(`Converted ${file} to hml`);
+        console.log(`Wrote ${chalk.yellow(fileName)} to posts ${ chalk.green('[' + new Date().toUTCString() + ']') }`);
     });
 };
