@@ -14,6 +14,6 @@ export class Header {
   }
 
   public render() {
-    return `<header class='header'><span class='site-title'>🍍 emmaramirez</span><span class='site-style-switcher'>🌙</span></header>`;
+    return `<header class='header'><a href='/' class='site-title'>🍍 emmaramirez</a><span class='site-style-switcher'>🌙</span></header>`;
   }
 }

@@ -1,8 +1,10 @@
+dark-color = #242830
+
 body
     font-family 'Open Sans', sans-serif
     overflow-x hidden
     &.dark
-        background #242830
+        background dark-color
         color #eee
     
     @media screen and (max-width: 640px)
@@ -50,3 +52,9 @@ h2
     code
         background #eee
         padding .25rem
+
+.dark .blog-post
+    code
+        background darken(dark-color, 10%)
+        color #fff
+        outline 1px solid #2e2c2c

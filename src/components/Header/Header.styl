@@ -12,3 +12,19 @@
 
 .dark .header
     border-bottom 1px solid #333
+
+.dark .site-title
+    color #eee
+
+.site-title
+    &:hover
+        animation 2s hue infinite alternate
+    
+@keyframes hue {
+    0% {
+        filter hue-rotate(0deg)
+    }
+    100% {
+        filter hue-rotate(360deg)
+    }
+}
