@@ -34,7 +34,7 @@ const ensureExists = (path, mask, cb) => {
 const isDirectory = source => fs.lstatSync(source).isDirectory();
 const getDirectories = source => fs.readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
 
-const directories = getDirectories(path.resolve(__dirname, '../src/posts'));
+const directories = getDirectories(path.resolve(__dirname, '../posts'));
 
 directories.forEach(dir => fs.readdir(path.resolve(__dirname, dir), (err, files) => {
     readFiles(dir, files);
@@ -55,7 +55,7 @@ marked.setOptions({
 
 const buildBlogPost = data => {
     return `
-        <html lang='en'>
+        <html lang=${config.lang}>
             <head>
                 <title>emmaramirez.me</title>
                 <meta charset='utf-8'>
