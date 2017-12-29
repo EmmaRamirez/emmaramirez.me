@@ -33,7 +33,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "test": "jest --coverage",
+    "test": "jest --verbose --coverage",
     "lint": "tslint -c tsconfig.json",
     "format": "prettier \"*/**/*.ts\" --parser 'typescript' --single-quote --ignore-path ./.prettierignore --write",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"

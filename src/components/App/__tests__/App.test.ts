@@ -5,10 +5,9 @@ const data = require('data.json');
 declare var describe: any;
 
 describe('App', () => {
-
   // @ts-ignore: this is a required polyfill
   window.localStorage = {
-    getItem: (str:string) => '🌙'
+    getItem: (str: string) => '🌙'
   };
 
   it('renders', () => {
@@ -30,5 +29,10 @@ describe('App', () => {
     const app = new App(data);
     expect(app.Header).toBeDefined();
     expect(typeof app.Header.render()).toBe('string');
+  });
+
+  it('#appBody()', () => {
+    const app = new App(data);
+    expect(typeof app.appBody()).toBe('string');
   });
 });

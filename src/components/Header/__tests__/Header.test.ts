@@ -16,4 +16,13 @@ describe('Header', () => {
     const header = new Header((e, el) => ({ e, el }), 'test');
     expect(header.postRender).toBeDefined();
   });
+
+  it('attaches an event', () => {
+    window.document.querySelector = (s: string) => ({
+      addEventListener: (event: string, func: Function) => null
+    });
+    const header = new Header((e, el) => null, 'test');
+    header.postRender();
+    expect(header.postRender).toBeDefined();
+  });
 });
