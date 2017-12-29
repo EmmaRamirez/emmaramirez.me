@@ -1,6 +1,6 @@
 {
   "name": "emmaramirez.me",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "emma's personal website",
   "main": "index.js",
   "dependencies": {
