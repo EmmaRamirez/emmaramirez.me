@@ -13,6 +13,6 @@ A third theory is that life and code both move faster than my ability to freeze 
 
 I'm sorry for wasting your time.
 
-Hello.
+So, hello, again, I guess.
 
 `*potentionally didn't happen`
