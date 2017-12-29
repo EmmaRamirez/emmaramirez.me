@@ -6,6 +6,11 @@ declare var describe: any;
 
 describe('App', () => {
 
+  // @ts-ignore: this is a required polyfill
+  window.localStorage = {
+    getItem: (str:string) => '🌙'
+  };
+
   it('renders', () => {
     const app = new App();
     expect(app.render()).toBeDefined();

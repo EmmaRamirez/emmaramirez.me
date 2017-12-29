@@ -3,7 +3,6 @@ import { Header } from '..';
 declare var describe: any;
 
 describe('Header', () => {
-
   it('renders', () => {
     const header = new Header((e, el) => null, '🌙');
     expect(header).toBeDefined();

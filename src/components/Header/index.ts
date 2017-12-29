@@ -1,7 +1,10 @@
 import './Header.styl';
 
 export class Header {
-  constructor(public onStyleSwitch: (e: Event, element: HTMLElement) => void, public theme: string) {
+  constructor(
+    public onStyleSwitch: (e: Event, element: HTMLElement) => void,
+    public theme: string
+  ) {
     this.onStyleSwitch = onStyleSwitch;
   }
 
@@ -14,6 +17,8 @@ export class Header {
   }
 
   public render() {
-    return `<header class='header'><a href='/' class='site-title'>🍍 emmaramirez</a><span class='site-style-switcher'>${ this.theme }</span></header>`;
+    return `<header class='header'><a href='/' class='site-title'>🍍 emmaramirez</a><span class='site-style-switcher'>${
+      this.theme
+    }</span></header>`;
   }
 }
