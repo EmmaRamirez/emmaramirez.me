@@ -1,6 +1,10 @@
 {
     "articles": [
         {
+            "link": "./posts/the-safe-navigation-operator",
+            "title": "The Safe Navigation Operator"
+        },
+        {
             "link": "./posts/yet-another-blog-post",
             "title": "Yet Another Blog Post"
         }

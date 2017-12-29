@@ -1,0 +1,46 @@
+
+        <html lang=en>
+            <head>
+                <title>emmaramirez.me</title>
+                <meta charset='utf-8'>
+                <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+                <link rel="icon" href="/favicon.ico" type="image/x-icon">
+                <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+                <link href="../../code-theme.css" rel="stylesheet">
+            </head>
+            <body class='markdown-body'>
+                <div id='markdown' style='color:white'><h1 id="the-safe-navigation-operator">The Safe Navigation Operator</h1>
+<h2 id="a-billion-dollars">A Billion Dollars</h2>
+<p>One thing about Javascript that’s always irked me is dealing with <code>null</code> values. Sir Tony Hoare famously referred to its creation as the billion-dollar mistake. While the goal of the null reference was safety, it can create a lot of pitfalls, especially when checking through nested values in an object. Take for example a reference <code>article.author.name</code>. In Javascript, a conditional such as</p>
+<pre><code class="lang-js">if (article.author.name) { ... }
+</code></pre>
+<p>If your code is <code>const article = { }</code>, the latter triggers an Uncaught TypeError, as the property name belongs to author which isn’t defined. The solution is simple enough:</p>
+<pre><code class="lang-js">if (article.author &amp;&amp; article.author.name) { ... }
+
+// or
+
+if (article.author == null ? false : article.author.name)
+</code></pre>
+<p>But this is verbose, and can become problematic when you’re dealing with primitives (i.e. name might be a string which is going to be coerced into true, but what about a number like 0? or an empty array, which becomes unfortunately <code>true</code>?).</p>
+<p>Enter the safe navigation operator. This currently <a href="https://github.com/tc39/proposal-optional-chaining">Stage 1 proposal</a> allows for code like this:</p>
+<pre><code class="lang-js">if (article?.author?.name) { ... }
+</code></pre>
+<p>This is much cleaner. The <code>?</code> syntax essentially means “navigate to the next property, and if it’s undefined, bail out.” This can be arbitrarily chained (the safe navigation operator is also often called optional chaining or null propagation, or most dramatically, the existential operator). Since they can be nested, you can stack them like so:</p>
+<pre><code class="lang-js">a?.b[3].c?.(x).d
+</code></pre>
+<p>That looks really complicated, so let’s break it down.</p>
+<p><code>a</code> is an object that might contain…</p>
+<p><code>b</code> which is an array that might contain in its third index…</p>
+<p><code>c</code> which evaluates x if c is defined…</p>
+<p><code>d</code> which then calls d after the function is evaluated</p>
+<h2 id="using-it-today">Using it Today</h2>
+<p>The safe navigation operator is available today in <a href="https://github.com/babel/babel/pull/5813">Babel</a>. It’s part of <a href="https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-optional-chaining">v7</a>, though you’ll have to npm install <code>@babel/plugin-syntax-optional-chaining</code>.</p>
+<p>While there’s been discussion of including this in Typescript (for over 3 years), it won’t be included until it <a href="https://github.com/Microsoft/TypeScript/issues/16">reaches stage 3</a>. In the meantime, you could probably try pestering the tc39 committee as opposed to the Typescript team, but that’s just my advice.</p>
+<p>Ultimately, while the safe navigation operator would be a huge boon syntactically to the Javascript language, figuring out how to handle edge cases around syntax and effect are priorities for the ECMAScript community. Hopefully per Tony Hoare’s advice we’ll be able to save a couple billion.</p>
+<p>I? Sure? Hope? So?</p>
+</div>
+                <div id='app'></div>
+                <script src='../../bundle.js'></script>
+                <script src="../../rainbow-custom.min.js"></script>
+            </body>
+        </html>
