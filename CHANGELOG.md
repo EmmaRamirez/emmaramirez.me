@@ -1,3 +1,13 @@
+<a name="0.6.4"></a>
+## [0.6.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.6.3...v0.6.4) (2017-12-30)
+
+
+### Bug Fixes
+
+* fix 'possibly undefined' err in test ([e713eb8](https://github.com/EmmaRamirez/emmaramirez.me/commit/e713eb8))
+
+
+
 <a name="0.6.3"></a>
 ## [0.6.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.6.2...v0.6.3) (2017-12-30)
 
