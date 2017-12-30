@@ -36,6 +36,7 @@
     "build:watch": "webpack --watch",
     "test": "jest --verbose --coverage",
     "lint": "tslint -c tsconfig.json",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "format": "prettier \"*/**/*.ts\" --parser 'typescript' --single-quote --ignore-path ./.prettierignore --write",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
