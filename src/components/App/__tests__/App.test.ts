@@ -31,8 +31,19 @@ describe('App', () => {
     expect(typeof app.Header.render()).toBe('string');
   });
 
-  it('#appBody()', () => {
-    const app = new App(data);
-    expect(typeof app.appBody()).toBe('string');
+  describe('#appBody()', () => {
+    it('works when there is no markdown', () => {
+      window.document.body.className = '';
+      const app = new App(data);
+      expect(typeof app.appBody()).toBe('string');
+    });
+    it('works when there is markdown', () => {
+      window.document.body.className = 'markdown-body';
+      window.document.getElementById = (s:string) => ({
+        innerHTML: 'test'
+      } as any);
+      const app = new App(data);
+      expect(app.appBody().match(/test/g)).toBeDefined();
+    });
   });
 });

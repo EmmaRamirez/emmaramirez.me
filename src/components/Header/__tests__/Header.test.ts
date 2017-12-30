@@ -25,4 +25,11 @@ describe('Header', () => {
     header.postRender();
     expect(header.postRender).toBeDefined();
   });
+
+  it('does nothing when the element is null', () => {
+    window.document.querySelector = (s: string) => undefined;
+    const header = new Header((e, el) => null, 'test');
+    header.postRender();
+    expect(header.postRender).toBeDefined();
+  });
 });
