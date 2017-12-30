@@ -6,6 +6,7 @@ export class Header {
     public theme: string
   ) {
     this.onStyleSwitch = onStyleSwitch;
+    this.theme = theme;
   }
 
   public postRender() {
