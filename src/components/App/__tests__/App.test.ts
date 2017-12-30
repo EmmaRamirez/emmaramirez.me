@@ -44,7 +44,7 @@ describe('App', () => {
           innerHTML: 'test'
         } as any);
       const app = new App(data);
-      expect(app.appBody().match(/test/g)).toBeDefined();
+      expect(app.appBody().match(/test/g) || undefined).toBeDefined();
     });
   });
 });
