@@ -18,7 +18,7 @@ describe('List', () => {
 
 describe('Item', () => {
   it('conforms to spec', () => {
-    const Item:Item = {
+    const Item: Item = {
       link: 'test',
       title: 'test post',
       description: 'this is a test Item',

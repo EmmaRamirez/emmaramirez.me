@@ -39,9 +39,10 @@ describe('App', () => {
     });
     it('works when there is markdown', () => {
       window.document.body.className = 'markdown-body';
-      window.document.getElementById = (s:string) => ({
-        innerHTML: 'test'
-      } as any);
+      window.document.getElementById = (s: string) =>
+        ({
+          innerHTML: 'test'
+        } as any);
       const app = new App(data);
       expect(app.appBody().match(/test/g)).toBeDefined();
     });

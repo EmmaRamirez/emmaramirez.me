@@ -28,12 +28,12 @@ export class App {
     this.data = data || { articles: [], projects: [], links: [] };
   }
 
-  public appBody() {
+  public appBody(): string {
     if (document.body.className === 'markdown-body') {
       const md = document.getElementById('markdown');
       const markdown = (md ? md : { innerHTML: false }).innerHTML;
       (md ? md : { innerHTML: false }).innerHTML = '';
-      return markdown;
+      return markdown as string;
     }
     return `
       <div class='posts'>
