@@ -56,22 +56,22 @@ marked.setOptions({
 
 const buildBlogPost = data => {
     return `
-        <html lang=${config.lang}>
-            <head>
-                <title>emmaramirez.me</title>
-                <meta charset='utf-8'>
-                <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-                <link rel="icon" href="/favicon.ico" type="image/x-icon">
-                <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
-                <link href="../../code-theme.css" rel="stylesheet">
-            </head>
-            <body class='markdown-body'>
-                <div id='markdown' style='color:white'>${marked(data)}</div>
-                <div id='app'></div>
-                <script src='../../bundle.js'></script>
-                <script src="../../rainbow-custom.min.js"></script>
-            </body>
-        </html>`;
+<html lang=${config.lang}>
+    <head>
+        <title>emmaramirez.me</title>
+        <meta charset='utf-8'>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+        <link href="../../code-theme.css" rel="stylesheet">
+    </head>
+    <body class='markdown-body'>
+        <div id='markdown' style='color:white'>${marked(data)}</div>
+        <div id='app'></div>
+        <script src='../../bundle.js'></script>
+        <script src="../../rainbow-custom.min.js"></script>
+    </body>
+</html>`;
 }
 
 const convertToMarkdown = (data, file) => {
