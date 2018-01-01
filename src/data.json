@@ -2,15 +2,18 @@
     "articles": [
         {
             "link": "./posts/the-safe-navigation-operator",
-            "title": "The Safe Navigation Operator"
+            "title": "The Safe Navigation Operator",
+            "date": "12/29/17"
         },
         {
             "link": "./posts/yet-another-blog-post",
-            "title": "Yet Another Blog Post"
+            "title": "Yet Another Blog Post",
+            "date": "12/25/17"
         },
         {
             "link": "./posts/my-first-day-at-npm",
-            "title": "My First Day at npm"
+            "title": "My First Day at npm",
+            "date": "06/06/16"
         }
     ],
 

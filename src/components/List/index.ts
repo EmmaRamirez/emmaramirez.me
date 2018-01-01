@@ -3,6 +3,7 @@ import './List.styl';
 export interface Item {
   link: string;
   title: string;
+  date?: string;
   description?: string;
   wip?: boolean;
 }
@@ -39,6 +40,13 @@ export class List {
                               item.description
                                 ? `<span class='item-description'>${
                                     item.description
+                                  }</span>`
+                                : ''
+                            }
+                            ${
+                              item.date
+                                ? `<span class='item-date'>${
+                                    item.date
                                   }</span>`
                                 : ''
                             }
