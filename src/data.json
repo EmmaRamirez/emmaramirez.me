@@ -7,10 +7,20 @@
         {
             "link": "./posts/yet-another-blog-post",
             "title": "Yet Another Blog Post"
+        },
+        {
+            "link": "./posts/my-first-day-at-npm",
+            "title": "My First Day at npm"
         }
     ],
 
     "projects": [
+        {
+            "link": "https://github.com/EmmaRamirez/npmjs-plus",
+            "title": "npmjs+",
+            "description": "a chrome extension for npm's website",
+            "wip": true
+        },
         {
             "link": "http://emmaramirez.github.io/fakemon-idea-generator/",
             "title": "fakemon idea generator"
