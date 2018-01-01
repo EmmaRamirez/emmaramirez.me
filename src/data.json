@@ -1,6 +1,11 @@
 {
     "articles": [
         {
+            "link": "./posts/on-joining-and-leaving-a-techstars-company",
+            "title": "On Joining (and Leaving) a Techstars Company",
+            "date": "01/01/18"
+        },
+        {
             "link": "./posts/the-safe-navigation-operator",
             "title": "The Safe Navigation Operator",
             "date": "12/29/17"

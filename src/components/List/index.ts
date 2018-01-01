@@ -45,9 +45,7 @@ export class List {
                             }
                             ${
                               item.date
-                                ? `<span class='item-date'>${
-                                    item.date
-                                  }</span>`
+                                ? `<span class='item-date'>${item.date}</span>`
                                 : ''
                             }
                         </li>`;
