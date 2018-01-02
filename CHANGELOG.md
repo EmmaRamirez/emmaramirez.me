@@ -1,5 +1,20 @@
+<a name="0.6.5"></a>
+## [0.6.5](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.4...0.6.5) (2018-01-02)
+
+
+### Bug Fixes
+
+* **styles:** blogpost width to 55rem ([00ece37](https://github.com/EmmaRamirez/emmaramirez.me/commit/00ece37))
+
+
+### Features
+
+* add dates to items ([59fba6d](https://github.com/EmmaRamirez/emmaramirez.me/commit/59fba6d))
+
+
+
 <a name="0.6.4"></a>
-## [0.6.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.6.3...v0.6.4) (2017-12-30)
+## [0.6.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.6.3...0.6.4) (2017-12-30)
 
 
 ### Bug Fixes
