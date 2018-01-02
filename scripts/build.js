@@ -69,7 +69,15 @@ const buildBlogPost = data => {
         <div id='markdown' style='color:white'>${marked(data)}</div>
         <div id='app'></div>
         <script src='../../bundle.js'></script>
-        <script src="../../rainbow-custom.min.js"></script>
+        <script src="../../rainbow-custom.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79007755-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'UA-79007755-1');
+        </script>        
     </body>
 </html>`;
 }
