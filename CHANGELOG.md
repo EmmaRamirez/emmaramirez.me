@@ -1,3 +1,14 @@
+<a name="0.6.6"></a>
+## [0.6.6](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.5...0.6.6) (2018-01-02)
+
+
+### Bug Fixes
+
+* add google analytics ([db8cd00](https://github.com/EmmaRamirez/emmaramirez.me/commit/db8cd00))
+* **styles:** fix styling to be more responsive + viewport tag ([10f3d20](https://github.com/EmmaRamirez/emmaramirez.me/commit/10f3d20))
+
+
+
 <a name="0.6.5"></a>
 ## [0.6.5](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.4...0.6.5) (2018-01-02)
 
