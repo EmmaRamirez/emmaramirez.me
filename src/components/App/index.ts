@@ -43,14 +43,14 @@ export class App {
           ${new List(this.data.projects, {
             target: '_blank'
           }).render()}
-          <img style='display: block; margin: 3rem auto' src='./palms.webp' />
+          <img class='palm-trees' style='display: block; margin: 3rem auto' src='./palms.webp' />
           <br />
-          <h2>Elsewhere</h2>
+          <!-- <h2>Elsewhere</h2>
           ${new ElsewhereLinks(this.data.links, {
             target: '_blank'
           }).render()}
           <div class='monospace'>Bitcoin: 16mM8fFqLsAFZ9J6v1Efr3Ba8mT18RuZLW</div>
-          <div class='monospace'>Ethereum: 0x67cee0981f84Cc86A0eC7491e2d19cd8476d0A42</div>
+          <div class='monospace'>Ethereum: 0x67cee0981f84Cc86A0eC7491e2d19cd8476d0A42</div> -->
 
           <div class='stats'>
             <p><a href="https://travis-ci.org/EmmaRamirez/emmaramirez.me" rel="nofollow"><img src="https://camo.githubusercontent.com/b70123a10e32ce6a5fbc9095092238fee4e78e0f/68747470733a2f2f696d672e736869656c64732e696f2f7472617669732f456d6d6152616d6972657a2f656d6d6172616d6972657a2e6d652e7376673f7374796c653d666c61742d737175617265" alt="Build Status" data-canonical-src="https://img.shields.io/travis/EmmaRamirez/emmaramirez.me.svg?style=flat-square" style="max-width:100%;"></a>

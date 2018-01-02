@@ -63,6 +63,7 @@ const buildBlogPost = data => {
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
         <link href="../../code-theme.css" rel="stylesheet">
     </head>
     <body class='markdown-body'>
