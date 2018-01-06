@@ -12,15 +12,15 @@
     <body class='markdown-body'>
         <div id='markdown' style='color:white'><h1 id="piping-hot-a-rundown-on-the-pipeline-operator">Piping Hot: A Rundown on the Pipeline Operator</h1>
 <h2 id="context">Context</h2>
-<p>The Pipeline operator is one of the more interesting proposals advancing through the TC39 currently.</p>
+<p>Currently, the Pipeline operator is one of the more interesting proposals advancing through the TC39.</p>
 <p>The operator <code>|&gt;</code> is borrowed and inspired by several functional languages such as F#, Elm, and Elixir, and UNIX pipes as well. (The original syntax was <code>::</code>, which proved too controversial) According to the TC39 proposal</p>
 <blockquote>
 <p>It’s a backwards-compatible way of streamlining chained function calls in a readable, functional manner, and provides a practical alternative to extending built-in prototypes.</p>
 </blockquote>
 <p>which makes it very useful for short single-argument functions.</p>
 <h2 id="examples">Examples</h2>
-<p>In the simplest example, the pipeline operator turns <code>alert(&#39;Hello!&#39;)</code> into <code>&#39;Hello!&#39; |&gt; alert</code>. This isn’t a particularly good example of course, as it doesn’t aid the readability in any way. The better usage comes when you chain several functions together.</p>
-<p>Take for example we have these functions:</p>
+<p>In the simplest example, the pipeline operator turns <code>alert(&#39;Hello!&#39;)</code> into <code>&#39;Hello!&#39; |&gt; alert</code>. This is not the best uage of the operator, as it doesn’t aid the readability in any way. The better usage comes when you chain several functions together.</p>
+<p>Take for example these functions:</p>
 <pre><code class="lang-javascript">function add5 (number) {
     return number + 5;
 }
@@ -44,7 +44,7 @@ const number = 5
         |&gt; add5
         |&gt; multiplyBy10
 </code></pre>
-<p>This is slightly opinionated, but I think the pipeline operator aids in readability here. Note that the order goes by the function that gets called <em>first</em>, which is especialy useful since I know the f(g) versus g(f) can get confusing for particularly long-chained functions.</p>
+<p>This is slightly opinionated, but I think the pipeline operator aids in readability here. Note that the order goes by the function called <em>first</em>, which is especially useful since I know the f(g) versus g(f) can get confusing for particularly long-chained functions.</p>
 <p>Let’s do an example involving multiple arguments.</p>
 <pre><code class="lang-javascript">function makeLowerCase(str) { return str.toLowerCase() }
 function concat(strA, strB) { return strA + strB }
@@ -75,7 +75,7 @@ console.log(sentence) // &quot;I ate a pineapple&quot;
 // is equivalent to
 await f(x)
 </code></pre>
-<p>You can await the result of an async function and pass it to the next function, like so</p>
+<p>You can await the result of an async function and pass it to the next function, like so:</p>
 <pre><code class="lang-javascript">const userAge = userId |&gt; await fetchUsersById |&gt; getAgeFromUser
 // is equivalent to
 const userAge = getAgeFromUser(await fetchUserById(userId))

@@ -1,7 +1,7 @@
 # Piping Hot: A Rundown on the Pipeline Operator
 
 ## Context
-The Pipeline operator is one of the more interesting proposals advancing through the TC39 currently.
+Currently, the Pipeline operator is one of the more interesting proposals advancing through the TC39.
 
 The operator `|>` is borrowed and inspired by several functional languages such as F#, Elm, and Elixir, and UNIX pipes as well. (The original syntax was `::`, which proved too controversial) According to the TC39 proposal
 
@@ -11,9 +11,9 @@ which makes it very useful for short single-argument functions.
 
 ## Examples
 
-In the simplest example, the pipeline operator turns `alert('Hello!')` into `'Hello!' |> alert`. This isn't a particularly good example of course, as it doesn't aid the readability in any way. The better usage comes when you chain several functions together.
+In the simplest example, the pipeline operator turns `alert('Hello!')` into `'Hello!' |> alert`. This is not the best uage of the operator, as it doesn't aid the readability in any way. The better usage comes when you chain several functions together.
 
-Take for example we have these functions:
+Take for example these functions:
 
 ```javascript
 function add5 (number) {
@@ -43,7 +43,7 @@ const number = 5
         |> multiplyBy10
 ```
 
-This is slightly opinionated, but I think the pipeline operator aids in readability here. Note that the order goes by the function that gets called _first_, which is especialy useful since I know the f(g) versus g(f) can get confusing for particularly long-chained functions.
+This is slightly opinionated, but I think the pipeline operator aids in readability here. Note that the order goes by the function called _first_, which is especially useful since I know the f(g) versus g(f) can get confusing for particularly long-chained functions.
 
 Let's do an example involving multiple arguments.
 
@@ -87,7 +87,7 @@ x |> await f
 await f(x)
 ```
 
-You can await the result of an async function and pass it to the next function, like so
+You can await the result of an async function and pass it to the next function, like so:
 
 ```javascript
 const userAge = userId |> await fetchUsersById |> getAgeFromUser
