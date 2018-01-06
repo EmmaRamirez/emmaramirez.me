@@ -10,8 +10,12 @@ const endpoint: Nullable<HTMLElement> = document.getElementById('app');
 const app = new App(data);
 
 function selectText() {
-    const preTags = document.querySelectorAll('pre');
-    preTags.forEach(item => item.addEventListener('click', () => window.getSelection().selectAllChildren(item)));
+  const preTags = document.querySelectorAll('pre');
+  preTags.forEach(item =>
+    item.addEventListener('click', () =>
+      window.getSelection().selectAllChildren(item)
+    )
+  );
 }
 
 render(app, endpoint, app => app.postRender());

@@ -63,7 +63,7 @@ console.log(sentence) // &quot;I ate a pineapple&quot;
 </code></pre>
 <p>While it seems a bit odd at first, we’re just simple piping in arrow functions that handle the previous result from the preceeding pipe. When we took ‘APPLE’, we lowercased it, and then concatenated ‘pine’ with ‘apple’. Hence, pineapple became the new argument for the last function, which wrote our sentence with pineapple as its subject.</p>
 <p>You could also write the function as <code>writeSentence(&#39;I&#39;, &#39;ate&#39;, concat(&#39;pine&#39;, makeLowerCase(apple)))</code> though deciding between compactness or readability is up to you.</p>
-<p>Depending on the (papp)[<a href="https://github.com/mindeavor/es-papp">https://github.com/mindeavor/es-papp</a>] proposal, it may be able to write this:</p>
+<p>Depending on the <a href="https://github.com/mindeavor/es-papp">papp</a> proposal, it may be able to write this:</p>
 <pre><code class="lang-javascript">const sentence = apple
         |&gt; makeLowerCase
         |&gt; concat.papp(&#39;pine&#39;)
@@ -110,9 +110,10 @@ World!
 <h2 id="futher-reading">Futher Reading</h2>
 <p>While the pipeline operator is currently a stage 1 (very experimental) feature, you can find other resources here:</p>
 <ul>
-<li>(mdn docs page)[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Pipeline_operator">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Pipeline_operator</a>]</li>
-<li>(Fun Fun Function video)[<a href="https://www.youtube.com/watch?v=dYQIkV2L-eg">https://www.youtube.com/watch?v=dYQIkV2L-eg</a>]</li>
-<li>(Babel Plugin)[<a href="https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-pipeline-operator">https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-pipeline-operator</a>]</li>
+<li><a href="https://github.com/tc39/proposal-pipeline-operator">TC39 Proposal</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Pipeline_operator">mdn docs page</a></li>
+<li><a href="https://www.youtube.com/watch?v=dYQIkV2L-eg">Fun Fun Function video</a></li>
+<li><a href="https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-pipeline-operator">Babel Plugin</a></li>
 </ul>
 </div>
         <div id='app'></div>

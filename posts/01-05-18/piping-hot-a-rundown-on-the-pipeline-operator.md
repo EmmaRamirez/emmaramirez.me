@@ -68,7 +68,7 @@ While it seems a bit odd at first, we're just simple piping in arrow functions t
 
 You could also write the function as `writeSentence('I', 'ate', concat('pine', makeLowerCase(apple)))` though deciding between compactness or readability is up to you.
 
-Depending on the (papp)[https://github.com/mindeavor/es-papp] proposal, it may be able to write this:
+Depending on the [papp](https://github.com/mindeavor/es-papp) proposal, it may be able to write this:
 
 ```javascript
 const sentence = apple
@@ -128,6 +128,7 @@ World!
 ## Futher Reading
 
 While the pipeline operator is currently a stage 1 (very experimental) feature, you can find other resources here:
-- (mdn docs page)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Pipeline_operator]
-- (Fun Fun Function video)[https://www.youtube.com/watch?v=dYQIkV2L-eg]
-- (Babel Plugin)[https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-pipeline-operator]
+- [TC39 Proposal](https://github.com/tc39/proposal-pipeline-operator)
+- [mdn docs page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Pipeline_operator)
+- [Fun Fun Function video](https://www.youtube.com/watch?v=dYQIkV2L-eg)
+- [Babel Plugin](https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-pipeline-operator)
