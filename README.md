@@ -38,7 +38,7 @@ I miss them so much. 🌴
 ## 🏎️ Roadmap
 
 ##### Q1 2018
-- [ ] at least five (maybe) quality articles
+- [x] at least five (maybe) quality articles
 - [ ] an admin backend
 - [ ] post management that makes sense
 - [ ] better state management
