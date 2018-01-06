@@ -6,6 +6,7 @@ export interface Item {
   date?: string;
   description?: string;
   wip?: boolean;
+  emoji?: string;
 }
 
 export interface ListOptions {
@@ -28,6 +29,13 @@ export class List {
               .map((item, key) => {
                 return `
                         <li class='list-item' data-key=${key}>
+                            ${
+                              item.emoji
+                                ? `<span class='item-emoji'>${
+                                    item.emoji
+                                  }</span>`
+                                : ''
+                            }
                             <a href='${item.link}' target=${
                   this.options.target
                 }>${item.title}</a>
