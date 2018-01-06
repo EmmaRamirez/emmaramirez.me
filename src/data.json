@@ -21,7 +21,6 @@
             "date": "06/06/16"
         }
     ],
-
     "projects": [
         {
             "link": "https://github.com/EmmaRamirez/npmjs-plus",
@@ -46,7 +45,6 @@
             "wip": true
         }
     ],
-
     "links": [
         {
             "link": "https://github.com/EmmaRamirez/emmaramirez.me",
