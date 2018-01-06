@@ -1,3 +1,20 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.6...0.7.0) (2018-01-06)
+
+
+### Bug Fixes
+
+* **styles:** fix ul styles, code styles ([6d913a7](https://github.com/EmmaRamirez/emmaramirez.me/commit/6d913a7))
+* **writing:** fix broken links in post ([05c00a6](https://github.com/EmmaRamirez/emmaramirez.me/commit/05c00a6))
+
+
+### Features
+
+* finish up create new post ([6011c10](https://github.com/EmmaRamirez/emmaramirez.me/commit/6011c10))
+* new post creator init ([a75f1d9](https://github.com/EmmaRamirez/emmaramirez.me/commit/a75f1d9))
+
+
+
 <a name="0.6.6"></a>
 ## [0.6.6](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.5...0.6.6) (2018-01-02)
 
