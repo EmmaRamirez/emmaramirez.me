@@ -1,6 +1,15 @@
 @import url(https://cdn.rawgit.com/tonsky/FiraCode/1.204/distr/fira_code.css)
 
 dark-color = #242830
+light-color = #efefef
+
+::-moz-selection
+  color dark-color
+  background #42f4f4
+
+::selection
+  color darkc-olor
+  background #42f4f4
 
 body
     font-family 'Open Sans', sans-serif
@@ -26,7 +35,6 @@ h2
     margin .25rem
 
 .posts
-    margin 2rem auto
     max-width: 40rem
 
 .monospace
@@ -113,3 +121,7 @@ h2
 
 .dark .stats
     background rgba(black, 0.3)
+
+#disqus_thread
+    margin 0 auto
+    max-width 50rem

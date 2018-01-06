@@ -11,20 +11,7 @@ export class App {
 
   constructor(public data?: any) {
     this.theme = localStorage.getItem('theme') || '🌙';
-    this.Header = new Header((event: Event, element: HTMLElement) => {
-      const targetNode = document.body;
-      if (element.textContent === '🌙') {
-        this.theme = '☀️';
-        element.textContent = '☀️';
-        if (targetNode) targetNode.className = 'dark';
-        localStorage.setItem('theme', '🌙');
-      } else {
-        this.theme = '🌙';
-        element.textContent = '🌙';
-        if (targetNode) targetNode.className = 'light';
-        localStorage.setItem('theme', '☀️');
-      }
-    }, this.theme);
+    this.Header = new Header();
     this.data = data || { articles: [], projects: [], links: [] };
   }
 
@@ -43,7 +30,7 @@ export class App {
           ${new List(this.data.projects, {
             target: '_blank'
           }).render()}
-          <img class='palm-trees' style='display: block; margin: 3rem auto' src='./palms.webp' />
+          <h2>🌴</h2>
           <br />
 
           <!-- <h2>Elsewhere</h2>
@@ -73,7 +60,5 @@ export class App {
         `;
   }
 
-  public postRender() {
-    this.Header.postRender();
-  }
+  public postRender() {}
 }
