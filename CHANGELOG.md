@@ -1,3 +1,23 @@
+<a name="0.7.1"></a>
+## [0.7.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.7.0...0.7.1) (2018-01-06)
+
+
+### Bug Fixes
+
+* **styles:** add 100% more emoji ([f26954f](https://github.com/EmmaRamirez/emmaramirez.me/commit/f26954f))
+* **styles:** improve selection styles ([1ecd7d8](https://github.com/EmmaRamirez/emmaramirez.me/commit/1ecd7d8))
+* **styles:** improve selection styles ([5939666](https://github.com/EmmaRamirez/emmaramirez.me/commit/5939666))
+* add emoji field to npm run create ([9048fdd](https://github.com/EmmaRamirez/emmaramirez.me/commit/9048fdd))
+* remove broken style switcher ([8faeedb](https://github.com/EmmaRamirez/emmaramirez.me/commit/8faeedb))
+* **styles:** make item-description color darker ([73ef854](https://github.com/EmmaRamirez/emmaramirez.me/commit/73ef854))
+
+
+### Features
+
+* enable comments via Disqus ([06b4cc0](https://github.com/EmmaRamirez/emmaramirez.me/commit/06b4cc0))
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.6...0.7.0) (2018-01-06)
 
