@@ -54,7 +54,7 @@ marked.setOptions({
     smartypants: true
 });
 
-const buildBlogPost = data => {
+const buildBlogPost = (data, fileName) => {
     return `
 <html lang=${config.lang}>
     <head>
@@ -69,6 +69,27 @@ const buildBlogPost = data => {
     <body class='markdown-body'>
         <div id='markdown' style='color:white'>${marked(data)}</div>
         <div id='app'></div>
+        <div id="disqus_thread"></div>
+        <script>
+
+        /**
+        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+        /*
+        var disqus_config = function () {
+        this.page.url = 'http://emmaramirez.me/posts/${fileName}/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '${fileName}'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+        */
+        (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://emmaramirez-me.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                                    
         <script src='../../bundle.js'></script>
         <script src="../../rainbow-custom.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79007755-1"></script>
@@ -86,7 +107,7 @@ const buildBlogPost = data => {
 const convertToMarkdown = (data, file) => {
     const fileName = file.split('.')[0];
     ensureExists(`./docs/posts/${fileName}`, 0744, (err) => noop());
-    const blogPost = buildBlogPost(data);
+    const blogPost = buildBlogPost(data, fileName);
     fs.writeFile(`./docs/posts/${fileName}/index.html`, blogPost, err =>  {
         if (err) console.error(err);
         console.log(`Wrote ${chalk.yellow(fileName)} to posts ${ chalk.green('[' + new Date().toUTCString() + ']') }`);
