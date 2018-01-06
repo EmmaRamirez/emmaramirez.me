@@ -43,7 +43,7 @@ export class App {
           ${new List(this.data.projects, {
             target: '_blank'
           }).render()}
-          <img class='palm-trees' style='display: block; margin: 3rem auto' src='./palms.webp' />
+          <h2>🌴</h2>
           <br />
 
           <!-- <h2>Elsewhere</h2>
