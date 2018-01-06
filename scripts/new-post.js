@@ -14,7 +14,7 @@ const padZero = (s) => ('00' + s).slice(-2);
 function createNewPost(title, date) {
     const internalDate = new Date();
     let postTitle = title;
-    let postTitleDashed = postTitle.toLowerCase().replace(/\s/g, '-');
+    let postTitleDashed = postTitle.toLowerCase().replace(/\s/g, '-').replace(/:/g, '');
     let postDate = date != null ? date : `${padZero(internalDate.getMonth() + 1)}-${padZero(internalDate.getDate())}-${internalDate.getFullYear().toString().split('').slice(-2).join('')}`;
     let postData = data;
     let postDataArticles = postData.articles;

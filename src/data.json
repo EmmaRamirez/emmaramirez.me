@@ -1,6 +1,11 @@
 {
     "articles": [
         {
+            "link": "./posts/piping-hot-a-rundown-on-the-pipeline-operator",
+            "title": "Piping Hot: A Rundown on the Pipeline Operator",
+            "date": "01/05/18"
+        },
+        {
             "link": "./posts/on-joining-and-leaving-a-techstars-company",
             "title": "On Joining (and Leaving) a Techstars Company",
             "date": "01/01/18"
