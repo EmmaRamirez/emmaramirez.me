@@ -45,6 +45,7 @@ export class App {
           }).render()}
           <img class='palm-trees' style='display: block; margin: 3rem auto' src='./palms.webp' />
           <br />
+
           <!-- <h2>Elsewhere</h2>
           ${new ElsewhereLinks(this.data.links, {
             target: '_blank'

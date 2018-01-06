@@ -11,6 +11,7 @@
     "coveralls": "^3.0.0",
     "css-loader": "^0.28.7",
     "fs-extra": "^5.0.0",
+    "hyperapp": "^1.0.1",
     "istanbul": "^0.4.5",
     "jest": "^22.0.4",
     "marked": "^0.3.9",
@@ -24,7 +25,8 @@
     "tslint": "^5.8.0",
     "tslint-microsoft-contrib": "^5.0.1",
     "webpack": "^3.10.0",
-    "webpack-shell-plugin": "^0.5.0"
+    "webpack-shell-plugin": "^0.5.0",
+    "yargs": "^10.0.3"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^2.1.0",
@@ -33,6 +35,7 @@
   },
   "scripts": {
     "build": "webpack",
+    "create": "node ./scripts/new-post.js",
     "build:watch": "webpack --watch",
     "test": "jest --verbose --coverage",
     "lint": "tslint -c tsconfig.json",
