@@ -1,3 +1,14 @@
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.7.1...0.8.0) (2018-01-09)
+
+
+### Features
+
+* add ads to build ([b94cc32](https://github.com/EmmaRamirez/emmaramirez.me/commit/b94cc32))
+* add adwords ([0a27426](https://github.com/EmmaRamirez/emmaramirez.me/commit/0a27426))
+
+
+
 <a name="0.7.1"></a>
 ## [0.7.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.7.0...0.7.1) (2018-01-06)
 
