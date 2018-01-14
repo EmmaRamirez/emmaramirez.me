@@ -1,6 +1,7 @@
 import './List.styl';
 
-import { Tags } from 'components/Tags';
+import { Component } from 'utils';
+import { Tags, TagsType } from 'components/Tags';
 
 export interface Item {
   link: string;
@@ -8,7 +9,7 @@ export interface Item {
   date?: string;
   description?: string;
   draft?: boolean;
-  tags?: string[];
+  tags?: TagsType;
   wip?: boolean;
   emoji?: string;
 }
@@ -17,19 +18,25 @@ export interface ListOptions {
   target?: '_blank' | '_self' | '_parent' | '_top';
 }
 
-export class List {
+export interface ListProps {
+  items: Item[],
+  options?: ListOptions
+}
+
+export class List extends Component<ListProps> {
   public items: Item[];
   public options: ListOptions;
 
-  constructor(items: Item[], options?: ListOptions) {
-    if (options == null) options = {};
-    this.items = items;
-    this.options = { target: '_self', ...options };
+  constructor(props: ListProps) {
+    super(props);
   }
+
   public render() {
+    const { items, options } = this.props;
+
     return `
             <ul class='list'>
-            ${this.items
+            ${items
               .filter(i => (i.draft == null ? true : !i.draft))
               .map((item, key) => {
                 return `
@@ -42,7 +49,7 @@ export class List {
                                 : ''
                             }
                             <a href='${item.link}' target=${
-                  this.options.target
+                  options ? options.target : '_self'
                 }>${item.title}</a>
                             ${
                               item.wip

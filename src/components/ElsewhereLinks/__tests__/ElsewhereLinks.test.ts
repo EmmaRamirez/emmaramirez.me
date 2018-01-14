@@ -11,12 +11,12 @@ describe('<ElsewhereLinks />', () => {
   ];
 
   it('renders', () => {
-    const links = new ElsewhereLinks(data);
+    const links = new ElsewhereLinks({ items: data });
     expect(typeof links.render()).toBe('string');
   });
 
   it('can contain data', () => {
-    const links = new ElsewhereLinks(data);
+    const links = new ElsewhereLinks({ items: data });
     const result = links.render();
 
     // Name has three references

@@ -1,23 +1,25 @@
 import { ListOptions } from 'components/List';
+import { Component } from 'utils';
 
 export interface ElsewhereLink {
   link: string;
   name: string;
 }
 
-export class ElsewhereLinks {
-  public items: ElsewhereLink[];
-  public options: ListOptions;
+export interface ElsewhereLinksProps {
+  items: ElsewhereLink[];
+  options?: ListOptions;
+}
 
-  constructor(items: ElsewhereLink[], options?: ListOptions) {
-    if (options == null) options = {};
-    this.items = items;
-    this.options = { target: '_self', ...options };
+export class ElsewhereLinks extends Component<ElsewhereLinksProps> {
+  constructor(props:ElsewhereLinksProps) {
+    super(props);
   }
   public render() {
+    const { items } = this.props;
     return `
             <span class='elswhere-links'>
-            ${this.items
+            ${items
               .map((item, key) => {
                 return `
                     <a class='elsewhere-link' title=${

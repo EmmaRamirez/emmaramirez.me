@@ -2,17 +2,22 @@ import { State } from 'state';
 import { Header } from 'components/Header';
 import { Item, List } from 'components/List';
 import { ElsewhereLinks } from 'components/ElsewhereLinks';
+import { Component } from 'utils';
 
 const data = require('data.json');
 
-export class App {
-  public Header: Header;
-  public theme: '☀️' | '🌙' | string;
+export interface AppProps {
+  Header: Header;
+  data: {
+    articles?: any[],
+    projects?: any[],
+    links?: any[],
+  }
+}
 
-  constructor(public data?: any) {
-    this.theme = localStorage.getItem('theme') || '🌙';
-    this.Header = new Header();
-    this.data = data || { articles: [], projects: [], links: [] };
+export class App extends Component<AppProps> {
+  constructor(props: AppProps) {
+    super(props);
   }
 
   public appBody(): string {
@@ -25,21 +30,15 @@ export class App {
     return `
       <div class='posts'>
           <h2>Writing</h2>
-          ${new List(this.data.articles).render()}
+          ${new List({ items: this.props.data.articles || [] }).render()}
           <h2>Projects</h2>
-          ${new List(this.data.projects, {
-            target: '_blank'
+          ${new List({
+              items: this.props.data.projects || [],
+              options: {
+                target: '_blank'
+            }
           }).render()}
           <h2>🌴</h2>
-          <br />
-
-          <!-- <h2>Elsewhere</h2>
-          ${new ElsewhereLinks(this.data.links, {
-            target: '_blank'
-          }).render()}
-          <div class='monospace'>Bitcoin: 16mM8fFqLsAFZ9J6v1Efr3Ba8mT18RuZLW</div>
-          <div class='monospace'>Ethereum: 0x67cee0981f84Cc86A0eC7491e2d19cd8476d0A42</div> -->
-
           <div class='stats'>
             <p><a href="https://travis-ci.org/EmmaRamirez/emmaramirez.me" rel="nofollow"><img src="https://camo.githubusercontent.com/b70123a10e32ce6a5fbc9095092238fee4e78e0f/68747470733a2f2f696d672e736869656c64732e696f2f7472617669732f456d6d6152616d6972657a2f656d6d6172616d6972657a2e6d652e7376673f7374796c653d666c61742d737175617265" alt="Build Status" data-canonical-src="https://img.shields.io/travis/EmmaRamirez/emmaramirez.me.svg?style=flat-square" style="max-width:100%;"></a>
             <a href="/EmmaRamirez/emmaramirez.me/blob/master"><img src="https://camo.githubusercontent.com/447f3afa7024326905ca2c2876b9bc5e6cc9b09e/68747470733a2f2f696d672e736869656c64732e696f2f636f766572616c6c732f6769746875622f456d6d6152616d6972657a2f656d6d6172616d6972657a2e6d652f6d61737465722e7376673f7374796c653d666c61742d737175617265" alt="Coveralls github branch" data-canonical-src="https://img.shields.io/coveralls/github/EmmaRamirez/emmaramirez.me/master.svg?style=flat-square" style="max-width:100%;"></a>
@@ -52,7 +51,7 @@ export class App {
   public render() {
     return `
             <div class='app'>
-                ${this.Header.render()}
+                ${this.props.Header.render()}
                 <div class='blog-post'>
                   ${this.appBody()}
                 </div>

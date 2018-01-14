@@ -6,13 +6,13 @@ declare var describe: any;
 
 describe('<List />', () => {
   it('renders', () => {
-    const list = new List(data.projects);
+    const list = new List({ items: data.projects });
     expect(list.render()).toBeDefined();
   });
 
   it('can contain data', () => {
-    const list = new List(data.projects);
-    expect(list.items.length).toBe(data.projects.length);
+    const list = new List({ items: data.projects });
+    expect(list.props.items.length).toBe(data.projects.length);
   });
 });
 

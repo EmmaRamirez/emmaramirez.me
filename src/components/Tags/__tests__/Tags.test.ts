@@ -8,7 +8,7 @@ describe('<Tag />', () => {
 
 describe('<Tags />', () => {
   it('renders', () => {
-    const wrapper = new Tags(['tag-a', 'tag-b']);
+    const wrapper = new Tags({ tags: ['tag-a', 'tag-b'] });
     expect(wrapper.render()).toBeDefined();
     expect(wrapper.render().match(/tag-a/g)).toBeDefined();
   });
