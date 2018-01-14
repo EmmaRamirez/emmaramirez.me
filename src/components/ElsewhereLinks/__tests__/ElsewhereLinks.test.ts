@@ -2,7 +2,7 @@ import { ElsewhereLinks, ElsewhereLink } from '..';
 
 declare var describe: any;
 
-describe('ElsewhereLinks', () => {
+describe('<ElsewhereLinks />', () => {
   const data: ElsewhereLink[] = [
     {
       link: 'jest',

@@ -4,7 +4,7 @@ const data = require('data.json');
 
 declare var describe: any;
 
-describe('List', () => {
+describe('<List />', () => {
   it('renders', () => {
     const list = new List(data.projects);
     expect(list.render()).toBeDefined();
@@ -16,7 +16,7 @@ describe('List', () => {
   });
 });
 
-describe('Item', () => {
+describe('<Item />', () => {
   it('conforms to spec', () => {
     const Item: Item = {
       link: 'test',
