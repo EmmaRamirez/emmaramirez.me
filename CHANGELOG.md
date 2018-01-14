@@ -1,3 +1,8 @@
+<a name="0.10.1"></a>
+## [0.10.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.0...0.10.1) (2018-01-14)
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.9.0...0.10.0) (2018-01-14)
 
