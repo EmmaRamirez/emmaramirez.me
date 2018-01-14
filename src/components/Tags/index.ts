@@ -9,7 +9,10 @@ export class Tags {
 
   public render() {
     return this.tags
-      ? `<div class='tags'>${this.tags.sort().map(t => Tag(t)).join('')}</div>`
+      ? `<div class='tags'>${this.tags
+          .sort()
+          .map(t => Tag(t))
+          .join('')}</div>`
       : '';
   }
 }
