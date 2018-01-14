@@ -1,14 +1,6 @@
 {
     "articles": [
         {
-            "link": "./posts/bad-post",
-            "title": "Bad Post",
-            "date": "01/14/18",
-            "emoji": "",
-            "tags": [],
-            "draft": true
-        },
-        {
             "link": "./posts/piping-hot-a-rundown-on-the-pipeline-operator",
             "title": "Piping Hot: A Rundown on the Pipeline Operator",
             "date": "01/05/18",

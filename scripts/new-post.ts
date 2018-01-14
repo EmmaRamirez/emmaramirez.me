@@ -54,31 +54,33 @@ function createNewPost(
 
   if (!isDraft) {
     fs.mkdir(`./posts/${postDate}`, 0o777, (err: Error) => {
-        // We ignore errors here, since a post can still be created
-        fs.writeFile(
-          `./posts/${postDate}/${postTitleDashed}.md`,
-          `# ${postTitle}`,
-          (err: Error) => {
-            if (err) throw err;
-            console.log(
-              `Created directory ${chalk.green(postDate)} with post ${chalk.cyan(
-                postTitle
-              )}`
-            );
-          }
-        );
-      });
-  } else {
+      // We ignore errors here, since a post can still be created
       fs.writeFile(
-            `${config.draftsDir}/${postTitleDashed}.md`,
-            `# ${postTitle}`,
-            (err:Error) => {
-                if (err) throw err;
-                console.log(
-                    `Created file ${chalk.cyan(postTitle)} in ${chalk.green('__drafts__')}`
-                );
-            }
+        `./posts/${postDate}/${postTitleDashed}.md`,
+        `# ${postTitle}`,
+        (err: Error) => {
+          if (err) throw err;
+          console.log(
+            `Created directory ${chalk.green(postDate)} with post ${chalk.cyan(
+              postTitle
+            )}`
+          );
+        }
+      );
+    });
+  } else {
+    fs.writeFile(
+      `${config.draftsDir}/${postTitleDashed}.md`,
+      `# ${postTitle}`,
+      (err: Error) => {
+        if (err) throw err;
+        console.log(
+          `Created file ${chalk.cyan(postTitle)} in ${chalk.green(
+            '__drafts__'
+          )}`
         );
+      }
+    );
   }
 
   fs.writeFile(
@@ -89,7 +91,6 @@ function createNewPost(
       console.log(`Wrote post ${chalk.green(postTitle)} to data.json`);
     }
   );
-
 }
 
 if (argv.title != null) {

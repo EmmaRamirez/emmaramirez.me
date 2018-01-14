@@ -30,7 +30,7 @@ export class List {
     return `
             <ul class='list'>
             ${this.items
-              .filter(i => i.draft == null ? true : !i.draft)
+              .filter(i => (i.draft == null ? true : !i.draft))
               .map((item, key) => {
                 return `
                         <li class='list-item' data-key=${key}>
