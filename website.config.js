@@ -1,6 +1,7 @@
 module.exports = {
-    source: './posts',
-    assets: './src/assets',
-    dest: './docs/posts',
+    sourceDir: './posts',
+    assetsDir: './src/assets',
+    destDir: './docs/posts',
+    draftsDir: './__drafts',
     lang: 'en',
 }

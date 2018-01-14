@@ -4,7 +4,7 @@ const data = require('data.json');
 
 declare var describe: any;
 
-describe('App', () => {
+describe('<App />', () => {
   // @ts-ignore: this is a required polyfill
   window.localStorage = {
     getItem: (str: string) => '🌙'
