@@ -9,16 +9,16 @@ const argv = require('yargs').argv;
 const process = require('process');
 const data = require('../src/data.json');
 
-const padZero = (s) => ('00' + s).slice(-2);
+const padZero = (s:string | number) => ('00' + s).slice(-2);
 
-function createNewPost(title, date, emoji, tags) {
+function createNewPost(title:string, date:string, emoji:string, tags:string) {
     const internalDate = new Date();
-    let postTitle = title;
-    let postTitleDashed = postTitle.toLowerCase().replace(/\s/g, '-').replace(/:/g, '');
-    let postDate = date != null ? date : `${padZero(internalDate.getMonth() + 1)}-${padZero(internalDate.getDate())}-${internalDate.getFullYear().toString().split('').slice(-2).join('')}`;
-    let postData = data;
-    let postDataArticles = postData.articles;
-    let postTags = tags ? tags.split(',').map(s => s.trim()) : [];
+    const postTitle = title;
+    const postTitleDashed = postTitle.toLowerCase().replace(/\s/g, '-').replace(/:/g, '');
+    const postDate = date != null ? date : `${padZero(internalDate.getMonth() + 1)}-${padZero(internalDate.getDate())}-${internalDate.getFullYear().toString().split('').slice(-2).join('')}`;
+    const postData = data;
+    const postDataArticles = postData.articles;
+    const postTags = tags ? tags.split(',').map((s:string) => s.trim()) : [];
 
     postDataArticles.unshift({
         link: './posts/' + postTitleDashed,
@@ -30,15 +30,15 @@ function createNewPost(title, date, emoji, tags) {
 
     data.articles = postDataArticles;
 
-    fs.mkdir(`./posts/${postDate}`, 0777, err => {
+    fs.mkdir(`./posts/${postDate}`, 0o777, (err:Error) => {
         // We ignore errors here, since a post can still be created
-        fs.writeFile(`./posts/${postDate}/${postTitleDashed}.md`, `# ${postTitle}`, err => {
+        fs.writeFile(`./posts/${postDate}/${postTitleDashed}.md`, `# ${postTitle}`, (err:Error) => {
             if (err) throw err;
             console.log(`Created directory ${chalk.green(postDate)} with post ${chalk.cyan(postTitle)}`);
-        })
-    })
+        });
+    });
 
-    fs.writeFile('./src/data.json', JSON.stringify(data, null, 4), err => {
+    fs.writeFile('./src/data.json', JSON.stringify(data, null, 4), (err:Error) => {
         if (err) throw err;
         console.log(`Wrote post ${chalk.green(postTitle)} to data.json`);
     });
@@ -55,3 +55,5 @@ if (argv.title != null) {
     process.exitCode = 1;
     process.exit();
 }
+
+export {};

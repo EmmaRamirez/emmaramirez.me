@@ -30,11 +30,12 @@
   "devDependencies": {
     "cz-conventional-changelog": "^2.1.0",
     "semantic-release": "^11.0.2",
+    "ts-node": "^4.1.0",
     "typescript": "^2.6.2"
   },
   "scripts": {
     "build": "webpack",
-    "create": "node ./scripts/new-post.js",
+    "create": "ts-node ./scripts/new-post",
     "build:watch": "webpack --watch",
     "test": "jest --verbose --coverage",
     "lint": "tslint -c tsconfig.json",

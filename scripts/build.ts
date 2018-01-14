@@ -6,42 +6,38 @@ const chalk = require('chalk');
 
 const config = require('../website.config');
 
-// fse.remove(path.join(__dirname, '../docs/posts'), err => {
-//     fs.mkdir(path.join(__dirname, '../docs/posts'), err => { if (err) throw err });
-// });
-
 const noop = () => {};
 
-const extension = (element) => {
+const extension = (element:string) => {
     const extName = path.extname(element);
     return extName === '.md';
 };
 
-const ensureExists = (path, mask, cb) => {
+const ensureExists = (path:string, mask:any, cb:any) => {
     if (typeof mask === 'function') {
         cb = mask;
-        mask = 0777;
+        mask = 0o777;
     }
-    fs.mkdir(path, mask, err => {
+    fs.mkdir(path, mask, (err:any) => {
         if (err) {
-            if (err.code == 'EEXIST') cb(null);
+            if (err.code === 'EEXIST') cb(null);
             else cb(err);
         } else {
             cb(null);
         }
-    })
-}
+    });
+};
 
-const isDirectory = source => fs.lstatSync(source).isDirectory();
-const getDirectories = source => fs.readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
+const isDirectory = (source:string) => fs.lstatSync(source).isDirectory();
+const getDirectories = (source:string) => fs.readdirSync(source).map((name:string) => path.join(source, name)).filter(isDirectory);
 
 const directories = getDirectories(path.resolve(__dirname, '../posts'));
 
-directories.forEach(dir => fs.readdir(path.resolve(__dirname, dir), (err, files) => {
+directories.forEach((dir:string) => fs.readdir(path.resolve(__dirname, dir), (err:any, files:string[]) => {
     readFiles(dir, files);
 }));
 
-const readFiles = (dir, files) => files.filter(extension).forEach(file => {
+const readFiles = (dir:string, files:string[]) => files.filter(extension).forEach((file:string) => {
     const data = fs.readFileSync(path.join(dir, file), 'utf8');
     convertToMarkdown(data, file);
 });
@@ -54,7 +50,7 @@ marked.setOptions({
     smartypants: true
 });
 
-const buildBlogPost = (data, fileName) => {
+const buildBlogPost = (data:any, fileName:string) => {
     return `
 <html lang=${config.lang}>
     <head>
@@ -63,7 +59,7 @@ const buildBlogPost = (data, fileName) => {
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="../../code-theme.css" rel="stylesheet">
         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <script>
@@ -96,7 +92,6 @@ const buildBlogPost = (data, fileName) => {
         })();
         </script>
         <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                    
         <script src='../../bundle.js'></script>
         <script src="../../rainbow-custom.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79007755-1"></script>
@@ -104,19 +99,18 @@ const buildBlogPost = (data, fileName) => {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-        
           gtag('config', 'UA-79007755-1');
-        </script>        
+        </script>
     </body>
 </html>`;
-}
+};
 
-const convertToMarkdown = (data, file) => {
+const convertToMarkdown = (data:any, file:string) => {
     const fileName = file.split('.')[0];
-    ensureExists(`./docs/posts/${fileName}`, 0744, (err) => noop());
+    ensureExists(`./docs/posts/${fileName}`, 0o744, (err:Error) => noop());
     const blogPost = buildBlogPost(data, fileName);
-    fs.writeFile(`./docs/posts/${fileName}/index.html`, blogPost, err =>  {
+    fs.writeFile(`./docs/posts/${fileName}/index.html`, blogPost, (err:Error) =>  {
         if (err) console.error(err);
-        console.log(`Wrote ${chalk.yellow(fileName)} to posts ${ chalk.green('[' + new Date().toUTCString() + ']') }`);
+        console.log(`Wrote ${chalk.yellow(fileName)} to posts ${ chalk.green(`[${new Date().toUTCString()}]`)}`);
     });
 };
