@@ -18,14 +18,14 @@ function createNewPost(title, date, emoji, tags) {
     let postDate = date != null ? date : `${padZero(internalDate.getMonth() + 1)}-${padZero(internalDate.getDate())}-${internalDate.getFullYear().toString().split('').slice(-2).join('')}`;
     let postData = data;
     let postDataArticles = postData.articles;
-    let postTags = tags.split(',');
+    let postTags = tags ? tags.split(',').map(s => s.trim()) : [];
 
     postDataArticles.unshift({
         link: './posts/' + postTitleDashed,
         title: postTitle,
         date: postDate.replace(/-/g, '/'),
         emoji: emoji || '',
-        tags: postTags || [],
+        tags: postTags,
     });
 
     data.articles = postDataArticles;
