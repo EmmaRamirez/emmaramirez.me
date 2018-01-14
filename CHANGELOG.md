@@ -1,3 +1,22 @@
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.8.0...0.9.0) (2018-01-14)
+
+
+### Bug Fixes
+
+* add sort to Tags component ([8cde27c](https://github.com/EmmaRamirez/emmaramirez.me/commit/8cde27c))
+* add sort to Tags component ([262d8a2](https://github.com/EmmaRamirez/emmaramirez.me/commit/262d8a2))
+* **style:** add padding to blog-post ([b2471aa](https://github.com/EmmaRamirez/emmaramirez.me/commit/b2471aa))
+* ensure not passing in 'tags' breaks command ([98740bf](https://github.com/EmmaRamirez/emmaramirez.me/commit/98740bf))
+
+
+### Features
+
+* add Tags component ([a58a053](https://github.com/EmmaRamirez/emmaramirez.me/commit/a58a053))
+* add tags to npm run create ([7a95b7c](https://github.com/EmmaRamirez/emmaramirez.me/commit/7a95b7c))
+
+
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.7.1...0.8.0) (2018-01-09)
 
