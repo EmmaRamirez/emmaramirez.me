@@ -22,7 +22,10 @@ describe('<Item />', () => {
       link: 'test',
       title: 'test post',
       description: 'this is a test Item',
-      wip: false
+      wip: false,
+      date: '12/12/4',
+      draft: false,
+      emoji: '🚀'
     };
 
     expect(Item.link).toBe('test');
