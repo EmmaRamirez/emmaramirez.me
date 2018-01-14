@@ -1,3 +1,13 @@
+<a name="0.10.2"></a>
+## [0.10.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.1...0.10.2) (2018-01-14)
+
+
+### Bug Fixes
+
+* fix test errors related to Component ([5caf26a](https://github.com/EmmaRamirez/emmaramirez.me/commit/5caf26a))
+
+
+
 <a name="0.10.1"></a>
 ## [0.10.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.0...0.10.1) (2018-01-14)
 
