@@ -11,19 +11,21 @@ const data = require('../src/data.json');
 
 const padZero = (s) => ('00' + s).slice(-2);
 
-function createNewPost(title, date, emoji) {
+function createNewPost(title, date, emoji, tags) {
     const internalDate = new Date();
     let postTitle = title;
     let postTitleDashed = postTitle.toLowerCase().replace(/\s/g, '-').replace(/:/g, '');
     let postDate = date != null ? date : `${padZero(internalDate.getMonth() + 1)}-${padZero(internalDate.getDate())}-${internalDate.getFullYear().toString().split('').slice(-2).join('')}`;
     let postData = data;
     let postDataArticles = postData.articles;
+    let postTags = tags ? tags.split(',').map(s => s.trim()) : [];
 
     postDataArticles.unshift({
         link: './posts/' + postTitleDashed,
         title: postTitle,
         date: postDate.replace(/-/g, '/'),
-        emoji: emoji || ''
+        emoji: emoji || '',
+        tags: postTags,
     });
 
     data.articles = postDataArticles;
@@ -43,7 +45,7 @@ function createNewPost(title, date, emoji) {
 }
 
 if (argv.title != null) {
-    createNewPost(argv.title, argv.date, argv.emoji);
+    createNewPost(argv.title, argv.date, argv.emoji, argv.tags);
 } else {
     console.log(`
         ${chalk.red('ERROR: ')} Please provide a title for your new post.
