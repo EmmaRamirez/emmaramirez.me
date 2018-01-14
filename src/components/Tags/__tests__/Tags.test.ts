@@ -1,9 +1,5 @@
 import { Tag, Tags } from '..';
 
-describe('<Tag />', () => {
+describe('<Tag />', () => {});
 
-});
-
-describe('<Tags />', () => {
-
-});
+describe('<Tags />', () => {});

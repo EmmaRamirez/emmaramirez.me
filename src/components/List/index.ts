@@ -1,10 +1,13 @@
 import './List.styl';
 
+import { Tags } from 'components/Tags';
+
 export interface Item {
   link: string;
   title: string;
   date?: string;
   description?: string;
+  tags?: string[];
   wip?: boolean;
   emoji?: string;
 }
@@ -54,6 +57,11 @@ export class List {
                             ${
                               item.date
                                 ? `<span class='item-date'>${item.date}</span>`
+                                : ''
+                            }
+                            ${
+                              item.tags
+                                ? '<br>' + new Tags(item.tags).render()
                                 : ''
                             }
                         </li>`;
