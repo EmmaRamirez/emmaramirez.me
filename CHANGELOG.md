@@ -1,3 +1,13 @@
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.9.0...0.10.0) (2018-01-14)
+
+
+### Features
+
+* **drafts:** enable drafting a post ([823a001](https://github.com/EmmaRamirez/emmaramirez.me/commit/823a001))
+
+
+
 <a name="0.9.0"></a>
 # [0.9.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.8.0...0.9.0) (2018-01-14)
 
