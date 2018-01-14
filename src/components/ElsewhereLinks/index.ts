@@ -12,7 +12,7 @@ export interface ElsewhereLinksProps {
 }
 
 export class ElsewhereLinks extends Component<ElsewhereLinksProps> {
-  constructor(props:ElsewhereLinksProps) {
+  constructor(props: ElsewhereLinksProps) {
     super(props);
   }
   public render() {

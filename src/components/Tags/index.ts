@@ -6,7 +6,7 @@ export type TagsType = { tags: string[] };
 export const Tag = (title: string): string => `<div class='tag'>${title}</div>`;
 
 export class Tags extends Component<TagsType> {
-  constructor(props:TagsType) {
+  constructor(props: TagsType) {
     super(props);
   }
 

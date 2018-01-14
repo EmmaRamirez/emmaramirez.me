@@ -14,14 +14,18 @@ describe('<App />', () => {
   it('renders', () => {
     const app = new App({ Header: new Header(), data: {} });
     expect(app.render()).toBeDefined();
-    expect(typeof app.render()).toBe('string');  });
+    expect(typeof app.render()).toBe('string');
+  });
 
   it('can contain data', () => {
-    const app1 = new App({ Header: new Header(), data: {
-      projects: [],
-      links: [],
-      articles: []
-    } });
+    const app1 = new App({
+      Header: new Header(),
+      data: {
+        projects: [],
+        links: [],
+        articles: []
+      }
+    });
     const app2 = new App({ Header: new Header(), data: data });
     // @ts-ignore: test
     expect(app1.props.data.projects.length).toBe(0);
@@ -32,8 +36,10 @@ describe('<App />', () => {
   });
 
   it('contains a Header', () => {
-    const app = new App(data);
+    const app = new App({ Header: new Header(), data });
+    // @ts-ignore
     expect(app.props.Header).toBeDefined();
+    // @ts-ignore
     expect(typeof app.props.Header.render()).toBe('string');
   });
 

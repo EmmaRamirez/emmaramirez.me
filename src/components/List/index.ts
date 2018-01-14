@@ -19,21 +19,17 @@ export interface ListOptions {
 }
 
 export interface ListProps {
-  items: Item[],
-  options?: ListOptions
+  items: Item[];
+  options?: ListOptions;
 }
 
 export class List extends Component<ListProps> {
-  public items: Item[];
-  public options: ListOptions;
-
   constructor(props: ListProps) {
     super(props);
   }
 
   public render() {
     const { items, options } = this.props;
-
     return `
             <ul class='list'>
             ${items

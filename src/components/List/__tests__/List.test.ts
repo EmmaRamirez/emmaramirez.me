@@ -12,7 +12,7 @@ describe('<List />', () => {
 
   it('can contain data', () => {
     const list = new List({ items: data.projects });
-    expect(list.props.items.length).toBe(data.projects.length);
+    expect((list.props as any).items.length).toBe(data.projects.length);
   });
 });
 

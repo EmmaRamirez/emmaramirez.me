@@ -9,10 +9,10 @@ const data = require('data.json');
 export interface AppProps {
   Header: Header;
   data: {
-    articles?: any[],
-    projects?: any[],
-    links?: any[],
-  }
+    articles?: any[];
+    projects?: any[];
+    links?: any[];
+  };
 }
 
 export class App extends Component<AppProps> {
@@ -30,12 +30,14 @@ export class App extends Component<AppProps> {
     return `
       <div class='posts'>
           <h2>Writing</h2>
-          ${new List({ items: this.props.data.articles || [] }).render()}
+          ${new List({
+            items: (this.props as any).data.articles || []
+          }).render()}
           <h2>Projects</h2>
           ${new List({
-              items: this.props.data.projects || [],
-              options: {
-                target: '_blank'
+            items: (this.props as any).data.projects || [],
+            options: {
+              target: '_blank'
             }
           }).render()}
           <h2>🌴</h2>
@@ -51,7 +53,7 @@ export class App extends Component<AppProps> {
   public render() {
     return `
             <div class='app'>
-                ${this.props.Header.render()}
+                ${(this.props as any).Header.render()}
                 <div class='blog-post'>
                   ${this.appBody()}
                 </div>
