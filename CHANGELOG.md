@@ -1,5 +1,5 @@
-<a name="0.10.3"></a>
-## [0.10.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.2...0.10.3) (2018-01-15)
+<a name="0.10.4"></a>
+## [0.10.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.2...0.10.4) (2018-01-15)
 
 
 ### Bug Fixes
@@ -7,6 +7,7 @@
 * **styles:** add margin 0 auto to ([fdf094c](https://github.com/EmmaRamirez/emmaramirez.me/commit/fdf094c))
 * **Tags:** fix error where Tags broke ([e6905ad](https://github.com/EmmaRamirez/emmaramirez.me/commit/e6905ad))
 * add keyword + description meta tags to posts ([1079cbc](https://github.com/EmmaRamirez/emmaramirez.me/commit/1079cbc))
+* add publish command ([5936c89](https://github.com/EmmaRamirez/emmaramirez.me/commit/5936c89))
 * spruce up projects section ([8365a7d](https://github.com/EmmaRamirez/emmaramirez.me/commit/8365a7d))
 
 
