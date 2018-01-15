@@ -26,7 +26,10 @@ describe('<ElsewhereLinks />', () => {
   });
 
   it('can have options', () => {
-    const links = new ElsewhereLinks({ items: data, options: { target: '_blank' }});
+    const links = new ElsewhereLinks({
+      items: data,
+      options: { target: '_blank' }
+    });
     expect((links.props.options as any).target).toBe('_blank');
   });
 });
