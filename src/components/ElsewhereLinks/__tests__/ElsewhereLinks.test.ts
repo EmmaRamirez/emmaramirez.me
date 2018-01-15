@@ -24,4 +24,9 @@ describe('<ElsewhereLinks />', () => {
     // Link has one
     expect(result.match(/jest/g)).toHaveLength(1);
   });
+
+  it('can have options', () => {
+    const links = new ElsewhereLinks({ items: data, options: { target: '_blank' }});
+    expect((links.props.options as any).target).toBe('_blank');
+  });
 });
