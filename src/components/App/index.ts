@@ -1,4 +1,3 @@
-import { State } from 'state';
 import { Header } from 'components/Header';
 import { Item, List } from 'components/List';
 import { ElsewhereLinks } from 'components/ElsewhereLinks';

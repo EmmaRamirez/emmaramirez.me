@@ -1,4 +1,4 @@
-import { render } from '..';
+import { render, noop } from '..';
 
 describe('render()', () => {
   it('behaves as expected', () => {
@@ -16,5 +16,11 @@ describe('render()', () => {
     expect(render(component, endpoint, callback)).toBeUndefined();
     expect(render(component, null, callback)).toBeUndefined();
     expect(endpoint.innerHTML).toBe('Hello Test');
+  });
+});
+
+describe('noop()', () => {
+  it('behaves as expected', () => {
+    expect(noop()).toBeUndefined();
   });
 });
