@@ -40,3 +40,36 @@
 .dark .item-wip-badge
     background rgba(0, 0, 0, 0.3)
     color #eee
+
+.projects-list
+    display flex
+    flex-wrap wrap
+    @media screen and (max-width: 640px)
+        flex-wrap wrap
+    .list-item
+        background #fafafa
+        border 1px solid #eee
+        border-radius .25rem
+        flex-wrap wrap
+        margin .25rem
+        padding .3rem
+        transition 350ms all
+        width 18rem
+        @media screen and (max-width: 640px)
+            width 45%
+        a
+            display block
+            text-align center
+        &:hover
+            border 1px solid #ddd
+            box-shadow 0 0 3px #eee
+            transition 350ms all
+    .item-emoji
+        all initial
+        align-content center
+        border-radius 50%
+        display flex
+        font-size 1.25rem
+        justify-content center
+        padding .25rem
+        text-align center

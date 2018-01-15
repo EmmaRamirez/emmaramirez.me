@@ -21,6 +21,7 @@ export interface ListOptions {
 export interface ListProps {
   items: Item[];
   options?: ListOptions;
+  className?: string;
 }
 
 export class List extends Component<ListProps> {
@@ -29,9 +30,9 @@ export class List extends Component<ListProps> {
   }
 
   public render() {
-    const { items, options } = this.props;
+    const { items, options, className } = this.props;
     return `
-            <ul class='list'>
+            <ul class='${'list ' + (className || '')}'>
             ${items
               .filter(i => (i.draft == null ? true : !i.draft))
               .map((item, key) => {

@@ -38,7 +38,8 @@ export class App extends Component<AppProps> {
             items: (this.props as any).data.projects || [],
             options: {
               target: '_blank'
-            }
+            },
+            className: 'projects-list'
           }).render()}
           <h2>🌴</h2>
           <div class='stats'>

@@ -12,7 +12,14 @@ describe('<List />', () => {
 
   it('can contain data', () => {
     const list = new List({ items: data.projects });
-    expect((list.props as any).items.length).toBe(data.projects.length);
+    expect(list.props.items.length).toBe(data.projects.length);
+  });
+
+  it('can have a className', () => {
+    const list = new List({ items: [], options: {}, className: 'test-list' });
+    expect(list.props.className).toBe('test-list');
+    // @ts-ignore
+    expect(list.render().match(/test-list/g).length).toBeGreaterThan(0);
   });
 });
 

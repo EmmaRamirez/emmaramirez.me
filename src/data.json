@@ -59,23 +59,28 @@
             "link": "https://github.com/EmmaRamirez/npmjs-plus",
             "title": "npmjs+",
             "description": "a chrome extension for npm's website",
-            "wip": true
+            "wip": true,
+            "emoji": "➕"
         },
         {
             "link": "http://emmaramirez.github.io/fakemon-idea-generator/",
-            "title": "fakemon idea generator"
+            "title": "fakemon idea generator",
+            "description": "generate fake Pokémon dex entries",
+            "emoji": "🎲"
         },
         {
             "link": "https://github.com/Clickopolis",
             "title": "clickopolis",
             "description": "an incremental empire management game",
-            "wip": true
+            "wip": true,
+            "emoji": "🗽"
         },
         {
             "link": "https://github.com/EmmaRamirez/nuzlocke-generator",
             "title": "nuzlocke template generator",
             "description": "a nuzlocke documentation engine",
-            "wip": true
+            "wip": true,
+            "emoji": "📃"
         }
     ],
     "links": [
