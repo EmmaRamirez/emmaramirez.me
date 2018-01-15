@@ -4,6 +4,7 @@ const path = require('path');
 const marked = require('marked');
 const chalk = require('chalk');
 
+const articles = require('../src/data.json').articles;
 const config = require('../website.config');
 
 const noop = () => {};
@@ -56,6 +57,23 @@ marked.setOptions({
   smartypants: true
 });
 
+const getTags = (filename: string) => {
+  const article = articles.filter(
+    (f: any) => f.link === `./posts/${filename}`
+  )[0];
+  return article.tags.join(', ');
+};
+
+const getDescription = (data: any) => {
+  const description =
+    data
+      .split('\n')
+      .filter((s: string) => !s.includes('#'))
+      .map((s: string) => s.trim())
+      .filter((s: string) => s !== '')[0] + '...';
+  return marked(description);
+};
+
 const buildBlogPost = (data: any, fileName: string) => {
   return `
 <html lang=${config.lang}>
@@ -67,6 +85,8 @@ const buildBlogPost = (data: any, fileName: string) => {
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="../../code-theme.css" rel="stylesheet">
+        <meta name="keywords" content="${getTags(fileName)}">
+        <meta name="description" content="${getDescription(data)}">
         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <script>
         (adsbygoogle = window.adsbygoogle || []).push({

@@ -1,0 +1,81 @@
+
+<html lang=en>
+    <head>
+        <title>emmaramirez.me</title>
+        <meta charset='utf-8'>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../../code-theme.css" rel="stylesheet">
+        <meta name="keywords" content="lerna, monorepo, yarn, npm, semver, rush">
+        <meta name="description" content="<p>“Monorepo” is one of those words you could break down – Mono meaning one, and Repo meaning <del>rail</del> repository. Better phrased: you took a bunch of similar repos or npm packages and bundled them onto a single repo….</p>
+">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-5802352571182119",
+            enable_page_level_ads: true
+        });
+        </script>
+    </head>
+    <body class='markdown-body'>
+        <div id='markdown' style='color:white'><h1 id="the-glories-and-pitfalls-of-monorepos">The Glories and Pitfalls of Monorepos</h1>
+<p>“Monorepo” is one of those words you could break down – Mono meaning one, and Repo meaning <del>rail</del> repository. Better phrased: you took a bunch of similar repos or npm packages and bundled them onto a single repo.</p>
+<p>Now what?</p>
+<p>Well, let’s back up a little. Monorepos are an increasingly popular way to handle managing packages, especially as we continue to write (and consume) more atomic modules. A monorepo means you can centralize config, commits, releases, and anything you do in a normal repo in one place. Of course, it has all sorts of <a href="https://github.com/babel/babel/blob/master/doc/design/monorepo.md">pros and cons</a>. One of the biggest questions when it comes to monorepos is: do the pros outweigh the cons?</p>
+<p>Well…. There’s a pretty quick checklist you could make just to find that out:</p>
+<ul>
+<li>does the repo have multiple contributors?</li>
+<li>do the projects have similar release cycles?</li>
+<li>are the packages independent of each other?</li>
+</ul>
+<p>If you answered yes to all three, consider yourself lucky and let’s go! If not, keep thinking about your approaches&mdash;a monorepo might not be the best answer.</p>
+<h2 id="setting-it-up">Setting It Up</h2>
+<p>Let’s make a brand new project, called <code>links-and-stuff</code> in a directory somewhere, and then run the following</p>
+<pre><code class="lang-shell">cd links-and-stuff
+npm i -g lerna
+lerna init --independent
+lerna add links
+</code></pre>
+<p>This will create boilerplate with a <code>packages</code> folder. The <code>--independent</code> flag means we’ll use separate versioning for each project. Your layout should look like this now</p>
+<pre><code>|-- package.json
+|-- lerna.json
+|-- packages
+|---- links
+|---- stuff
+</code></pre><p>Now run <code>lerna add lodash</code> to install lodash into each package. (If we ran <code>lerna add lodash --scope=links</code> for example, it would only install lodash in the links package).</p>
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="https://developer.atlassian.com/blog/2015/10/monorepos-in-git/">Atlassian: Monorepos in Git</a></li>
+<li><a href="https://github.com/npm/npm/issues/2974">npm: Discussion on Subdirectories for Git installs</a></li>
+<li><a href="https://bitbucket.org/atlassian/atlaskit-mk-2/src">Atlassian: Bolt build system</a></li>
+<li><a href="https://github.com/Microsoft/web-build-tools/wiki/Rush">Microsoft: Rush build system</a></li>
+</ul>
+</div>
+        <div id='app'></div>
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_config = function () {
+            this.page.url = 'http://emmaramirez.me/posts/the-glories-and-pitfalls-of-monorepos/';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = 'the-glories-and-pitfalls-of-monorepos'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+        (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://emmaramirez-me.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <script src='../../bundle.js'></script>
+        <script src="../../rainbow-custom.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79007755-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-79007755-1');
+        </script>
+    </body>
+</html>

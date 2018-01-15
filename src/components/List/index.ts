@@ -67,7 +67,8 @@ export class List extends Component<ListProps> {
                             }
                             ${
                               item.tags
-                                ? '<br>' + new Tags({ tags: item.tags } as any).render()
+                                ? '<br>' +
+                                  new Tags({ tags: item.tags } as any).render()
                                 : ''
                             }
                         </li>`;

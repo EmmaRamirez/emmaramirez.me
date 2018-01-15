@@ -1,6 +1,20 @@
 {
     "articles": [
         {
+            "link": "./posts/the-glories-and-pitfalls-of-monorepos",
+            "title": "The Glories and Pitfalls of Monorepos",
+            "date": "01/14/18",
+            "emoji": "🐉",
+            "tags": [
+                "lerna",
+                "monorepo",
+                "yarn",
+                "npm",
+                "semver",
+                "rush"
+            ]
+        },
+        {
             "link": "./posts/piping-hot-a-rundown-on-the-pipeline-operator",
             "title": "Piping Hot: A Rundown on the Pipeline Operator",
             "date": "01/05/18",
