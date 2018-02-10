@@ -1,6 +1,17 @@
 {
     "articles": [
         {
+            "link": "./posts/i'll-be-giving-a-talk-at-forwardjs!",
+            "title": "I'll be Giving A Talk At ForwardJS!",
+            "date": "02/10/18",
+            "emoji": "🎤",
+            "tags": [
+                "talk",
+                "presentation",
+                "forwardjs"
+            ]
+        },
+        {
             "link": "./posts/the-glories-and-pitfalls-of-monorepos",
             "title": "The Glories and Pitfalls of Monorepos",
             "date": "01/14/18",

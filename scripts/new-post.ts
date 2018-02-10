@@ -100,7 +100,7 @@ if (argv.title != null) {
         ${chalk.red('ERROR: ')} Please provide a title for your new post.
 
         Run the command as ${chalk.yellow(
-          'npm run create -- --title "Post Title"'
+          'npm run create -- --title "Post Title" --tags string,string --draft <boolean> --emoji'
         )}
     `);
   process.exitCode = 1;

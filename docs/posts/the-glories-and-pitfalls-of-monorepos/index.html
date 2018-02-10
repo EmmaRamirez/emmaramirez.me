@@ -30,7 +30,7 @@
 <li>do the projects have similar release cycles?</li>
 <li>are the packages independent of each other?</li>
 </ul>
-<p>If you answered yes to all three, consider yourself lucky and let’s go! If not, keep thinking about your approaches&mdash;a monorepo might not be the best answer.</p>
+<p>If you answered yes to all three, consider yourself lucky and let’s go! If not, keep thinking about your approaches&mdash;a monorepo might not be the best answer. Another additional question you might ask is “who consumes this?” While it’s not a hard and fast rule, high-usage frameworks or libraries tend to be structured as monorepos (React, Angular, Meteor, etc).</p>
 <h2 id="setting-it-up">Setting It Up</h2>
 <p>Let’s make a brand new project, called <code>links-and-stuff</code> in a directory somewhere, and then run the following</p>
 <pre><code class="lang-shell">cd links-and-stuff
@@ -45,6 +45,9 @@ lerna add links
 |---- links
 |---- stuff
 </code></pre><p>Now run <code>lerna add lodash</code> to install lodash into each package. (If we ran <code>lerna add lodash --scope=links</code> for example, it would only install lodash in the links package).</p>
+<h2 id="the-glories">The Glories</h2>
+<p>There are some clear advantages that you’ll quickly find when managing a monorepo.</p>
+<p>For one, Lerna’s <code>exec</code> command allows you to </p>
 <h2 id="further-reading">Further Reading</h2>
 <ul>
 <li><a href="https://developer.atlassian.com/blog/2015/10/monorepos-in-git/">Atlassian: Monorepos in Git</a></li>

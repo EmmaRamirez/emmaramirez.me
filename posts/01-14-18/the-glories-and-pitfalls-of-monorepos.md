@@ -12,7 +12,7 @@ Well.... There's a pretty quick checklist you could make just to find that out:
 - do the projects have similar release cycles?
 - are the packages independent of each other?
 
-If you answered yes to all three, consider yourself lucky and let's go! If not, keep thinking about your approaches&mdash;a monorepo might not be the best answer.
+If you answered yes to all three, consider yourself lucky and let's go! If not, keep thinking about your approaches&mdash;a monorepo might not be the best answer. Another additional question you might ask is "who consumes this?" While it's not a hard and fast rule, high-usage frameworks or libraries tend to be structured as monorepos (React, Angular, Meteor, etc).
 
 ## Setting It Up
 
@@ -37,6 +37,11 @@ This will create boilerplate with a `packages` folder. The `--independent` flag 
 
 Now run `lerna add lodash` to install lodash into each package. (If we ran `lerna add lodash --scope=links` for example, it would only install lodash in the links package).
 
+## The Glories
+
+There are some clear advantages that you'll quickly find when managing a monorepo.
+
+For one, Lerna's `exec` command allows you to 
 
 
 ## Further Reading
