@@ -102,10 +102,10 @@
             "emoji": "🗽"
         },
         {
-            "link": "https://github.com/EmmaRamirez/nuzlocke-generator",
+            "link": "https://nuzlocke-generator.herokuapp.com/",
             "title": "nuzlocke template generator",
             "description": "a nuzlocke documentation engine",
-            "wip": true,
+            "wip": false,
             "emoji": "📃"
         }
     ],
