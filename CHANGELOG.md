@@ -1,3 +1,13 @@
+<a name="0.10.6"></a>
+## [0.10.6](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.5...0.10.6) (2018-05-06)
+
+
+### Bug Fixes
+
+* correct first post ([32892d4](https://github.com/EmmaRamirez/emmaramirez.me/commit/32892d4))
+
+
+
 <a name="0.10.5"></a>
 ## [0.10.5](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.4...0.10.5) (2018-01-15)
 
