@@ -71,7 +71,7 @@ const getDescription = (data: any) => {
       .filter((s: string) => !s.includes('#'))
       .map((s: string) => s.trim())
       .filter((s: string) => s !== '')[0] + '...';
-  return marked(description).replace(/"/g, '\'');
+  return marked(description).replace(/"/g, "'");
 };
 
 const buildBlogPost = (data: any, fileName: string) => {

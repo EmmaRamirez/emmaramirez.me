@@ -1,6 +1,19 @@
 {
     "articles": [
         {
+            "link": "./posts/building-the-nuzlocke-generator",
+            "title": "Building the Nuzlocke Generator",
+            "date": "06/13/18",
+            "emoji": "🎲",
+            "tags": [
+                "generator",
+                "nuzlocke",
+                "pokemon",
+                "react",
+                "typescript"
+            ]
+        },
+        {
             "link": "./posts/ill-be-giving-a-talk-at-forwardjs",
             "title": "I'll be Giving A Talk At ForwardJS!",
             "date": "02/10/18",
@@ -81,13 +94,6 @@
         }
     ],
     "projects": [
-        {
-            "link": "https://github.com/EmmaRamirez/npmjs-plus",
-            "title": "npmjs+",
-            "description": "a chrome extension for npm's website",
-            "wip": true,
-            "emoji": "➕"
-        },
         {
             "link": "http://emmaramirez.github.io/fakemon-idea-generator/",
             "title": "fakemon idea generator",
