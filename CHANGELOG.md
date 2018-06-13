@@ -1,3 +1,13 @@
+<a name="0.10.7"></a>
+## [0.10.7](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.6...0.10.7) (2018-06-13)
+
+
+### Bug Fixes
+
+* strip doublequotes in description ([c950d2c](https://github.com/EmmaRamirez/emmaramirez.me/commit/c950d2c))
+
+
+
 <a name="0.10.6"></a>
 ## [0.10.6](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.5...0.10.6) (2018-05-06)
 
