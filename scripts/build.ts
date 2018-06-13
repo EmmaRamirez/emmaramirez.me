@@ -71,6 +71,7 @@ const getDescription = (data: any) => {
       .filter((s: string) => !s.includes('#'))
       .map((s: string) => s.trim())
       .filter((s: string) => s !== '')[0] + '...';
+  // tslint:disable-next-line:quotemark
   return marked(description).replace(/"/g, "'");
 };
 
