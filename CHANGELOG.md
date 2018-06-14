@@ -1,3 +1,13 @@
+<a name="0.10.8"></a>
+## [0.10.8](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.7...0.10.8) (2018-06-14)
+
+
+### Bug Fixes
+
+* proper emoji for new article ([9ba0d8c](https://github.com/EmmaRamirez/emmaramirez.me/commit/9ba0d8c))
+
+
+
 <a name="0.10.7"></a>
 ## [0.10.7](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.6...0.10.7) (2018-06-13)
 
