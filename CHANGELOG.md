@@ -1,3 +1,14 @@
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.8...0.11.0) (2018-06-18)
+
+
+### Bug Fixes
+
+* gramamr ([b8dfe9c](https://github.com/EmmaRamirez/emmaramirez.me/commit/b8dfe9c))
+* grammar error, nice => niche ([a74202f](https://github.com/EmmaRamirez/emmaramirez.me/commit/a74202f))
+
+
+
 <a name="0.10.8"></a>
 ## [0.10.8](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.7...0.10.8) (2018-06-14)
 
