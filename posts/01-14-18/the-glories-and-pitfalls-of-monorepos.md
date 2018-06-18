@@ -75,9 +75,9 @@ If you're using yarn, you may face some issues regarding compatibility with lern
 
 At scale, lerna starts to [slow down](https://gist.github.com/nolanlawson/457cdb309c9ec5b39f0d420266a9faa4) significantly as the number of packages increases. Monorepos such as babel don't even use the `lerna run` command for this reason, as it cycles through each package, which can become cumbersome&mdash;at that point, it makes more sense to write a custom build script.
 
-Another potential problem comes down to CI/CD, as it sometimes requires unecessarily complicated setups in the pipeline.
+Another potential problem comes down to CI/CD, as it sometimes requires unecessarily complicated setups in the pipeline. While parallel pipelines in continuous deployment tools like CircleCI are useful for this, it's not an answer at scale. Like before, this sometimes requires custom build scripts and the like. 
 
-And the last thing that I think is worth bringing up is the suggestion that monorepos hamper autonomy of teams, and that code sharing can introduce coupling. I've thought about this one the most, since it doesn't have a "clear" solution. It's philosophical. When code gets housed in the same repository, everyone can see all the code. But like an open space lined with desks, it often gets cramped, and that same transparency can make you feel like you're stepping on other people's toes. Sometimes you just want a closed room where you can experiment or break thigns
+And the last thing that I think is worth bringing up is the suggestion that monorepos hamper autonomy of teams, and that code sharing can introduce coupling. I've thought about this one the most, since it doesn't have a "clear" solution. It's philosophical. When code gets housed in the same repository, everyone can see all the code. But like an open space lined with desks, it often gets cramped, and that same transparency can make you feel like you're stepping on other people's toes. Sometimes you just want a closed room. 
 
 
 ## Further Reading
