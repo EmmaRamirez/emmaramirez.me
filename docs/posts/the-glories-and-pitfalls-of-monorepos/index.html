@@ -39,21 +39,41 @@ lerna init --independent
 lerna add links
 </code></pre>
 <p>This will create boilerplate with a <code>packages</code> folder. The <code>--independent</code> flag means we’ll use separate versioning for each project. Your layout should look like this now</p>
-<pre><code>|-- package.json
+<pre><code class="lang-shell">|-- package.json
 |-- lerna.json
 |-- packages
 |---- links
 |---- stuff
-</code></pre><p>Now run <code>lerna add lodash</code> to install lodash into each package. (If we ran <code>lerna add lodash --scope=links</code> for example, it would only install lodash in the links package).</p>
+</code></pre>
+<p>Now run <code>lerna add lodash</code> to install lodash into each package. (If we ran <code>lerna add lodash --scope=links</code> for example, it would only install lodash in the links package).</p>
 <h2 id="the-glories">The Glories</h2>
 <p>There are some clear advantages that you’ll quickly find when managing a monorepo.</p>
-<p>For one, Lerna’s <code>exec</code> command allows you to </p>
+<p>For one, Lerna’s <code>exec</code> command allows you to run a command <em>in each package</em>. For example,</p>
+<pre><code class="lang-shell">lerna exec -- rm -rf ./node_modules
+</code></pre>
+<p>Will delete the <code>node_modules</code> in each package. A similar command is <code>run</code>, which is specifically for npm scripts.</p>
+<pre><code class="lang-shell">lerna run build
+</code></pre>
+<p>Will run <code>npm run build</code> in each package, building them in parallel. (You can use the <code>--scope</code> argument previously discussed to only affect certain packages). Another example: let’s say we wanted to run tests in each package, but we also wanted to update our jest snapshots. We can pass arguments the way you would with any npm script.</p>
+<pre><code class="lang-shell">lerna run test -- -u
+</code></pre>
+<p>Another awesome thing about lerna is its <code>publish</code> command. I personally use this variation of it:</p>
+<pre><code class="lang-shell">lerna publish --conventional-commits --yes
+</code></pre>
+<p>What this will do is publish each of your npm packages <em>and</em> generate the appropriate npm version based off the commits (with the <code>--conventional-commits</code> flag) <em>and</em> generate a changelog for each (using the <code>--changelog-preset</code> argument, which defaults to the <a href="https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular#angular-convention">angular</a> preset).</p>
+<h1 id="the-pitfalls-">The Pitfalls (?)</h1>
+<p>Monorepos do have some issues, but Lerna monorepos do have fewer issues than a regular monorepo. For example, publishing is a breeze and versioning, maintained via npm, is not singular or lost. Some of them are specific to Lerna.</p>
+<p>If you’re using yarn, you may face some issues regarding compatibility with lerna <a href="https://github.com/lerna/lerna/issues/1349">now that it has moved back to npm</a>, and using both in one monorepo <em>is an absolutely bad idea</em> due to incompatibilities between <code>yarn.lock</code>, <code>package.json</code>, and the <code>pack</code> command.</p>
+<p>At scale, lerna starts to <a href="https://gist.github.com/nolanlawson/457cdb309c9ec5b39f0d420266a9faa4">slow down</a> significantly as the number of packages increases. Monorepos such as babel don’t even use the <code>lerna run</code> command for this reason, as it cycles through each package, which can become cumbersome&mdash;at that point, it makes more sense to write a custom build script.</p>
+<p>Another potential problem comes down to CI/CD, as it sometimes requires unecessarily complicated setups in the pipeline.</p>
+<p>And the last thing that I think is worth bringing up is the suggestion that monorepos hamper autonomy of teams, and that code sharing can introduce coupling. I’ve thought about this one the most, since it doesn’t have a “clear” solution. It’s philosophical. When code gets housed in the same repository, everyone can see all the code. But like an open space lined with desks, it often gets cramped, and that same transparency can make you feel like you’re stepping on other people’s toes. Sometimes you just want a closed room where you can experiment or break thigns</p>
 <h2 id="further-reading">Further Reading</h2>
 <ul>
 <li><a href="https://developer.atlassian.com/blog/2015/10/monorepos-in-git/">Atlassian: Monorepos in Git</a></li>
 <li><a href="https://github.com/npm/npm/issues/2974">npm: Discussion on Subdirectories for Git installs</a></li>
 <li><a href="https://bitbucket.org/atlassian/atlaskit-mk-2/src">Atlassian: Bolt build system</a></li>
 <li><a href="https://github.com/Microsoft/web-build-tools/wiki/Rush">Microsoft: Rush build system</a></li>
+<li><a href="https://chengl.com/multirepo-vs-monorepo/">Chen Long: Multirepo vs Monorepo</a></li>
 </ul>
 </div>
         <div id='app'></div>

@@ -36,8 +36,7 @@
                 "npm",
                 "semver",
                 "rush"
-            ],
-            "draft": true
+            ]
         },
         {
             "link": "./posts/piping-hot-a-rundown-on-the-pipeline-operator",
