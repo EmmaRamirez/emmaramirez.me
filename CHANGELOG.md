@@ -1,3 +1,13 @@
+<a name="0.11.1"></a>
+## [0.11.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.11.0...0.11.1) (2018-06-18)
+
+
+### Bug Fixes
+
+* save writing ([5a74acb](https://github.com/EmmaRamirez/emmaramirez.me/commit/5a74acb))
+
+
+
 <a name="0.11.0"></a>
 # [0.11.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.8...0.11.0) (2018-06-18)
 
