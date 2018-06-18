@@ -32,7 +32,7 @@ The criticism I think has been most poignant is that sometimes layouts look too 
 
 Here's some of the work I've planned out:
 
-Adding more layouts and customization. It's never easy to predict what layouts people will like the most. It migth be a good idea to direct users to take a look at the option before they start their runs to reduce cookie-cutterieness.
+Adding more layouts and customization. It's never easy to predict what layouts people will like the most. It might be a good idea to direct users to take a look at the option before they start their runs to reduce cookie-cutterieness.
 
 I'm working currently on converting the DOM elements that the generator produces into images. Right now, most users just take screenshots of their work. This is serviceable, but it's not good enough to me. There's some experimental FireFox APIs that can work here, as well as libraries like dom2image. I don't know how "social" I want the site to be, but a hall of fame does exist on the github repo.
 
