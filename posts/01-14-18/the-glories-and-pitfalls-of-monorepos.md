@@ -65,9 +65,9 @@ Another awesome thing about lerna is its `publish` command. I personally use thi
 lerna publish --conventional-commits --yes
 ```
 
-What this will do is publish each of your npm packages _and_ generate the appropriate npm version based off the commits (with the `--conventional-commits` flag) _and_ generate a changelog for each (using the `--changelog-preset` argument, which defaults to the [angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular#angular-convention) preset).
+What this will do is publish each of your npm packages _and_ generate the appropriate npm version based off the commits (with the `--conventional-commits` flag) _and_ generate a changelog for each (using the `--changelog-preset` argument, which defaults to the [angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular#angular-convention) preset). The `--yes` flag auto-confirms the changes; you may want to to turn this off if you want to verify the versions before publishing.
 
-# The Pitfalls (?)
+## The Pitfalls
 
 Monorepos do have some issues, but Lerna monorepos do have fewer issues than a regular monorepo. For example, publishing is a breeze and versioning, maintained via npm, is not singular or lost. Some of them are specific to Lerna.
 
