@@ -1,3 +1,13 @@
+<a name="0.11.2"></a>
+## [0.11.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.11.1...0.11.2) (2018-06-18)
+
+
+### Bug Fixes
+
+* change h1 => h2, add notes on --yes flag ([0a4a793](https://github.com/EmmaRamirez/emmaramirez.me/commit/0a4a793))
+
+
+
 <a name="0.11.1"></a>
 ## [0.11.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.11.0...0.11.1) (2018-06-18)
 
