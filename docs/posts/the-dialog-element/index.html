@@ -1,0 +1,118 @@
+
+<html lang=en>
+    <head>
+        <title>emmaramirez.me</title>
+        <meta charset='utf-8'>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../../code-theme.css" rel="stylesheet">
+        <meta name="keywords" content="html5, dialog, w3c">
+        <meta name="description" content="<p><script src='https://cdn.jsdelivr.net/gh/ireade/caniuse-embed/caniuse-embed.min.js'></script>…</p>
+">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-5802352571182119",
+            enable_page_level_ads: true
+        });
+        </script>
+    </head>
+    <body class='markdown-body'>
+        <div id='markdown' style='color:white'><h1 id="the-dialog-element">The Dialog Element</h1>
+<script src="https://cdn.jsdelivr.net/gh/ireade/caniuse-embed/caniuse-embed.min.js"></script>
+<script src="../../dialog-script.js"></script>
+
+<p>The <a href="https://www.w3.org/TR/html52/">HTML5.2</a> spec includes a couple of minor updates, but the one I’m most excited about is the <a href="https://www.w3.org/TR/html52/interactive-elements.html#the-dialog-element"><code>&lt;dialog&gt;</code></a> element.</p>
+<p>Dialogs exist everywhere on the web&mdash;and every website implements it in their own way. But the biggest issue with this is that websites don’t always implement it in accessible ways, and <a href="https://bitsofco.de/accessible-modal-dialog/">implementing accessible modal dialogs</a> isn’t always easy. So a native dialog element sounds like a good thing&mdash;we get accessibility out of the box, it’s custmoizable, and requires minimal Javascript unlike, say, one of the <a href="https://www.npmjs.com/search?q=react%20dialog">many react dialogs</a> out there.</p>
+<p>Currently, dialog is supported on the following browsers, most noticeably Chrome:</p>
+<p class="ciu_embed" data-feature="dialog" data-periods="future_2,future_1,current,past_1,past_2" data-accessible-colours="false">
+  <a href="http://caniuse.com/#feat=dialog">Can I Use dialog?</a> Data on support for the dialog feature across the major browsers from caniuse.com.
+</p>
+
+<p>So how do we implement it? The Dialog element follows a pretty simple format.</p>
+<pre><code class="lang-html">&lt;dialog id=&quot;dialog&quot;&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Dialog Title&lt;/h1&gt;
+    &lt;/header&gt;
+    &lt;p&gt;Lorem ipsum dolor amet man bun irony letterpress ugh vexillologist.
+    Cronut synth craft beer, dreamcatcher organic adaptogen venmo activated 
+    charcoal listicle trust fund food truck. Fixie pok pok skateboard franzen 
+    food truck tattooed tousled raw denim shoreditch freegan adaptogen la croix 
+    selfies prism. Pinterest actually meggings pickled, four dollar toast tilde 
+    kinfolk art party iceland organic chicharrones tote bag 90&#39;s. Taiyaki vice 
+    kale chips hammock mixtape tote bag XOXO authentic poutine vegan. Banh mi 
+    hexagon hell of try-hard small batch intelligentsia affogato enamel pin 
+    seitan readymade YOLO. Woke bicycle rights deep v, umami squid salvia 
+    cronut knausgaard.&lt;/p&gt;
+    &lt;button class=&quot;close&quot;&gt;Close Dialog&lt;/button&gt;
+&lt;/dialog&gt;
+</code></pre>
+<p>If you were to omit the <code>open</code> attribute, the dialog would be closed. You can have pretty much any time of content you want within a dialog element. User agent styles applied to the dialog element have so far seemed pretty light. Of course it wouldn’t be useful if it wasn’t interactive! For this, the dialog element has a <code>.show()</code> and <code>.close()</code> method.</p>
+<div class="button-container">
+    <button id="open">Open Dialog</button>
+    <button class="close">Close Dialog</button>
+</div>
+
+<dialog id="dialog">
+    <header>
+        <h1>Dialog Title</h1>
+    </header>
+    <p>Lorem ipsum dolor amet man bun irony letterpress ugh vexillologist. Cronut synth craft beer, dreamcatcher organic adaptogen venmo activated charcoal listicle trust fund food truck. Fixie pok pok skateboard franzen food truck tattooed tousled raw denim shoreditch freegan adaptogen la croix selfies prism. Pinterest actually meggings pickled, four dollar toast tilde kinfolk art party iceland organic chicharrones tote bag 90’s. Taiyaki vice kale chips hammock mixtape tote bag XOXO authentic poutine vegan. Banh mi hexagon hell of try-hard small batch intelligentsia affogato enamel pin seitan readymade YOLO. Woke bicycle rights deep v, umami squid salvia cronut knausgaard.</p>
+    <button class="close">Close Dialog</button>
+</dialog>
+
+<p>If you want to copy this code, you’ll also these event handlers:</p>
+<pre><code class="lang-javascript">window.addEventListener(&#39;DOMContentLoaded&#39;, () =&gt; {
+    const dialog = document.getElementById(&#39;dialog&#39;);
+    console.log(dialog);
+    document.getElementById(&#39;open&#39;).addEventListener(&#39;click&#39;, () =&gt; {
+        dialog.show();
+    });
+    Array.from(document.querySelectorAll(&#39;.close&#39;))
+        .forEach(f =&gt; { /* f is one button element */
+            f.addEventListener(&#39;click&#39;, () =&gt; {
+                dialog.close();
+            })
+        });
+});
+</code></pre>
+<p>You’ll likely notice a couple things about this dialog:</p>
+<ul>
+<li>You can’t use <code>esc</code> to exit the dialog. It’s unclear if this might be implemented by other browsers, or if this is something developers should implement</li>
+<li>The dialog is very plain. It has very minimal initial CSS</li>
+<li>It automatically focuses on the buttons in the dialog, which is great for accessibility</li>
+</ul>
+<p>That’s largley it on the dialog element. It’s in infancy still, so hopefully we’ll see it mature more as it becomes adopted by other browsers.</p>
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="https://bugs.chromium.org/p/chromium/issues/detail?id=677562">Chrome Tracking For Dialog</a></li>
+</ul>
+</div>
+        <div id='app'></div>
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_config = function () {
+            this.page.url = 'http://emmaramirez.me/posts/the-dialog-element/';  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = 'the-dialog-element'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+        (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://emmaramirez-me.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <script src='../../bundle.js'></script>
+        <script src="../../rainbow-custom.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79007755-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-79007755-1');
+        </script>
+    </body>
+</html>

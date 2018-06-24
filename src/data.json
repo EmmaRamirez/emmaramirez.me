@@ -1,6 +1,17 @@
 {
     "articles": [
         {
+            "link": "./posts/the-dialog-element",
+            "title": "The Dialog Element",
+            "date": "06/23/18",
+            "emoji": "💬",
+            "tags": [
+                "html5",
+                "dialog",
+                "w3c"
+            ]
+        },
+        {
             "link": "./posts/building-the-nuzlocke-generator",
             "title": "Building the Nuzlocke Generator",
             "date": "06/13/18",

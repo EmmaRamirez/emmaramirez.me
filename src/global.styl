@@ -38,6 +38,43 @@ h2
     margin 0 auto
     max-width 40rem
 
+.button-container
+    background #eee
+    display flex
+    margin 0 auto
+    justify-content center
+    max-width 20rem
+    padding .5rem
+
+button
+    background #355ce3 
+    color white
+    border 1px solid #dddddd
+    border-radius .25rem
+    padding .25rem
+    font-size 1rem
+    margin .25rem
+    text-align center
+    transition 250ms all
+    &:hover
+        background ligthen(#355ce3, 10%)
+        transition 250ms all
+
+dialog 
+    box-shadow 0 0 4px rgba(black, 0.33)
+    border-radius .5rem
+    border 1px solid #ccc
+    max-width 50rem
+    position fixed
+    top 15rem
+    left auto 
+    right auto
+    z-index 10
+    button
+        margin 0 auto
+        display block
+
+
 .monospace
     font-family monospace
     margin .5rem
