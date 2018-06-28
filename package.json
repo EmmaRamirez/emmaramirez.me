@@ -37,7 +37,7 @@
     "build": "webpack",
     "create": "ts-node ./scripts/new-post",
     "build:watch": "webpack --watch",
-    "serve": "npx http-server ./docs",
+    "serve": "npx http-server ./docs -c-1",
     "test": "jest --verbose --coverage",
     "lint": "tslint -c tsconfig.json",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
