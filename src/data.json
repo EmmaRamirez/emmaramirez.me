@@ -105,10 +105,11 @@
     ],
     "projects": [
         {
-            "link": "http://emmaramirez.github.io/fakemon-idea-generator/",
-            "title": "fakemon idea generator",
-            "description": "generate fake Pokémon dex entries",
-            "emoji": "🎲"
+            "link": "https://nuzlocke-generator.herokuapp.com/",
+            "title": "nuzlocke template generator",
+            "description": "a nuzlocke documentation engine",
+            "wip": false,
+            "emoji": "📃"
         },
         {
             "link": "https://github.com/Clickopolis",
@@ -118,11 +119,10 @@
             "emoji": "🗽"
         },
         {
-            "link": "https://nuzlocke-generator.herokuapp.com/",
-            "title": "nuzlocke template generator",
-            "description": "a nuzlocke documentation engine",
-            "wip": false,
-            "emoji": "📃"
+            "link": "http://emmaramirez.github.io/fakemon-idea-generator/",
+            "title": "fakemon idea generator",
+            "description": "generate fake Pokémon dex entries",
+            "emoji": "🎲"
         }
     ],
     "links": [
