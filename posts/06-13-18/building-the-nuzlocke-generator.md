@@ -12,7 +12,7 @@ I really enjoyed doing the latter, but I'm not very good at photoshop. So I used
 
 As I posted them, I got comments from people interested in the format, but I didn't have much to offer them -- it wasn't code I wrote for anyone else to see, and as I kept using the same code for different runs, it got hard to manage. I tried looking to see if there was anything out there that could make it easier to manage, but any tools that existed simply recorded logs, and didn't produce screenshots.
 
-That's where I had the idea of the nuzlocke generator. At first, I tried reformattin g the HTML code I had an making it more dynamic, but this was a mess. So I turned to building an SPA with React & Typescript, and an http-server package called with [`npx`](https://github.com/zkat/npx), which proved to be a much cleaner combination.
+That's where I had the idea of the nuzlocke generator. At first, I tried reformatting the HTML code I had an making it more dynamic, but this was a mess. So I turned to building an SPA with React & Typescript, and an http-server package called with [`npx`](https://github.com/zkat/npx), which proved to be a much cleaner combination.
 
 The main flavor of state management for this was redux, with redux-saga and redux-persist in the mix. I'm a huge fan of both, as the former provides an easy mechanic for side-effects and the latter, a way to store user data locally. I considered making a server that would save all this info, but decided against it because I didn't really want to store user data if I could avoid it. Maybe I'm too afraid of GDPR. I may one day go back on this, because the idea of an Admin panel and site-wide stats strike me as interesting ideas that would be easier with a stronger backend.
 
@@ -22,7 +22,7 @@ And there it was! I tested it with a nuzlocke of my own (which was successful, b
 
 ![nuzlocke-generator](../../img/nuzlocke-generator.png)
 
-After this, I got a great amount of user feedback, which was key to improving the implication. The feature I added soon after was an export and import format. Nuzlockes are all stored as JSON, so it's easy to serialize them into files that user can download, even without an actual backend. Alongside that, I continued adding more customization options and QoL improvements like autocomplete.
+After this, I got a great amount of user feedback, which was key to improving the application. The feature I added soon after was an export and import format. Nuzlockes are all stored as JSON, so it's easy to serialize them into files that user can download, even without an actual backend. Alongside that, I continued adding more customization options and QoL improvements like autocomplete.
 
 I've also worked on making the design more responsive since it's not uncommon you'll be playing and your phone is closer than your computer. (This is another case for server-side improvements, since it enables logins). Redux-persist is still very useful, however, and its migration feature has allowed someone who started their template at `0.0.1-beta` (like me) still work with current iterations.
 
