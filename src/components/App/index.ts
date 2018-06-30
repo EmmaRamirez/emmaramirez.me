@@ -15,8 +15,21 @@ export interface AppProps {
 }
 
 export class App extends Component<AppProps> {
+  public articles: List;
+  public projects: List;
+
   constructor(props: AppProps) {
     super(props);
+    this.articles = new List({
+      items: (this.props as any).data.articles || []
+    });
+    this.projects = new List({
+      items: (this.props as any).data.projects || [],
+      options: {
+        target: '_blank'
+      },
+      type: 'projects'
+    });
   }
 
   public appBody(): string {
@@ -29,17 +42,9 @@ export class App extends Component<AppProps> {
     return `
       <div class='posts'>
           <h2>Writing</h2>
-          ${new List({
-            items: (this.props as any).data.articles || []
-          }).render()}
+          ${this.articles.render()}
           <h2>Projects</h2>
-          ${new List({
-            items: (this.props as any).data.projects || [],
-            options: {
-              target: '_blank'
-            },
-            type: 'projects'
-          }).render()}
+          ${this.projects.render()}
           <h2>🌴</h2>
           <div class='stats'>
             <p><a href="https://travis-ci.org/EmmaRamirez/emmaramirez.me" rel="nofollow"><img src="https://camo.githubusercontent.com/b70123a10e32ce6a5fbc9095092238fee4e78e0f/68747470733a2f2f696d672e736869656c64732e696f2f7472617669732f456d6d6152616d6972657a2f656d6d6172616d6972657a2e6d652e7376673f7374796c653d666c61742d737175617265" alt="Build Status" data-canonical-src="https://img.shields.io/travis/EmmaRamirez/emmaramirez.me.svg?style=flat-square" style="max-width:100%;"></a>
@@ -61,5 +66,8 @@ export class App extends Component<AppProps> {
         `;
   }
 
-  public postRender() {}
+  public postRender() {
+    this.articles.postRender();
+    this.projects.postRender();
+  }
 }

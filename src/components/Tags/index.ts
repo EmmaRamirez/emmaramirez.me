@@ -3,7 +3,7 @@ import './Tags.styl';
 
 export type TagType = string;
 export type TagsType = { tags: string[] };
-export const Tag = (title: string): string => `<div class='tag'>${title}</div>`;
+export const Tag = (title: string): string => `<a href='tags/${title.replace(/\s/g, '-')}' class='tag'>${title}</a>`;
 
 export class Tags extends Component<TagsType> {
   constructor(props: TagsType) {

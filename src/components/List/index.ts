@@ -33,6 +33,17 @@ export class List extends Component<ListProps> {
     super(props);
   }
 
+  public postRender() {
+    const projectOverlays = Array.from(document.querySelectorAll('.project-overlay'));
+    projectOverlays.forEach((projectOverlay: HTMLElement) => {
+      projectOverlay.addEventListener('click', (event:any) => {
+        if (!event.target.classList.contains('tag')) {
+          window.open(projectOverlay.dataset.link, '_blank');
+        }
+      });
+    });
+  }
+
   public render() {
     const { items, options, type } = this.props;
     const condition = (condition: any, str: string) => {
@@ -48,13 +59,13 @@ export class List extends Component<ListProps> {
                   return condition(!item.hide, `
                     <li class='list-item project-item' data-key=${key} style='background-image: url(${item.image || ''})'>
                       <div class='item-last-updated'><img src=${item.lastUpdated} /></div>
-                      <a class='project-overlay' href='${item.link}' target=${options ? options.target : '_self'}>
+                      <div data-link=${item.link} class='project-overlay'  target=${options ? options.target : '_self'}>
                         <div class='project-item-inner'>
                           <h4><span class='item-emoji'>${item.emoji}</span> ${ item.title }${condition(item.wip, `<span class='item-wip-badge'>WIP</span>`)}</h4>
                           <p>${ item.description }</p>
                           ${condition(item.tags, `<br/>${new Tags({ tags: item.tags } as any).render()}`)}
                         </div>
-                      </a>
+                      </div>
                     </li>
                   `);
                 }).join(''));
