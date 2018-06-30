@@ -5,9 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "@types/jest": "^21.1.9",
-    "awesome-typescript-loader": "^3.4.1",
     "chalk": "^2.3.0",
-    "copy-webpack-plugin": "^4.3.1",
+    "copy-webpack-plugin": "^4.5.2",
     "coveralls": "^3.0.0",
     "css-loader": "^0.28.7",
     "fs-extra": "^5.0.0",
@@ -16,22 +15,25 @@
     "marked": "^0.3.9",
     "path": "^0.12.7",
     "prettier": "^1.9.2",
-    "resolve-url-loader": "^2.2.1",
     "style-loader": "^0.19.1",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1",
+    "stylus-loader": "^3.0.2",
     "ts-jest": "^22.0.0",
     "tslint": "^5.8.0",
     "tslint-microsoft-contrib": "^5.0.1",
-    "webpack": "^3.10.0",
+    "webpack": "^4.14.0",
     "webpack-shell-plugin": "^0.5.0",
     "yargs": "^10.0.3"
   },
   "devDependencies": {
+    "concurrently": "^3.6.0",
     "cz-conventional-changelog": "^2.1.0",
+    "resolve-url-loader": "^2.3.0",
     "semantic-release": "^11.0.2",
+    "ts-loader": "^4.4.2",
     "ts-node": "^4.1.0",
-    "typescript": "^2.6.2"
+    "typescript": "^2.6.2",
+    "webpack-cli": "^3.0.8"
   },
   "scripts": {
     "build": "webpack",
@@ -42,7 +44,9 @@
     "lint": "tslint -c tsconfig.json",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "format": "prettier \"*/**/*.ts\" --parser 'typescript' --single-quote --ignore-path ./.prettierignore --write",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "prestart": "rm -rf ./docs && mkdir ./docs && mkdir ./docs/posts",
+    "start": "concurrently \"npm run build:watch\" \"npm run serve\""
   },
   "repository": {
     "type": "git",

@@ -109,20 +109,50 @@
             "title": "nuzlocke template generator",
             "description": "a nuzlocke documentation engine",
             "wip": false,
+            "lastUpdated": "https://camo.githubusercontent.com/7c31e88ac4aa846ee95742c76c4f4b43d544133c/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f72656c656173652f456d6d6152616d6972657a2f6e757a6c6f636b652d67656e657261746f722e7376673f7374796c653d666c61742d737175617265",
+            "image": "./img/nuzlocke-generator.png",
+            "tags": [
+                "react",
+                "redux",
+                "typescript"
+            ],
             "emoji": "📃"
+        },
+        {
+            "link": "https://pokemon-nicknames.herokuapp.com/",
+            "title": "pokemon nicknames",
+            "description": "a database for pokémon nicknames",
+            "image": "./img/pokemon-nicknames.png",
+            "emoji": "📛",
+            "lastUpdated": "https://camo.githubusercontent.com/c42dbe544ace2bb6b813058994056a1e89278fa8/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f72656c656173652f7175627974652f727562696469756d2e7376673f7374796c653d666c61742d737175617265",
+            "tags": [
+                "angular",
+                "typescript"
+            ]
         },
         {
             "link": "https://github.com/Clickopolis",
             "title": "clickopolis",
             "description": "an incremental empire management game",
+            "lastUpdated": "https://camo.githubusercontent.com/b598c0601f488d8b1a2603804d0fdf8c8649ca99/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f40636c69636b6f706f6c69732f636f72652e7376673f7374796c653d666c61742d737175617265",
             "wip": true,
+            "image": "./img/clickopolis-screen.png",
+            "tags": [
+                "react",
+                "typescript",
+                "redux",
+                "nodeJS",
+                "graphQL"
+            ],
             "emoji": "🗽"
         },
         {
             "link": "http://emmaramirez.github.io/fakemon-idea-generator/",
             "title": "fakemon idea generator",
-            "description": "generate fake Pokémon dex entries",
-            "emoji": "🎲"
+            "image": "./img/fakemon-idea-generator.png",
+            "description": "generate fake pokémon dex entries",
+            "emoji": "🎲",
+            "hide": true
         }
     ],
     "links": [
