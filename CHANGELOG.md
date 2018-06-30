@@ -1,3 +1,14 @@
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.11.3...0.12.0) (2018-06-30)
+
+
+### Features
+
+* add new fields for projects, upgrade webpack ([6f0dc1e](https://github.com/EmmaRamirez/emmaramirez.me/commit/6f0dc1e))
+* redesign of projects list ([5584c9b](https://github.com/EmmaRamirez/emmaramirez.me/commit/5584c9b))
+
+
+
 <a name="0.11.3"></a>
 ## [0.11.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.11.2...0.11.3) (2018-06-24)
 
@@ -70,7 +81,17 @@
 
 
 <a name="0.10.4"></a>
-## [0.10.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.2...0.10.4) (2018-01-15)
+## [0.10.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.10.3...0.10.4) (2018-01-15)
+
+
+### Bug Fixes
+
+* add publish command ([5936c89](https://github.com/EmmaRamirez/emmaramirez.me/commit/5936c89))
+
+
+
+<a name="0.10.3"></a>
+## [0.10.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.10.2...v0.10.3) (2018-01-15)
 
 
 ### Bug Fixes
@@ -78,13 +99,12 @@
 * **styles:** add margin 0 auto to ([fdf094c](https://github.com/EmmaRamirez/emmaramirez.me/commit/fdf094c))
 * **Tags:** fix error where Tags broke ([e6905ad](https://github.com/EmmaRamirez/emmaramirez.me/commit/e6905ad))
 * add keyword + description meta tags to posts ([1079cbc](https://github.com/EmmaRamirez/emmaramirez.me/commit/1079cbc))
-* add publish command ([5936c89](https://github.com/EmmaRamirez/emmaramirez.me/commit/5936c89))
 * spruce up projects section ([8365a7d](https://github.com/EmmaRamirez/emmaramirez.me/commit/8365a7d))
 
 
 
 <a name="0.10.2"></a>
-## [0.10.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.1...0.10.2) (2018-01-14)
+## [0.10.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.2...v0.10.2) (2018-01-14)
 
 
 ### Bug Fixes
@@ -94,12 +114,12 @@
 
 
 <a name="0.10.1"></a>
-## [0.10.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.0...0.10.1) (2018-01-14)
+## [0.10.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.1...v0.10.1) (2018-01-14)
 
 
 
 <a name="0.10.0"></a>
-# [0.10.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.9.0...0.10.0) (2018-01-14)
+# [0.10.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.10.0...v0.10.0) (2018-01-14)
 
 
 ### Features
@@ -109,7 +129,7 @@
 
 
 <a name="0.9.0"></a>
-# [0.9.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.8.0...0.9.0) (2018-01-14)
+# [0.9.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.9.0...v0.9.0) (2018-01-14)
 
 
 ### Bug Fixes
@@ -128,7 +148,12 @@
 
 
 <a name="0.8.0"></a>
-# [0.8.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.7.1...0.8.0) (2018-01-09)
+# [0.8.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.8.0...v0.8.0) (2018-01-11)
+
+
+
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.7.1...0.8.0) (2018-01-09)
 
 
 ### Features
@@ -139,7 +164,7 @@
 
 
 <a name="0.7.1"></a>
-## [0.7.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.7.0...0.7.1) (2018-01-06)
+## [0.7.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.7.1...v0.7.1) (2018-01-06)
 
 
 ### Bug Fixes
@@ -159,7 +184,7 @@
 
 
 <a name="0.7.0"></a>
-# [0.7.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.6...0.7.0) (2018-01-06)
+# [0.7.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.7.0...v0.7.0) (2018-01-06)
 
 
 ### Bug Fixes
@@ -176,7 +201,7 @@
 
 
 <a name="0.6.6"></a>
-## [0.6.6](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.5...0.6.6) (2018-01-02)
+## [0.6.6](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.6...v0.6.6) (2018-01-02)
 
 
 ### Bug Fixes
@@ -187,7 +212,7 @@
 
 
 <a name="0.6.5"></a>
-## [0.6.5](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.4...0.6.5) (2018-01-02)
+## [0.6.5](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.5...v0.6.5) (2018-01-02)
 
 
 ### Bug Fixes
@@ -202,7 +227,7 @@
 
 
 <a name="0.6.4"></a>
-## [0.6.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.6.3...0.6.4) (2017-12-30)
+## [0.6.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.6.4...v0.6.4) (2017-12-30)
 
 
 ### Bug Fixes
@@ -243,7 +268,7 @@
 
 
 <a name="0.6.0"></a>
-# [0.6.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.5.0...v0.6.0) (2017-12-29)
+# [0.6.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.0.0...v0.6.0) (2017-12-29)
 
 
 ### Bug Fixes
@@ -262,8 +287,27 @@
 
 
 
+<a name="0.0.0"></a>
+# [0.0.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.5.0...v0.0.0) (2017-12-27)
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.4.0...v0.5.0) (2017-12-27)
+
+
+### Bug Fixes
+
+* add some media queries ([b08938c](https://github.com/EmmaRamirez/emmaramirez.me/commit/b08938c))
+* links work in night mode ([94e137c](https://github.com/EmmaRamirez/emmaramirez.me/commit/94e137c))
+
+
+### Features
+
+* **projects:** add fakemon idea generator, nuzlocke template generator, palm trees as webp ([9c9aacd](https://github.com/EmmaRamirez/emmaramirez.me/commit/9c9aacd))
+* add bitcoin/eth addresses ([02dc8e5](https://github.com/EmmaRamirez/emmaramirez.me/commit/02dc8e5))
+* add ElsewhereLinks component ([af4c7aa](https://github.com/EmmaRamirez/emmaramirez.me/commit/af4c7aa))
+* add personal icons ([7a338bb](https://github.com/EmmaRamirez/emmaramirez.me/commit/7a338bb))
 
 
 
@@ -271,41 +315,42 @@
 # [0.4.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.3.0...v0.4.0) (2017-12-27)
 
 
-
-<a name="0.3.0"></a>
-# [0.3.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.2.0...v0.3.0) (2017-12-27)
-
-
-
-<a name="0.2.0"></a>
-# [0.2.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.0.0...v0.2.0) (2017-12-27)
-
-
-
-<a name="0.0.0"></a>
-# [0.0.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/ae07008...v0.0.0) (2017-12-27)
-
-
 ### Bug Fixes
 
-* add some media queries ([b08938c](https://github.com/EmmaRamirez/emmaramirez.me/commit/b08938c))
-* links work in night mode ([94e137c](https://github.com/EmmaRamirez/emmaramirez.me/commit/94e137c))
-* make webpack actually work ([b33c924](https://github.com/EmmaRamirez/emmaramirez.me/commit/b33c924))
 * public => docs ([eed4484](https://github.com/EmmaRamirez/emmaramirez.me/commit/eed4484))
 
 
 ### Features
 
-* add bitcoin/eth addresses ([02dc8e5](https://github.com/EmmaRamirez/emmaramirez.me/commit/02dc8e5))
-* add ElsewhereLinks component ([af4c7aa](https://github.com/EmmaRamirez/emmaramirez.me/commit/af4c7aa))
-* add personal icons ([7a338bb](https://github.com/EmmaRamirez/emmaramirez.me/commit/7a338bb))
 * add style switcher ([5752918](https://github.com/EmmaRamirez/emmaramirez.me/commit/5752918))
+
+
+
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.2.0...v0.3.0) (2017-12-26)
+
+
+### Features
+
 * App component ([f06b8d4](https://github.com/EmmaRamirez/emmaramirez.me/commit/f06b8d4))
 * better render() util, App ([c334c93](https://github.com/EmmaRamirez/emmaramirez.me/commit/c334c93))
-* **projects:** add fakemon idea generator, nuzlocke template generator, palm trees as webp ([9c9aacd](https://github.com/EmmaRamirez/emmaramirez.me/commit/9c9aacd))
 * Header component ([e7666b3](https://github.com/EmmaRamirez/emmaramirez.me/commit/e7666b3))
-* include scripts in webpack ([3d17b59](https://github.com/EmmaRamirez/emmaramirez.me/commit/3d17b59))
 * List component ([a252636](https://github.com/EmmaRamirez/emmaramirez.me/commit/a252636))
+
+
+
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/ae07008...v0.2.0) (2017-12-25)
+
+
+### Bug Fixes
+
+* make webpack actually work ([b33c924](https://github.com/EmmaRamirez/emmaramirez.me/commit/b33c924))
+
+
+### Features
+
+* include scripts in webpack ([3d17b59](https://github.com/EmmaRamirez/emmaramirez.me/commit/3d17b59))
 * update config, build step ([ae07008](https://github.com/EmmaRamirez/emmaramirez.me/commit/ae07008))
 
 
