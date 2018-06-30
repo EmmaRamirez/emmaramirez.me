@@ -15,9 +15,9 @@ describe('<List />', () => {
     expect(list.props.items.length).toBe(data.projects.length);
   });
 
-  it('can have a className', () => {
-    const list = new List({ items: [], options: {}, className: 'test-list' });
-    expect(list.props.className).toBe('test-list');
+  it('can have a type', () => {
+    const list = new List({ items: [], options: {}, type: 'test-list' });
+    expect(list.props.type).toBe('test-list');
     // @ts-ignore
     expect(list.render().match(/test-list/g).length).toBeGreaterThan(0);
   });

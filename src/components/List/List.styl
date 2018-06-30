@@ -1,3 +1,5 @@
+
+
 .list
     font-size 1.25rem
     list-style-type none
@@ -5,6 +7,7 @@
 
 .list-item
     margin-bottom 1em
+    position relative
     @media screen and (max-width: 640px)
         margin .5rem
     a
@@ -12,6 +15,14 @@
         text-decoration none
         &:hover
             color #2C7EFF
+    &:hover
+        .project-overlay .tags .tag
+            border 1px solid transparent
+            color #111
+        for i in 1..10
+            .tags .tag:nth-child({i})
+                transition-delay i * 20ms
+                background-color hsl(i * 36, 70%, 70%)
 
 .item-description,
 .item-date
@@ -41,25 +52,31 @@
     background rgba(0, 0, 0, 0.3)
     color #eee
 
-.projects-list
+.item-last-updated
+    position absolute
+    right .5rem
+    top .5rem
+
+.projects
     display flex
     flex-wrap wrap
     @media screen and (max-width: 640px)
         flex-wrap wrap
+    .item-emoji, .item-description, .item-link
+        background #222
     .list-item
         background #fafafa
+        background-size cover
         border 1px solid #eee
         border-radius .25rem
         flex-wrap wrap
+        height 12rem
         margin .25rem
-        padding .3rem
+        overflow hidden
         transition 350ms all
         width 36rem
         @media screen and (max-width: 640px)
             width 45%
-        a
-            display block
-            text-align center
         &:hover
             border 1px solid #ddd
             box-shadow 0 0 3px #eee
@@ -73,3 +90,34 @@
         justify-content center
         padding .25rem
         text-align center
+
+.projects .project-overlay
+    align-items center
+    background rgba(black, 0.75)
+    color #fff !important
+    cursor pointer
+    display flex
+    justify-content flex-start
+    padding 2rem
+    height 100%
+    width 100%
+    h4
+        align-items center
+        display flex
+    p
+        margin 0
+    .tags .tag
+        background transparent
+        border 1px solid white
+        color white
+        border-radius 1rem
+        padding .25rem 1rem
+        transition 300ms all
+    .item-wip-badge
+        background white
+        border-radius 1rem
+        display block
+        margin-left .5rem
+        padding .25rem 1rem
+    &:hover
+        color #fff !important

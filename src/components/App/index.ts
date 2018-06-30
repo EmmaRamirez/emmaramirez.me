@@ -38,7 +38,7 @@ export class App extends Component<AppProps> {
             options: {
               target: '_blank'
             },
-            className: 'projects-list'
+            type: 'projects'
           }).render()}
           <h2>🌴</h2>
           <div class='stats'>
