@@ -16,7 +16,7 @@ describe('<List />', () => {
   });
 
   it('can have a type', () => {
-    const list = new List({ items: [], options: {}, type: 'test-list' });
+    const list = new List({ items: [ { link: '', title: '' }], options: {}, type: 'test-list' });
     expect(list.props.type).toBe('test-list');
     // @ts-ignore
     expect(list.render().match(/test-list/g).length).toBeGreaterThan(0);

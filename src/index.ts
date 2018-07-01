@@ -1,7 +1,9 @@
 import { App, Header } from 'components';
 import { render, Nullable } from 'utils';
 
-const data = require('data.json');
+const data = (window as any).data || require('data.json');
+
+console.log(data);
 
 import './reset.styl';
 import './global.styl';

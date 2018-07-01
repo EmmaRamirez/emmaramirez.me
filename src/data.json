@@ -1,7 +1,7 @@
 {
     "articles": [
         {
-            "link": "./posts/the-dialog-element",
+            "link": "/posts/the-dialog-element",
             "title": "The Dialog Element",
             "date": "06/23/18",
             "emoji": "💬",
@@ -12,7 +12,7 @@
             ]
         },
         {
-            "link": "./posts/building-the-nuzlocke-generator",
+            "link": "/posts/building-the-nuzlocke-generator",
             "title": "Building the Nuzlocke Generator",
             "date": "06/13/18",
             "emoji": "📃",
@@ -25,7 +25,7 @@
             ]
         },
         {
-            "link": "./posts/ill-be-giving-a-talk-at-forwardjs",
+            "link": "/posts/ill-be-giving-a-talk-at-forwardjs",
             "title": "I'll be Giving A Talk At ForwardJS!",
             "date": "02/10/18",
             "emoji": "🎤",
@@ -36,7 +36,7 @@
             ]
         },
         {
-            "link": "./posts/the-glories-and-pitfalls-of-monorepos",
+            "link": "/posts/the-glories-and-pitfalls-of-monorepos",
             "title": "The Glories and Pitfalls of Monorepos",
             "date": "01/14/18",
             "emoji": "🐉",
@@ -50,7 +50,7 @@
             ]
         },
         {
-            "link": "./posts/piping-hot-a-rundown-on-the-pipeline-operator",
+            "link": "/posts/piping-hot-a-rundown-on-the-pipeline-operator",
             "title": "Piping Hot: A Rundown on the Pipeline Operator",
             "date": "01/05/18",
             "tags": [
@@ -61,7 +61,7 @@
             "emoji": "🛢️"
         },
         {
-            "link": "./posts/on-joining-and-leaving-a-techstars-company",
+            "link": "/posts/on-joining-and-leaving-a-techstars-company",
             "title": "On Joining (and Leaving) a Techstars Company",
             "date": "01/01/18",
             "tags": [
@@ -71,7 +71,7 @@
             "emoji": "🚀"
         },
         {
-            "link": "./posts/the-safe-navigation-operator",
+            "link": "/posts/the-safe-navigation-operator",
             "title": "The Safe Navigation Operator",
             "date": "12/29/17",
             "tags": [
@@ -83,7 +83,7 @@
             "emoji": "❓"
         },
         {
-            "link": "./posts/yet-another-blog-post",
+            "link": "/posts/yet-another-blog-post",
             "title": "Yet Another Blog Post",
             "date": "12/25/17",
             "tags": [
@@ -92,7 +92,7 @@
             "emoji": "✏️"
         },
         {
-            "link": "./posts/my-first-day-at-npm",
+            "link": "/posts/my-first-day-at-npm",
             "title": "My First Day at npm",
             "date": "06/06/16",
             "tags": [
@@ -110,7 +110,7 @@
             "description": "a nuzlocke documentation engine",
             "wip": false,
             "lastUpdated": "https://camo.githubusercontent.com/7c31e88ac4aa846ee95742c76c4f4b43d544133c/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f72656c656173652f456d6d6152616d6972657a2f6e757a6c6f636b652d67656e657261746f722e7376673f7374796c653d666c61742d737175617265",
-            "image": "./img/nuzlocke-generator.png",
+            "image": "/img/nuzlocke-generator.png",
             "tags": [
                 "react",
                 "redux",
@@ -122,7 +122,7 @@
             "link": "https://pokemon-nicknames.herokuapp.com/",
             "title": "pokemon nicknames",
             "description": "a database for pokémon nicknames",
-            "image": "./img/pokemon-nicknames.png",
+            "image": "/img/pokemon-nicknames.png",
             "emoji": "📛",
             "lastUpdated": "https://camo.githubusercontent.com/c42dbe544ace2bb6b813058994056a1e89278fa8/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f72656c656173652f7175627974652f727562696469756d2e7376673f7374796c653d666c61742d737175617265",
             "tags": [
@@ -135,8 +135,7 @@
             "title": "clickopolis",
             "description": "an incremental empire management game",
             "lastUpdated": "https://camo.githubusercontent.com/b598c0601f488d8b1a2603804d0fdf8c8649ca99/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f40636c69636b6f706f6c69732f636f72652e7376673f7374796c653d666c61742d737175617265",
-            "wip": true,
-            "image": "./img/clickopolis-screen.png",
+            "image": "/img/clickopolis-screen.png",
             "tags": [
                 "react",
                 "typescript",
@@ -149,9 +148,10 @@
         {
             "link": "http://emmaramirez.github.io/fakemon-idea-generator/",
             "title": "fakemon idea generator",
-            "image": "./img/fakemon-idea-generator.png",
+            "image": "/img/fakemon-idea-generator.png",
             "description": "generate fake pokémon dex entries",
             "emoji": "🎲",
+            "tags": [],
             "hide": true
         }
     ],

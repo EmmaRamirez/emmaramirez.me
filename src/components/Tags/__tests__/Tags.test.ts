@@ -2,7 +2,7 @@ import { Tag, Tags } from '..';
 
 describe('<Tag />', () => {
   it('renders', () => {
-    expect(Tag('tag')).toEqual(`<div class='tag'>tag</div>`);
+    expect(Tag('tag')).toEqual(`<a href='/tags/tag' class='tag'>tag</a>`);
   });
 });
 

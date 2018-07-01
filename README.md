@@ -34,14 +34,11 @@ I miss them so much. 🌴
 
 ## 🏎️ Roadmap
 
-##### Q1 2018
-- [x] at least five (maybe) quality articles
+- [x] tags!
 - [ ] an admin backend
 - [ ] post management that makes sense
 - [ ] better state management
 - [ ] top-quality design-y stuff
-##### Q2 2018
-TBD.
 
 ## 🖊️ Contributing
 

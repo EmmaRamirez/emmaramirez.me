@@ -3,7 +3,7 @@ import { Item, List } from 'components/List';
 import { ElsewhereLinks } from 'components/ElsewhereLinks';
 import { Component } from 'utils';
 
-const data = require('data.json');
+const data = (window as any).data || require('data.json');
 
 export interface AppProps {
   Header: Header;
@@ -33,7 +33,10 @@ export class App extends Component<AppProps> {
   }
 
   public appBody(): string {
-    if (document.body.className === 'markdown-body') {
+    const isTagsPage = window.location.pathname.includes('tags');
+    const windowPathArray = window.location.pathname.split('/');
+    const tag = windowPathArray[windowPathArray.length - 2];
+    if (document.body.className === 'markdown-body' && window.location.pathname.includes('posts')) {
       const md = document.getElementById('markdown');
       const markdown = (md ? md : { innerHTML: false }).innerHTML;
       (md ? md : { innerHTML: false }).innerHTML = '';
@@ -41,9 +44,10 @@ export class App extends Component<AppProps> {
     }
     return `
       <div class='posts'>
-          <h2>Writing</h2>
+          ${isTagsPage ? `<h2>Items Matching Tag: ${tag}</h2>` : ''}
+          ${isTagsPage ? '' : '<h2>Writing</h2>'}
           ${this.articles.render()}
-          <h2>Projects</h2>
+          ${isTagsPage ? '' : '<h2>Projects</h2>'}
           ${this.projects.render()}
           <h2>🌴</h2>
           <div class='stats'>
@@ -56,6 +60,7 @@ export class App extends Component<AppProps> {
   }
 
   public render() {
+    console.log(this.appBody());
     return `
             <div class='app'>
                 ${(this.props as any).Header.render()}

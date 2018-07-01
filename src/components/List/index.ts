@@ -53,6 +53,8 @@ export class List extends Component<ListProps> {
     const ul = (innerContent: string) => {
       return `<ul class='${'list ' + (type || '')}'>${ innerContent }</ul>`;
     };
+    const noMatches = `<div class='no-items'>No Matching Items Found 😱</div>`;
+    if (!items.length) return ``;
     if (type === 'projects') {
       return ul(items
                 .map((item, key) => {

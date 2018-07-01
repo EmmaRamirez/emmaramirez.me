@@ -45,7 +45,7 @@
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "format": "prettier \"*/**/*.ts\" --parser 'typescript' --single-quote --ignore-path ./.prettierignore --write",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "prestart": "rm -rf ./docs && mkdir ./docs && mkdir ./docs/posts",
+    "prestart": "rm -rf ./docs && mkdir ./docs && mkdir ./docs/posts && mkdir ./docs/tags",
     "start": "concurrently \"npm run build:watch\" \"npm run serve\""
   },
   "repository": {
