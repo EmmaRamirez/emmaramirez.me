@@ -1,3 +1,14 @@
+<a name="0.13.4"></a>
+## [0.13.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.13.3...0.13.4) (2018-07-01)
+
+
+### Bug Fixes
+
+* **design:** fix mobile styling ([069652d](https://github.com/EmmaRamirez/emmaramirez.me/commit/069652d))
+* **design:** improve hover on tags ([1cb31eb](https://github.com/EmmaRamirez/emmaramirez.me/commit/1cb31eb))
+
+
+
 <a name="0.13.3"></a>
 ## [0.13.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.13.2...0.13.3) (2018-07-01)
 
