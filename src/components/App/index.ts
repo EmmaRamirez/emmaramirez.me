@@ -39,7 +39,6 @@ export class App extends Component<AppProps> {
     if (document.body.className === 'markdown-body' && window.location.pathname.includes('posts')) {
       const md = document.getElementById('markdown');
       const markdown = (md ? md : { innerHTML: false }).innerHTML;
-      (md ? md : { innerHTML: false }).innerHTML = '';
       return markdown as string;
     }
     return `
@@ -60,7 +59,6 @@ export class App extends Component<AppProps> {
   }
 
   public render() {
-    console.log(this.appBody());
     return `
             <div class='app'>
                 ${(this.props as any).Header.render()}
@@ -74,5 +72,7 @@ export class App extends Component<AppProps> {
   public postRender() {
     this.articles.postRender();
     this.projects.postRender();
+    const md = document.getElementById('markdown');
+    if (md) { md.innerHTML = ''; }
   }
 }

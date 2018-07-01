@@ -11,17 +11,10 @@
         <meta name="keywords" content="no tags">
         <meta name="description" content="<p>One thing about Javascript that’s always irked me is dealing with <code>null</code> values. Sir Tony Hoare famously referred to its creation as the billion-dollar mistake. While the goal of the null reference was safety, it can create a lot of pitfalls, especially when checking through nested values in an object. Take for example a reference <code>article.author.name</code>. In Javascript, a conditional such as…</p>
 ">
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <script>
-        (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-5802352571182119",
-            enable_page_level_ads: true
-        });
-        </script>
         
     </head>
     <body class=markdown-body>
-        <div id='markdown' style='color:white'><h1 id="the-safe-navigation-operator">The Safe Navigation Operator</h1>
+        <div id='markdown' style='display: none'><h1 id="the-safe-navigation-operator">The Safe Navigation Operator</h1>
 <h2 id="a-billion-dollars">A Billion Dollars</h2>
 <p>One thing about Javascript that’s always irked me is dealing with <code>null</code> values. Sir Tony Hoare famously referred to its creation as the billion-dollar mistake. While the goal of the null reference was safety, it can create a lot of pitfalls, especially when checking through nested values in an object. Take for example a reference <code>article.author.name</code>. In Javascript, a conditional such as</p>
 <pre><code class="lang-js">if (article.author.name) { ... }
@@ -52,19 +45,6 @@ if (article.author == null ? false : article.author.name)
 <p>I? Sure? Hope? So?</p>
 </div>
         <div id='app'></div>
-        <div id="disqus_thread"></div>
-        <script>
-        var disqus_config = function () {
-            this.page.url = 'http://emmaramirez.me/posts/the-safe-navigation-operator/';  // Replace PAGE_URL with your page's canonical URL variable
-            this.page.identifier = 'the-safe-navigation-operator'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-        };
-        (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://emmaramirez-me.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-        })();
-        </script>
         <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <script src='../../bundle.js'></script>
         <script src="../../rainbow-custom.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics -->
