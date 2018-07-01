@@ -3,8 +3,6 @@ import { render, Nullable } from 'utils';
 
 const data = (window as any).data || require('data.json');
 
-console.log(data);
-
 import './reset.styl';
 import './global.styl';
 

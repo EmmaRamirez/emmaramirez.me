@@ -1,7 +1,6 @@
 # The Dialog Element
 
 <script src="https://cdn.jsdelivr.net/gh/ireade/caniuse-embed/caniuse-embed.min.js"></script>
-<script src="../../dialog-script.js"></script>
 
 The [HTML5.2](https://www.w3.org/TR/html52/) spec includes a couple of minor updates, but the one I'm most excited about is the [`<dialog>`](https://www.w3.org/TR/html52/interactive-elements.html#the-dialog-element) element.
 
@@ -33,21 +32,10 @@ So how do we implement it? The Dialog element follows a pretty simple format.
     <button class="close">Close Dialog</button>
 </dialog>
 ```
-
 If you were to omit the `open` attribute, the dialog would be closed. You can have pretty much any time of content you want within a dialog element. User agent styles applied to the dialog element have so far seemed pretty light. Of course it wouldn't be useful if it wasn't interactive! For this, the dialog element has a `.show()` and `.close()` method.
 
-<div class="button-container">
-    <button id="open">Open Dialog</button>
-    <button class="close">Close Dialog</button>
-</div>
-
-<dialog id="dialog">
-    <header>
-        <h1>Dialog Title</h1>
-    </header>
-    <p>Lorem ipsum dolor amet man bun irony letterpress ugh vexillologist. Cronut synth craft beer, dreamcatcher organic adaptogen venmo activated charcoal listicle trust fund food truck. Fixie pok pok skateboard franzen food truck tattooed tousled raw denim shoreditch freegan adaptogen la croix selfies prism. Pinterest actually meggings pickled, four dollar toast tilde kinfolk art party iceland organic chicharrones tote bag 90's. Taiyaki vice kale chips hammock mixtape tote bag XOXO authentic poutine vegan. Banh mi hexagon hell of try-hard small batch intelligentsia affogato enamel pin seitan readymade YOLO. Woke bicycle rights deep v, umami squid salvia cronut knausgaard.</p>
-    <button class="close">Close Dialog</button>
-</dialog>
+<p data-height="440" data-theme-id="109" data-slug-hash="MXLbaL" data-default-tab="result" data-user="boltaway" data-embed-version="2" data-pen-title="MXLbaL" class="codepen">See the Pen <a href="https://codepen.io/boltaway/pen/MXLbaL/">MXLbaL</a> by emma (<a href="https://codepen.io/boltaway">@boltaway</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
 
 If you want to copy this code, you'll also these event handlers:
 
@@ -66,7 +54,6 @@ window.addEventListener('DOMContentLoaded', () => {
         });
 });
 ```
-
 You'll likely notice a couple things about this dialog:
 - You can't use `esc` to exit the dialog. It's unclear if this might be implemented by other browsers, or if this is something developers should implement
 - The dialog is very plain. It has very minimal initial CSS. This includes things such as positioning.
