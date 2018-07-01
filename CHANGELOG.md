@@ -1,3 +1,20 @@
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.12.0...0.13.0) (2018-07-01)
+
+
+### Bug Fixes
+
+* increase padding for projects ([fa558a9](https://github.com/EmmaRamirez/emmaramirez.me/commit/fa558a9))
+
+
+### Features
+
+* **tags:** add build-tags script ([57de79d](https://github.com/EmmaRamirez/emmaramirez.me/commit/57de79d))
+* **tags:** modify data format to support tags ([67d5a53](https://github.com/EmmaRamirez/emmaramirez.me/commit/67d5a53))
+* **tags:** modify scripts to work with tags build ([7b34e64](https://github.com/EmmaRamirez/emmaramirez.me/commit/7b34e64))
+
+
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.11.3...0.12.0) (2018-06-30)
 
