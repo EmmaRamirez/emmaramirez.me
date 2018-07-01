@@ -27,6 +27,13 @@
             .tags .tag:nth-child({i})
                 transition-delay i * 20ms
                 background-color hsl(i * 36, 70%, 70%)
+        .tags:hover
+            .tag
+                background #eee
+            for i in 1..10
+                .tag:nth-child({i}):hover
+                    color #555
+                    background-color hsl(i * 36, 70%, 70%)
 
 .item-description,
 .item-date
@@ -115,6 +122,7 @@
         border 1px solid white
         color white
         border-radius 1rem
+        margin-right .25rem
         padding .25rem 1rem
         transition 300ms all
     .item-wip-badge
