@@ -1,3 +1,13 @@
+<a name="0.13.3"></a>
+## [0.13.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.13.2...0.13.3) (2018-07-01)
+
+
+### Bug Fixes
+
+* update webpack minification ([ab23f15](https://github.com/EmmaRamirez/emmaramirez.me/commit/ab23f15))
+
+
+
 <a name="0.13.2"></a>
 ## [0.13.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.13.1...0.13.2) (2018-07-01)
 
