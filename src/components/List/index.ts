@@ -53,6 +53,11 @@ export class List extends Component<ListProps> {
     const ul = (innerContent: string) => {
       return `<ul class='${'list ' + (type || '')}'>${ innerContent }</ul>`;
     };
+    const formatDate = (date: string | undefined) => {
+      if (date == null) return '';
+      const d = new Date(date);
+      return d.toDateString();
+    };
     const noMatches = `<div class='no-items'>No Matching Items Found 😱</div>`;
     if (!items.length) return ``;
     if (type === 'projects') {
@@ -85,7 +90,7 @@ export class List extends Component<ListProps> {
                             ${condition(item.description, `<span class='item-description'>${
                               item.description
                             }</span>`)}
-                            ${condition(item.date, `<span class='item-date'>${item.date}</span>`)}
+                            ${condition(item.date, `<span class='item-date'>${formatDate(item.date)}</span>`)}
                             ${condition(item.tags, `<br/>${new Tags({ tags: item.tags } as any).render()}`)}
                         </li>`;
               })

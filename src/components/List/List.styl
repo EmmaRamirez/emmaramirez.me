@@ -47,7 +47,11 @@
     width 2.25rem
 
 .item-date
+    // display block
+    // float right
     font-family monospace
+    // margin-left 4rem
+    // text-align right
 
 .dark .list-item a
     color #fff
@@ -71,8 +75,6 @@
 .projects
     display flex
     flex-wrap wrap
-    @media screen and (max-width: 640px)
-        flex-wrap wrap
     .item-emoji, .item-description, .item-link
         background #222
     .list-item
@@ -82,12 +84,12 @@
         border-radius .25rem
         flex-wrap wrap
         height 12rem
+        @media screen and (max-width: 640px)
+            height 15rem
         margin .25rem
         overflow hidden
         transition 350ms all
         width 36rem
-        @media screen and (max-width: 640px)
-            width 45%
         &:hover
             border 1px solid #ddd
             box-shadow 0 0 3px #eee
@@ -112,6 +114,9 @@
     padding 3rem
     height 100%
     width 100%
+    @media screen and (max-width: 640px)
+        font-size 80% !important
+        padding 1rem
     h4
         align-items center
         display flex
