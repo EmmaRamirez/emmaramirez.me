@@ -118,7 +118,7 @@
     "projects": [
         {
             "link": "https://nuzlocke-generator.herokuapp.com/",
-            "title": "nuzlocke template generator",
+            "title": "nuzlocke generator",
             "description": "a nuzlocke documentation engine",
             "wip": false,
             "lastUpdated": "https://camo.githubusercontent.com/7c31e88ac4aa846ee95742c76c4f4b43d544133c/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f72656c656173652f456d6d6152616d6972657a2f6e757a6c6f636b652d67656e657261746f722e7376673f7374796c653d666c61742d737175617265",
