@@ -1,3 +1,13 @@
+<a name="0.13.2"></a>
+## [0.13.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.13.1...0.13.2) (2018-07-01)
+
+
+### Bug Fixes
+
+* improve rendering times + methods ([4ce3038](https://github.com/EmmaRamirez/emmaramirez.me/commit/4ce3038))
+
+
+
 <a name="0.13.1"></a>
 ## [0.13.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.13.0...0.13.1) (2018-07-01)
 
