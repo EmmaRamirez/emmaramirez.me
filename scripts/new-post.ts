@@ -42,7 +42,7 @@ function createNewPost(
   const isDraft = draft || false;
 
   postDataArticles.unshift({
-    link: './posts/' + postTitleDashed,
+    link: '/posts/' + postTitleDashed,
     title: postTitle,
     date: postDate.replace(/-/g, '/'),
     emoji: emoji || '',
