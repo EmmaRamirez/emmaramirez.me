@@ -3,8 +3,8 @@ import { render, Nullable } from 'utils';
 
 const data = (window as any).data || require('data.json');
 
-import './reset.styl';
-import './global.styl';
+import './reset.scss';
+import './global.scss';
 
 const endpoint: Nullable<HTMLElement> = document.getElementById('app');
 const app = new App({ Header: new Header(), data });

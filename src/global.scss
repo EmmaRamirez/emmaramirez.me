@@ -1,0 +1,180 @@
+$dark-color: #242830;
+$light-color: #efefef;
+
+::-moz-selection {
+  color: $dark-color;
+  background: #42f4f4;
+}
+
+::selection {
+  color: darkc-olor;
+  background: #42f4f4;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  overflow-x: hidden;
+  &.dark {
+    background: $dark-color;
+    color: #eee;
+  }
+
+  @media screen and (max-width: 640px) {
+    font-size: 20px;
+  }
+}
+
+a {
+  color: #121212;
+  text-decoration: none;
+}
+
+.palm-trees {
+  @media screen and (max-width: 640px) {
+    width: 100%;
+  }
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: lighter;
+  margin: 0.25rem;
+}
+
+.posts {
+  margin: 0 auto;
+  max-width: 40rem;
+  @media screen and (max-width: 640px) {
+    width: 100%;
+  }
+}
+
+.button-container {
+  background: #eee;
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+  max-width: 20rem;
+  padding: 0.5rem;
+}
+
+.monospace {
+  font-family: monospace;
+  margin: 0.5rem;
+}
+
+.elsewhere-link {
+  opacity: 0.85;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.dark .elsewhere-link {
+  filter: invert(100%);
+}
+
+.cp_embed_wrapper {
+  box-shadow: 0 0 0.25rem #b9b9b9;
+}
+
+.blog-post {
+  font-size: 1.15rem;
+  margin: 0 auto;
+  max-width: 55rem;
+  padding: 0 1rem;
+  padding-bottom: 5rem;
+  h1 {
+    font-size: 2rem;
+    font-weight: light;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+    margin-top: 3rem;
+  }
+  h2 {
+    margin-top: 2rem;
+    margin-left: 1rem;
+  }
+  blockquote {
+    color: #444;
+    border-left: 0.25rem solid #ccc;
+    p {
+      padding: 0.25rem;
+    }
+  }
+  p {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    margin: 1rem;
+  }
+  code {
+
+    font-family: 'Fira Code' !important;
+    font-size: 1rem;
+  }
+  pre {
+    border: 1px solid #cccccc;
+    border-radius: 0.25rem;
+    line-height: 1.5;
+    margin-left: 2rem;
+    padding: 0.5rem;
+    width: calc(100% - 5rem);
+    code {
+      color: #111;
+    }
+  }
+}
+
+.markdown-body {
+  ul {
+    font-size: 1.15rem;
+    line-height: 1.4;
+    padding-left: 4rem;
+  }
+}
+
+.markdown-body img {
+  width: 100%;
+}
+
+.markdown-body .caption {
+  color: #bbb;
+  font-size: 80%;
+  text-align: center;
+}
+
+
+.markdown-body .blog-post a {
+  color: #4286f4;
+}
+
+.dark .blog-post {
+  code {
+    background: darken($dark-color, 10%);
+    color: #fff;
+    outline: 1px solid #2e2c2c;
+  }
+}
+
+.stats {
+  background: #efefef;
+  display: flex;
+  bottom: 0;
+  left: 0;
+  justify-content: center;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+  img {
+    width: auto;
+  }
+}
+
+.dark .stats {
+  background: rgba(black, 0.3);
+}
+
+#disqus_thread {
+  margin: 0 auto;
+  max-width: 50rem;
+}

@@ -1,5 +1,5 @@
 import { Component } from 'utils';
-import './Tags.styl';
+import './Tags.scss';
 
 export type TagType = string;
 export type TagsType = { tags: string[] };

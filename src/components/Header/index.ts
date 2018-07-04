@@ -1,4 +1,4 @@
-import './Header.styl';
+import './Header.scss';
 import { Component } from 'utils';
 
 export class Header {
