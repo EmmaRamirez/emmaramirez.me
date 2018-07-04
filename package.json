@@ -1,11 +1,12 @@
 {
   "name": "emmaramirez.me",
-  "version": "0.14.0",
+  "version": "0.14.3",
   "description": "emma's personal website",
   "main": "index.js",
   "dependencies": {
     "@types/jest": "^21.1.9",
     "chalk": "^2.3.0",
+    "conventional-changelog": "^2.0.1",
     "copy-webpack-plugin": "^4.5.2",
     "coveralls": "^3.0.0",
     "css-loader": "^0.28.7",
