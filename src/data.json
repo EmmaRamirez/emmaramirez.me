@@ -1,6 +1,17 @@
 {
     "articles": [
         {
+            "link": "/posts/making-time-to-code",
+            "title": "Making Time to Code When You Have a Job Coding",
+            "date": "04/25/19",
+            "emoji": "⏰",
+            "tags": [
+                "personal",
+                "programming",
+                "time management"
+            ]
+        },
+        {
             "link": "/posts/typing-redux-actions",
             "title": "Typing Redux Actions",
             "date": "08/10/18",
