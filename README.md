@@ -7,8 +7,6 @@
 
 my corner of the internet.
 
-Hi! This is my blog, which I finally got around to making, after twenty-two years of procrastination. 
-
 
 ## 🔧 Installation
 
