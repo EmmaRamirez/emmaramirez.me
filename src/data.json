@@ -1,6 +1,53 @@
 {
     "articles": [
         {
+            "link": "/posts/making-time-to-code",
+            "title": "Making Time to Code When You Have a Job Coding",
+            "date": "04/25/19",
+            "emoji": "⏰",
+            "tags": [
+                "personal",
+                "programming",
+                "time management"
+            ]
+        },
+        {
+            "link": "/posts/typing-redux-actions",
+            "title": "Typing Redux Actions",
+            "date": "08/10/18",
+            "emoji": "⌨️",
+            "tags": [
+                "react",
+                "redux",
+                "typescript"
+            ]
+        },
+        {
+            "link": "/posts/projects-and-writing-in-the-works",
+            "title": "Projects and Writing in the Works",
+            "date": "07/10/18",
+            "emoji": "👩‍💻",
+            "tags": [
+                "personal",
+                "programming",
+                "typescript",
+                "react",
+                "rust",
+                "webassembly"
+            ]
+        },
+        {
+            "link": "/posts/learning-rust",
+            "title": "Learning Rust",
+            "date": "07/04/18",
+            "emoji": "🔧",
+            "tags": [
+                "rust",
+                "learning"
+            ],
+            "draft": true
+        },
+        {
             "link": "/posts/what-coffeescripts-failures-say-about-elm",
             "title": "What Coffeescript's Failures Say About Elm",
             "date": "06/30/18",

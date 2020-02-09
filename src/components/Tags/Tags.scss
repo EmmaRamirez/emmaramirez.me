@@ -1,0 +1,17 @@
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 0.5rem;
+}
+.tags .tag {
+  background: #eeeeee;
+  border-radius: 1rem;
+  color: #555;
+  display: block;
+  font-size: 0.95rem;
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding: 0.25rem 1rem;
+  transition: 250ms all;
+}

@@ -1,4 +1,4 @@
-import './List.styl';
+import './List.scss';
 
 import { Component } from 'utils';
 import { Tags, TagsType } from '../Tags';

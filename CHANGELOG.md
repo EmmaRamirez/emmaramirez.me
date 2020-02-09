@@ -1,3 +1,23 @@
+<a name="0.15.0"></a>
+# [0.15.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.14.5...v0.15.0) (2018-08-24)
+
+
+
+<a name="0.14.5"></a>
+## [0.14.5](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.14.4...0.14.5) (2018-07-04)
+
+
+
+<a name="0.14.4"></a>
+## [0.14.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.14.0...0.14.4) (2018-07-04)
+
+
+### Bug Fixes
+
+* **writing:** reorganize section abou Elm ([bce34fe](https://github.com/EmmaRamirez/emmaramirez.me/commit/bce34fe))
+
+
+
 <a name="0.14.0"></a>
 # [0.14.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.13.4...0.14.0) (2018-07-01)
 
