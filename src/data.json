@@ -1,6 +1,15 @@
 {
     "articles": [
         {
+            "link": "",
+            "title": "",
+            "date": "05/24/20",
+            "emoji": "",
+            "tags": [
+                ""
+            ]
+        },
+        {
             "link": "/posts/making-time-to-code",
             "title": "Making Time to Code When You Have a Job Coding",
             "date": "04/25/19",

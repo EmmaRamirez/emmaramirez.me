@@ -13,6 +13,7 @@ function selectText() {
   const preTags = document.querySelectorAll('pre');
   preTags.forEach(item =>
     item.addEventListener('click', () =>
+      // @ts-ignore
       window.getSelection().selectAllChildren(item)
     )
   );

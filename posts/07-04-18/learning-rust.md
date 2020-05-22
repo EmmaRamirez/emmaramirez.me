@@ -2,7 +2,7 @@
 
 I've been writing Rust code for over a year now, and I am still squarely in the novice category. Which isn't a bad thing! But I'm certainly less of a novice and less mystified by Rust than I was a year ago. I come from a non-systems programming background, so most of this is going to relate back to that. I'll be going over some of the things that I've learned about Rust that make it as confusing as it is special.
 
-For anyone getting started with Rust, it's heavy syntax is intimidating. I would liken it to a math course where everyone's using ∑, ∫, or ∴ (sum, integral, therefore), which is not very beginner friendly. Symbols exist for a reason: they help us communicate ideas more efficiently. But that same efficiency creates a barrier.
+For anyone getting started with Rust, its heavy syntax is intimidating. I would liken it to a math course where everyone's using ∑, ∫, or ∴ (sum, integral, therefore), which is not very beginner friendly. Symbols exist for a reason: they help us communicate ideas more efficiently. But that same efficiency creates a barrier.
 
 You can see just how [long of a list it is](https://doc.rust-lang.org/book/second-edition/appendix-02-operators.html?highlight=syntax#operators). If you have prior experience, some things are common like arrays [], generics <T>, and standard logical operators. Some, like @ (pattern binding), |x| (closure expression), or $ident (macro substitution) are probably less familiar.
 

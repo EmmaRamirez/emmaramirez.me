@@ -18,7 +18,7 @@
         const allTags = [...p, ...a].reduce((p, c) => [...p, ...c], []);
         // @ts-ignore: downLevel iteration
         const uniqueTags = [...new Set(allTags)];
-        return uniqueTags.map(tag => tag.toString().replace(/\s/g, '-'));
+        return uniqueTags.map(tag => (tag as string).toString().replace(/\s/g, '-'));
     };
 
     const createDataFromTag = (tag: string) => {
