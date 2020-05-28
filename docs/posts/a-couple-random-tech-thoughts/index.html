@@ -28,10 +28,10 @@
 <p>This will only run when blogPostCount is changed, just like a strict <code>componentWillUpdate</code> check.</p>
 </li>
 <li>Getting people to adopt hooks is not always easy. Despite the learning curve, we also just like sticking to what we already know&mdash;classes! And most of us transitioned away from <code>React.createClass()</code> to classes so it’s a double-whammy. Hooks are also incompatible with <em>a lot</em> of existing React architecture, and this is absolutely my biggest frustration with them.</li>
-<li>Or rather, converting classes into Function components is a pain in the butt and there’s a cognitive overload to recalling which React methods map to which Hooks. Check out this (guide)[<a href="https://reactjs.org/docs/hooks-faq.html#adoption-strategy">https://reactjs.org/docs/hooks-faq.html#adoption-strategy</a>] for more info.</li>
+<li>Or rather, converting classes into Function components is a pain in the butt and there’s a cognitive overload to recalling which React methods map to which Hooks. Check out this <a href="https://reactjs.org/docs/hooks-faq.html#adoption-strategy">guide</a> for more info.</li>
 </ul>
 </li>
-<li><p><strong>Dogfooding is always wise.</strong> I’m realizing this more and more as I’ve worked with the (nuzlocke-generator)[<a href="https://nuzlocke-generator.com">https://nuzlocke-generator.com</a>] and ocassionally breaking things. The more I actually do my own nuzlockes and record them using my own tool, the more errors I catch! Wow, who knew using your own software was a good idea!</p>
+<li><p><strong>Dogfooding is always wise.</strong> I’m realizing this more and more as I’ve worked with the <a href="https://nuzlocke-generator.com">nuzlocke-generator</a> and ocassionally breaking things. The more I actually do my own nuzlockes and record them using my own tool, the more errors I catch! Wow, who knew using your own software was a good idea!</p>
 <ul>
 <li>Of course, what I really mean by this is workflows that aren’t common when developing. For example, you can import a <code>nuzlocke.json</code> file in the application, but when I’m testing I’m usually just creating a new one and working through that…</li>
 <li>Whereas users are often using <code>nuzlocke.json</code> files that might be multiple versions old. This is especially brittle because all data is stored locally, so there’s no such things as db migrations. Redux-persist migrations are used to catch these, but can on ocassion miss, especially if it’s a multiple-version mismatch.</li>

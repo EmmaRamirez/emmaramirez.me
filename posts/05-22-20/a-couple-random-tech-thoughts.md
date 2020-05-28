@@ -14,9 +14,9 @@ I haven't had much time or energy to write articles, so I wanted to dump a coupl
 
     This will only run when blogPostCount is changed, just like a strict `componentWillUpdate` check.
     - Getting people to adopt hooks is not always easy. Despite the learning curve, we also just like sticking to what we already know&mdash;classes! And most of us transitioned away from `React.createClass()` to classes so it's a double-whammy. Hooks are also incompatible with *a lot* of existing React architecture, and this is absolutely my biggest frustration with them.
-    - Or rather, converting classes into Function components is a pain in the butt and there's a cognitive overload to recalling which React methods map to which Hooks. Check out this (guide)[https://reactjs.org/docs/hooks-faq.html#adoption-strategy] for more info.
+    - Or rather, converting classes into Function components is a pain in the butt and there's a cognitive overload to recalling which React methods map to which Hooks. Check out this [guide](https://reactjs.org/docs/hooks-faq.html#adoption-strategy) for more info.
 
-- **Dogfooding is always wise.** I'm realizing this more and more as I've worked with the (nuzlocke-generator)[https://nuzlocke-generator.com] and ocassionally breaking things. The more I actually do my own nuzlockes and record them using my own tool, the more errors I catch! Wow, who knew using your own software was a good idea!
+- **Dogfooding is always wise.** I'm realizing this more and more as I've worked with the [nuzlocke-generator](https://nuzlocke-generator.com) and ocassionally breaking things. The more I actually do my own nuzlockes and record them using my own tool, the more errors I catch! Wow, who knew using your own software was a good idea!
   - Of course, what I really mean by this is workflows that aren't common when developing. For example, you can import a `nuzlocke.json` file in the application, but when I'm testing I'm usually just creating a new one and working through that...
   - Whereas users are often using `nuzlocke.json` files that might be multiple versions old. This is especially brittle because all data is stored locally, so there's no such things as db migrations. Redux-persist migrations are used to catch these, but can on ocassion miss, especially if it's a multiple-version mismatch.
 
