@@ -33,14 +33,14 @@ module.exports = {
         ]
     },
     plugins: [
-        new copyWebpackPlugin(
-            [
+        new copyWebpackPlugin({
+            patterns: [
                 {
                     from: './src/assets',
                     to: '.',
                 }
             ]
-        ),
+        }),
         new shellWebpackPlugin({
             onBuildEnd: ['ts-node ./scripts/build', 'ts-node ./scripts/build-tags']
         }),

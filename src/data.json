@@ -1,12 +1,13 @@
 {
     "articles": [
         {
-            "link": "",
-            "title": "",
-            "date": "05/24/20",
-            "emoji": "",
+            "link": "/posts/a-couple-random-tech-thoughts",
+            "title": "A Couple Random Tech Thoughts",
+            "date": "05/22/20",
+            "emoji": "🔀",
             "tags": [
-                ""
+                "programming",
+                "react"
             ]
         },
         {
