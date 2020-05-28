@@ -1,20 +1,16 @@
-<a name="0.15.0"></a>
-# [0.15.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.14.5...v0.15.0) (2018-08-24)
-
-
-
-<a name="0.14.5"></a>
-## [0.14.5](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.14.4...0.14.5) (2018-07-04)
-
-
-
-<a name="0.14.4"></a>
-## [0.14.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.14.0...0.14.4) (2018-07-04)
+<a name="0.16.2"></a>
+## [0.16.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.14.0...0.16.2) (2020-05-28)
 
 
 ### Bug Fixes
 
+* fix links markdown'd wrong ([3911a7b](https://github.com/EmmaRamirez/emmaramirez.me/commit/3911a7b))
 * **writing:** reorganize section abou Elm ([bce34fe](https://github.com/EmmaRamirez/emmaramirez.me/commit/bce34fe))
+
+
+### Features
+
+* add post on random thoughts ([a096f76](https://github.com/EmmaRamirez/emmaramirez.me/commit/a096f76))
 
 
 
@@ -179,9 +175,9 @@
 
 ### Bug Fixes
 
+* add keyword + description meta tags to posts ([1079cbc](https://github.com/EmmaRamirez/emmaramirez.me/commit/1079cbc))
 * **styles:** add margin 0 auto to ([fdf094c](https://github.com/EmmaRamirez/emmaramirez.me/commit/fdf094c))
 * **Tags:** fix error where Tags broke ([e6905ad](https://github.com/EmmaRamirez/emmaramirez.me/commit/e6905ad))
-* add keyword + description meta tags to posts ([1079cbc](https://github.com/EmmaRamirez/emmaramirez.me/commit/1079cbc))
 * spruce up projects section ([8365a7d](https://github.com/EmmaRamirez/emmaramirez.me/commit/8365a7d))
 
 
@@ -217,10 +213,10 @@
 
 ### Bug Fixes
 
+* ensure not passing in 'tags' breaks command ([98740bf](https://github.com/EmmaRamirez/emmaramirez.me/commit/98740bf))
+* **style:** add padding to blog-post ([b2471aa](https://github.com/EmmaRamirez/emmaramirez.me/commit/b2471aa))
 * add sort to Tags component ([8cde27c](https://github.com/EmmaRamirez/emmaramirez.me/commit/8cde27c))
 * add sort to Tags component ([262d8a2](https://github.com/EmmaRamirez/emmaramirez.me/commit/262d8a2))
-* **style:** add padding to blog-post ([b2471aa](https://github.com/EmmaRamirez/emmaramirez.me/commit/b2471aa))
-* ensure not passing in 'tags' breaks command ([98740bf](https://github.com/EmmaRamirez/emmaramirez.me/commit/98740bf))
 
 
 ### Features
@@ -252,12 +248,12 @@
 
 ### Bug Fixes
 
+* **styles:** make item-description color darker ([73ef854](https://github.com/EmmaRamirez/emmaramirez.me/commit/73ef854))
+* add emoji field to npm run create ([9048fdd](https://github.com/EmmaRamirez/emmaramirez.me/commit/9048fdd))
 * **styles:** add 100% more emoji ([f26954f](https://github.com/EmmaRamirez/emmaramirez.me/commit/f26954f))
+* remove broken style switcher ([8faeedb](https://github.com/EmmaRamirez/emmaramirez.me/commit/8faeedb))
 * **styles:** improve selection styles ([1ecd7d8](https://github.com/EmmaRamirez/emmaramirez.me/commit/1ecd7d8))
 * **styles:** improve selection styles ([5939666](https://github.com/EmmaRamirez/emmaramirez.me/commit/5939666))
-* add emoji field to npm run create ([9048fdd](https://github.com/EmmaRamirez/emmaramirez.me/commit/9048fdd))
-* remove broken style switcher ([8faeedb](https://github.com/EmmaRamirez/emmaramirez.me/commit/8faeedb))
-* **styles:** make item-description color darker ([73ef854](https://github.com/EmmaRamirez/emmaramirez.me/commit/73ef854))
 
 
 ### Features
@@ -289,8 +285,8 @@
 
 ### Bug Fixes
 
-* add google analytics ([db8cd00](https://github.com/EmmaRamirez/emmaramirez.me/commit/db8cd00))
 * **styles:** fix styling to be more responsive + viewport tag ([10f3d20](https://github.com/EmmaRamirez/emmaramirez.me/commit/10f3d20))
+* add google analytics ([db8cd00](https://github.com/EmmaRamirez/emmaramirez.me/commit/db8cd00))
 
 
 
@@ -365,8 +361,8 @@
 
 ### Features
 
-* **blog:** add first post ([a62c09e](https://github.com/EmmaRamirez/emmaramirez.me/commit/a62c09e))
 * add status badges to site ([a664df2](https://github.com/EmmaRamirez/emmaramirez.me/commit/a664df2))
+* **blog:** add first post ([a62c09e](https://github.com/EmmaRamirez/emmaramirez.me/commit/a62c09e))
 
 
 
@@ -387,10 +383,10 @@
 
 ### Features
 
-* **projects:** add fakemon idea generator, nuzlocke template generator, palm trees as webp ([9c9aacd](https://github.com/EmmaRamirez/emmaramirez.me/commit/9c9aacd))
 * add bitcoin/eth addresses ([02dc8e5](https://github.com/EmmaRamirez/emmaramirez.me/commit/02dc8e5))
 * add ElsewhereLinks component ([af4c7aa](https://github.com/EmmaRamirez/emmaramirez.me/commit/af4c7aa))
 * add personal icons ([7a338bb](https://github.com/EmmaRamirez/emmaramirez.me/commit/7a338bb))
+* **projects:** add fakemon idea generator, nuzlocke template generator, palm trees as webp ([9c9aacd](https://github.com/EmmaRamirez/emmaramirez.me/commit/9c9aacd))
 
 
 
