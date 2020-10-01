@@ -3,7 +3,7 @@ cache:
   directories:
     - ~/.npm
 node_js:
-  - '9'
+  - '12'
 after_success:
   - npm run semantic-release
   - node node_modules/.bin/jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
