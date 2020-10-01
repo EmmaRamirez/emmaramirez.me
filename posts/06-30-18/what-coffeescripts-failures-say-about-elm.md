@@ -1,7 +1,7 @@
 # What Coffeescript's Failures Say About Elm
 
 ## On Coffeescript
-Coffeescript, a language that compiles to Javscript, [recently released version 2.0](https://coffeescript.org/announcing-coffeescript-2/), to little fanfare. There's a bevy of languages that compile to Javascript, but Coffeescript was, for quite a while, a popular one. Nowadays, [it's one of the most dreaded languages](https://insights.stackoverflow.com/survey/2018/#most-loved-dreaded-and-wanted) at 82.7%, falling behind only Cobol and Visual Basic 6. That's pretty impressive considering Cobol and VB6 are decades old and Coffeescript popped up 8 years ago.
+Coffeescript, a language that compiles to Javascript, [recently released version 2.0](https://coffeescript.org/announcing-coffeescript-2/), to little fanfare. There's a bevy of languages that compile to Javascript, but Coffeescript was, for quite a while, a popular one. Nowadays, [it's one of the most dreaded languages](https://insights.stackoverflow.com/survey/2018/#most-loved-dreaded-and-wanted) at 82.7%, falling behind only Cobol and Visual Basic 6. That's pretty impressive considering Cobol and VB6 are decades old and Coffeescript popped up 8 years ago.
 
 From the start, [Coffeescript](https://github.com/jashkenas/coffeescript/issues/4288) [was](http://ryanflorence.com/2011/case-against-coffeescript/) [polarizing](http://walkercoderanger.com/blog/2014/03/coffeescript-isnt-the-answer/)&mdash;it was paired with Rails 4.0 as a default, so it's usage was often aimed at Ruby devs (and in fact, most Coffeescript code still being written is being written because of Rails). Coffeescript's big selling point was that _everything is an expression_, which sounds really cool until you get to:
 
@@ -24,6 +24,6 @@ Elm has a concept called [ports](https://guide.elm-lang.org/interop/javascript.h
 
 Since Elm is statically and strictly typed, it makes sense that they need safeguards against the unclean Javascript code. But that's also a problem&mdash;it makes compatibility between JS libraries _your_ problem, and there's no guarantee it'll work, making refactors expensive. God forbid you decide to switch back to Javascript.
 
-Elm, Purescript, and Dart all have their own packages managers, elm-package, pursuit, and pub, respectively. While that's fine, it also forgoes npm, which is the larget ecosystem of any language, and I think that's a critical mistake. Unless you have the infrastructure or niche use cases to justify those languages, or the time to implement your own libraries for the problems you might encounter.
+Elm, Purescript, and Dart all have their own packages managers, elm-package, pursuit, and pub, respectively. While that's fine, it also forgoes npm, which is the largest ecosystem of any language, and I think that's a critical mistake. Unless you have the infrastructure or niche use cases to justify those languages, or the time to implement your own libraries for the problems you might encounter.
 
 To me, it comes off as hubris&mdash;in an attempt to guard their ecosystems, they skip out on compatibility with Javascript, which has evolved to be a great language with ES6+. Coffeescript had a lot of good ideas, and some like => syntax found their way into JS proper, and its syntax certainly wasn't enough ot sink it&mdash;it was its arrogant, casual detachment from the world of Javascript.

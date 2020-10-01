@@ -21,7 +21,7 @@ export const StartGame = ({ start }: Start): Action<START_GAME, Start> =>
     ({ type: 'START_GAME' })
 ```
 
-Note: You can chanin the conditional type to allow payloads with strings or numbers, etc.
+Note: You can chain the conditional type to allow payloads with strings or numbers, etc.
 
 And that's it! There's some more stuff you can do with reducers though:
 

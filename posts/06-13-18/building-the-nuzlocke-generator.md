@@ -12,7 +12,7 @@ I really enjoyed doing the latter, but I'm not very good at photoshop. So I used
 
 As I posted them, I got comments from people interested in the format, but I didn't have much to offer them -- it wasn't code I wrote for anyone else to see, and as I kept using the same code for different runs, it got hard to manage. I tried looking to see if there was anything out there that could make it easier to manage, but any tools that existed simply recorded logs, and didn't produce screenshots.
 
-That's where I had the idea of the nuzlocke generator. At first, I tried reformatting the HTML code I had an making it more dynamic, but this was a mess. So I turned to building an SPA with React & Typescript, and an http-server package called with [`npx`](https://github.com/zkat/npx), which proved to be a much cleaner combination.
+That's where I had the idea of the nuzlocke generator. At first, I tried reformatting the HTML code I had and making it more dynamic, but this was a mess. So I turned to building an SPA with React & Typescript, and an http-server package called with [`npx`](https://github.com/zkat/npx), which proved to be a much cleaner combination.
 
 The main flavor of state management for this was redux, with redux-saga and redux-persist in the mix. I'm a huge fan of both, as the former provides an easy mechanic for side-effects and the latter, a way to store user data locally. I considered making a server that would save all this info, but decided against it because I didn't really want to store user data if I could avoid it. Maybe I'm too afraid of GDPR. I may one day go back on this, because the idea of an Admin panel and site-wide stats strike me as interesting ideas that would be easier with a stronger backend.
 
@@ -32,7 +32,7 @@ The criticism I think has been most poignant is that sometimes layouts look too 
 
 Here's some of the work I've planned out:
 
-Adding more layouts and customization. It's never easy to predict what layouts people will like the most. It might be a good idea to direct users to take a look at the option before they start their runs to reduce cookie-cutterieness.
+Adding more layouts and customization. It's never easy to predict what layouts people will like the most. It might be a good idea to direct users to take a look at the option before they start their runs to reduce cookie-cutterness.
 
 I'm working currently on converting the DOM elements that the generator produces into images. Right now, most users just take screenshots of their work. This is serviceable, but it's not good enough to me. There's some experimental FireFox APIs that can work here, as well as libraries like dom2image. I don't know how "social" I want the site to be, but a hall of fame does exist on the github repo.
 

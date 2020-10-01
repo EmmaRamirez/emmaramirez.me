@@ -8,7 +8,7 @@ tl;dr check out some things I'm working on:
 
 > [Nuzlocke Generator](https://github.com/EmmaRamirez/nuzlocke-generator)
 
-Still working hard on this project, if you have any interest in Pokémon and nuzlocking, please check it out! I've been working on integrating downloading images, theme + component customizaiton, and supporting more variations in rulesets.
+Still working hard on this project, if you have any interest in Pokémon and nuzlocking, please check it out! I've been working on integrating downloading images, theme + component customization, and supporting more variations in rulesets.
 
 > [Rust & Webassembly Talk](https://github.com/EmmaRamirez/rust-and-webassembly-talk)
 

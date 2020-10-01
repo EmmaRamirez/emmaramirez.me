@@ -4,7 +4,7 @@
 
 The [HTML5.2](https://www.w3.org/TR/html52/) spec includes a couple of minor updates, but the one I'm most excited about is the [`<dialog>`](https://www.w3.org/TR/html52/interactive-elements.html#the-dialog-element) element.
 
-Dialogs exist everywhere on the web&mdash;and every website implements it in their own way. But the biggest issue with this is that websites don't always implement it in accessible ways, and [implementing accessible modal dialogs](https://bitsofco.de/accessible-modal-dialog/) isn't always easy. So a native dialog element sounds like a good thing&mdash;we get accessibility out of the box, it's custmoizable, and requires minimal Javascript unlike, say, one of the [many react dialogs](https://www.npmjs.com/search?q=react%20dialog) out there.
+Dialogs exist everywhere on the web&mdash;and every website implements it in their own way. But the biggest issue with this is that websites don't always implement it in accessible ways, and [implementing accessible modal dialogs](https://bitsofco.de/accessible-modal-dialog/) isn't always easy. So a native dialog element sounds like a good thing&mdash;we get accessibility out of the box, it's customizable, and requires minimal Javascript unlike, say, one of the [many react dialogs](https://www.npmjs.com/search?q=react%20dialog) out there.
 
 Currently, dialog is supported on the following browsers, most noticeably Chrome:
 
