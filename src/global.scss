@@ -106,11 +106,14 @@ h2 {
     font-size: 1.25rem;
     line-height: 1.4;
     margin: 1rem;
+    
+    code {
+      background: #eee;
+    }
   }
   code {
-
     font-family: 'Fira Code' !important;
-    font-size: 1rem;
+    font-size: 1.25rem;
   }
   pre {
     border: 1px solid #cccccc;
