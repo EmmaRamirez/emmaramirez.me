@@ -1,6 +1,5 @@
 import { Header } from 'components/Header';
-import { Item, List } from 'components/List';
-import { ElsewhereLinks } from 'components/ElsewhereLinks';
+import { List } from 'components/List';
 import { Component } from 'utils';
 
 const data = (window as any).data || require('data.json');
@@ -17,9 +16,11 @@ export interface AppProps {
 export class App extends Component<AppProps> {
   public articles: List;
   public projects: List;
+  public header: Header;
 
   constructor(props: AppProps) {
     super(props);
+    this.header = new Header();
     this.articles = new List({
       items: (this.props as any).data.articles || []
     });
@@ -61,7 +62,7 @@ export class App extends Component<AppProps> {
   public render() {
     return `
             <div class='app'>
-                ${(this.props as any).Header.render()}
+                ${this.header.render()}
                 <div class='blog-post'>
                   ${this.appBody()}
                 </div>
@@ -71,6 +72,7 @@ export class App extends Component<AppProps> {
 
   public postRender() {
     this.articles.postRender();
+    this.header.postRender();
     this.projects.postRender();
     const md = document.getElementById('markdown');
     if (md) { md.innerHTML = ''; }
