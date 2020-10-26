@@ -155,6 +155,12 @@ h2 {
 
 .markdown-body .blog-post a {
   color: #4286f4;
+  border-bottom: 1px solid transparent;
+
+  &:hover {
+    border-bottom: 1px solid #4286f4;
+    transition: border-color all;
+  }
 }
 
 .dark .blog-post {
