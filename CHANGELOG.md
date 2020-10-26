@@ -1,3 +1,18 @@
+# [0.20.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.19.1...0.20.0) (2020-10-26)
+
+
+### Bug Fixes
+
+* **design:** make font size in project item descrip smaller ([a686df5](https://github.com/EmmaRamirez/emmaramirez.me/commit/a686df548352d5f92012b0f23095324c30e985a2))
+* **projects:** use new nuzlocke-generator url ([d26ff75](https://github.com/EmmaRamirez/emmaramirez.me/commit/d26ff754cbc592c0add3c6613f7ca2737223ec01))
+
+
+### Features
+
+* **design:** new tags design ([3981828](https://github.com/EmmaRamirez/emmaramirez.me/commit/398182884a4c06a08771aa7a80514b55d613c047))
+
+
+
 ## [0.19.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.19.0...0.19.1) (2020-10-26)
 
 
