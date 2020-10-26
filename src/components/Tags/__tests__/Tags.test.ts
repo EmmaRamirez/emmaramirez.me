@@ -2,7 +2,11 @@ import { Tag, Tags } from '..';
 
 describe('<Tag />', () => {
   it('renders', () => {
-    expect(Tag('tag')).toEqual(`<a href='/tags/tag' class='tag'>tag</a>`);
+    expect(Tag({
+      title: 'Typescript',
+      index: 0,
+      isHighlighted: false,
+    })).toEqual(`<a href='/tags/Typescript' style='border: 1px solid hsl(0, 70%, 60%)' class='tag '><span class='tag-inner'>Typescript</span></a>`);
   });
 });
 
