@@ -186,7 +186,7 @@
     ],
     "projects": [
         {
-            "link": "https://nuzlocke-generator.herokuapp.com/",
+            "link": "https://nuzlocke-generator.com/",
             "title": "nuzlocke generator",
             "description": "a nuzlocke documentation engine",
             "wip": false,
