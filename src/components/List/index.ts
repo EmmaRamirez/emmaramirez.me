@@ -69,11 +69,9 @@ export class List extends Component<ListProps> {
                       <div class='item-last-updated'><img src=${item.lastUpdated} /></div>
                       <div data-link=${item.link}>
                         <div class='project-item-inner'>
-                          <h4>
-                            <span class='item-emoji'>${item.emoji}</span> <a href='${item.link}' target=${options ? options.target : '_self'}>${ item.title }</a>
+                          <span class='item-emoji'>${item.emoji}</span> <a href='${item.link}' target=${options ? options.target : '_self'}>${ item.title }</a>
                             ${condition(item.wip, `<span class='item-wip-badge'>WIP</span>`)}
-                          </h4>
-                          <p>${ item.description }</p>
+                          <span class='item-description'>${ item.description }</span>
                           ${condition(item.tags, `${new Tags({ tags: item.tags } as any).render()}`)}
                         </div>
                       </div>
