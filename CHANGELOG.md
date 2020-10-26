@@ -1,3 +1,12 @@
+## [0.20.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.20.0...0.20.1) (2020-10-26)
+
+
+### Bug Fixes
+
+* **design:** polish redesign of tags ([637d39b](https://github.com/EmmaRamirez/emmaramirez.me/commit/637d39bc05bb4cba088ac159a5d3fb9665265a48))
+
+
+
 # [0.20.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.19.1...0.20.0) (2020-10-26)
 
 
