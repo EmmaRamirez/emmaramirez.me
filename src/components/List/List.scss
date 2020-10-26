@@ -12,8 +12,15 @@
 }
 
 .list-item {
-  margin-bottom: 1em;
   position: relative;
+  
+  //border: 1px solid #eee;
+  //border-radius: 2px;
+  //box-shadow: 0 0 2px #eee;
+
+  padding: 2rem;
+  transition-delay: 150ms;
+
   @media screen and (max-width: 640px) {
     margin: 0.5rem;
   }
@@ -33,7 +40,7 @@
     }
     .tags:hover {
       .tag {
-        background: #eee;
+        background: #fafafa;
       }
       @for $i from 1 through 10 {
         .tag:nth-child($i):hover {
@@ -59,8 +66,7 @@
 }
 
 .item-date {
-
-
+  display: block;
   font-family: monospace;
 }
 
@@ -86,5 +92,10 @@
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;
+}
+
+.item-title {
+  display: inline-block;
+  margin-bottom: 0.5rem;
 }
 

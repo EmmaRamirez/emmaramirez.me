@@ -87,7 +87,7 @@ export class List extends Component<ListProps> {
                 return `
                         <li class='list-item' data-key=${key}>
                             ${condition(item.emoji, `<span class='item-emoji'>${item.emoji}</span>`)}
-                            <a href='${item.link}' target=${
+                            <a href='${item.link}' class='item-title' target=${
                               options ? options.target : '_self'
                             }>${item.title}</a>
                             ${condition(item.wip, `<span class='item-wip-badge'>WIP</span>`)}
@@ -95,7 +95,7 @@ export class List extends Component<ListProps> {
                               item.description
                             }</span>`)}
                             ${condition(item.date, `<span class='item-date'>${formatDate(item.date)}</span>`)}
-                            ${condition(item.tags, `<br/>${new Tags({ tags: item.tags } as any).render()}`)}
+                            ${condition(item.tags, `${new Tags({ tags: item.tags } as any).render()}`)}
                         </li>`;
               })
               .join(''));

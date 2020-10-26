@@ -5,13 +5,22 @@
   margin-top: 0.5rem;
 }
 .tags .tag {
-  background: #eeeeee;
-  border-radius: 1rem;
-  color: #555;
+  background: #fff;
+  color: #000;
   display: block;
   font-size: 0.95rem;
-  margin-right: 0.25rem;
   margin-bottom: 0.25rem;
+  margin-right: -1px;
   padding: 0.25rem 1rem;
+  text-align: center;
   transition: 250ms all;
+  transform: skew(-15deg);
+}
+.tag.highlight, .tag:hover {
+  background: #222 !important;
+  color: #efefef !important;
+}
+.tag-inner {
+  display: inline-block;
+  transform: skew(15deg);
 }
