@@ -1,3 +1,13 @@
+## [0.19.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.19.0...0.19.1) (2020-10-26)
+
+
+### Bug Fixes
+
+* **design:** add overflow on x-axis for code ([0a50ede](https://github.com/EmmaRamirez/emmaramirez.me/commit/0a50edeb52ac36f04f256cb2bdc5cfeb74c5e234))
+* **design:** standardize font-size for code ([f156529](https://github.com/EmmaRamirez/emmaramirez.me/commit/f1565297f320654fd6e0d661f94ba2c378638407))
+
+
+
 # [0.19.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.16.2...0.19.0) (2020-10-26)
 
 
