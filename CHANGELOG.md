@@ -1,3 +1,12 @@
+## [0.20.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.20.1...0.20.2) (2020-10-26)
+
+
+### Bug Fixes
+
+* fix broken Tag test ([f350131](https://github.com/EmmaRamirez/emmaramirez.me/commit/f350131b3e6745ec65df29584d9095a0fd9ce349))
+
+
+
 ## [0.20.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.20.0...0.20.1) (2020-10-26)
 
 
