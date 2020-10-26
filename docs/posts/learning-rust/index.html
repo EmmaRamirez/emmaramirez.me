@@ -9,26 +9,30 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="../../code-theme.css" rel="stylesheet">
         <meta name="keywords" content="no tags">
-        <meta name="description" content="<p>I’ve been writing Rust code for over a year now, and I am still squarely in the novice category. Which isn’t a bad thing! But I’m certainly less of a novice and less mystified by Rust than I was a year ago. I come from a non-systems programming background, so most of this is going to relate back to that. I’ll be going over some of the things that I’ve learned about Rust that make it as confusing as it is special….</p>
+        <meta name="description" content="<p>I've been writing Rust code for over a year now, and I am still squarely in the novice category. Which isn't a bad thing! But I'm certainly less of a novice and less mystified by Rust than I was a year ago. I come from a non-systems programming background, so most of this is going to relate back to that. I'll be going over some of the things that I've learned about Rust that make it as confusing as it is special....</p>
 ">
         
     </head>
     <body class=markdown-body>
-        <div id='markdown' style='display: none'><h1 id="learning-rust">Learning Rust</h1>
-<p>I’ve been writing Rust code for over a year now, and I am still squarely in the novice category. Which isn’t a bad thing! But I’m certainly less of a novice and less mystified by Rust than I was a year ago. I come from a non-systems programming background, so most of this is going to relate back to that. I’ll be going over some of the things that I’ve learned about Rust that make it as confusing as it is special.</p>
-<p>For anyone getting started with Rust, its heavy syntax is intimidating. I would liken it to a math course where everyone’s using ∑, ∫, or ∴ (sum, integral, therefore), which is not very beginner friendly. Symbols exist for a reason: they help us communicate ideas more efficiently. But that same efficiency creates a barrier.</p>
-<p>You can see just how <a href="https://doc.rust-lang.org/book/second-edition/appendix-02-operators.html?highlight=syntax#operators">long of a list it is</a>. If you have prior experience, some things are common like arrays [], generics <T>, and standard logical operators. Some, like @ (pattern binding), |x| (closure expression), or $ident (macro substitution) are probably less familiar.</p>
-<h2 id="borrowing-and-references">Borrowing and References</h2>
+        <div id='markdown' style='display: none'><h1>Learning Rust</h1>
+<p>I've been writing Rust code for over a year now, and I am still squarely in the novice category. Which isn't a bad thing! But I'm certainly less of a novice and less mystified by Rust than I was a year ago. I come from a non-systems programming background, so most of this is going to relate back to that. I'll be going over some of the things that I've learned about Rust that make it as confusing as it is special.</p>
+<p>For anyone getting started with Rust, its heavy syntax is intimidating. I would liken it to a math course where everyone's using ∑, ∫, or ∴ (sum, integral, therefore), which is not very beginner friendly. Symbols exist for a reason: they help us communicate ideas more efficiently. But that same efficiency creates a barrier.</p>
+<p>You can see just how <a href="https://doc.rust-lang.org/book/second-edition/appendix-02-operators.html?highlight=syntax#operators">long of a list it is</a>. If you have prior experience, some things are common like arrays [], generics &lt;T&gt;, and standard logical operators. Some, like @ (pattern binding), |x| (closure expression), or $ident (macro substitution) are probably less familiar.</p>
+<h2>Borrowing and References</h2>
 <p>In Rust, there is a concept called <em>ownership</em>, which is the system through which memory is managed. In most languages there are two options</p>
 <ul>
 <li><a href="https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals">garbage collector</a>, which looks for used/unused memory (java)</li>
 <li><a href="https://en.cppreference.com/w/cpp/language/raii">explicit allocation</a>, where the user sets the rules to free memory (C)</li>
 </ul>
-<p>Rust takes a different direction with ownership, which is that memory is managed by rules of ownership. These work at compile time, so it doesn’t slow down your program during runtime.</p>
-<p>Ownership in Rust is difficult to wrap your hand around because it’s unique to the language. The <a href="https://doc.rust-lang.org/book/second-edition/ch04-01-what-is-ownership.html">Rust book, 2nd edition</a> summarizes the rules of ownership as:</p>
+<p>Rust takes a different direction with ownership, which is that memory is managed by rules of ownership. These work at compile time, so it doesn't slow down your program during runtime.</p>
+<p>Ownership in Rust is difficult to wrap your hand around because it's unique to the language. The <a href="https://doc.rust-lang.org/book/second-edition/ch04-01-what-is-ownership.html">Rust book, 2nd edition</a> summarizes the rules of ownership as:</p>
 <blockquote>
 <p>Each value in Rust has a variable that’s called its owner.</p>
+</blockquote>
+<blockquote>
 <p>There can only be one owner at a time.</p>
+</blockquote>
+<blockquote>
 <p>When the owner goes out of scope, the value will be dropped.</p>
 </blockquote>
 </div>

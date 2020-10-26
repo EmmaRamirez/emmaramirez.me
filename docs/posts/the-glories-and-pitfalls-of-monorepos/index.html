@@ -9,59 +9,59 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="../../code-theme.css" rel="stylesheet">
         <meta name="keywords" content="no tags">
-        <meta name="description" content="<p>“Monorepo” is one of those words you could break down – Mono meaning one, and Repo meaning <del>rail</del> repository. Better phrased: you took a bunch of similar repos or npm packages and bundled them onto a single repo….</p>
+        <meta name="description" content="<p>&quot;Monorepo&quot; is one of those words you could break down -- Mono meaning one, and Repo meaning <s>rail</s> repository. Better phrased: you took a bunch of similar repos or npm packages and bundled them onto a single repo....</p>
 ">
         
     </head>
     <body class=markdown-body>
-        <div id='markdown' style='display: none'><h1 id="the-glories-and-pitfalls-of-monorepos">The Glories and Pitfalls of Monorepos</h1>
-<p>“Monorepo” is one of those words you could break down – Mono meaning one, and Repo meaning <del>rail</del> repository. Better phrased: you took a bunch of similar repos or npm packages and bundled them onto a single repo.</p>
+        <div id='markdown' style='display: none'><h1>The Glories and Pitfalls of Monorepos</h1>
+<p>&quot;Monorepo&quot; is one of those words you could break down -- Mono meaning one, and Repo meaning <s>rail</s> repository. Better phrased: you took a bunch of similar repos or npm packages and bundled them onto a single repo.</p>
 <p>Now what?</p>
-<p>Well, let’s back up a little. Monorepos are an increasingly popular way to handle managing packages, especially as we continue to write (and consume) more atomic modules. A monorepo means you can centralize config, commits, releases, and anything you do in a normal repo in one place. Of course, it has all sorts of <a href="https://github.com/babel/babel/blob/master/doc/design/monorepo.md">pros and cons</a>. One of the biggest questions when it comes to monorepos is: do the pros outweigh the cons?</p>
-<p>Well…. There’s a pretty quick checklist you could make just to find that out:</p>
+<p>Well, let's back up a little. Monorepos are an increasingly popular way to handle managing packages, especially as we continue to write (and consume) more atomic modules. A monorepo means you can centralize config, commits, releases, and anything you do in a normal repo in one place. Of course, it has all sorts of <a href="https://github.com/babel/babel/blob/master/doc/design/monorepo.md">pros and cons</a>. One of the biggest questions when it comes to monorepos is: do the pros outweigh the cons?</p>
+<p>Well.... There's a pretty quick checklist you could make just to find that out:</p>
 <ul>
 <li>does the repo have multiple contributors?</li>
 <li>do the projects have similar release cycles?</li>
 <li>are the packages independent of each other?</li>
 </ul>
-<p>If you answered yes to all three, consider yourself lucky and let’s go! If not, keep thinking about your approaches&mdash;a monorepo might not be the best answer. Another additional question you might ask is “who consumes this?” While it’s not a hard and fast rule, high-usage frameworks or libraries tend to be structured as monorepos (React, Angular, Meteor, etc).</p>
-<h2 id="setting-it-up">Setting It Up</h2>
-<p>Let’s make a brand new project, called <code>links-and-stuff</code> in a directory somewhere, and then run the following</p>
-<pre><code class="lang-shell">cd links-and-stuff
+<p>If you answered yes to all three, consider yourself lucky and let's go! If not, keep thinking about your approaches—a monorepo might not be the best answer. Another additional question you might ask is &quot;who consumes this?&quot; While it's not a hard and fast rule, high-usage frameworks or libraries tend to be structured as monorepos (React, Angular, Meteor, etc).</p>
+<h2>Setting It Up</h2>
+<p>Let's make a brand new project, called <code>links-and-stuff</code> in a directory somewhere, and then run the following</p>
+<pre><code class="language-shell">cd links-and-stuff
 npm i -g lerna
 lerna init --independent
 lerna add links
 </code></pre>
-<p>This will create boilerplate with a <code>packages</code> folder. The <code>--independent</code> flag means we’ll use separate versioning for each project. Your layout should look like this now</p>
-<pre><code class="lang-shell">|-- package.json
+<p>This will create boilerplate with a <code>packages</code> folder. The <code>--independent</code> flag means we'll use separate versioning for each project. Your layout should look like this now</p>
+<pre><code class="language-shell">|-- package.json
 |-- lerna.json
 |-- packages
 |---- links
 |---- stuff
 </code></pre>
 <p>Now run <code>lerna add lodash</code> to install lodash into each package. (If we ran <code>lerna add lodash --scope=links</code> for example, it would only install lodash in the links package).</p>
-<h2 id="the-glories">The Glories</h2>
-<p>There are some clear advantages that you’ll quickly find when managing a monorepo.</p>
-<p>For one, Lerna’s <code>exec</code> command allows you to run a command <em>in each package</em>. For example,</p>
-<pre><code class="lang-shell">lerna exec -- rm -rf ./node_modules
+<h2>The Glories</h2>
+<p>There are some clear advantages that you'll quickly find when managing a monorepo.</p>
+<p>For one, Lerna's <code>exec</code> command allows you to run a command <em>in each package</em>. For example,</p>
+<pre><code class="language-shell">lerna exec -- rm -rf ./node_modules
 </code></pre>
 <p>Will delete the <code>node_modules</code> in each package. A similar command is <code>run</code>, which is specifically for npm scripts.</p>
-<pre><code class="lang-shell">lerna run build
+<pre><code class="language-shell">lerna run build
 </code></pre>
-<p>Will run <code>npm run build</code> in each package, building them in parallel. (You can use the <code>--scope</code> argument previously discussed to only affect certain packages). Another example: let’s say we wanted to run tests in each package, but we also wanted to update our jest snapshots. We can pass arguments the way you would with any npm script.</p>
-<pre><code class="lang-shell">lerna run test -- -u
+<p>Will run <code>npm run build</code> in each package, building them in parallel. (You can use the <code>--scope</code> argument previously discussed to only affect certain packages). Another example: let's say we wanted to run tests in each package, but we also wanted to update our jest snapshots. We can pass arguments the way you would with any npm script.</p>
+<pre><code class="language-shell">lerna run test -- -u
 </code></pre>
 <p>Another awesome thing about lerna is its <code>publish</code> command. I personally use this variation of it:</p>
-<pre><code class="lang-shell">lerna publish --conventional-commits --yes
+<pre><code class="language-shell">lerna publish --conventional-commits --yes
 </code></pre>
 <p>What this will do is publish each of your npm packages <em>and</em> generate the appropriate npm version based off the commits (with the <code>--conventional-commits</code> flag) <em>and</em> generate a changelog for each (using the <code>--changelog-preset</code> argument, which defaults to the <a href="https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular#angular-convention">angular</a> preset). The <code>--yes</code> flag auto-confirms the changes; you may want to turn this off if you want to verify the versions before publishing.</p>
-<h2 id="the-pitfalls">The Pitfalls</h2>
+<h2>The Pitfalls</h2>
 <p>Monorepos do have some issues, but Lerna monorepos do have fewer issues than a regular monorepo. For example, publishing is a breeze and versioning, maintained via npm, is not singular or lost. Some of them are specific to Lerna.</p>
-<p>If you’re using yarn, you may face some issues regarding compatibility with lerna <a href="https://github.com/lerna/lerna/issues/1349">now that it has moved back to npm</a>, and using both in one monorepo <em>is an absolutely bad idea</em> due to incompatibilities between <code>yarn.lock</code>, <code>package.json</code>, and the <code>pack</code> command.</p>
-<p>At scale, lerna starts to <a href="https://gist.github.com/nolanlawson/457cdb309c9ec5b39f0d420266a9faa4">slow down</a> significantly as the number of packages increases. Monorepos such as babel don’t even use the <code>lerna run</code> command for this reason, as it cycles through each package, which can become cumbersome&mdash;at that point, it makes more sense to write a custom build script.</p>
-<p>Another potential problem comes down to CI/CD, as it sometimes requires unecessarily complicated setups in the pipeline. While parallel pipelines in continuous deployment tools like CircleCI are useful for this, it’s not an answer at scale. Like before, this sometimes requires custom build scripts and the like. </p>
-<p>And the last thing that I think is worth bringing up is the suggestion that monorepos hamper autonomy of teams, and that code sharing can introduce coupling. I’ve thought about this one the most, since it doesn’t have a “clear” solution. It’s philosophical. When code gets housed in the same repository, everyone can see all the code. But like an open space lined with desks, it often gets cramped, and that same transparency can make you feel like you’re stepping on other people’s toes. Sometimes you just want a closed room. </p>
-<h2 id="further-reading">Further Reading</h2>
+<p>If you're using yarn, you may face some issues regarding compatibility with lerna <a href="https://github.com/lerna/lerna/issues/1349">now that it has moved back to npm</a>, and using both in one monorepo <em>is an absolutely bad idea</em> due to incompatibilities between <code>yarn.lock</code>, <code>package.json</code>, and the <code>pack</code> command.</p>
+<p>At scale, lerna starts to <a href="https://gist.github.com/nolanlawson/457cdb309c9ec5b39f0d420266a9faa4">slow down</a> significantly as the number of packages increases. Monorepos such as babel don't even use the <code>lerna run</code> command for this reason, as it cycles through each package, which can become cumbersome—at that point, it makes more sense to write a custom build script.</p>
+<p>Another potential problem comes down to CI/CD, as it sometimes requires unecessarily complicated setups in the pipeline. While parallel pipelines in continuous deployment tools like CircleCI are useful for this, it's not an answer at scale. Like before, this sometimes requires custom build scripts and the like.</p>
+<p>And the last thing that I think is worth bringing up is the suggestion that monorepos hamper autonomy of teams, and that code sharing can introduce coupling. I've thought about this one the most, since it doesn't have a &quot;clear&quot; solution. It's philosophical. When code gets housed in the same repository, everyone can see all the code. But like an open space lined with desks, it often gets cramped, and that same transparency can make you feel like you're stepping on other people's toes. Sometimes you just want a closed room.</p>
+<h2>Further Reading</h2>
 <ul>
 <li><a href="https://developer.atlassian.com/blog/2015/10/monorepos-in-git/">Atlassian: Monorepos in Git</a></li>
 <li><a href="https://github.com/npm/npm/issues/2974">npm: Discussion on Subdirectories for Git installs</a></li>

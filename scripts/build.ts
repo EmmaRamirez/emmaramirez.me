@@ -3,10 +3,12 @@
 const fse = require('fs-extra');
 const fs = require('fs');
 const path = require('path');
-const marked = require('marked');
 const chalk = require('chalk');
 const ensureExists = require('./ensure-exists');
 const buildFile = require('./build-file');
+const hljs = require('highlight.js/lib/core');  // require only the core library
+hljs.registerLanguage('typescript', require('highlight.js/lib/languages/typescript'));
+
 
 const articles = require('../src/data.json').articles;
 const config = require('../website.config');
@@ -39,12 +41,6 @@ const readFiles = (dir: string, files: string[]) =>
     convertToMarkdown(data, file);
   });
 
-marked.setOptions({
-  gfm: true,
-  tables: true,
-  smartLists: true,
-  smartypants: true
-});
 
 const getTags = (filename: string) => {
   const article = articles.find(
@@ -62,7 +58,7 @@ const getDescription = (data: any) => {
       .map((s: string) => s.trim())
       .filter((s: string) => s !== '')[0] + '...';
   // tslint:disable-next-line:quotemark
-  return marked(description).replace(/"/g, "'");
+  return require('markdown-it')().render(description).replace(/"/g, "'");
 };
 
 const buildBlogPost = (data: any, fileName: string) => {
@@ -70,7 +66,7 @@ const buildBlogPost = (data: any, fileName: string) => {
     config,
     keywords: getTags(fileName),
     description: getDescription(data),
-    markdown: marked(data),
+    markdown: require('markdown-it')().render(data),
     fileName
   });
 };

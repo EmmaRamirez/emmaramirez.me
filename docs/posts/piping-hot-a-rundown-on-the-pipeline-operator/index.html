@@ -9,23 +9,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="../../code-theme.css" rel="stylesheet">
         <meta name="keywords" content="no tags">
-        <meta name="description" content="<p>Currently, the Pipeline operator is one of the more interesting proposals advancing through the TC39….</p>
+        <meta name="description" content="<p>Currently, the Pipeline operator is one of the more interesting proposals advancing through the TC39....</p>
 ">
         
     </head>
     <body class=markdown-body>
-        <div id='markdown' style='display: none'><h1 id="piping-hot-a-rundown-on-the-pipeline-operator">Piping Hot: A Rundown on the Pipeline Operator</h1>
-<h2 id="context">Context</h2>
+        <div id='markdown' style='display: none'><h1>Piping Hot: A Rundown on the Pipeline Operator</h1>
+<h2>Context</h2>
 <p>Currently, the Pipeline operator is one of the more interesting proposals advancing through the TC39.</p>
 <p>The operator <code>|&gt;</code> is borrowed and inspired by several functional languages such as F#, Elm, and Elixir, and UNIX pipes as well. (The original syntax was <code>::</code>, which proved too controversial) According to the TC39 proposal</p>
 <blockquote>
-<p>It’s a backwards-compatible way of streamlining chained function calls in a readable, functional manner, and provides a practical alternative to extending built-in prototypes.</p>
+<p>It's a backwards-compatible way of streamlining chained function calls in a readable, functional manner, and provides a practical alternative to extending built-in prototypes.</p>
 </blockquote>
 <p>which makes it very useful for short single-argument functions.</p>
-<h2 id="examples">Examples</h2>
-<p>In the simplest example, the pipeline operator turns <code>alert(&#39;Hello!&#39;)</code> into <code>&#39;Hello!&#39; |&gt; alert</code>. This is not the best uage of the operator, as it doesn’t aid the readability in any way. The better usage comes when you chain several functions together.</p>
+<h2>Examples</h2>
+<p>In the simplest example, the pipeline operator turns <code>alert('Hello!')</code> into <code>'Hello!' |&gt; alert</code>. This is not the best uage of the operator, as it doesn't aid the readability in any way. The better usage comes when you chain several functions together.</p>
 <p>Take for example these functions:</p>
-<pre><code class="lang-javascript">function add5 (number) {
+<pre><code class="language-javascript">function add5 (number) {
     return number + 5;
 }
 
@@ -38,7 +38,7 @@ function multiplyBy10 (number) {
 }
 </code></pre>
 <p>All pretty straightforward. Now we can do this:</p>
-<pre><code class="lang-javascript">// ES6
+<pre><code class="language-javascript">// ES6
 const number = multiplyBy10(add5(subtract3(5)))
 console.log(number) // 70
 
@@ -49,51 +49,51 @@ const number = 5
         |&gt; multiplyBy10
 </code></pre>
 <p>This is slightly opinionated, but I think the pipeline operator aids in readability here. Note that the order goes by the function called <em>first</em>, which is especially useful since I know the f(g) versus g(f) can get confusing for particularly long-chained functions.</p>
-<p>Let’s do an example involving multiple arguments.</p>
-<pre><code class="lang-javascript">function makeLowerCase(str) { return str.toLowerCase() }
+<p>Let's do an example involving multiple arguments.</p>
+<pre><code class="language-javascript">function makeLowerCase(str) { return str.toLowerCase() }
 function concat(strA, strB) { return strA + strB }
 function writeSentence (subject, verb, object) {
     return `${subject} ${verb} a ${object}`
 }
 
-const apple = &#39;APPLE&#39;
+const apple = 'APPLE'
 
 const sentence = apple
         |&gt; makeLowerCase
-        |&gt; (s =&gt; concat(&#39;pine&#39;, s))
-        |&gt; (_ =&gt; writeSentence(&#39;I&#39;, &#39;ate&#39;, _))
+        |&gt; (s =&gt; concat('pine', s))
+        |&gt; (_ =&gt; writeSentence('I', 'ate', _))
 
 console.log(sentence) // &quot;I ate a pineapple&quot;
 </code></pre>
-<p>While it seems a bit odd at first, we’re just simple piping in arrow functions that handle the previous result from the preceeding pipe. When we took ‘APPLE’, we lowercased it, and then concatenated ‘pine’ with ‘apple’. Hence, pineapple became the new argument for the last function, which wrote our sentence with pineapple as its subject.</p>
-<p>You could also write the function as <code>writeSentence(&#39;I&#39;, &#39;ate&#39;, concat(&#39;pine&#39;, makeLowerCase(apple)))</code> though deciding between compactness or readability is up to you.</p>
+<p>While it seems a bit odd at first, we're just simple piping in arrow functions that handle the previous result from the preceeding pipe. When we took 'APPLE', we lowercased it, and then concatenated 'pine' with 'apple'. Hence, pineapple became the new argument for the last function, which wrote our sentence with pineapple as its subject.</p>
+<p>You could also write the function as <code>writeSentence('I', 'ate', concat('pine', makeLowerCase(apple)))</code> though deciding between compactness or readability is up to you.</p>
 <p>Depending on the <a href="https://github.com/mindeavor/es-papp">papp</a> proposal, it may be able to write this:</p>
-<pre><code class="lang-javascript">const sentence = apple
+<pre><code class="language-javascript">const sentence = apple
         |&gt; makeLowerCase
-        |&gt; concat.papp(&#39;pine&#39;)
-        |&gt; writeSentence.papp(&#39;I&#39;, &#39;ate&#39;)
+        |&gt; concat.papp('pine')
+        |&gt; writeSentence.papp('I', 'ate')
 </code></pre>
-<p><code>papp</code> is used as a way to partially apply the function’s parameters, leaving the rest to be used by the pipelines.</p>
-<p>Async/Await usage also works nicely here. To borrow directly from the proposal’s page:</p>
-<pre><code class="lang-javascript">x |&gt; await f
+<p><code>papp</code> is used as a way to partially apply the function's parameters, leaving the rest to be used by the pipelines.</p>
+<p>Async/Await usage also works nicely here. To borrow directly from the proposal's page:</p>
+<pre><code class="language-javascript">x |&gt; await f
 // is equivalent to
 await f(x)
 </code></pre>
 <p>You can await the result of an async function and pass it to the next function, like so:</p>
-<pre><code class="lang-javascript">const userAge = userId |&gt; await fetchUsersById |&gt; getAgeFromUser
+<pre><code class="language-javascript">const userAge = userId |&gt; await fetchUsersById |&gt; getAgeFromUser
 // is equivalent to
 const userAge = getAgeFromUser(await fetchUserById(userId))
 </code></pre>
 <p>A more complex example</p>
-<pre><code class="lang-javascript">async function runOperationsOnFile () {
-    fs.readFile(&#39;./post.txt&#39;)
+<pre><code class="language-javascript">async function runOperationsOnFile () {
+    fs.readFile('./post.txt')
         |&gt; await
         |&gt; file =&gt; file
-                .split(&#39;\n&#39;)
+                .split('\n')
                 .map(fs.readFile)
         |&gt; Promise.all
         |&gt; await
-        |&gt; all =&gt; all.join(&#39;\n&#39;)
+        |&gt; all =&gt; all.join('\n')
         |&gt; console.log
 }
 
@@ -111,7 +111,7 @@ World!
 Hello
 World!
 </code></pre>
-<h2 id="futher-reading">Futher Reading</h2>
+<h2>Futher Reading</h2>
 <p>While the pipeline operator is currently a stage 1 (very experimental) feature, you can find other resources here:</p>
 <ul>
 <li><a href="https://github.com/tc39/proposal-pipeline-operator">TC39 Proposal</a></li>
