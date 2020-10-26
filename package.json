@@ -1,6 +1,6 @@
 {
   "name": "emmaramirez.me",
-  "version": "0.16.2",
+  "version": "0.18.0",
   "description": "emma's personal website",
   "main": "index.js",
   "dependencies": {
@@ -43,7 +43,7 @@
     "serve": "npx http-server ./docs -c-1 -p 9090",
     "test": "jest --verbose --coverage",
     "lint": "tslint -c tsconfig.json",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+    "version": "npx conventional-changelog-cli -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "format": "prettier \"*/**/*.ts\" --parser 'typescript' --single-quote --ignore-path ./.prettierignore --write",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "prestart": "rm -rf ./docs && mkdir ./docs && mkdir ./docs/posts && mkdir ./docs/tags",
