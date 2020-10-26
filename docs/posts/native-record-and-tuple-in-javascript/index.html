@@ -1,0 +1,112 @@
+
+<html lang=en>
+    <head>
+        <title>emmaramirez.me</title>
+        <meta charset='utf-8'>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../../code-theme.css" rel="stylesheet">
+        <meta name="keywords" content="no tags">
+        <meta name="description" content="<blockquote>
+<p>⚠️ This is a stage 2 proposal and not yet a JS standard!…</p>
+</blockquote>
+">
+        
+    </head>
+    <body class=markdown-body>
+        <div id='markdown' style='display: none'><h1 id="native-record-and-tuple-types-in-javascript">Native Record and Tuple Types in Javascript</h1>
+<blockquote>
+<p>⚠️ This is a stage 2 proposal and not yet a JS standard!</p>
+</blockquote>
+<p>Javascript objects are generally mutable, and <a href="https://web.mit.edu/6.005/www/fa15/classes/09-immutability/">mutability has risks</a> that become more noticeable in large-scale web applications. Luckily, the JS community has myriad solutions to this problem, such as Immutable.js or native features such as <code>Object.freeze</code>.</p>
+<p>So what’s that got to do with the title? Well, <code>Record</code> &amp; <code>Tuple</code> are both new types that allow immutable native data structures in Javascript.</p>
+<h2 id="the-record-type">The Record Type</h2>
+<p>In Typescript, the <code>Record</code> type is defined as follows</p>
+<pre><code class="lang-typescript">type Record&lt;K extends string, T&gt; = {
+    [P in K]: T;
+}
+</code></pre>
+<p>and while they may seem very similar in shape, that’s about all they have in common. Typescript <code>Record</code> is a utility mapped types, whereas Javascript <code>Record</code>s are a native type.</p>
+<p>The Javascript definition of the <code>Record</code> type is nearly the same, with a key exception: <strong>it can only contain primitives</strong>. But just like the <code>Record</code> type defined above, it can be treated like an object.</p>
+<pre><code class="lang-javascript">const record = #{
+    dexNumber: 25,
+    name: &#39;Pikachu&#39;,
+    description: `Electric Mouse Pokemon
+        Evolves into Raichu with a thunderstone`,
+    types: #[&#39;electric&#39;]
+}
+
+// You can access keys like a regular JS object
+console.log(record.dexNumber);
+
+// You can use Object methods on the type
+console.log(Object.keys(record));
+</code></pre>
+<p>That <code>#{ ... }</code> syntax is what defines a <code>Record</code> for us. What does that types declaration in our <code>Record</code> mean?</p>
+<h2 id="the-tuple-type">The Tuple Type</h2>
+<p>If <code>#{ ... }</code> defines a <code>Record</code>, it might not shock you that <code>#[ ... ]</code> defines the <code>Tuple</code> type. In the same way <code>Record</code> can be treated like a Javascript object, <code>Tuple</code>s can be treated like Arrays.</p>
+<pre><code class="lang-javascript">const tuple = #[0, 3];
+
+// returns 3
+console.log(tuple[1]);
+</code></pre>
+<h2 id="putting-it-all-together">Putting it All Together</h2>
+<p>The main benefit of these new native types is <em>native immutability</em>, which allows for more performant JS code* (Immutable’s toJS and fromJS can be computationally expensive) and allowing for a cleaner mental model. By cleaner mental model, I mean both not having to think “has this been mutated elsewhere?” and equality that is similar to that of primitives.</p>
+<pre><code class="lang-javascript">#{a: 1, b: 2} === #{a: 1, b: 2} // true!!
+
+// compared to a standard object
+{a: 1, b: 2} === {a: 1, b: 2}; // false :(
+</code></pre>
+<p>Let’s take a look at a larger example:</p>
+<pre><code class="lang-typescript">// our record from earlier
+const pokemon = {
+    dexNumber: 25,
+    name: &#39;Pikachu&#39;,
+    description: `Electric Mouse Pokemon
+        Evolves into Raichu with a thunderstone`,
+    types: #[&#39;electric&#39;]
+}
+
+// spread the Record to create a new Record
+const evolved = #{
+    ...pokemon,
+    name: &#39;Alolan Raichu&#39;,
+    types: #[&#39;electric&#39;, &#39;psychic&#39;],
+}
+
+// This results in a TypeError -- good
+evolved.name = &#39;Kantonian Raichu&#39;;
+
+// We can use Records as both map keys and map values
+const pokedex = new Map();
+map.set(evolved.name, evolved);
+
+// Retrieve the types from our map and map the Tuple to strings
+const displayTypes = map.get(&#39;Alolan Raichu&#39;).map(x =&gt; `${x} type`)).join(&#39;, &#39;);
+
+assert(displayTypes, &#39;electric type, psychic type&#39;);
+</code></pre>
+<p>As you can see, there’s a lot we can do with <code>Record</code>s and <code>Tuple</code>s at our disposal, without some of the issues we run into when using third-party libraries.</p>
+<p>Overall I’m optimistic about this proposal advancing through tc39’s stages, especially as it reduces the scope &amp; faults in design of previous native immutable type proposals.</p>
+<p>* Many of these performance optimizations will happen based on JS engine choices, but the proposal specifically avoids some cases (i.e. a branch path) that would inhibit performance-tuning.</p>
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="https://rickbutton.github.io/record-tuple-playground">Record &amp; Tuple Playground</a></li>
+<li><a href="https://github.com/tc39/proposal-record-tuple">Proposal details</a></li>
+</ul>
+</div>
+        <div id='app'></div>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <script src='../../bundle.js'></script>
+        <script src="../../rainbow-custom.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79007755-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-79007755-1');
+        </script>
+    </body>
+</html>

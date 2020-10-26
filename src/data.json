@@ -1,6 +1,18 @@
 {
     "articles": [
         {
+            "link": "/posts/native-record-and-tuple-in-javascript",
+            "title": "Native Record & Tuple in Javascript",
+            "date": "10/25/20",
+            "emoji": "⏺️",
+            "tags": [
+                "record",
+                "tuple",
+                "tc39",
+                "proposal"
+            ]
+        },
+        {
             "link": "/posts/a-couple-random-tech-thoughts",
             "title": "A Couple Random Tech Thoughts",
             "date": "05/22/20",
@@ -197,7 +209,8 @@
             "tags": [
                 "angular",
                 "typescript"
-            ]
+            ],
+            "hide": true
         },
         {
             "link": "https://github.com/Clickopolis",
@@ -232,10 +245,6 @@
         {
             "link": "https://keybase.io/emmaramirez",
             "name": "keybase"
-        },
-        {
-            "link": "https://twitter.com/emmagramirez",
-            "name": "twitter"
         }
     ]
 }
