@@ -1,3 +1,13 @@
+## [0.20.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.20.2...0.20.3) (2020-10-26)
+
+
+### Bug Fixes
+
+* **design:** add border-bottom to anchors ([979d4bf](https://github.com/EmmaRamirez/emmaramirez.me/commit/979d4bf77f5c8e378811b2fbc95453c681023444))
+* **writing:** edit formatting for random tech thoughts post ([d4ae895](https://github.com/EmmaRamirez/emmaramirez.me/commit/d4ae895062aecc9a1a542e1703f6e6d350bb5784))
+
+
+
 ## [0.20.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.20.1...0.20.2) (2020-10-26)
 
 
