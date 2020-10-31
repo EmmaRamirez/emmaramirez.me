@@ -1,3 +1,12 @@
+## [0.21.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.21.0...0.21.1) (2020-10-31)
+
+
+### Bug Fixes
+
+* **tests:** fix Header test ([84d907f](https://github.com/EmmaRamirez/emmaramirez.me/commit/84d907f1efcf2f77c672abd4568a51ae14322d64))
+
+
+
 # [0.21.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.20.3...0.21.0) (2020-10-31)
 
 
