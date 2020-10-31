@@ -1,3 +1,12 @@
+# [0.21.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.20.3...0.21.0) (2020-10-31)
+
+
+### Features
+
+* we serif now ([adc09cd](https://github.com/EmmaRamirez/emmaramirez.me/commit/adc09cdda71b9d80f90f1380b19bce7050747ee1))
+
+
+
 ## [0.20.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.20.2...0.20.3) (2020-10-26)
 
 
