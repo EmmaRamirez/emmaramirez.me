@@ -7,12 +7,12 @@ $light-color: #efefef;
 }
 
 ::selection {
-  color: darkc-olor;
+  color: $dark-color;
   background: #42f4f4;
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Georgia', sans-serif;
   overflow-x: hidden;
   &.dark {
     background: $dark-color;
@@ -29,6 +29,10 @@ body {
   }
 }
 
+h1, h2, h3, h4, .item-title {
+  font-family: 'Roboto Slab', serif;
+}
+
 a {
   color: #121212;
   text-decoration: none;
@@ -41,8 +45,8 @@ a {
 }
 
 h2 {
-  font-size: 1.5rem;
-  font-weight: lighter;
+  font-size: 2rem;
+  font-weight: bolder;
   margin: 0.25rem;
 }
 
@@ -83,6 +87,7 @@ h2 {
   box-shadow: 0 0 0.25rem #b9b9b9;
 }
 
+
 .blog-post {
   font-size: 1.15rem;
   margin: 0 auto;
@@ -90,8 +95,7 @@ h2 {
   padding: 0 1rem;
   padding-bottom: 5rem;
   h1 {
-    font-size: 2rem;
-    font-weight: light;
+    font-size: 3rem;
     margin-bottom: 1rem;
     margin-left: 1rem;
     margin-top: 3rem;
@@ -99,6 +103,9 @@ h2 {
   h2 {
     margin-top: 2rem;
     margin-left: 1rem;
+  }
+  .writing-title {
+    margin-top: 3rem;
   }
   blockquote {
     color: #444;
@@ -118,7 +125,7 @@ h2 {
   }
   code {
     font-family: 'Fira Code' !important;
-    font-size: 1.25rem;
+    font-size: 1rem;
   }
   pre {
     border: 1px solid #cccccc;
@@ -172,18 +179,19 @@ h2 {
 }
 
 .stats {
-  background: #fff;
-  border-top: 1px solid #ddd;
   display: flex;
   bottom: 0;
   left: 0;
-  justify-content: center;
-  position: fixed;
   text-align: center;
   width: 100%;
   img {
     width: auto;
   }
+}
+
+.palm-tree {
+  font-size: 6rem;
+  text-align: center;
 }
 
 .dark .stats {

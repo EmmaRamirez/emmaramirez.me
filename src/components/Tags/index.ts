@@ -11,7 +11,7 @@ export const Tag = ({
   title: string,
   index: number,
   isHighlighted: boolean,
-}): string => `<a href='/tags/${title.replace(/\s/g, '-')}' style='border: 1px solid hsl(${index * 36}, 70%, 60%)' class='tag ${isHighlighted ? 'highlight' : ''}'><span class='tag-inner'>${title}</span></a>`;
+}): string => `<a href='/tags/${title.replace(/\s/g, '-')}' class='tag ${isHighlighted ? 'highlight' : ''}'><span class='tag-inner'>#${title}</span></a>`;
 
 export class Tags extends Component<TagsType> {
   constructor(props: TagsType) {
