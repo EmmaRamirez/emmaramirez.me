@@ -1,3 +1,13 @@
+## [0.21.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.21.2...0.21.3) (2020-11-11)
+
+
+### Bug Fixes
+
+* **design:** remove desktop-styling for Header, use padding-top ([e7096ad](https://github.com/EmmaRamirez/emmaramirez.me/commit/e7096ad463341e93ad25f57c6b7d4b4e8907ccaf))
+* **design:** remove display inline-block from item-emoji ([5132cc4](https://github.com/EmmaRamirez/emmaramirez.me/commit/5132cc4added6b8633f22f7f37ceed1fc078d7ba))
+
+
+
 ## [0.21.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.21.1...0.21.2) (2020-11-11)
 
 
