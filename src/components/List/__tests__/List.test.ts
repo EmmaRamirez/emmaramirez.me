@@ -21,6 +21,11 @@ describe('<List />', () => {
     // @ts-ignore
     expect(list.render().match(/test-list/g).length).toBeGreaterThan(0);
   });
+
+  it('fires a post render', () => {
+    const list = new List({ items: data.projects });
+    expect(list.postRender()).toBeFalsy();
+  });
 });
 
 describe('<Item />', () => {

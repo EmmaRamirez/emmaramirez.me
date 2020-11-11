@@ -49,13 +49,13 @@ describe('<App />', () => {
       const app = new App({ Header: new Header(), data: data });
       expect(typeof app.appBody()).toBe('string');
     });
-    xit('works when there is markdown', () => {
+    it('works when there is markdown', () => {
       window.document.body.className = 'markdown-body';
       window.document.getElementById = (s: string) =>
         ({
           innerHTML: 'test'
         } as any);
-      const app = new App({ Header: new Header(), data: data });
+      const app = new App({ Header: new Header(), data: data, forceMarkdownRender: true });
       expect(app.appBody().match(/test/g) || undefined).toBeDefined();
     });
   });

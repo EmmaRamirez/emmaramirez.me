@@ -11,12 +11,14 @@ export interface AppProps {
     projects?: any[];
     links?: any[];
   };
+  forceMarkdownRender?: boolean;
 }
 
 export class App extends Component<AppProps> {
   public articles: List;
   public projects: List;
   public header: Header;
+  public forceMarkdownRender = false;
 
   constructor(props: AppProps) {
     super(props);
@@ -31,13 +33,14 @@ export class App extends Component<AppProps> {
       },
       type: 'projects'
     });
+    this.forceMarkdownRender = props.forceMarkdownRender || false;
   }
 
   public appBody(): string {
     const isTagsPage = window.location.pathname.includes('tags');
     const windowPathArray = window.location.pathname.split('/');
     const tag = windowPathArray[windowPathArray.length - 2];
-    if (document.body.className === 'markdown-body' && window.location.pathname.includes('posts')) {
+    if (document.body.className === 'markdown-body' && window.location.pathname.includes('posts') || this.forceMarkdownRender) {
       const md = document.getElementById('markdown');
       const markdown = (md ? md : { innerHTML: false }).innerHTML;
       return markdown as string;
