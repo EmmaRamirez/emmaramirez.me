@@ -1,20 +1,24 @@
 
 
-@media screen and (min-width: 1500px) {
-  .header {
-    width: 21rem;
-    margin-left: -23rem;
-    border-radius: .25rem;
-    position: fixed;
-    text-align: center;
-    z-index: 1;
-  }
+// @media screen and (min-width: 1500px) {
+//   .header {
+//     width: 21rem;
+//     margin-left: -23rem;
+//     border-radius: .25rem;
+//     position: fixed;
+//     text-align: center;
+//     z-index: 1;
+//   }
 
-  .header .site-title {
-    margin-top: 2rem;
-    color: #111 !important;
-    border: none !important;
-  }
+//   .header .site-title {
+//     margin-top: 2rem;
+//     color: #111 !important;
+//     border: none !important;
+//   }
+// }
+
+.header {
+  padding-top: 1rem;
 }
 
 .day-switch {
