@@ -2,7 +2,7 @@
 
 [![Build Status](https://img.shields.io/travis/EmmaRamirez/emmaramirez.me.svg?style=flat-square)](https://travis-ci.org/EmmaRamirez/emmaramirez.me)
 [![Coveralls github branch](https://img.shields.io/coveralls/github/EmmaRamirez/emmaramirez.me/master.svg?style=flat-square)]()
-[![npm](https://img.shields.io/github/release/emmaramirez/emmaramirez.me.svg?style=flat-square)](https://github.com/EmmaRamirez/emmaramirez.me/releases)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/emmaramirez/emmaramirez.me?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT%20License-blue.svg?style=flat-square)
 
 my corner of the internet.
