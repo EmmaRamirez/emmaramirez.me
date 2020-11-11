@@ -1,3 +1,12 @@
+## [0.21.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.21.1...0.21.2) (2020-11-11)
+
+
+### Bug Fixes
+
+* **design:** increase min-width for header display ([5f9535e](https://github.com/EmmaRamirez/emmaramirez.me/commit/5f9535e570fa101dcc3ef702ee0cfebe88e559f3))
+
+
+
 ## [0.21.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.21.0...0.21.1) (2020-10-31)
 
 
