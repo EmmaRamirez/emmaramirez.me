@@ -1,3 +1,7 @@
+## [0.21.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.21.3...0.21.4) (2020-11-11)
+
+
+
 ## [0.21.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.21.2...0.21.3) (2020-11-11)
 
 
