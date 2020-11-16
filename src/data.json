@@ -1,6 +1,16 @@
 {
     "articles": [
         {
+            "link": "/posts/making-a-cli-game-with-elixir",
+            "title": "Making a Cli Game with Elixir",
+            "date": "11/15/20",
+            "emoji": "🧪",
+            "tags": [
+                "elixir",
+                "cli"
+            ]
+        },
+        {
             "link": "/posts/native-record-and-tuple-in-javascript",
             "title": "Native Record & Tuple in Javascript",
             "date": "10/25/20",
