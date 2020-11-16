@@ -20,8 +20,8 @@ const buildFile = ({
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+        <link href='../../prism.css' rel='stylesheet' />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="../../code-theme.css" rel="stylesheet">
         <meta name="keywords" content="${keywords}">
         <meta name="description" content="${description}">
         ${data ? `<script>window.data = ${JSON.stringify(data)}</script>` : ''}
@@ -31,7 +31,8 @@ const buildFile = ({
         <div id='app'></div>
         <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <script src='../../bundle.js'></script>
-        <script src="../../rainbow-custom.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics -->
+        <script src='../../prism.js'></script>
+        </script><!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79007755-1"></script>
         <script>
           window.dataLayer = window.dataLayer || [];

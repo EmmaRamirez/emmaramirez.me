@@ -1,3 +1,13 @@
+# [0.22.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.21.4...0.22.0) (2020-11-16)
+
+
+### Features
+
+* add post on Elixir with new prism syntax highlights ([d459f41](https://github.com/EmmaRamirez/emmaramirez.me/commit/d459f41eb18c7bc9b9a52f002c27f2835e99d4a4))
+* **design:** update design to not constrain width on posts ([97e73f0](https://github.com/EmmaRamirez/emmaramirez.me/commit/97e73f0d5eb9c83ad51096166988f20367c15676))
+
+
+
 ## [0.21.4](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.21.3...0.21.4) (2020-11-11)
 
 
@@ -103,18 +113,26 @@
 
 
 
-## [0.16.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.14.0...0.16.2) (2020-05-28)
+## [0.16.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/v0.15.0...0.16.2) (2020-05-28)
 
 
 ### Bug Fixes
 
 * fix links markdown'd wrong ([3911a7b](https://github.com/EmmaRamirez/emmaramirez.me/commit/3911a7bfb30699aaf1750b36ebb2bfc313b20fcb))
-* **writing:** reorganize section abou Elm ([bce34fe](https://github.com/EmmaRamirez/emmaramirez.me/commit/bce34fe60978cad7deabd746747f11f4ddd84625))
 
 
 ### Features
 
 * add post on random thoughts ([a096f76](https://github.com/EmmaRamirez/emmaramirez.me/commit/a096f7690bf7bea457d382a21cddf17da56f67a3))
+
+
+
+# [0.15.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.14.0...v0.15.0) (2018-08-24)
+
+
+### Bug Fixes
+
+* **writing:** reorganize section abou Elm ([bce34fe](https://github.com/EmmaRamirez/emmaramirez.me/commit/bce34fe60978cad7deabd746747f11f4ddd84625))
 
 
 

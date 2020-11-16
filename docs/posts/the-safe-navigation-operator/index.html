@@ -6,8 +6,8 @@
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+        <link href='../../prism.css' rel='stylesheet' />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="../../code-theme.css" rel="stylesheet">
         <meta name="keywords" content="no tags">
         <meta name="description" content="<p>One thing about Javascript that's always irked me is dealing with <code>null</code> values. Sir Tony Hoare famously referred to its creation as the billion-dollar mistake. While the goal of the null reference was safety, it can create a lot of pitfalls, especially when checking through nested values in an object. Take for example a reference <code>article.author.name</code>. In Javascript, a conditional such as...</p>
 ">
@@ -47,7 +47,8 @@ if (article.author == null ? false : article.author.name)
         <div id='app'></div>
         <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <script src='../../bundle.js'></script>
-        <script src="../../rainbow-custom.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics -->
+        <script src='../../prism.js'></script>
+        </script><!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79007755-1"></script>
         <script>
           window.dataLayer = window.dataLayer || [];

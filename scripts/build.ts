@@ -6,9 +6,6 @@ const path = require('path');
 const chalk = require('chalk');
 const ensureExists = require('./ensure-exists');
 const buildFile = require('./build-file');
-const hljs = require('highlight.js/lib/core');  // require only the core library
-hljs.registerLanguage('typescript', require('highlight.js/lib/languages/typescript'));
-
 
 const articles = require('../src/data.json').articles;
 const config = require('../website.config');
