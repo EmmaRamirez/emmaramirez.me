@@ -1,0 +1,116 @@
+
+<html lang=en>
+    <head>
+        <title>emmaramirez.me</title>
+        <meta charset='utf-8'>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+        <link href='../../prism.css' rel='stylesheet' />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="no tags">
+        <meta name="description" content="<p>Out of curiosity, I've currently been experimenting with the <a href='https://elixir-lang.org/'>Elixir programming language</a>, and one of my goals to get a good feel for the language is building a tiny game in the command line. Why? Because it's fun!...</p>
+">
+        
+    </head>
+    <body class=markdown-body>
+        <div id='markdown' style='display: none'><h1>Making a CLI Game with Elixir Part I</h1>
+<p>Out of curiosity, I've currently been experimenting with the <a href="https://elixir-lang.org/">Elixir programming language</a>, and one of my goals to get a good feel for the language is building a tiny game in the command line. Why? Because it's fun!</p>
+<blockquote>
+<p>Note: This is being written about two weeks into learning Elixir, so I'm certain that some of the patterns &amp; ideas here are not prime Elixir. I'll do my best to update this blog post over time as I learn more.</p>
+</blockquote>
+<h2>Beginning the Brew</h2>
+<p>The first thing, <a href="https://elixir-lang.org/getting-started/introduction.html">after installing Elixir itself</a> is creating an Elxir file*.</p>
+<pre><code class="language-bash">touch game.ex
+elixirc game.ex
+</code></pre>
+<p><code>.ex</code> is the file extension for Elixir, and the <code>elixirc</code> command is how we run Elixir files (it stands for Elixir compile).</p>
+<p>We begin our file by creating a module for our Game:</p>
+<pre><code class="language-elixir">defmodule Game do
+    def start_game do
+        IO.puts &quot;Hello! Welcome to Elixirtopia. What would you like to do?&quot;
+    end
+end
+
+Game.start_game
+</code></pre>
+<p><code>defmodule</code> declares our module and <code>start_game</code> is a method that prints to the console. When you run <code>elixirc game.ex</code>, you should see &quot;Hello! Welcome to Elixirtopia. What would you like to do?&quot; printed to the screen.</p>
+<h2>Managing State</h2>
+<p>Functional programming relies on the pure functions in order to achieve predictability and elegance. But like most programming languages, Elixir offers a way of handling side-effects, that is code that dispatches actions rather than just returning values, through procceses, in this case <code>Agent</code>s.</p>
+<p>Let's refactor our code a bit to look more like this</p>
+<pre><code class="language-elixir">defmodule Game do
+    use Agent
+
+    def start_game do
+        IO.puts &quot;Hello! Welcome to Elixirtopia. What would you like to do?&quot;
+    end
+
+    def create_player do
+        Agent.start_link(fn -&gt; %{
+            :attack =&gt; 10,
+            :current_hp =&gt; 10,
+            :max_hp =&gt; 10,
+            :name =&gt; &quot;&quot;,
+        } end, name: :player)
+    end
+end
+</code></pre>
+<p>Okay, so that's quite a bit going on there. First, we declare <code>use Agent</code>, in the same way you would any import. Then, our <code>create_player</code> function starts the process that creates our player -- we also name it <code>:player</code> for convenience later on. For this game, we declare a couple of attributes in a Map (<code>%{}</code>) (equivalent to a Python dict or a Javascript object), chiefly attack, current_hp, max_hp, and name.</p>
+<p>Let's add these two additional functions. For brevity's sake, presume that any additional functions are int he body of our <code>Game</code> module.</p>
+<pre><code class="language-elixir">def get_player do
+    Agent.get(:player, &amp; &amp;1)
+do
+
+def update_player(key, value) do
+    Agent.get_and_update(:player, fn (x) -&gt; {x | %{x | key =&gt; value }} end)
+end
+</code></pre>
+<p>Don't worry too much about any confusing syntax here, just know that <code>get_player</code> retrieves our <code>:player</code> from state and <code>update_player</code> updates the Map with the appropriate map and key.</p>
+<h2>Sequencing the Game</h2>
+<p>Now, let's modify our <code>start_game</code> function</p>
+<pre><code class="language-elixir">def start_game do
+    Game.create_player
+    answer = IO.gets &quot;&quot;&quot;
+        Hello! Welcome to Elixirtopia. What would you like to do?
+        [1] Explore
+        [2 / any other key] Quit
+    &quot;&quot;&quot;
+    answer_parsed = Integer.parse answer
+    number = elem(answer_parsed, 0)
+
+    cond do
+        number == 1 -&gt; explore
+        number == 2 -&gt; quit
+        number == :error -&gt; quit
+        true -&gt; quit
+    end
+end
+</code></pre>
+<p>Let's run through all of what this means</p>
+<p><code>Game.create_player</code> calls our Agent to manage our player state</p>
+<p><code>IO.gets</code> prints out a prompt with a multiline <code>&quot;&quot;&quot;</code> string</p>
+<p><code>elem(answer_parsed, 0)</code> after our answer has been parsed, much like in Rust, we need to unwrap the resulting value. Elixir will either return our value or an <code>:error</code></p>
+<p><code>cond do</code> declares a condition and we match based on that; the <code>true</code> declaration at the end will match any condition we give it. You may intuit that because we only have 2 options—explore or quit—we only need <code>number == 1 -&gt; explore</code> and <code>true -&gt; quit</code> and you'd be absolutely right!</p>
+<p><code>explore</code> and <code>quit</code> are functions we haven't written yet!</p>
+<p>We'll walk through the exploration and more in the next segment.</p>
+<h2>Further Reading &amp; Footnotes</h2>
+<p>* <code>Mix</code> is generally what you would use to initiate a real-world project, but this is more in the alley of &quot;contrived example.&quot;</p>
+<p>Additional Reading</p>
+<ul>
+<li><a href="https://dockyard.com/blog/2016/08/05/understand-capture-operator-in-elixir">Explanation of &amp; Operator</a></li>
+</ul>
+</div>
+        <div id='app'></div>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <script src='../../bundle.js'></script>
+        <script src='../../prism.js'></script>
+        </script><!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79007755-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-79007755-1');
+        </script>
+    </body>
+</html>

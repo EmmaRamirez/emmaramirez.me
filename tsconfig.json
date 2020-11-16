@@ -1,32 +1,32 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "declaration": false,
-        "noImplicitAny": true,
-        "removeComments": true,
-        "strictNullChecks": true,
-        "noLib": false,
-        "jsx": "react",
-        "experimentalDecorators": true,
-        "allowSyntheticDefaultImports": false,
-        "allowJs": true,
-        "downlevelIteration": true,
-        "lib": [
-          "dom",
-          "dom.iterable",
-          "es2017",
-          "es2017.object",
-          "es2017.sharedmemory"
-        ],
-        "typeRoots": [
-          "./node_modules/@types"
-        ],
-        "baseUrl": "./src"
-      },
-      "exclude": [
-        "node_modules",
-        "./node_modules/@types"
-      ],
-      "compileOnSave": false
-  }
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": false,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "strictNullChecks": true,
+    "noLib": false,
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": false,
+    "allowJs": true,
+    "downlevelIteration": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es2017",
+      "es2017.object",
+      "es2017.sharedmemory"
+    ],
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "baseUrl": "./src"
+  },
+  "exclude": [
+    "node_modules",
+    "./node_modules/@types"
+  ],
+  "compileOnSave": false
+}
