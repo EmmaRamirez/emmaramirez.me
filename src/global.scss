@@ -11,7 +11,7 @@
 }
 
 body {
-  font-family: 'Georgia', sans-serif;
+  font-family: 'Merriweather', 'Georgia', sans-serif;
   overflow-x: hidden;
   &.dark {
     background: $dark-color;
@@ -115,7 +115,7 @@ h2 {
   }
   p {
     font-size: 1.25rem;
-    line-height: 1.4;
+    line-height: 28px;
     margin: 1rem;
     
     code {
@@ -140,7 +140,7 @@ h2 {
 .markdown-body {
   ul {
     font-size: 1.15rem;
-    line-height: 1.4;
+    line-height: 1.5;
     padding-left: 4rem;
   }
 }
@@ -195,10 +195,6 @@ body:not(.markdown-body) h2 {
 .palm-tree {
   font-size: 6rem;
   text-align: center;
-}
-
-.dark .stats {
-  background: rgba(black, 0.3);
 }
 
 #disqus_thread {
