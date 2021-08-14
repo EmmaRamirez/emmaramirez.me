@@ -13,6 +13,7 @@ module.exports = {
         modules: ['./src'],
         extensions: ['.ts', '.js']
     },
+    devtool: 'eval',
     mode: 'development',
     module: {
         rules: [
@@ -55,7 +56,6 @@ module.exports = {
               });
             }
           }
-        
     ],
     optimization: {
         minimize: true,

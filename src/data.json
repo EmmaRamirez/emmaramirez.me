@@ -193,7 +193,8 @@
             "tags": [
                 "personal"
             ],
-            "emoji": "✏️"
+            "emoji": "✏️",
+            "draft": true
         },
         {
             "link": "/posts/my-first-day-at-npm",
