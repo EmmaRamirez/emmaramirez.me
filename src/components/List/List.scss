@@ -33,7 +33,7 @@
   }
   &:hover {
     @for $i from 1 through 10 {
-      .tags .tag:nth-child($i) {
+      .tags .tag:nth-child(#{$i}n) {
         transition-delay: $i * 20ms;
         background-color: hsl($i * 36, 70%, 70%);
       }
@@ -43,7 +43,7 @@
         background: #fafafa;
       }
       @for $i from 1 through 10 {
-        .tag:nth-child($i):hover {
+        .tag:nth-child(#{$i}n):hover {
           color: #555;
           background-color: hsl($i * 36, 70%, 70%);
         }

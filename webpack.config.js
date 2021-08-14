@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const copyWebpackPlugin = require('copy-webpack-plugin');
-const shellWebpackPlugin = require('webpack-shell-plugin');
+const exec = require('child_process').exec;
 
 module.exports = {
     entry: './src/index.ts',
@@ -23,7 +23,7 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                loaders: [
+                use: [
                     { loader: 'style-loader' },
                     { loader: 'css-loader' },
                     { loader: 'resolve-url-loader' },
@@ -41,12 +41,23 @@ module.exports = {
                 }
             ]
         }),
-        new shellWebpackPlugin({
-            onBuildEnd: ['ts-node ./scripts/build', 'ts-node ./scripts/build-tags']
-        }),
+        {
+            apply: (compiler) => {
+              compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+                exec('ts-node ./scripts/build', (err, stdout, stderr) => {
+                  if (stdout) process.stdout.write(stdout);
+                  if (stderr) process.stderr.write(stderr);
+                });
+                exec('ts-node ./scripts/build-tags', (err, stdout, stderr) => {
+                    if (stdout) process.stdout.write(stdout);
+                    if (stderr) process.stderr.write(stderr);
+                  });
+              });
+            }
+          }
+        
     ],
     optimization: {
         minimize: true,
-        namedModules: false,
     }
 }
