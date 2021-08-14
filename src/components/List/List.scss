@@ -58,6 +58,11 @@
   font-size: 0.95rem;
 }
 
+.dark .item-description,
+.dark .item-date {
+  color: #888;
+}
+
 .item-emoji {
   margin-left: -2.5rem;
   text-align: right;
@@ -88,9 +93,8 @@
 }
 
 .item-last-updated {
-  position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
+  vertical-align: middle;
+  margin-left: 0.25rem;
 }
 
 .item-title {

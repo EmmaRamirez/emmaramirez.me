@@ -166,6 +166,11 @@ h2 {
   }
 }
 
+body:not(.markdown-body) h2 {
+  text-transform: lowercase;
+  letter-spacing: 2px;
+}
+
 .dark p > code {
   background: $dark-code-color;
   color: #fff;

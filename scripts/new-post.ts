@@ -1,9 +1,6 @@
 #!/usr/bin/env node
 
-const fse = require('fs-extra');
 const fs = require('fs');
-const path = require('path');
-const marked = require('marked');
 const chalk = require('chalk');
 const argv = require('yargs').argv;
 const process = require('process');
