@@ -1,3 +1,12 @@
+## [0.23.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.23.0...0.23.1) (2021-08-14)
+
+
+### Bug Fixes
+
+* tweak a sentence ([561a42a](https://github.com/EmmaRamirez/emmaramirez.me/commit/561a42ac56c7475dfc5b6fc83450cf8666dbf210))
+
+
+
 # [0.23.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.22.0...0.23.0) (2021-08-14)
 
 
