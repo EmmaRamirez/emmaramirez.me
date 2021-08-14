@@ -1,3 +1,19 @@
+# [0.23.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.22.0...0.23.0) (2021-08-14)
+
+
+### Bug Fixes
+
+* clean-up npm article ([cf672c9](https://github.com/EmmaRamirez/emmaramirez.me/commit/cf672c94a379eba2cfd9426dd8013d8d491c1cc5))
+* render noMatches markup ([955ed2c](https://github.com/EmmaRamirez/emmaramirez.me/commit/955ed2cb182a039a6a80a56132d33f3cd2680dbe))
+* typo in Coffeescript article ([5dbcff7](https://github.com/EmmaRamirez/emmaramirez.me/commit/5dbcff7bb587f25ac57f2045a8b405b4af3b39c7))
+
+
+### Features
+
+* Dark Mode support 🌙 ([95d3c31](https://github.com/EmmaRamirez/emmaramirez.me/commit/95d3c3153fe1f955282d597c0a655426bed2b862))
+
+
+
 # [0.22.0](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.21.4...0.22.0) (2020-11-16)
 
 
@@ -108,8 +124,8 @@
 ### Features
 
 * **design:** rework projects css ([68c607b](https://github.com/EmmaRamirez/emmaramirez.me/commit/68c607b5181baacd31db44a6f9b5ebd5506030f3))
-* **writing:** add post on Record & Tuples ([2fc76fe](https://github.com/EmmaRamirez/emmaramirez.me/commit/2fc76fe8968f81ca6aa33ac72d59018627d919b3))
 * spellchecker ([25a0059](https://github.com/EmmaRamirez/emmaramirez.me/commit/25a0059090f2b18739c856ac00bafe343c8b199f))
+* **writing:** add post on Record & Tuples ([2fc76fe](https://github.com/EmmaRamirez/emmaramirez.me/commit/2fc76fe8968f81ca6aa33ac72d59018627d919b3))
 
 
 
@@ -281,9 +297,9 @@
 ### Bug Fixes
 
 * add keyword + description meta tags to posts ([1079cbc](https://github.com/EmmaRamirez/emmaramirez.me/commit/1079cbcab7bba98031fff49a4d76ac998a593896))
+* spruce up projects section ([8365a7d](https://github.com/EmmaRamirez/emmaramirez.me/commit/8365a7daa03f973336604aa2370fd2c44d00a14d))
 * **styles:** add margin 0 auto to ([fdf094c](https://github.com/EmmaRamirez/emmaramirez.me/commit/fdf094cbecaceff7a133f6e4ead29c8ad3638527))
 * **Tags:** fix error where Tags broke ([e6905ad](https://github.com/EmmaRamirez/emmaramirez.me/commit/e6905ad6fad76c6deb2b56b25439d6b88571aa99))
-* spruce up projects section ([8365a7d](https://github.com/EmmaRamirez/emmaramirez.me/commit/8365a7daa03f973336604aa2370fd2c44d00a14d))
 
 
 
@@ -314,10 +330,10 @@
 
 ### Bug Fixes
 
-* ensure not passing in 'tags' breaks command ([98740bf](https://github.com/EmmaRamirez/emmaramirez.me/commit/98740bf86b29a0e78bb54cc0f05036c4517b53de))
-* **style:** add padding to blog-post ([b2471aa](https://github.com/EmmaRamirez/emmaramirez.me/commit/b2471aa10b0da442533137f5b14b24cfb00c24ef))
 * add sort to Tags component ([8cde27c](https://github.com/EmmaRamirez/emmaramirez.me/commit/8cde27ce228371c683d355b14f604f5d1cc2aa08))
 * add sort to Tags component ([262d8a2](https://github.com/EmmaRamirez/emmaramirez.me/commit/262d8a281a8538d68cb4463d753f23e8f70ae2da))
+* ensure not passing in 'tags' breaks command ([98740bf](https://github.com/EmmaRamirez/emmaramirez.me/commit/98740bf86b29a0e78bb54cc0f05036c4517b53de))
+* **style:** add padding to blog-post ([b2471aa](https://github.com/EmmaRamirez/emmaramirez.me/commit/b2471aa10b0da442533137f5b14b24cfb00c24ef))
 
 
 ### Features
@@ -346,12 +362,12 @@
 
 ### Bug Fixes
 
-* **styles:** make item-description color darker ([73ef854](https://github.com/EmmaRamirez/emmaramirez.me/commit/73ef8548909479bc6e8b31d5ff565c381a3f9aaf))
 * add emoji field to npm run create ([9048fdd](https://github.com/EmmaRamirez/emmaramirez.me/commit/9048fdd539bb3afceee5b8d4d98dda362203fe16))
-* **styles:** add 100% more emoji ([f26954f](https://github.com/EmmaRamirez/emmaramirez.me/commit/f26954f92d42fe2b0bc2d59bf092daff79b8f7f9))
 * remove broken style switcher ([8faeedb](https://github.com/EmmaRamirez/emmaramirez.me/commit/8faeedb9083259788f42bd753cee69b4ec6e2ddd))
+* **styles:** add 100% more emoji ([f26954f](https://github.com/EmmaRamirez/emmaramirez.me/commit/f26954f92d42fe2b0bc2d59bf092daff79b8f7f9))
 * **styles:** improve selection styles ([1ecd7d8](https://github.com/EmmaRamirez/emmaramirez.me/commit/1ecd7d8d1e5432ad9ecae85809e31b6f48278356))
 * **styles:** improve selection styles ([5939666](https://github.com/EmmaRamirez/emmaramirez.me/commit/59396665a62bfdac1036c562368336e07192aab6))
+* **styles:** make item-description color darker ([73ef854](https://github.com/EmmaRamirez/emmaramirez.me/commit/73ef8548909479bc6e8b31d5ff565c381a3f9aaf))
 
 
 ### Features
@@ -381,8 +397,8 @@
 
 ### Bug Fixes
 
-* **styles:** fix styling to be more responsive + viewport tag ([10f3d20](https://github.com/EmmaRamirez/emmaramirez.me/commit/10f3d205e68eaa4921e9c2912404af9e28f41322))
 * add google analytics ([db8cd00](https://github.com/EmmaRamirez/emmaramirez.me/commit/db8cd0056b1742884390523ae6edc470a5bf40ad))
+* **styles:** fix styling to be more responsive + viewport tag ([10f3d20](https://github.com/EmmaRamirez/emmaramirez.me/commit/10f3d205e68eaa4921e9c2912404af9e28f41322))
 
 
 
