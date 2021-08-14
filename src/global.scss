@@ -142,6 +142,10 @@ h2 {
     font-size: 1.15rem;
     line-height: 1.5;
     padding-left: 4rem;
+
+    @media screen and (max-width: 768px) {
+      padding-left: 2rem;
+    }
   }
 }
 

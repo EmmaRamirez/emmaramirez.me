@@ -13,12 +13,7 @@
 
 .list-item {
   position: relative;
-  
-  //border: 1px solid #eee;
-  //border-radius: 2px;
-  //box-shadow: 0 0 2px #eee;
-
-  padding: 2rem;
+  padding: 1rem;
   transition-delay: 150ms;
 
   @media screen and (max-width: 640px) {
