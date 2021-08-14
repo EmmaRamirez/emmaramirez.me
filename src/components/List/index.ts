@@ -59,7 +59,7 @@ export class List extends Component<ListProps> {
       return d.toDateString();
     };
     const noMatches = `<div class='no-items'>No Matching Items Found 😱</div>`;
-    if (!items.length) return ``;
+    if (!items.length) return noMatches;
     // style='background-image: url(${item.image || ''})'
     if (type === 'projects') {
       return ul(items
