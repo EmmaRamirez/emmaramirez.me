@@ -18,6 +18,15 @@ function selectText() {
   );
 }
 
+function applyTheme() {
+  const matched = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const body = document.querySelector('body');
+  if (matched) {
+    body?.classList.add('dark');
+  }
+}
+
 render(app, endpoint, app => app.postRender());
 
 selectText();
+applyTheme();

@@ -47,7 +47,7 @@ export class App extends Component<AppProps> {
     }
     return `
       <div class='posts'>
-          ${isTagsPage ? `<h2>Items Matching Tag: ${tag}</h2>` : ''}
+          ${isTagsPage ? `<h2 class="big-tag">${tag}</h2>` : ''}
           ${isTagsPage ? '' : '<h2 class="writing-title">Writing</h2>'}
           ${this.articles.render()}
           ${isTagsPage ? '' : '<h2>Projects</h2>'}

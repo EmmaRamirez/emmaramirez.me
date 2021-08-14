@@ -172,7 +172,8 @@
                 "personal",
                 "startups"
             ],
-            "emoji": "🚀"
+            "emoji": "🚀",
+            "draft": true
         },
         {
             "link": "/posts/the-safe-navigation-operator",

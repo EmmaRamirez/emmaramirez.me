@@ -1,3 +1,6 @@
+@use "sass:math";
+@import "../../variables";
+
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -12,6 +15,7 @@
   // margin-bottom: 0.25rem;
   // margin-right: -1px;
   // padding: 0.25rem 1rem;
+  padding: 6px;
   padding-right: 4px;
   text-align: center;
   // transition: 250ms all;
@@ -19,6 +23,11 @@
 }
 .tag.highlight, .tag:hover {
   text-decoration: underline;
+}
+.big-tag {
+  background-color: hsl(math.random() * 360, 70%, 70%);
+  color: $dark-color;
+  max-width: 18rem;
 }
 // .tag-inner {
 //   display: inline-block;

@@ -1,5 +1,4 @@
-$dark-color: #242830;
-$light-color: #efefef;
+@import "variables.scss";
 
 ::-moz-selection {
   color: $dark-color;
@@ -22,6 +21,7 @@ body {
   &.dark .tags:hover .tag,
   &.dark .tag {
     background: transparent;
+    color: $dark-color;
   }
 
   @media screen and (max-width: 640px) {
@@ -166,12 +166,14 @@ h2 {
   }
 }
 
-.dark .blog-post {
-  code {
-    background: darken($dark-color, 10%);
-    color: #fff;
-    outline: 1px solid #2e2c2c;
-  }
+.dark p > code {
+  background: $dark-code-color;
+  color: #fff;
+  outline: 1px solid #2e2c2c;
+}
+
+.dark blockquote {
+  color: #fff;
 }
 
 .stats {
