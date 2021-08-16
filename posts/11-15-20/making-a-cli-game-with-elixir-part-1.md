@@ -113,4 +113,5 @@ We'll walk through the exploration and more in the next segment.
 \* `Mix` is generally what you would use to initiate a real-world project, but this is more in the alley of "contrived example."
 
 Additional Reading
+
 - [Explanation of & Operator](https://dockyard.com/blog/2016/08/05/understand-capture-operator-in-elixir)

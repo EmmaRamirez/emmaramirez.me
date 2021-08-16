@@ -1,6 +1,6 @@
 # Building the Nuzlocke Generator
 
-> Note: This project is still in beta. Check it out [here](generator)
+> Note: This project is still in beta. Check it out [here](https://nuzlocke-generator.com/)
 
 ## Origins
 
@@ -41,6 +41,3 @@ The other thing is converting save files from Pokémon games into templates dire
 And the last thing I'm planning is a way to record the whole history of your nuzlocke. Redux makes this fairly easy, the editor makes it hard since it's hard to tell when a user _intends_ something as a permanent change. For example, I could make a Squirtle as dead, and then later bring it back to life because it was a mistake. Is this something that should be recorded? Most apps that produce logs require confirmation. Here, I chose simplicity and snappiness. If I did implement this feature, it would require that a) users can modify their history and b) it doesn't pollute the history with changes like every keystroke into a species field.
 
 That's essentially it! The app is currently hosted on heroku, and even one user would warm my heart, but 700 feels great for such a niche project. Feel free to reach out to me here or anywhere else if you have ideas or bugs. 
-
-
-[generator]: https://nuzlocke-generator.herokuapp.com/
