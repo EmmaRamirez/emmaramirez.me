@@ -1,3 +1,17 @@
+## [0.23.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.23.1...0.23.2) (2021-08-16)
+
+
+### Bug Fixes
+
+* fix broken link ([fe46537](https://github.com/EmmaRamirez/emmaramirez.me/commit/fe46537b9b58cbccaee5f2a7efabb67ea5778a4f))
+
+
+### Features
+
+* add read-time marker ([f1e3485](https://github.com/EmmaRamirez/emmaramirez.me/commit/f1e348567d808aa0243d2e8d13f23ca4736b7858))
+
+
+
 ## [0.23.1](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.23.0...0.23.1) (2021-08-14)
 
 
