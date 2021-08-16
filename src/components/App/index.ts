@@ -40,15 +40,18 @@ export class App extends Component<AppProps> {
     const isTagsPage = window.location.pathname.includes('tags');
     const windowPathArray = window.location.pathname.split('/');
     const tag = windowPathArray[windowPathArray.length - 2];
+
     if (document.body.className === 'markdown-body' && window.location.pathname.includes('posts') || this.forceMarkdownRender) {
       const md = document.getElementById('markdown');
       const markdown = (md ? md : { innerHTML: false }).innerHTML;
+      
       return markdown as string;
     }
+
     return `
       <div class='posts'>
           ${isTagsPage ? `<h2 class="big-tag">${tag}</h2>` : ''}
-          ${isTagsPage ? '' : '<h2 class="writing-title">Writing</h2>'}
+          ${isTagsPage ? '' : `<h2 class="writing-title">Writing</h2>`}
           ${this.articles.render()}
           ${isTagsPage ? '' : '<h2>Projects</h2>'}
           ${this.projects.render()}
@@ -73,5 +76,13 @@ export class App extends Component<AppProps> {
     this.projects.postRender();
     const md = document.getElementById('markdown');
     if (md) { md.innerHTML = ''; }
+    const readTimeRaw = document.querySelector('#app')?.getAttribute('data-read-time');
+    const readTime = readTimeRaw == null ? null : Number.parseInt(readTimeRaw as string);
+    const readTimeFormatted = readTime != null ? '📖 ' + (readTime + ' minute read') : null;
+    const readTimeElement = document.createElement('span');
+    const h1 = document.querySelector('h1');
+    readTimeElement.classList.add('read-time');
+    readTimeElement.innerHTML = readTimeFormatted ?? '';
+    h1?.prepend(readTimeElement);
   }
 }

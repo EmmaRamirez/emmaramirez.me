@@ -9,13 +9,13 @@
         <link href='../../prism.css' rel='stylesheet' />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="keywords" content="no tags">
-        <meta name="description" content="<p>Figured I'd show you here how I structure my Redux Actions...</p>
+        <meta name="description" content="<p>Figured I’d show you here how I structure my Redux Actions…</p>
 ">
         
     </head>
     <body class=markdown-body>
         <div id='markdown' style='display: none'><h1>Typing Redux Actions</h1>
-<p>Figured I'd show you here how I structure my Redux Actions</p>
+<p>Figured I’d show you here how I structure my Redux Actions</p>
 <pre><code class="language-typescript">export interface Action&lt;T extends string, P = unkown&gt; {
     type: T;
     payload?: P extends object ? P : null;
@@ -33,7 +33,7 @@ export const StartGame = ({ start }: Start): Action&lt;START_GAME, Start&gt; =&g
     ({ type: 'START_GAME' })
 </code></pre>
 <p>Note: You can chain the conditional type to allow payloads with strings or numbers, etc.</p>
-<p>And that's it! There's some more stuff you can do with reducers though:</p>
+<p>And that’s it! There’s some more stuff you can do with reducers though:</p>
 <pre><code class="language-typescript">export interface State {
     Game: {
         start: boolean;
@@ -49,10 +49,10 @@ export const game = (state: State['Game'], action: Action&lt;START_GAME&gt;) =&g
     }
 }
 </code></pre>
-<p>It'd probably be nice to use <a href="https://github.com/tc39/proposal-pattern-matching">pattern matching</a> once it lands in Ecmascript.</p>
-<p>The main thing about these types is that you should tailor them to your needs. While I do think this is a good starting type, it certainly isn't an end-all be-all of typing redux actions &amp; reducers. Another option might be a library with stronger typing such as <a href="https://github.com/bcherny/undux">undux</a>.</p>
+<p>It’d probably be nice to use <a href="https://github.com/tc39/proposal-pattern-matching">pattern matching</a> once it lands in Ecmascript.</p>
+<p>The main thing about these types is that you should tailor them to your needs. While I do think this is a good starting type, it certainly isn’t an end-all be-all of typing redux actions &amp; reducers. Another option might be a library with stronger typing such as <a href="https://github.com/bcherny/undux">undux</a>.</p>
 </div>
-        <div id='app'></div>
+        <div id='app' data-read-time=2></div>
         <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <script src='../../bundle.js'></script>
         <script src='../../prism.js'></script>

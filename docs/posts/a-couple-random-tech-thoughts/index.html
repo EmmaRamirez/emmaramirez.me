@@ -9,21 +9,21 @@
         <link href='../../prism.css' rel='stylesheet' />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="keywords" content="no tags">
-        <meta name="description" content="<p>I haven't had much time or energy to write articles, so I wanted to dump a couple things that I've been thinking lately....</p>
+        <meta name="description" content="<p>I haven’t had much time or energy to write articles, so I wanted to dump a couple things that I’ve been thinking lately…</p>
 ">
         
     </head>
     <body class=markdown-body>
         <div id='markdown' style='display: none'><h1>A Couple Random Tech Thoughts</h1>
-<p>I haven't had much time or energy to write articles, so I wanted to dump a couple things that I've been thinking lately.</p>
+<p>I haven’t had much time or energy to write articles, so I wanted to dump a couple things that I’ve been thinking lately.</p>
 <h2>Hooks really are better.</h2>
-<p>When hooks first came onto the scene, I was a bit confused (and more than anything else, mystified) and sort of ignored them for a few months. When I had to start a new project, I decided to try hooks again—voila!—maybe they just hadn't clicked.</p>
+<p>When hooks first came onto the scene, I was a bit confused (and more than anything else, mystified) and sort of ignored them for a few months. When I had to start a new project, I decided to try hooks again—voila!—maybe they just hadn’t clicked.</p>
 <ul>
 <li>
-<p>Don't be afraid to de-couple hooks from your components! Function components are meant to have a better separation of concerns, and hooks help with that goal.</p>
+<p>Don’t be afraid to de-couple hooks from your components! Function components are meant to have a better separation of concerns, and hooks help with that goal.</p>
 </li>
 <li>
-<p><code>useEffect</code> for any side-effects. I know that's sort of obvious, but when I started using hooks, I would end up with these infinitely repeating API calls or console.logs being done thousands of times. <code>useEffect</code> runs both on every render and every update, so using an effect dependency is an easy optimization to make. For example</p>
+<p><code>useEffect</code> for any side-effects. I know that’s sort of obvious, but when I started using hooks, I would end up with these infinitely repeating API calls or console.logs being done thousands of times. <code>useEffect</code> runs both on every render and every update, so using an effect dependency is an easy optimization to make. For example</p>
 <pre><code class="language-typescript">useEffect(() =&gt; {
     console.log(blogPostCount);
 }, [blogPostCount])
@@ -32,20 +32,20 @@
 </ul>
 <p>This will only run when blogPostCount is changed, just like a strict <code>componentWillUpdate</code> check.</p>
 <ul>
-<li>Getting people to adopt hooks is not always easy. Despite the learning curve, we also just like sticking to what we already know—classes! And most of us transitioned away from <code>React.createClass()</code> to classes so it's a double-whammy. Hooks are also incompatible with <em>a lot</em> of existing React architecture, and this is absolutely my biggest frustration with them.</li>
-<li>Or rather, converting classes into Function components is a pain in the butt and there's a cognitive overload to recalling which React methods map to which Hooks. Check out this <a href="https://reactjs.org/docs/hooks-faq.html#adoption-strategy">guide</a> for more info.</li>
+<li>Getting people to adopt hooks is not always easy. Despite the learning curve, we also just like sticking to what we already know—classes! And most of us transitioned away from <code>React.createClass()</code> to classes so it’s a double-whammy. Hooks are also incompatible with <em>a lot</em> of existing React architecture, and this is absolutely my biggest frustration with them.</li>
+<li>Or rather, converting classes into Function components is a pain in the butt and there’s a cognitive overload to recalling which React methods map to which Hooks. Check out this <a href="https://reactjs.org/docs/hooks-faq.html#adoption-strategy">guide</a> for more info.</li>
 </ul>
 <h2>Dogfooding is a good idea, actually</h2>
-<p>I'm realizing this more and more as I've worked with the <a href="https://nuzlocke-generator.com">nuzlocke-generator</a> and ocassionally breaking things. The more I actually do my own nuzlockes and record them using my own tool, the more errors I catch! Wow, who knew using your own software was a good idea!</p>
+<p>I’m realizing this more and more as I’ve worked with the <a href="https://nuzlocke-generator.com">nuzlocke-generator</a> and ocassionally breaking things. The more I actually do my own nuzlockes and record them using my own tool, the more errors I catch! Wow, who knew using your own software was a good idea!</p>
 <ul>
-<li>Of course, what I really mean by this is workflows that aren't common when developing. For example, you can import a <code>nuzlocke.json</code> file in the application, but when I'm testing I'm usually just creating a new one and working through that...</li>
-<li>Whereas users are often using <code>nuzlocke.json</code> files that might be multiple versions old. This is especially brittle because all data is stored locally, so there's no such things as db migrations. Redux-persist migrations are used to catch these, but can on ocassion miss, especially if it's a multiple-version mismatch.</li>
+<li>Of course, what I really mean by this is workflows that aren’t common when developing. For example, you can import a <code>nuzlocke.json</code> file in the application, but when I’m testing I’m usually just creating a new one and working through that…</li>
+<li>Whereas users are often using <code>nuzlocke.json</code> files that might be multiple versions old. This is especially brittle because all data is stored locally, so there’s no such things as db migrations. Redux-persist migrations are used to catch these, but can on ocassion miss, especially if it’s a multiple-version mismatch.</li>
 </ul>
 <h2>Frustrated users are the most important ones.</h2>
-<p>Speaking of the nuzlocke-generator, it went down for a bit. By which I mean like 2 weeks. And I got to hear a great deal of complaints from users when that happened, BUT it also cemented to me how important the tool I was. Before it went down (thanks Heroku), I had sort of convinced myself that people wouldn't care a great deal. No one was mean or anything (thank God), but it was sort of heart-warming hearing from users that they use the tool all the time, in all different sorts of channels. Good software is reliable, full stop. After getting it back up, I've been working a lot harder on resilience-testing and being more responsive to pushing up hotfixes (i.e. never making the mistaking of pushing a big update and then just going to sleep). Instead, after pushing updates, I monitor social media and rollbar.</p>
-<p>In other notes, I'll keep trying to make more time to write blog posts, although I've spent a lot of time recovering from surgery working on updates for my open source tools.</p>
+<p>Speaking of the nuzlocke-generator, it went down for a bit. By which I mean like 2 weeks. And I got to hear a great deal of complaints from users when that happened, BUT it also cemented to me how important the tool I was. Before it went down (thanks Heroku), I had sort of convinced myself that people wouldn’t care a great deal. No one was mean or anything (thank God), but it was sort of heart-warming hearing from users that they use the tool all the time, in all different sorts of channels. Good software is reliable, full stop. After getting it back up, I’ve been working a lot harder on resilience-testing and being more responsive to pushing up hotfixes (i.e. never making the mistaking of pushing a big update and then just going to sleep). Instead, after pushing updates, I monitor social media and rollbar.</p>
+<p>In other notes, I’ll keep trying to make more time to write blog posts, although I’ve spent a lot of time recovering from surgery working on updates for my open source tools.</p>
 </div>
-        <div id='app'></div>
+        <div id='app' data-read-time=4></div>
         <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <script src='../../bundle.js'></script>
         <script src='../../prism.js'></script>

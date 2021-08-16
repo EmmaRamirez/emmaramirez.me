@@ -9,7 +9,7 @@
         <link href='../../prism.css' rel='stylesheet' />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="keywords" content="no tags">
-        <meta name="description" content="<p>Currently, the Pipeline operator is one of the more interesting proposals advancing through the TC39....</p>
+        <meta name="description" content="<p>Currently, the Pipeline operator is one of the more interesting proposals advancing through the TC39…</p>
 ">
         
     </head>
@@ -19,11 +19,11 @@
 <p>Currently, the Pipeline operator is one of the more interesting proposals advancing through the TC39.</p>
 <p>The operator <code>|&gt;</code> is borrowed and inspired by several functional languages such as F#, Elm, and Elixir, and UNIX pipes as well. (The original syntax was <code>::</code>, which proved too controversial) According to the TC39 proposal</p>
 <blockquote>
-<p>It's a backwards-compatible way of streamlining chained function calls in a readable, functional manner, and provides a practical alternative to extending built-in prototypes.</p>
+<p>It’s a backwards-compatible way of streamlining chained function calls in a readable, functional manner, and provides a practical alternative to extending built-in prototypes.</p>
 </blockquote>
 <p>which makes it very useful for short single-argument functions.</p>
 <h2>Examples</h2>
-<p>In the simplest example, the pipeline operator turns <code>alert('Hello!')</code> into <code>'Hello!' |&gt; alert</code>. This is not the best uage of the operator, as it doesn't aid the readability in any way. The better usage comes when you chain several functions together.</p>
+<p>In the simplest example, the pipeline operator turns <code>alert('Hello!')</code> into <code>'Hello!' |&gt; alert</code>. This is not the best uage of the operator, as it doesn’t aid the readability in any way. The better usage comes when you chain several functions together.</p>
 <p>Take for example these functions:</p>
 <pre><code class="language-javascript">function add5 (number) {
     return number + 5;
@@ -49,7 +49,7 @@ const number = 5
         |&gt; multiplyBy10
 </code></pre>
 <p>This is slightly opinionated, but I think the pipeline operator aids in readability here. Note that the order goes by the function called <em>first</em>, which is especially useful since I know the f(g) versus g(f) can get confusing for particularly long-chained functions.</p>
-<p>Let's do an example involving multiple arguments.</p>
+<p>Let’s do an example involving multiple arguments.</p>
 <pre><code class="language-javascript">function makeLowerCase(str) { return str.toLowerCase() }
 function concat(strA, strB) { return strA + strB }
 function writeSentence (subject, verb, object) {
@@ -65,7 +65,7 @@ const sentence = apple
 
 console.log(sentence) // &quot;I ate a pineapple&quot;
 </code></pre>
-<p>While it seems a bit odd at first, we're just simple piping in arrow functions that handle the previous result from the preceeding pipe. When we took 'APPLE', we lowercased it, and then concatenated 'pine' with 'apple'. Hence, pineapple became the new argument for the last function, which wrote our sentence with pineapple as its subject.</p>
+<p>While it seems a bit odd at first, we’re just simple piping in arrow functions that handle the previous result from the preceeding pipe. When we took ‘APPLE’, we lowercased it, and then concatenated ‘pine’ with ‘apple’. Hence, pineapple became the new argument for the last function, which wrote our sentence with pineapple as its subject.</p>
 <p>You could also write the function as <code>writeSentence('I', 'ate', concat('pine', makeLowerCase(apple)))</code> though deciding between compactness or readability is up to you.</p>
 <p>Depending on the <a href="https://github.com/mindeavor/es-papp">papp</a> proposal, it may be able to write this:</p>
 <pre><code class="language-javascript">const sentence = apple
@@ -73,8 +73,8 @@ console.log(sentence) // &quot;I ate a pineapple&quot;
         |&gt; concat.papp('pine')
         |&gt; writeSentence.papp('I', 'ate')
 </code></pre>
-<p><code>papp</code> is used as a way to partially apply the function's parameters, leaving the rest to be used by the pipelines.</p>
-<p>Async/Await usage also works nicely here. To borrow directly from the proposal's page:</p>
+<p><code>papp</code> is used as a way to partially apply the function’s parameters, leaving the rest to be used by the pipelines.</p>
+<p>Async/Await usage also works nicely here. To borrow directly from the proposal’s page:</p>
 <pre><code class="language-javascript">x |&gt; await f
 // is equivalent to
 await f(x)
@@ -120,7 +120,7 @@ World!
 <li><a href="https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-pipeline-operator">Babel Plugin</a></li>
 </ul>
 </div>
-        <div id='app'></div>
+        <div id='app' data-read-time=4></div>
         <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <script src='../../bundle.js'></script>
         <script src='../../prism.js'></script>

@@ -4,7 +4,8 @@ const buildFile = ({
     description,
     markdown,
     fileName,
-    data
+    data,
+    readTime,
 }: {
     config: { lang: string, [x: string]: any },
     keywords: string,
@@ -12,6 +13,7 @@ const buildFile = ({
     markdown: string,
     fileName: string,
     data: object,
+    readTime: number,
 }) => `
 <html lang=${config.lang}>
     <head>
@@ -28,7 +30,7 @@ const buildFile = ({
     </head>
     <body class=${ markdown ? 'markdown-body' : ''}>
         <div id='markdown' style='display: none'>${markdown}</div>
-        <div id='app'></div>
+        <div id='app' data-read-time=${readTime}></div>
         <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <script src='../../bundle.js'></script>
         <script src='../../prism.js'></script>

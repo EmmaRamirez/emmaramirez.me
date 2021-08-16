@@ -18,10 +18,22 @@ body {
     color: #eee;
   }
 
-  &.dark .tags:hover .tag,
   &.dark .tag {
     background: transparent;
+    color: $light-color;
+  }
+
+  &.dark .tags:hover .tag {
     color: $dark-color;
+  }
+
+  &.dark code .tag {
+    color: #a454e6 !important;
+  }
+
+  &.dark :not(pre) > code[class*="language-"],
+  &.dark pre[class*="language-"] {
+    background: #242431;
   }
 
   @media screen and (max-width: 640px) {
@@ -94,10 +106,11 @@ h2 {
   padding: 0 1rem;
   padding-bottom: 5rem;
   h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin-bottom: 1rem;
     margin-left: 1rem;
     margin-top: 3rem;
+    text-align: center;
   }
   h2 {
     margin-top: 2rem;
@@ -105,6 +118,20 @@ h2 {
   }
   .writing-title {
     margin-top: 3rem;
+  }
+  .read-time {
+    background: rgba(0,0,0,0.1);
+    padding: 8px;
+    margin: 0 auto;
+    margin-bottom: .5rem;
+    font-size: 1rem;
+    display: block;
+    border-radius: .25rem;
+    font-family: sans-serif;
+    width: 12rem;
+    text-align: center;
+    font-weight: 200;
+    text-transform: uppercase;
   }
   blockquote {
     color: #444;

@@ -1,4 +1,4 @@
-
+@import "variables.scss";
 
 .list {
   font-size: 1.25rem;
@@ -31,15 +31,17 @@
       .tags .tag:nth-child(#{$i}n) {
         transition-delay: $i * 20ms;
         background-color: hsl($i * 36, 70%, 70%);
+        color: $dark-color;
       }
     }
     .tags:hover {
       .tag {
         background: #fafafa;
+        color: $dark-color;
       }
       @for $i from 1 through 10 {
         .tag:nth-child(#{$i}n):hover {
-          color: #555;
+          color: $dark-color;
           background-color: hsl($i * 36, 70%, 70%);
         }
       }
