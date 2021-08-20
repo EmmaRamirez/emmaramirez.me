@@ -1,3 +1,12 @@
+## [0.23.3](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.23.2...0.23.3) (2021-08-20)
+
+
+### Bug Fixes
+
+* make nuzlocke-generator article link work ([d17f478](https://github.com/EmmaRamirez/emmaramirez.me/commit/d17f4785bfe889f0bcd5a0d6dd28bfb787f01430))
+
+
+
 ## [0.23.2](https://github.com/EmmaRamirez/emmaramirez.me/compare/0.23.1...0.23.2) (2021-08-16)
 
 
