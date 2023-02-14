@@ -18,3 +18,4 @@ __drafts
 .cache
 public
 coverage
+node_modules

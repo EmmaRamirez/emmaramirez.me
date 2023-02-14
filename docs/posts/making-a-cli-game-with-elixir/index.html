@@ -1,0 +1,50 @@
+
+<html lang=en>
+    <head>
+        <title>emmaramirez.me</title>
+        <meta charset='utf-8'>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+        <link href='../../prism.css' rel='stylesheet' />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="no tags">
+        <meta name="description" content="<p>Out of curiosity, I’ve currently been experimenting with the <a href='https://elixir-lang.org/'>Elixir programming language</a>, and one of my goals to get a good feel for the language is building a tiny game in the command line. Why? Because it’s fun!..</p>
+">
+        
+    </head>
+    <body class=markdown-body>
+        <div id='markdown' style='display: none'><h1>Making a CLI Game with Elixir</h1>
+<p>Out of curiosity, I’ve currently been experimenting with the <a href="https://elixir-lang.org/">Elixir programming language</a>, and one of my goals to get a good feel for the language is building a tiny game in the command line. Why? Because it’s fun!</p>
+<blockquote>
+<p>Note: This is being written about two weeks into learning Elixir, so I’m certain that some of the patterns &amp; ideas here are not prime Elixir. I’ll do my best to update this blog post over time as I learn more.</p>
+</blockquote>
+<h2>Beginning the Brew</h2>
+<p>The first thing, <a href="https://elixir-lang.org/getting-started/introduction.html">after installing Elixir itself</a> is creating the file in question.</p>
+<pre><code class="language-bash">touch game.ex
+elixirc game.ex
+</code></pre>
+<p><code>.ex</code> is the file extension for Elixir, and the <code>elixirc</code> command is how we run Elixir files (it stands for Elixir compile).</p>
+<p>We begin our file by creating a module for our Game:</p>
+<pre><code class="language-elixir">defmodule Game do
+    def start_game do
+        IO.puts &quot;Hello! Welcome to Elixirtopia. What would you like to do?&quot;
+    end
+end
+</code></pre>
+<p><code>defmodule</code> declares our module and <code>start_game</code> is a method that prints to the console. When you run <code>elixirc game.ex</code>, you should see “Hello! Welcome to Elixirtopia. What would you like to do?” printed to the screen.</p>
+</div>
+        <div id='app' data-read-time=1></div>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <script src='../../bundle.js'></script>
+        <script src='../../prism.js'></script>
+        </script><!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79007755-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-79007755-1');
+        </script>
+    </body>
+</html>

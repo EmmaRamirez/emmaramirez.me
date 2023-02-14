@@ -12,6 +12,17 @@ const projects = require('../src/data.json').projects;
 const links = require('../src/data.json').links;
 const config = require('../website.config');
 
+const srcDir = `maya`;
+const destDir = `docs/maya`;
+                                 
+// To copy a folder or file, select overwrite accordingly
+try {
+  fse.copySync(srcDir, destDir, { overwrite: true })
+  console.log('success!')
+} catch (err) {
+  console.error(err)
+}
+
 const store = {
   articles,
 };
