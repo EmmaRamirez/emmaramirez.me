@@ -10,6 +10,35 @@
   background: #42f4f4;
 }
 
+.app-notice {
+  background: $dark-color;
+  border: 1px solid #e0e0e0;
+  border-radius: .25rem;
+  box-shadow: 0 0 1rem rgba($color: #000000, $alpha: 0.3);
+  color: #eee;
+  font-size: 1.5rem;
+  padding: 1rem;
+  text-align: center;
+  line-height: 2;
+}
+
+.app-notice a {
+  padding: 0.25rem;
+  color: #4286f4;
+  transition: 250ms ease-in all;
+
+  &:hover {
+    background: $dark-code-color;
+    color: lighten($color: #4286f4, $amount: 0.2);
+  }
+}
+
+body:has(.app-notice) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 body {
   font-family: 'Merriweather', 'Georgia', sans-serif;
   overflow-x: hidden;
