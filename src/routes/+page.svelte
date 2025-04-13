@@ -11,6 +11,8 @@
 
 <section>
 	<div>hi</div>
+
+	<p>my name’s emma and my biggest passion is making stuff with code. im into startups, finance, and fashion.</p>
 </section>
 
 <style>
