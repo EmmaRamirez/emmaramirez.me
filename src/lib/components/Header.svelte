@@ -4,10 +4,8 @@
 	import github from '$lib/images/github.svg';
 </script>
 
-<header>
-	<nav>
-		navigation
-	</nav>
+<header class="text-center bg-[var(--caroline-blue-500)] text-white p-4 max-w-screen-sm translate-y-[-3rem] ">
+	hi, welcome to my website.
 </header>
 
 <style>

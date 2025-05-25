@@ -1,6 +1,48 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@layer base {
+  :root {
+
+    --caroline-blue-base: hsla(217, 97%, 76%, 1);
+    --caroline-blue-100: hsl(217, 68%, 63%);
+    --caroline-blue-200: hsl(217, 90%, 76%);
+    --caroline-blue-400: hsl(217, 85%, 75%);
+    --caroline-blue-500: hsla(217, 97%, 76%, 1);
+    --caroline-blue-600: hsl(217, 78%, 65%);
+
+    --sandy-tan-400: hsl(36, 38%, 90%);
+    --sandy-tan-500: hsl(36, 38%, 85%);
+    --sandy-tan-600: hsl(36, 38%, 80%);
+    --sandy-tan-700: hsl(36, 38%, 75%);
+    --sandy-tan-800: hsl(36, 38%, 70%);
+    --sandy-tan-900: hsl(36, 38%, 65%);
+
+    --transit-yellow-500: hsl(47, 100%, 78%);
+    --transit-yellow-600: hsl(47, 100%, 73%);
+    --transit-yellow-700: hsl(47, 100%, 68%);
+    --transit-yellow-800: hsl(47, 100%, 63%);
+    --transit-yellow-900: hsl(47, 100%, 58%);
+
+    --liver-brown-500: hsl(0, 9%, 32%);
+
+    --blush-pink-500: #ED9CEF;
+
+    --light-rose-500: #FFCBCB;
+
+    --magic-mint-500: #B8FFE5;
+  }
+}
 
 @layer base {
   :root {
@@ -65,11 +107,34 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+
+.source-serif-4-<uniquifier> {
+  font-family: "Source Serif 4", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+
+.inter-<uniquifier> {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+body {
+  background-color: var(--sandy-tan-600);
+  font-family: "Source Serif 4", serif;
+}
+
+a {
+  color: var(--liver-brown-500);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+a:hover {
+  color: var(--caroline-blue-500);
+  transition: color 0.2s ease-in-out;
 }

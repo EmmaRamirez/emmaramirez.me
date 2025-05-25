@@ -6,9 +6,10 @@
 </script>
 
 <div class="app">
-	<Header />
 
-	<main>
+	<main class="border-6 border-[var(--liver-brown-500)] rounded-lg p-4">
+		<Header />
+
 		{@render children()}
 	</main>
 
@@ -33,6 +34,7 @@
 		max-width: 64rem;
 		margin: 0 auto;
 		box-sizing: border-box;
+		margin-top: 3rem;
 	}
 
 	footer {
