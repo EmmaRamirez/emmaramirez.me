@@ -80,17 +80,9 @@
 	
 </script>
 
-<div id="image-block" class="image-block disco-cursor sparkle relative {className}" onmousemove={moveDisco} onmouseleave={stopDisco}>
-	<figure class="absolute top-0 left-0" id="getMe">
-		<img id="image" src={image} {alt} class="rounded-lg" />
-		<figcaption>{caption}</figcaption>
-	</figure>
-    <canvas class="absolute top-0 left-0 " id="canvas"></canvas>
-</div>
-
-<!-- <ImageBlock {image} {alt} {caption} {className} imageId="image" onmousemove={moveDisco} onmouseleave={stopDisco} >
-    <canvas class="absolute top-0 left-0 " id="canvas"></canvas>
-</ImageBlock> -->
+<ImageBlock {image} {alt} {caption} class={className} imageId="image" onmousemove={moveDisco} onmouseleave={stopDisco}>
+    <canvas class="absolute top-0 left-0" id="canvas"></canvas>
+</ImageBlock>
 
 
 <style>
