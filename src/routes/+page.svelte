@@ -80,7 +80,7 @@
 	<InterestsBlock />
 
 	<DiscoBlock
-		class="disco-cursor translate-x-[4vw] translate-y-[-6vh] transition-all duration-300"
+		class="cursor-disco translate-x-[4vw] translate-y-[-6vh] transition-all duration-300"
 		image={disco}
 		alt="disco"
 		caption="i'm good at disco"
@@ -148,7 +148,7 @@
 		title="fix: fix game selection bug"
 		hash="bef44aa"
 		date="committed 3 weeks ago"
-		class="self-center"
+		class="self-center translate-x-[4vw] translate-y-[4vh]"
 	/>
 
 	<Bloblet3
@@ -161,13 +161,13 @@
 	/>
 
 	<ImageBlock
-		class="transition-all duration-300 translate-x-[12vw] translate-y-[4vh]"
+		class="transition-all duration-300 translate-x-[12vw] translate-y-[8vh] border-6 border-[var(--liver-brown-500)] bg-[var(--liver-brown-500)]"
 		image={houston}
 		alt="disco"
 	>
 		{#snippet children()}
 			<div
-				class="location-text absolute top-[29.5vh] w-full p-4 font-sans text-[3rem] font-bold text-[var(--sandy-tan-600)] bg-blend-multiply"
+				class="location-text location-text absolute bottom-0 w-full p-4 font-sans text-[3rem] font-bold text-[var(--sandy-tan-600)] bg-blend-multiply"
 			>
 				Houston, TX
 			</div>
@@ -203,7 +203,8 @@
 	</ProjectBlock>
 
 	<ArticleBlock
-		class="mt-8 mb-8 self-center justify-self-center"
+		class="self-center justify-self-center translate-x-[-10vw]"
+		titleClass="bg-[var(--liver-brown-800)] text-white p-2"
 		title="coffeescript: a lesson"
 		content="the greeks considered hubris to be the worst sin. it's a lesson that's been lost on many of us. coffeescript attempted to be better than javascript, and it was. it was elegant, expressive, and had a much better toolchain. so why did it fail?"
 		width="sm"
@@ -214,6 +215,14 @@
 
 <style>
 	.location-text {
-		/* -webkit-text-stroke: 2px black; */
+		-webkit-text-stroke: 2px white;
+		-webkit-text-fill-color: transparent;
+
 	}
+
+	/* use for testing layout stuff */
+	/* 
+	:global(.grid > *) {
+		outline: 1px solid var(--caroline-blue-500);
+	} */
 </style>

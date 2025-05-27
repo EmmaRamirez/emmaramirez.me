@@ -15,8 +15,8 @@
 
 
 <div class="image-block sparkle relative {className}" {...imageProps}>
-	<figure class="absolute top-0 left-0">
-		<img id={imageId} src={image} {alt} class="rounded-lg" />
+	<figure class="absolute top-0 left-0 h-full w-full">
+		<img id={imageId} src={image} {alt} class="rounded-lg h-full w-full object-cover" />
 		{#if caption}
             <figcaption>{caption}</figcaption>
         {/if}
