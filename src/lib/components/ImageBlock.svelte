@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
-
+	import type { SvelteHTMLElements } from "svelte/elements";
 
     interface ImageBlockProps extends svelteHTML.HTMLAttributes<HTMLImageElement> {
         image: string;
