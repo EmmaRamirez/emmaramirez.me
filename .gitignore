@@ -27,3 +27,5 @@ vite.config.ts.timestamp-*
 src/lib/paraglide
 
 *storybook.log
+.old
+.old/*
