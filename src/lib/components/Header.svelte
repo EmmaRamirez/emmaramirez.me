@@ -1,7 +1,9 @@
 <script lang="ts">
 
+	let { title, headerColor = 'var(--caroline-blue-600)' } = $props();
+
 </script>
 
-<header class="text-center bg-[var(--caroline-blue-600)] text-white p-4 max-w-screen-sm translate-y-[-3rem] flex justify-between">
-	<span>hi, welcome to my website.</span>
+<header style="--header-color: {headerColor}" class="text-center bg-[var(--header-color)] text-white p-4 max-w-screen-sm translate-y-[-3rem] flex justify-between transition-all duration-300">
+	<span>{title}</span>
 </header>

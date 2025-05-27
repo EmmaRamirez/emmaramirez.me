@@ -1,14 +1,21 @@
 <script lang="ts">
 	import Header from '$lib/components/Header.svelte';
+	import { headerColor, title } from '$lib/stores';
+	import { onMount } from 'svelte';
 	import '../app.css';
 
 	let { children } = $props();
+
+
+	title.set('hi, welcome to my website.');
+	headerColor.set('var(--caroline-blue-600)');
+
 </script>
 
 <div class="app">
 
 	<main class="border-6 border-[var(--liver-brown-500)] rounded-lg p-4">
-		<Header />
+		<Header title={$title} headerColor={$headerColor} />
 
 		{@render children()}
 	</main>

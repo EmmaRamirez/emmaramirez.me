@@ -20,7 +20,12 @@
     --caroline-blue-400: hsl(217, 85%, 75%);
     --caroline-blue-500: hsla(217, 97%, 76%, 1);
     --caroline-blue-600: hsl(217, 78%, 65%);
+    --caroline-blue-700: hsl(217, 78%, 60%);
+    --caroline-blue-800: hsl(217, 78%, 55%);
+    --caroline-blue-900: hsl(217, 78%, 50%);
 
+    --sandy-tan-200: hsl(36, 38%, 95%);
+    --sandy-tan-300: hsl(36, 38%, 90%);
     --sandy-tan-400: hsl(36, 38%, 90%);
     --sandy-tan-500: hsl(36, 38%, 85%);
     --sandy-tan-600: hsl(36, 38%, 80%);
@@ -148,13 +153,13 @@ body {
   font-family: "Source Serif 4", serif;
 }
 
-a {
+a:not(.style-none) {
   color: var(--liver-brown-500);
   text-decoration: underline;
   font-weight: 600;
 }
 
-a:hover {
+a:not(.style-none):hover {
   color: var(--liver-brown-900);
   transition: color 0.2s ease-in-out;
 }

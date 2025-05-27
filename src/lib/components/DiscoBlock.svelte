@@ -63,7 +63,7 @@
                 rands.push(rand);
 
                 ctx.beginPath();
-                ctx.fillStyle = `rgba(255, 255, 255, ${rand})`;
+                ctx.fillStyle = `rgba(${255 - (rand * 10)}, ${255 - (rand * 10)}, ${255 - (rand * 10)}, ${rand})`;
                 ctx.fillRect(j * discoSquareSize, i * discoSquareSize, discoSquareSize, discoSquareSize);
                 // ctx.fill();
             }

@@ -18,6 +18,9 @@
 	import houston from '$lib/images/photos/houston.jpeg';
 	import profile2 from '$lib/images/profile-2.png';
 	import DiscoBlock from '$lib/components/DiscoBlock.svelte';
+	import CommitBlock from '$lib/components/CommitBlock.svelte';
+	import Bloblet4 from '$lib/components/Bloblet4.svelte';
+	import BlobletCreatorBlock from '$lib/components/BlobletCreatorBlock.svelte';
 
 	const newPoints = parseDataPoints(
 		'M48.7387 180.368C120.837 131.797 215.458 24.6285 162.512 5.84484C109.565 -12.9388 140.297 28.8492 63.6784 2.88881C-12.94 -23.0716 -23.3593 228.94 48.7387 180.368Z'
@@ -134,37 +137,79 @@
 		width="lg"
 	/>
 
+	
+
+	<div
+		class="circle absolute top-[120vh] left-[-15vh] z-[-1] h-[30vh] w-[30vh] rounded-full bg-[var(--liver-brown-500)]"
+	></div>
+
+
+	<CommitBlock
+		title="fix: fix game selection bug"
+		hash="bef44aa"
+		date="committed 3 weeks ago"
+		class="self-center"
+	/>
+
+	<Bloblet3
+		id={4}
+		class="absolute top-[94vh] left-[20vh] z-[-1] h-[30vh] w-[30vh]"
+		startColor="var(--lawn-green-500)"
+		stopColor="var(--lawn-green-700)"
+		numPoints={12}
+		radius={80}
+	/>
+
 	<ImageBlock
-		class="translate-x-[4vw] translate-y-[4vh] transition-all duration-300"
+		class="transition-all duration-300 translate-x-[12vw] translate-y-[4vh]"
 		image={houston}
 		alt="disco"
 	>
 		{#snippet children()}
 			<div
-				class="location-text absolute top-[26vh] w-full p-4 font-sans text-[3rem] font-bold text-[var(--sandy-tan-500)] bg-blend-multiply"
+				class="location-text absolute top-[29.5vh] w-full p-4 font-sans text-[3rem] font-bold text-[var(--sandy-tan-600)] bg-blend-multiply"
 			>
 				Houston, TX
 			</div>
 		{/snippet}
 	</ImageBlock>
 
-	<div
-		class="circle absolute top-[94vh] left-[-15vh] z-[-1] h-[30vh] w-[30vh] rounded-full bg-[var(--liver-brown-500)]"
-	></div>
-
-	<div class="empty h-64 w-64"></div>
-
-	<div
-		class="commit-block h-22 rounded-lg border border-[var(--liver-brown-500)] bg-[var(--lawn-green-500)] font-sans"
-	>
-		<div class="flex justify-between border-b border-[var(--lawn-green-900)] p-2 pb-2 items-center">
-			<div class="commit-block-text">fix: fix game selection bug</div>
-			<div class="commit-block-hash font-mono text-s bg-[var(--lawn-green-600)] px-2 rounded-lg">bef44aa</div>
-		</div>
-		<div class="commit-block-date p-2">committed 3 weeks ago</div>
+	<div class="flex flex-col gap-4">
+		<CommitBlock
+			title="fix: fix game selection bug"
+			hash="bef44aa"
+			date="committed 3 weeks ago"
+			class=""
+		/>
+		<CommitBlock
+			title="fix: fix game selection bug"
+			hash="bef44aa"
+			date="committed 3 weeks ago"
+			class=""
+		/>
 	</div>
 
-	<div class="empty col-span-3 h-64 w-64"></div>
+	<ProjectBlock
+		class="col-span-2 p-4 max-w-[20rem] self-center justify-self-center"
+		contentClassName="flex-col "
+		imageClassName="hidden"
+		title="tsar"
+		pill="v1.0.0"
+		image="https://placehold.co/200x100"
+	>
+		{#snippet description()}
+			<strong>typescript</strong> suite of awesome resources. a small library of utilities. inspired by haskell
+		{/snippet}
+	</ProjectBlock>
+
+	<ArticleBlock
+		class="mt-8 mb-8 self-center justify-self-center"
+		title="coffeescript: a lesson"
+		content="the greeks considered hubris to be the worst sin. it's a lesson that's been lost on many of us. coffeescript attempted to be better than javascript, and it was. it was elegant, expressive, and had a much better toolchain. so why did it fail?"
+		width="sm"
+	/>
+
+	<BlobletCreatorBlock />
 </section>
 
 <style>

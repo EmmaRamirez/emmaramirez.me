@@ -17,6 +17,10 @@
         };
         numPoints?: number;
         radius?: number;
+		baseNoiseStep?: number;
+		smileyFace?: boolean;
+		stroke?: string;
+		strokeWidth?: number;
 	}
 
 	let {
@@ -27,7 +31,11 @@
 		stopColor = 'var(--stopColor)',
         svgProps,
         numPoints = 6,
-        radius = 75
+        radius = 75,
+		baseNoiseStep = 0.0005,
+		smileyFace = false,
+		stroke,
+		strokeWidth = 2
 	}: Bloblet3Props = $props();
 
     let points =
@@ -94,7 +102,6 @@
       for when we modulate the values later */
 				originX: x,
 				originY: y,
-				// more on this in a moment!
 				noiseOffsetX: Math.random() * 1000,
 				noiseOffsetY: Math.random() * 1000
 			});
@@ -102,6 +109,23 @@
 
 		return points;
 	}
+
+	let previousSignature = $derived([radius, numPoints, baseNoiseStep]);
+
+	$inspect('previousSignature', previousSignature);
+
+	$effect(() => {
+		if (JSON.stringify(previousSignature) !== JSON.stringify([radius, numPoints, baseNoiseStep])) {
+			console.log('recreating points with', radius, numPoints, baseNoiseStep);
+			points = createPoints();
+			path = spline(points, 
+						1,
+						true
+					);
+
+			previousSignature = [radius, numPoints, baseNoiseStep];
+		}
+	});
 
 	function animate() {
 		let pathEl = document.getElementById('path-' + id);
@@ -164,7 +188,14 @@
 		</linearGradient>
 	</defs>
 
-	<path id="path-{id}" d={path} fill="url(#gradient-{id})" />
+	<path {stroke} stroke-width={strokeWidth} id="path-{id}" d={path} fill="url(#gradient-{id})" />
+
+	<!-- smily face path -->
+	 {#if smileyFace}
+		<path id="smily-face" d="M 80 100 Q 100 120 120 100" stroke="black" stroke-width="2" fill="none" />
+		<circle id="left-eye" cx="85" cy="85" r="5" fill="black" />
+		<circle id="right-eye" cx="115" cy="85" r="5" fill="black" />
+	 {/if}
 </svg>
 
 
