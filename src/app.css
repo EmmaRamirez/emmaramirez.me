@@ -28,6 +28,8 @@
     --sandy-tan-800: hsl(36, 38%, 70%);
     --sandy-tan-900: hsl(36, 38%, 65%);
 
+    --eggshell-white-500: hsl(40, 38%, 90%);
+
     --transit-yellow-500: hsl(47, 100%, 78%);
     --transit-yellow-600: hsl(47, 100%, 73%);
     --transit-yellow-700: hsl(47, 100%, 68%);
@@ -35,12 +37,30 @@
     --transit-yellow-900: hsl(47, 100%, 58%);
 
     --liver-brown-500: hsl(0, 9%, 32%);
+    --liver-brown-600: hsl(0, 9%, 27%);
+    --liver-brown-700: hsl(0, 9%, 25%);
+    --liver-brown-800: hsl(0, 9%, 20%);
+    --liver-brown-900: hsl(0, 9%, 15%);
 
     --blush-pink-500: #ED9CEF;
 
     --light-rose-500: #FFCBCB;
 
     --magic-mint-500: #B8FFE5;
+
+    --lawn-green-500: hsl(128, 61%, 47%);
+    --lawn-green-600: hsl(128, 61%, 42%);
+    --lawn-green-700: hsl(128, 61%, 37%);
+    --lawn-green-800: hsl(128, 61%, 32%);
+    --lawn-green-900: hsl(128, 61%, 27%);
+
+    --lang-svelte: #ff3e00;
+    --lang-rust: #dea584;
+    --lang-elixir: #6e4a7e;
+    --lang-typescript: #3178c6;
+    --lang-javascript: #f1e05a;
+    --lang-haskell: #5e5086;
+    
   }
 }
 
@@ -135,6 +155,10 @@ a {
 }
 
 a:hover {
-  color: var(--caroline-blue-500);
+  color: var(--liver-brown-900);
   transition: color 0.2s ease-in-out;
+}
+
+.disco-cursor {
+  cursor: url(https://cdn.custom-cursor.com/db/10911/32/minimal-disco-ball-pointer.png), pointer !important;
 }
