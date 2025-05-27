@@ -159,7 +159,7 @@
 	>
 		<div class="flex justify-between border-b border-[var(--lawn-green-900)] p-2 pb-2 items-center">
 			<div class="commit-block-text">fix: fix game selection bug</div>
-			<div class="commit-block-hash font-mono text-sm bg-[var(--lawn-green-600)] p-1 rounded-lg">bef44aa</div>
+			<div class="commit-block-hash font-mono text-s bg-[var(--lawn-green-600)] px-2 rounded-lg">bef44aa</div>
 		</div>
 		<div class="commit-block-date p-2">committed 3 weeks ago</div>
 	</div>
