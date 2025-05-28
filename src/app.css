@@ -35,6 +35,10 @@
 
     --eggshell-white-500: hsl(40, 38%, 90%);
 
+    --transit-yellow-100: hsl(47, 100%, 96%);
+    --transit-yellow-200: hsl(47, 100%, 85%);
+    --transit-yellow-300: hsl(47, 100%, 80%);
+    --transit-yellow-400: hsl(47, 100%, 75%);
     --transit-yellow-500: hsl(47, 100%, 78%);
     --transit-yellow-600: hsl(47, 100%, 73%);
     --transit-yellow-700: hsl(47, 100%, 68%);

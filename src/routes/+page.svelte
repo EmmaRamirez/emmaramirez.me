@@ -56,8 +56,8 @@
 	</div>
 
 	<ArticleBlock
-		title="this is an article"
-		content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam..."
+		title="Hegel & Web Design"
+		content="As much as web design is a visual medium both restrained and bolstered by technological innovations, I find that it cycles in the same way art movements do. German philosopher Friedrich Hegel split up history into three moments: the thesis, that is the orignal thought, the antithesis, that is the thought that opposes the thesis, and the synthesis, that is the thought that combines the thesis and the antithesis. I think web design starts in the 1990s when the landscape is nothing but text. Innovation appears and takes hold and so do certain design choices -- rounded corners and shadows are that era's holy grail. The antithesis is the 2000s, when the web is a visual medium and design choices are more restrained. The synthesis is the 2010s, when the web is a visual medium and design choices are more restrained. The thesis is the 2020s, when the web is a visual medium and design choices are more restrained."
 	/>
 
 	<Bloblet3

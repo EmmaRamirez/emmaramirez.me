@@ -3,12 +3,15 @@
 	import { headerColor, title } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import '../app.css';
+	import { afterNavigate } from '$app/navigation';
 
 	let { children } = $props();
 
 
-	title.set('hi, welcome to my website.');
-	headerColor.set('var(--caroline-blue-600)');
+	afterNavigate(() => {
+		title.set('hi, welcome to my website.');
+		headerColor.set('var(--caroline-blue-600)');
+	});
 
 </script>
 

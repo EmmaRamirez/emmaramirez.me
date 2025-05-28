@@ -44,7 +44,7 @@
 		>(basePoints ?? createPoints());
 	
 	let simplex = createNoise2D();
-	let noiseStep = 0.0005;
+	let noiseStep = 0.0001;
     let animationId: number = $state(0);
     let path = $derived(spline(points, 1, true));
 
