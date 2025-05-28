@@ -49,12 +49,42 @@
         return delayNavigation();
     });
 
+
+    let top = $state(0);
+
+    function slowScroll(content: HTMLElement) {
+        
+        content.style.overflow = 'auto';
+        const height = content?.scrollHeight;
+
+        const interval = setInterval(() => {
+            top = top + 20;
+            content?.scrollTo({
+                top,
+                behavior: 'smooth'
+            });
+
+            if (top >= height) {
+                clearInterval(interval);
+            }
+        }, 1000);
+    }
+
+    function handleMouseOver(e: MouseEvent) {
+        const content = document.getElementById('content');
+
+        slowScroll(content);
+    }
+
 </script>
 
-<div class={cn("cursor-pointer article-block flex flex-col gap-3 relative z-index-2 hover:scale-105 transition-all duration-300", isNavigating && "z-2", className)} id={articleId}>
+<div class={cn("cursor-pointer article-block bg-[var(--transit-yellow-500)] border border-[var(--liver-brown-500)] rounded-lg flex flex-col gap-3 relative z-index-2 hover:scale-105 transition-all duration-300 overflow-hidden", isNavigating && "z-2", className)} id={articleId} on:mouseover={handleMouseOver}>
     <a class="style-none cursor-pointer" href="blog/article">
-    <div class={cn("article-block-title text-base font-bold", titleClass)}>{title}</div>
-    <p class={cn("article-block-content bg-[var(--transit-yellow-500)] border border-[var(--liver-brown-500)] rounded-lg p-4 max-h-48 overflow-hidden text-ellipsis {widthMap[width]}", contentClass)}>
+        <div class="flex items-center justify-between">
+            <div class={cn("article-block-title text-xl font-bold pl-4 py-2", titleClass)}>{title}</div>
+            <!-- <span class="article-block-content-tag bg-[var(--liver-brown-500)] text-white p-2 uppercase font-mono">Article</span> -->
+        </div>
+    <p id="content"class={cn("article-block-content bg-[var(--transit-yellow-500)] p-4 py-0 max-h-48 text-ellipsis {widthMap[width]}", contentClass)}>
         {#if typeof content != 'string'}
             {@render content()}
         {:else}
@@ -63,4 +93,10 @@
     </p>
 </a>
 </div>
+
+<style>
+    .article-block-content::-webkit-scrollbar {
+        display: none;
+    }
+</style>
 

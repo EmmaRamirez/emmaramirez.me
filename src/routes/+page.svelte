@@ -216,7 +216,6 @@
 
 	<BlobletCreatorBlock />
 
-	<div class="col-span-2 flex flex-col gap-4 h-48"></div>
 
 	<Bloblet3
 		id={6}
@@ -225,6 +224,20 @@
 		stopColor="var(--magic-mint-500)"
 		numPoints={12}
 		radius={80}
+	/>
+
+	<ArticleBlock
+		class="row-span-2 mb-auto"
+		title="coffeescript: a lesson"
+		content="the greeks considered hubris to be the worst sin. it's a lesson that's been lost on many of us. coffeescript attempted to be better than javascript, and it was. it was elegant, expressive, and had a much better toolchain. so why did it fail?"
+		width="sm"
+	/>
+
+	<ArticleBlock
+		class="self-center justify-self-center"
+		title="coffeescript: a lesson"
+		content="the greeks considered hubris to be the worst sin. it's a lesson that's been lost on many of us. coffeescript attempted to be better than javascript, and it was. it was elegant, expressive, and had a much better toolchain. so why did it fail?"
+		width="sm"
 	/>
 </section>
 
