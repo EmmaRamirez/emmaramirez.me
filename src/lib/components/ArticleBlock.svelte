@@ -52,7 +52,7 @@
 </script>
 
 <div class={cn("cursor-pointer article-block flex flex-col gap-3 relative z-index-2 hover:scale-105 transition-all duration-300", isNavigating && "z-2", className)} id={articleId}>
-    <a class="style-none" href="blog/article">
+    <a class="style-none cursor-pointer" href="blog/article">
     <div class={cn("article-block-title text-base font-bold", titleClass)}>{title}</div>
     <p class={cn("article-block-content bg-[var(--transit-yellow-500)] border border-[var(--liver-brown-500)] rounded-lg p-4 max-h-48 overflow-hidden text-ellipsis {widthMap[width]}", contentClass)}>
         {#if typeof content != 'string'}

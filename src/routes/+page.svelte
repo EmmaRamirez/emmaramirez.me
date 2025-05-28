@@ -166,7 +166,7 @@
 	/>
 
 	<ImageBlock
-		class="transition-all duration-300 translate-x-[12vw] translate-y-[8vh] border-6 border-[var(--liver-brown-500)] bg-[var(--liver-brown-500)]"
+		class="transition-all duration-300  border-6 border-[var(--liver-brown-500)] bg-[var(--liver-brown-500)]"
 		image={houston}
 		alt="disco"
 	>
@@ -179,7 +179,7 @@
 		{/snippet}
 	</ImageBlock>
 
-	<div class="flex flex-col gap-4">
+	<div class="col-span-2 flex flex-col gap-4">
 		<CommitBlock
 			title="fix: fix game selection bug"
 			hash="bef44aa"
@@ -195,7 +195,7 @@
 	</div>
 
 	<ProjectBlock
-		class="col-span-2 p-4 max-w-[20rem] self-center justify-self-center"
+		class="col-span-2 p-4 max-w-[20rem] self-center justify-self-center ml-auto"
 		contentClassName="flex-col "
 		imageClassName="hidden"
 		title="tsar"
@@ -208,13 +208,24 @@
 	</ProjectBlock>
 
 	<ArticleBlock
-		class="self-center justify-self-center translate-x-[-10vw]"
+		class="self-center justify-self-center translate-x-[10vw]"
 		title="coffeescript: a lesson"
 		content="the greeks considered hubris to be the worst sin. it's a lesson that's been lost on many of us. coffeescript attempted to be better than javascript, and it was. it was elegant, expressive, and had a much better toolchain. so why did it fail?"
 		width="sm"
 	/>
 
 	<BlobletCreatorBlock />
+
+	<div class="col-span-2 flex flex-col gap-4 h-48"></div>
+
+	<Bloblet3
+		id={6}
+		class="absolute bottom-0 left-0 z-[-1] !w-full scale-x-350"
+		startColor="var(--magic-mint-500)"
+		stopColor="var(--magic-mint-500)"
+		numPoints={12}
+		radius={80}
+	/>
 </section>
 
 <style>
