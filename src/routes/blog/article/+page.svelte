@@ -42,6 +42,7 @@
 				are more restrained. The thesis is the 2020s, when the web is a visual medium and design
 				choices are more restrained.
 			</p>
+            <h2>Subheading</h2>
             <p>
 				As much as web design is a visual medium both restrained and bolstered by technological
 				innovations, I find that it cycles in the same way art movements do. German philosopher
@@ -57,6 +58,7 @@
             <p>
                 Anywho...
             </p>
+            <h2>Subheading 2</h2>
             <p>
                 Friedrich Hegel split up history into three moments: the thesis, that is the orignal
 				thought, the antithesis, that is the thought that opposes the thesis, and the synthesis,

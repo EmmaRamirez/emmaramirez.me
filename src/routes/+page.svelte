@@ -21,10 +21,15 @@
 	import CommitBlock from '$lib/components/CommitBlock.svelte';
 	import Bloblet4 from '$lib/components/Bloblet4.svelte';
 	import BlobletCreatorBlock from '$lib/components/BlobletCreatorBlock.svelte';
+	import { afterNavigate } from '$app/navigation';
 
 	const newPoints = parseDataPoints(
 		'M48.7387 180.368C120.837 131.797 215.458 24.6285 162.512 5.84484C109.565 -12.9388 140.297 28.8492 63.6784 2.88881C-12.94 -23.0716 -23.3593 228.94 48.7387 180.368Z'
 	);
+
+	afterNavigate(() => {
+		document.body.style.backgroundColor = 'var(--sandy-tan-600)';
+	})
 </script>
 
 <svelte:head>
@@ -69,7 +74,7 @@
 
 	<TopLanguages />
 
-	<aside class="self-center text-xl">
+	<aside class="self-center ml-4 text-xl">
 		<p>
 			Feel free to browse <a href="/archives">the archives</a>, check out my
 			<a href="https://github.com/emmaramirez">Github</a>, or add me on
@@ -204,7 +209,6 @@
 
 	<ArticleBlock
 		class="self-center justify-self-center translate-x-[-10vw]"
-		titleClass="bg-[var(--liver-brown-800)] text-white p-2"
 		title="coffeescript: a lesson"
 		content="the greeks considered hubris to be the worst sin. it's a lesson that's been lost on many of us. coffeescript attempted to be better than javascript, and it was. it was elegant, expressive, and had a much better toolchain. so why did it fail?"
 		width="sm"

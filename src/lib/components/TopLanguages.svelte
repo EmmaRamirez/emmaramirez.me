@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from "$lib/utils";
+
     const languagesBase = [
         { name: 'svelte', percentage: (3/10)*100, color: 'var(--lang-svelte)' },
         { name: 'rust', percentage: (2/10)*100, color: 'var(--lang-rust)' },
@@ -27,23 +29,22 @@
 </script>
 
 <div class="top-languages relative z-index-2">
-    <div class="top-languages-title">top languages [by commit history]</div>
     <div
-        class="top-languages-list rounded-sm gap-2 border border-[var(--liver-brown-500)] bg-[var(--blush-pink-500)] p-2 relative"
+        class="top-languages-list rounded-sm gap-2 border-2 border-[var(--liver-brown-500)]  p-2 relative"
     >
-    {#each languages as language, idx}
-        
-        <div on:mouseover={() => setColor(languagesBase[idx].color)} on:mouseleave={() => resetColors()} style="--color: {language.color};" class="top-languages-item flex items-center justify-between gap-2 p-1 m-1 rounded-sm z-2 relative text-white bg-[var(--liver-brown-500)] hover:bg-[var(--liver-brown-600)] cursor-pointer">
+        <div class="top-languages-title flex items-center justify-between mb-2"><span>top languages</span><span>by<select>
+            <option value="commit-history">commit history</option>
+        </select></span></div>
+
+        <div class="grid grid-cols-2 gap-2">
+        {#each languages as language, idx} 
+        <div style="--color: {language.color};" class={cn("top-languages-item flex items-center justify-between  p-1 m-1 z-2 relative bg-transparent border-[var(--color)]  cursor-pointer border-2 rounded-lg ")}>
             <span>{language.name}</span>
             <span class="pill rounded-full  px-2">{language.percentage}%</span>
         </div>
         {/each}
-
-        <div class="top-languages-layers absolute left-0 top-0 w-full h-full z-1">
-        {#each languages as language}
-            <div class="top-languages-layer w-full transition-all duration-300 ease-in-out" style="--color: {language.color}; --height: {language.percentage}%;"></div>
-        {/each}
-    </div>
+        </div>
+        
     </div>
 
 </div>
@@ -54,6 +55,5 @@
         background-color: var(--color);
         background-blend-mode: multiply;
         /* filter: blur(6px); */
-        opacity: 0.5;        
     }
 </style>
