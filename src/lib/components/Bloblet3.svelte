@@ -47,6 +47,8 @@
 	let noiseStep = 0.0001;
     let animationId: number = $state(0);
     let path = $derived(spline(points, 1, true));
+	let blob = $state();
+	let pathEl = $state<SVGPathElement>();
 
     // $inspect('path', path);
     // $inspect('points', points, 'path', path);
@@ -115,6 +117,8 @@
 	$inspect('previousSignature', previousSignature);
 
 	$effect(() => {
+		previousSignature = [radius, numPoints, baseNoiseStep];
+
 		if (JSON.stringify(previousSignature) !== JSON.stringify([radius, numPoints, baseNoiseStep])) {
 			console.log('recreating points with', radius, numPoints, baseNoiseStep);
 			points = createPoints();
@@ -123,13 +127,12 @@
 						true
 					);
 
-			previousSignature = [radius, numPoints, baseNoiseStep];
+			animate();
 		}
+
 	});
 
 	function animate() {
-		let pathEl = document.getElementById('path-' + id);
-
 		path = spline(modifyPoints(), 
 				1,
                 true
@@ -154,7 +157,7 @@
             animate();
         });
 
-        const svgEl = document.getElementById('svg');
+        // const svgEl = document.getElementById('svg');
         // window.addEventListener('mousemove', (event) => {
         //     // get svg coordinates
         //     const coords = svgEl?.getBoundingClientRect();
@@ -178,7 +181,7 @@
     }
 </script>
 
-<svg viewBox="0 0 200 200" class={className} id="svg" {...svgProps}>
+<svg viewBox="0 0 200 200" class={className} bind:this={blob} {...svgProps}>
 	<defs>
 		<!-- Our gradient fill #gradient -->
 		<linearGradient id="gradient-{id}" gradientTransform="rotate(90)">
@@ -188,7 +191,7 @@
 		</linearGradient>
 	</defs>
 
-	<path {stroke} stroke-width={strokeWidth} id="path-{id}" d={path} fill="url(#gradient-{id})" />
+	<path {stroke} stroke-width={strokeWidth} bind:this={pathEl} d={path} fill="url(#gradient-{id})" />
 
 	<!-- smily face path -->
 	 {#if smileyFace}

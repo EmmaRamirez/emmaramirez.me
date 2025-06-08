@@ -28,7 +28,7 @@
 </script>
 
 
-<div class="hobbies col-span-2 h-48 self-center mb-4 border-4 border-[var(--liver-brown-500)] ml-[-4vw] rounded-lg p-4 relative">
+<div class="hobbies col-span-2 h-48 self-center mb-4 border-4 border-[var(--liver-brown-500)] rounded-lg p-4 relative">
     <h3 class="pb-4 font-bold text-right text-[var(--eggshell-white-500)] text-xl tracking-wide">my interests</h3>
 
     <div class="hobbies-list grid grid-cols-3 gap-4">

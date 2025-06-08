@@ -85,14 +85,13 @@
 	<InterestsBlock />
 
 	<DiscoBlock
-		class="cursor-disco translate-x-[4vw] translate-y-[-6vh] transition-all duration-300"
+		class="cursor-disco  transition-all duration-300"
 		image={disco}
 		alt="disco"
 		caption="i'm good at disco"
 	/>
 
 	<ProjectBlock
-		class=" ml-[-2rem]"
 		title="nuzlocke-generator"
 		pill="v1.16.0"
 		image={'https://placehold.co/300x200'}
@@ -105,7 +104,7 @@
 	</ProjectBlock>
 
 	<ArticleBlock
-		class="ml-8 self-center justify-self-center"
+		class="self-center justify-self-center"
 		title="vibe coding is here. is it any good?"
 		content="okay so by the time you're reading this, you've probably heard about vibe coding. it's a new way to code, and it's a new way to think about code."
 		width="lg"
@@ -121,9 +120,7 @@
 	/>
 
 	<ProjectBlock
-		class="translate-x-[8vw] translate-y-[2vh]"
 		contentClassName="flex-row flex-grow "
-		imageClassName="absolute top-0 right-0 translate-x-[2vw] translate-y-[18vh]"
 		title="fakemon-generator"
 		pill="v2.0.0"
 		image="https://placehold.co/200x100"
@@ -141,7 +138,6 @@
 		content="a less commonly heard about proposal is that for the pipeline operator, which looks like..."
 		width="lg"
 	/>
-
 	
 
 	<div
@@ -153,7 +149,7 @@
 		title="fix: fix game selection bug"
 		hash="bef44aa"
 		date="committed 3 weeks ago"
-		class="self-center translate-x-[4vw] translate-y-[4vh]"
+		class="self-center "
 	/>
 
 	<Bloblet3
@@ -195,7 +191,7 @@
 	</div>
 
 	<ProjectBlock
-		class="col-span-2 p-4 max-w-[20rem] self-center justify-self-center ml-auto"
+		class="col-span-2 p-4 max-w-[20rem] self-center justify-self-center "
 		contentClassName="flex-col "
 		imageClassName="hidden"
 		title="tsar"
@@ -208,7 +204,7 @@
 	</ProjectBlock>
 
 	<ArticleBlock
-		class="self-center justify-self-center translate-x-[10vw]"
+		class="self-center justify-self-center "
 		title="coffeescript: a lesson"
 		content="the greeks considered hubris to be the worst sin. it's a lesson that's been lost on many of us. coffeescript attempted to be better than javascript, and it was. it was elegant, expressive, and had a much better toolchain. so why did it fail?"
 		width="sm"
@@ -227,7 +223,7 @@
 	/>
 
 	<ArticleBlock
-		class="row-span-2 mb-auto"
+		class="row-span-2"
 		title="coffeescript: a lesson"
 		content="the greeks considered hubris to be the worst sin. it's a lesson that's been lost on many of us. coffeescript attempted to be better than javascript, and it was. it was elegant, expressive, and had a much better toolchain. so why did it fail?"
 		width="sm"
