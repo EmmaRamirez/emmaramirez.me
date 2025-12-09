@@ -31,6 +31,18 @@
 
     let boxes = $state<{ x: number, y: number, width: number, height: number }[]>([]);
     let blobPointsCache = $state<{ points: { x: number; y: number }[]; quadrant: { x: number, y: number, width: number, height: number } }[]>([]);
+    
+    // Wave pulse animation state
+    interface WavePulse {
+        x: number;
+        y: number;
+        startTime: number;
+        maxRadius: number;
+        duration: number;
+    }
+    let wavePulses = $state<WavePulse[]>([]);
+    const pulseMaxRadius = 500;
+    const pulseDuration = 1000; // milliseconds
 
     function regenerateCanvas() {
         if (canvas) {
@@ -104,14 +116,14 @@
         quadrant: { x: number, y: number, width: number, height: number }
     ): boolean {
         // Generate radial coordinates for a circle centered at the mouse position
-        const circlePoints = 32;
-        const radialCoordinates: { x: number; y: number }[] = Array.from({ length: circlePoints }, (_, i) => {
-            const angle = (2 * Math.PI * i) / circlePoints;
-            return {
-                x: mouseX + Math.cos(angle) * circleRadius,
-                y: mouseY + Math.sin(angle) * circleRadius
-            };
-        });
+            const circlePoints = 32;
+            const radialCoordinates: { x: number; y: number }[] = Array.from({ length: circlePoints }, (_, i) => {
+                const angle = (2 * Math.PI * i) / circlePoints;
+                return {
+                    x: mouseX + Math.cos(angle) * circleRadius,
+                    y: mouseY + Math.sin(angle) * circleRadius
+                };
+            });
         return radialCoordinates.some(coord => 
             coord.x > quadrant.x - 10 && 
             coord.x < quadrant.x + quadrant.width + 10 && 
@@ -153,17 +165,74 @@
         }
     }
 
+    function drawWavePulses(ctx: CanvasRenderingContext2D) {
+        const now = Date.now();
+        
+        // Draw active pulses
+        wavePulses.forEach(pulse => {
+            const elapsed = now - pulse.startTime;
+            const progress = Math.min(elapsed / pulse.duration, 1);
+            const currentRadius = progress * pulse.maxRadius;
+            
+            // Fade out as pulse expands
+            const opacity = 1 - progress;
+            
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(pulse.x, pulse.y, currentRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = nearColor;
+            ctx.globalAlpha = opacity * 0.8;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.globalAlpha = 1.0;
+            ctx.restore();
+        });
+    }
+
+    function renderCanvas() {
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        
+        // Clean up completed pulses
+        const now = Date.now();
+        wavePulses = wavePulses.filter(pulse => {
+            const elapsed = now - pulse.startTime;
+            return elapsed < pulse.duration;
+        });
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        createboxes(ctx, canvas, boxes);
+        blobPointsCache.forEach(({ points, quadrant }) => {
+            generateBlob(ctx, canvas!, quadrant, points);
+        });
+        drawWavePulses(ctx);
+    }
+
     function generateBlobs(event: MouseEvent, ctx: CanvasRenderingContext2D | null, canvas: HTMLCanvasElement) {
         mouseX = event.clientX;
         mouseY = event.clientY;
-        console.log(mouseX, mouseY);
-
-        if (canvas && ctx) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            createboxes(ctx, canvas, boxes);
-            blobPointsCache.forEach(({ points, quadrant }) => {
-                generateBlob(ctx, canvas!, quadrant, points);
-            });
+        renderCanvas();
+    }
+    
+    function handleClick(event: MouseEvent) {
+        // Create a new wave pulse at the click position
+        wavePulses = [...wavePulses, {
+            x: event.clientX,
+            y: event.clientY,
+            startTime: Date.now(),
+            maxRadius: pulseMaxRadius,
+            duration: pulseDuration
+        }];
+        
+        renderCanvas();
+    }
+    
+    function animationLoop() {
+        if (wavePulses.length > 0) {
+            renderCanvas();
+            requestAnimationFrame(animationLoop);
         }
     }
 
@@ -215,10 +284,20 @@
                 generateBlobs(event, ctx, canvas!);
             });
         };
+        
+        const onClick = (event: MouseEvent) => {
+            handleClick(event);
+            // Start animation loop if not already running
+            if (wavePulses.length === 1) {
+                animationLoop();
+            }
+        };
 
         window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('click', onClick);
         return () => {
             window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('click', onClick);
         };
     });
 
