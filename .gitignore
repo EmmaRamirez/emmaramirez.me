@@ -29,3 +29,4 @@ src/lib/paraglide
 *storybook.log
 .old
 .old/*
+/../generated/prisma

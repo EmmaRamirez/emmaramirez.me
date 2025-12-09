@@ -3,7 +3,6 @@
 	import Bloblet3 from './Bloblet3.svelte';
 	import ColorPicker from './ColorPicker.svelte';
 	import Button from './Button.svelte';
-	import { blob } from 'drizzle-orm/sqlite-core';
 
 	let startColor = $state('var(--caroline-blue-500)');
 	let stopColor = $state('var(--caroline-blue-700)');
