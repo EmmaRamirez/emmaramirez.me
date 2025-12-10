@@ -99,7 +99,6 @@
 		<ol class="flex flex-col">
 			{#each steps as step, i (step.id)}
 				<li class="relative {i < steps.length - 1 ? 'pb-8' : ''}">
-					<!-- Connector line (vertical) -->
 					{#if i < steps.length - 1}
 						<div class="absolute left-4 top-8 bottom-0 w-0.5 -ml-px
 							{getStepStatus(i) === 'complete' ? 'bg-[var(--caroline-blue-700)]' : 'bg-[var(--liver-brown-400)]'}"
