@@ -157,7 +157,7 @@
 	role="presentation"
 	class="relative"
 	bind:this={container}
-	onmousemove={moveDisco}
+	onmousemove={startDisco}
 	onmouseleave={stopDisco}
 >
 	<ImageBlock {image} {alt} {caption} class={className} imageId="disco-image">
