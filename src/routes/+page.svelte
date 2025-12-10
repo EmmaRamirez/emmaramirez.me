@@ -20,7 +20,7 @@
 	</Header>
 
 	<div class="flex justify-center items-center py-14 px-4">
-		<h1 class="text-5xl font-sans font-bold text-center">
+		<h1 class="uppercase text-5xl font-sans font-bold text-center">
 			Hi my name's Emma. This is my website.
 		</h1>
 	</div>
