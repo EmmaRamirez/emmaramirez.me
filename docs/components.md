@@ -93,10 +93,12 @@ to the Svelte implementation is noted.
 
 ## Data Display
 
-- [ ] **Avatar**
+- [x] **Avatar**
   - User or entity representation (image, initials, fallback).
-- [ ] **Badge / Pill**
+  - Existing: `Avatar` → `$lib/components/ui/Avatar.svelte`.
+- [x] **Badge / Pill**
   - Small labels for statuses or categories.
+  - Existing: `Badge` → `$lib/components/ui/Badge.svelte`.
 - [ ] **Tag / Chip**
   - Removable tokens for filters, selections, or labels.
 - [ ] **Tooltip**
