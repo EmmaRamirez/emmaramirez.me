@@ -358,9 +358,16 @@
     // Update blob physics (velocity, position, spring back)
     function updateBlobPhysics(deltaTime: number) {
         blobDataCache.forEach(blob => {
-            // Apply spring force to pull back to original position
-            blob.vx -= blob.offsetX * springForce;
-            blob.vy -= blob.offsetY * springForce;
+            // Apply spring force to pull back to original position (only if not free roaming)
+            if (!freeRoaming) {
+                blob.vx -= blob.offsetX * springForce;
+                blob.vy -= blob.offsetY * springForce;
+            } else {
+                // Very weak spring force when free roaming - just to prevent infinite drift
+                const weakSpring = springForce * 0.1;
+                blob.vx -= blob.offsetX * weakSpring;
+                blob.vy -= blob.offsetY * weakSpring;
+            }
             
             // Apply friction
             blob.vx *= friction;
@@ -374,10 +381,37 @@
             blob.offsetX += blob.vx * deltaTime;
             blob.offsetY += blob.vy * deltaTime;
             
-            // Clamp offset to prevent blobs from flying too far (larger range = more movement)
-            const maxOffset = Math.min(blob.quadrant.width, blob.quadrant.height) * 3;
-            blob.offsetX = Math.max(-maxOffset, Math.min(maxOffset, blob.offsetX));
-            blob.offsetY = Math.max(-maxOffset, Math.min(maxOffset, blob.offsetY));
+            if (freeRoaming && canvas) {
+                // Bounce off canvas edges when free roaming
+                const center = getBlobCenter(blob, animationTime);
+                const radius = blob.effectiveRadius;
+                
+                // Left edge
+                if (center.x - radius < 0) {
+                    blob.offsetX += (radius - center.x) * 1.1;
+                    blob.vx = Math.abs(blob.vx) * collisionBounce;
+                }
+                // Right edge
+                if (center.x + radius > canvas.width) {
+                    blob.offsetX -= (center.x + radius - canvas.width) * 1.1;
+                    blob.vx = -Math.abs(blob.vx) * collisionBounce;
+                }
+                // Top edge
+                if (center.y - radius < 0) {
+                    blob.offsetY += (radius - center.y) * 1.1;
+                    blob.vy = Math.abs(blob.vy) * collisionBounce;
+                }
+                // Bottom edge
+                if (center.y + radius > canvas.height) {
+                    blob.offsetY -= (center.y + radius - canvas.height) * 1.1;
+                    blob.vy = -Math.abs(blob.vy) * collisionBounce;
+                }
+            } else {
+                // Clamp offset to prevent blobs from flying too far (original behavior)
+                const maxOffset = Math.min(blob.quadrant.width, blob.quadrant.height) * 3;
+                blob.offsetX = Math.max(-maxOffset, Math.min(maxOffset, blob.offsetX));
+                blob.offsetY = Math.max(-maxOffset, Math.min(maxOffset, blob.offsetY));
+            }
         });
     }
 
