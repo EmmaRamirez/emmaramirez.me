@@ -101,22 +101,28 @@ to the Svelte implementation is noted.
 - [x] **Badge / Pill**
   - Small labels for statuses or categories.
   - Existing: `Badge` → `$lib/components/ui/Badge.svelte`.
-- [ ] **Tag / Chip**
+- [x] **Tag / Chip**
   - Removable tokens for filters, selections, or labels.
-- [ ] **Tooltip**
+  - Existing: `Tag` → `$lib/components/ui/Tag.svelte`.
+- [x] **Tooltip**
   - On-hover/on-focus contextual help.
+  - Existing: `Tooltip` → `$lib/components/ui/Tooltip.svelte`.
 - [ ] **Table**
   - Tabular data with header, rows, sorting, and pagination hooks.
-- [ ] **DescriptionList (KeyValue)**
+- [x] **DescriptionList (KeyValue)**
   - Name/value pairs for attribute display.
+  - Existing: `DescriptionList` → `$lib/components/ui/DescriptionList.svelte`.
 - [ ] **List / ListItem**
   - Generic list with optional icons, metadata, and actions.
-- [ ] **Statistic / KPI**
+- [x] **Statistic / KPI**
   - Highlighted numeric metrics with labels and trends.
-- [ ] **ProgressBar**
+  - Existing: `Statistic` → `$lib/components/ui/Statistic.svelte`.
+- [x] **ProgressBar**
   - Linear representation of completion state.
-- [ ] **Spinner / Loader**
+  - Existing: `ProgressBar` → `$lib/components/ui/ProgressBar.svelte`.
+- [x] **Spinner / Loader**
   - Indeterminate loading indicator.
+  - Existing: `Spinner` → `$lib/components/ui/Spinner.svelte`.
 
 ---
 
