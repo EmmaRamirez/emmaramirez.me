@@ -162,8 +162,9 @@ to the Svelte implementation is noted.
 
 - [ ] **Modal / Dialog**
   - Focus-trapped overlay for blocking interactions.
-- [ ] **Drawer / Sheet**
+- [x] **Drawer / Sheet**
   - Slide-in panel from edge of screen.
+  - Existing: `Drawer` → `$lib/components/ui/Drawer.svelte`.
 - [ ] **Popover**
   - Contextual panel anchored to a trigger.
 - [ ] **DropdownMenu / ContextMenu**
