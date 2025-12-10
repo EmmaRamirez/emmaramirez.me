@@ -19,6 +19,10 @@
 		</HeaderNav>
 	</Header>
 
+	<div class="">
+		<h1>Hi my name's Emma. This is my website.</h1>
+	</div>
+
 	<div class="content-grid max-w-6xl mx-auto px-4 py-8 mt-16">
 		<div class="flex flex-col lg:flex-row gap-8">
 			<div class="flex-1">
