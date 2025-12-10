@@ -178,7 +178,6 @@
 			{/if}
 		</div>
 
-		<!-- Footer -->
 		<div class="flex items-center justify-between px-4 py-2 border-t-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)] text-xs text-[var(--liver-brown-600)]">
 			<div class="flex items-center gap-3">
 				<span class="flex items-center gap-1">
