@@ -50,12 +50,10 @@
 		
 		const days: (Date | null)[] = [];
 		
-		// Add empty cells for days before month starts
 		for (let i = 0; i < firstDay; i++) {
 			days.push(null);
 		}
 		
-		// Add days of month
 		for (let i = 1; i <= lastDate; i++) {
 			days.push(new Date(year, month, i));
 		}
