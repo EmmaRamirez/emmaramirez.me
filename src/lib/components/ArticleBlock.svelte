@@ -40,9 +40,13 @@
                 {#if tags.length > 0}
                     <div class="flex gap-2 flex-wrap">
                         {#each tags as tag (tag)}
-                            <span class="text-xs px-2 py-1 rounded-full bg-[var(--sandy-tan-500)] text-[var(--liver-brown-700)] font-mono uppercase tracking-wider">
+                            <button 
+                                type="button"
+                                class="text-xs px-2 py-1 rounded-full bg-[var(--sandy-tan-500)] text-[var(--liver-brown-700)] font-mono uppercase tracking-wider hover:bg-[var(--liver-brown-500)] hover:text-[var(--sandy-tan-100)] transition-colors cursor-pointer"
+                                onclick={(e) => handleTagClick(e, tag)}
+                            >
                                 {tag}
-                            </span>
+                            </button>
                         {/each}
                     </div>
                 {/if}
