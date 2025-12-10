@@ -68,8 +68,9 @@ to the Svelte implementation is noted.
 - [x] **Select**
   - Native `<select>` or custom listbox for single selection.
   - Existing: `Select` → `$lib/components/ui/Select.svelte`.
-- [ ] **Combobox / Autocomplete**
+- [x] **Combobox / Autocomplete**
   - Searchable selection with keyboard navigation.
+  - Existing: `Combobox` → `$lib/components/ui/Combobox.svelte`.
 - [x] **Checkbox**
   - Boolean toggle, possibly in groups.
   - Existing: `Checkbox` → `$lib/components/ui/Checkbox.svelte`.
@@ -82,8 +83,9 @@ to the Svelte implementation is noted.
 - [x] **Slider / RangeSlider**
   - Numeric value selection by dragging a thumb.
   - Existing: `Slider` → `$lib/components/ui/Slider.svelte`.
-- [ ] **DatePicker / DateRangePicker**
+- [x] **DatePicker / DateRangePicker**
   - Calendar-based date selection.
+  - Existing: `DatePicker` → `$lib/components/ui/DatePicker.svelte`.
 - [x] **FileInput**
   - File upload with drag-and-drop support.
   - Existing: `FileInput` → `$lib/components/ui/FileInput.svelte`.
@@ -107,8 +109,9 @@ to the Svelte implementation is noted.
 - [x] **Tooltip**
   - On-hover/on-focus contextual help.
   - Existing: `Tooltip` → `$lib/components/ui/Tooltip.svelte`.
-- [ ] **Table**
+- [x] **Table**
   - Tabular data with header, rows, sorting, and pagination hooks.
+  - Existing: `Table` → `$lib/components/ui/Table.svelte`.
 - [x] **DescriptionList (KeyValue)**
   - Name/value pairs for attribute display.
   - Existing: `DescriptionList` → `$lib/components/ui/DescriptionList.svelte`.
@@ -136,8 +139,9 @@ to the Svelte implementation is noted.
 - [x] **Toast / Snackbar**
   - Ephemeral notifications that stack and auto-dismiss.
   - Existing: `Toast` → `$lib/components/ui/Toast.svelte`.
-- [ ] **Inline validation messages**
+- [x] **Inline validation messages**
   - Field-level feedback tied to inputs.
+  - Existing: `InlineValidation` → `$lib/components/ui/InlineValidation.svelte`.
 - [x] **EmptyState**
   - Illustrations and copy for when lists or views have no data.
   - Existing: `EmptyState` → `$lib/components/ui/EmptyState.svelte`.
@@ -146,10 +150,12 @@ to the Svelte implementation is noted.
 
 ## Navigation
 
-- [ ] **Navbar / AppHeader**
+- [x] **Navbar / AppHeader**
   - Top-level navigation bar with branding and primary actions.
-- [ ] **Sidebar / AppShell**
+  - Existing: `Navbar` → `$lib/components/ui/Navbar.svelte`.
+- [x] **Sidebar / AppShell**
   - Shell layout with persistent navigation on the side.
+  - Existing: `Sidebar` → `$lib/components/ui/Sidebar.svelte`.
 - [x] **Tabs**
   - Switch between related views without navigation changes.
   - Existing: `Tabs` → `$lib/components/ui/Tabs.svelte`.
@@ -159,8 +165,9 @@ to the Svelte implementation is noted.
 - [x] **Pagination**
   - Navigate between pages of content.
   - Existing: `Pagination` → `$lib/components/ui/Pagination.svelte`.
-- [ ] **Stepper / Wizard**
+- [x] **Stepper / Wizard**
   - Multi-step workflows with progress tracking.
+  - Existing: `Stepper` → `$lib/components/ui/Stepper.svelte`.
 
 ---
 
@@ -189,12 +196,15 @@ to the Svelte implementation is noted.
 - [x] **Collapse / Disclosure**
   - Simple show/hide section with a header.
   - Existing: `Collapse` → `$lib/components/ui/Collapse.svelte`.
-- [ ] **Carousel / Content Slider**
+- [x] **Carousel / Content Slider**
   - Rotate between panels or media items.
-- [ ] **Tooltip-rich controls**
+  - Existing: `Carousel` → `$lib/components/ui/Carousel.svelte`.
+- [x] **Tooltip-rich controls**
   - Icon-only or compact controls relying on tooltips for clarity.
-- [ ] **Command palette / Command menu**
+  - Note: Use `Tooltip` + `IconButton` components together.
+- [x] **Command palette / Command menu**
   - Fuzzy-searchable menu for actions and navigation.
+  - Existing: `CommandPalette` → `$lib/components/ui/CommandPalette.svelte`.
 
 ---
 
@@ -210,9 +220,13 @@ These components already exist and can be extended or documented further:
 - `Button` → `$lib/components/ui/Button.svelte`
 - `ButtonGroup` → `$lib/components/ui/ButtonGroup.svelte`
 - `Card` → `$lib/components/ui/Card.svelte`
+- `Carousel` → `$lib/components/ui/Carousel.svelte`
 - `Checkbox` → `$lib/components/ui/Checkbox.svelte`
 - `Collapse` → `$lib/components/ui/Collapse.svelte`
+- `Combobox` → `$lib/components/ui/Combobox.svelte`
+- `CommandPalette` → `$lib/components/ui/CommandPalette.svelte`
 - `Container` → `$lib/components/ui/Container.svelte`
+- `DatePicker` → `$lib/components/ui/DatePicker.svelte`
 - `DescriptionList` → `$lib/components/ui/DescriptionList.svelte`
 - `Divider` → `$lib/components/ui/Divider.svelte`
 - `Drawer` → `$lib/components/ui/Drawer.svelte`
@@ -223,11 +237,13 @@ These components already exist and can be extended or documented further:
 - `Grid` → `$lib/components/ui/Grid.svelte`
 - `Icon` → `$lib/components/ui/Icon.svelte`
 - `IconButton` → `$lib/components/ui/IconButton.svelte`
+- `InlineValidation` → `$lib/components/ui/InlineValidation.svelte`
 - `Input` → `$lib/components/ui/Input.svelte`
 - `LinkButton` → `$lib/components/ui/LinkButton.svelte`
 - `List` → `$lib/components/ui/List.svelte`
 - `ListItem` → `$lib/components/ui/ListItem.svelte`
 - `Modal` → `$lib/components/ui/Modal.svelte`
+- `Navbar` → `$lib/components/ui/Navbar.svelte`
 - `PageShell` → `$lib/components/ui/PageShell.svelte`
 - `Pagination` → `$lib/components/ui/Pagination.svelte`
 - `Popover` → `$lib/components/ui/Popover.svelte`
@@ -236,11 +252,14 @@ These components already exist and can be extended or documented further:
 - `SearchField` → `$lib/components/ui/SearchField.svelte`
 - `Section` → `$lib/components/ui/Section.svelte`
 - `Select` → `$lib/components/ui/Select.svelte`
+- `Sidebar` → `$lib/components/ui/Sidebar.svelte`
 - `Slider` → `$lib/components/ui/Slider.svelte`
 - `Spinner` → `$lib/components/ui/Spinner.svelte`
 - `Stack` → `$lib/components/ui/Stack.svelte`
 - `Statistic` → `$lib/components/ui/Statistic.svelte`
+- `Stepper` → `$lib/components/ui/Stepper.svelte`
 - `Switch` → `$lib/components/ui/Switch.svelte`
+- `Table` → `$lib/components/ui/Table.svelte`
 - `Tabs` → `$lib/components/ui/Tabs.svelte`
 - `Tag` → `$lib/components/ui/Tag.svelte`
 - `Textarea` → `$lib/components/ui/Textarea.svelte`

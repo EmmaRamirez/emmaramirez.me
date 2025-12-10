@@ -1,19 +1,33 @@
 <script lang="ts">
-	import SiteCanvas from '$lib/components/SiteCanvas.svelte';
-	import DiscoBlock from '$lib/components/DiscoBlock.svelte';
-	import ArticleBlock from '$lib/components/ArticleBlock.svelte';
-	import type { Article } from '$lib/articles';
-	import { defaultArticles } from '$lib/articles';
-	import ProjectBlock from '$lib/components/ProjectBlock.svelte';
-	import discoImage from '$lib/images/photos/disco.jpeg';
-	import fakemonImage from '$lib/images/fakemon-generator.png';
-	import nuzlockeImage from '$lib/images/nuzlocke-generator.jpg';
-	import profileImage from '$lib/images/profile-2.png';
-	import houstonImage from '$lib/images/photos/houston.jpeg';
-	import svelteWelcomeImage from '$lib/images/svelte-welcome.webp';
-	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
+import SiteCanvas from '$lib/components/SiteCanvas.svelte';
+import DiscoBlock from '$lib/components/DiscoBlock.svelte';
+import ArticleBlock from '$lib/components/ArticleBlock.svelte';
+import type { Article } from '$lib/articles';
+import { defaultArticles } from '$lib/articles';
+import ProjectBlock from '$lib/components/ProjectBlock.svelte';
+import discoImage from '$lib/images/photos/disco.jpeg';
+import fakemonImage from '$lib/images/fakemon-generator.png';
+import nuzlockeImage from '$lib/images/nuzlocke-generator.jpg';
+import profileImage from '$lib/images/profile-2.png';
+import houstonImage from '$lib/images/photos/houston.jpeg';
+import svelteWelcomeImage from '$lib/images/svelte-welcome.webp';
+import profileAltImage from '$lib/images/profile.png';
+import redbullImage from '$lib/images/photos/redbull.jpeg';
+import svelteLogoImage from '$lib/images/svelte-logo.svg';
+import githubImage from '$lib/images/github.svg';
+import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 
-	type ProjectId = 'fakemon' | 'nuzlocke' | 'site' | 'discoProject' | 'paraglide';
+type ProjectId =
+	| 'fakemon'
+	| 'nuzlocke'
+	| 'site'
+	| 'discoProject'
+	| 'paraglide'
+	| 'designSystemLab'
+	| 'commitGarden'
+	| 'palettePlayground'
+	| 'a11yAuditKit'
+	| 'readmeStudio';
 
 	type Item =
 		| { kind: 'article'; article: Article }
@@ -53,6 +67,11 @@
 		{ kind: 'project', id: 'site' },
 		{ kind: 'project', id: 'discoProject' },
 		{ kind: 'project', id: 'paraglide' },
+		{ kind: 'project', id: 'designSystemLab' },
+		{ kind: 'project', id: 'commitGarden' },
+		{ kind: 'project', id: 'palettePlayground' },
+		{ kind: 'project', id: 'a11yAuditKit' },
+		{ kind: 'project', id: 'readmeStudio' },
 		{ kind: 'disco' }
 	];
 
@@ -176,6 +195,77 @@
 								A multilingual SvelteKit demo using Paraglide that stress-tests copy,
 								layout, and tone across languages without turning the UI into a
 								spreadsheet.
+							{/snippet}
+						</ProjectBlock>
+					{:else if item.id === 'designSystemLab'}
+						<ProjectBlock
+							title="Design System Lab"
+							pill="Design systems"
+							image={svelteLogoImage}
+							class="h-full"
+							contentClassName="md:flex-row md:items-center"
+							imageClassName="md:translate-x-0 md:ml-4"
+						>
+							{#snippet description()}
+								A sandbox for tokens, components, and documentation that explores how far a
+								Svelte-powered design system can be pushed before it begs for refactors.
+							{/snippet}
+						</ProjectBlock>
+					{:else if item.id === 'commitGarden'}
+						<ProjectBlock
+							title="Commit Garden"
+							pill="Developer tooling"
+							image={githubImage}
+							class="h-full"
+							contentClassName="md:flex-row md:items-center"
+							imageClassName="md:translate-x-0 md:ml-4"
+						>
+							{#snippet description()}
+								A tiny dashboard that turns git history into a garden view, nudging you
+								toward smaller, story-shaped commits instead of one giant \"final-final\"
+								push.
+							{/snippet}
+						</ProjectBlock>
+					{:else if item.id === 'palettePlayground'}
+						<ProjectBlock
+							title="Palette Playground"
+							pill="Color & theming"
+							image={profileAltImage}
+							class="h-full"
+							contentClassName="md:flex-row md:items-center"
+							imageClassName="md:translate-x-0 md:ml-4"
+						>
+							{#snippet description()}
+								An interactive color lab for testing palettes against real content, dark
+								mode, and accessibility constraints without leaving the browser.
+							{/snippet}
+						</ProjectBlock>
+					{:else if item.id === 'a11yAuditKit'}
+						<ProjectBlock
+							title="A11y Audit Kit"
+							pill="Accessibility"
+							image={redbullImage}
+							class="h-full"
+							contentClassName="md:flex-row md:items-center"
+							imageClassName="md:translate-x-0 md:ml-4"
+						>
+							{#snippet description()}
+								A weekend-sized toolkit for running lightweight accessibility audits—checklists,
+								notes, and quick wins bundled into a friendly interface.
+							{/snippet}
+						</ProjectBlock>
+					{:else if item.id === 'readmeStudio'}
+						<ProjectBlock
+							title="README Studio"
+							pill="Writing & docs"
+							image={profileImage}
+							class="h-full"
+							contentClassName="md:flex-row md:items-center"
+							imageClassName="md:translate-x-0 md:ml-4"
+						>
+							{#snippet description()}
+								A structured editor for project READMEs that helps you go from blank page to
+								clear, kind documentation without feeling like a corporate template.
 							{/snippet}
 						</ProjectBlock>
 					{/if}
