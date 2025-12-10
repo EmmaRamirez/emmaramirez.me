@@ -13,8 +13,7 @@
     let minRadiusMultiplier = $state(0.19);
     let maxRadiusMultiplier = $state(0.36);
     let circleRadius = $state(100);
-    let nearColor = $state('#ff0000');
-    let farColor = $state('#ff0000');
+    let nearColor = $state('#ff0000'); // Used for wave pulse color
     let gridColor = $state('#000000');
     let alpha = $state(0.7);
     let showBoxes = $state(false);
