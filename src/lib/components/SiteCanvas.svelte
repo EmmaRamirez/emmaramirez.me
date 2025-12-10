@@ -392,9 +392,19 @@
         );
     }
 
+    // Brighten a hex color by a percentage (0-1)
+    function brightenColor(hex: string, amount: number): string {
+        const clean = hex.replace('#', '');
+        const r = Math.min(255, Math.round(parseInt(clean.substring(0, 2), 16) * (1 + amount)));
+        const g = Math.min(255, Math.round(parseInt(clean.substring(2, 4), 16) * (1 + amount)));
+        const b = Math.min(255, Math.round(parseInt(clean.substring(4, 6), 16) * (1 + amount)));
+        const toHex = (n: number) => n.toString(16).padStart(2, '0');
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+    }
+    
     function drawBlob(
         ctx: CanvasRenderingContext2D,
-        blobData: { points: { x: number; y: number }[]; isNearMouse: boolean }
+        blobData: { points: { x: number; y: number }[]; isNearMouse: boolean; color: string }
     ) {
         const points = blobData.points;
         if (points.length < 3) return;
@@ -420,7 +430,8 @@
         }
         
         ctx.closePath();
-        ctx.fillStyle = blobData.isNearMouse ? nearColor : farColor;
+        // Use blob's own color, brighten on hover
+        ctx.fillStyle = blobData.isNearMouse ? brightenColor(blobData.color, 0.4) : blobData.color;
         ctx.globalAlpha = alpha;
         ctx.fill();
         ctx.globalAlpha = 1.0;
@@ -471,7 +482,7 @@
         blobDataCache.forEach(blobData => {
             const animatedPoints = getAnimatedBlobPoints(blobData, animationTime);
             const isNearMouse = checkIsNearMouse(blobData.quadrant);
-            drawBlob(ctx, { points: animatedPoints, isNearMouse });
+            drawBlob(ctx, { points: animatedPoints, isNearMouse, color: blobData.color });
         });
         
         drawWavePulses(ctx);
