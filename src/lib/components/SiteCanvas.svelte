@@ -687,21 +687,43 @@
                 </div>
                 
                 <div>
-                    <label for="near-color-input" class="block text-sm font-medium mb-1">Near Color</label>
-                    <input
-                        id="near-color-input"
-                        type="color"
-                        bind:value={nearColor}
-                        class="w-full h-10 border rounded"
-                    />
+                    <label for="palette-select" class="block text-sm font-medium mb-1">Color Palette</label>
+                    <select
+                        id="palette-select"
+                        bind:value={selectedPreset}
+                        onchange={handlePaletteChange}
+                        class="w-full px-2 py-1 border rounded bg-white"
+                    >
+                        <option value="sunset">Sunset</option>
+                        <option value="ocean">Ocean</option>
+                        <option value="forest">Forest</option>
+                        <option value="neon">Neon</option>
+                        <option value="monochrome">Monochrome</option>
+                        <option value="candy">Candy</option>
+                        <option value="earth">Earth</option>
+                    </select>
+                    <div class="flex gap-1 mt-2">
+                        {#each activePalette as color}
+                            <div 
+                                style="background: {color}" 
+                                class="w-6 h-6 rounded border border-gray-300"
+                            ></div>
+                        {/each}
+                    </div>
+                    <button
+                        onclick={handlePaletteChange}
+                        class="mt-2 w-full px-2 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded border"
+                    >
+                        Reset Colors
+                    </button>
                 </div>
                 
                 <div>
-                    <label for="far-color-input" class="block text-sm font-medium mb-1">Far Color</label>
+                    <label for="wave-color-input" class="block text-sm font-medium mb-1">Wave Pulse Color</label>
                     <input
-                        id="far-color-input"
+                        id="wave-color-input"
                         type="color"
-                        bind:value={farColor}
+                        bind:value={nearColor}
                         class="w-full h-10 border rounded"
                     />
                 </div>
