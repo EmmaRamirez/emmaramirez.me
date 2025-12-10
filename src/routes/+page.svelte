@@ -6,7 +6,7 @@
 	import discoImage from '$lib/images/photos/disco.jpeg';
 	import fakemonImage from '$lib/images/fakemon-generator.png';
 	import nuzlockeImage from '$lib/images/nuzlocke-generator.jpg';
-	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header/index';
+	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 </script>
 
 <section class="relative w-screen min-h-screen">
