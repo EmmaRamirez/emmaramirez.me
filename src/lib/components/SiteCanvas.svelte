@@ -702,7 +702,7 @@
                         <option value="earth">Earth</option>
                     </select>
                     <div class="flex gap-1 mt-2">
-                        {#each activePalette as color}
+                        {#each activePalette as color, i (color + i)}
                             <div 
                                 style="background: {color}" 
                                 class="w-6 h-6 rounded border border-gray-300"

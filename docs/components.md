@@ -180,9 +180,12 @@ to the Svelte implementation is noted.
 
 These components already exist and can be extended or documented further:
 
+- `Avatar` → `$lib/components/ui/Avatar.svelte`
+- `Badge` → `$lib/components/ui/Badge.svelte`
 - `Button` → `$lib/components/ui/Button.svelte`
 - `ButtonGroup` → `$lib/components/ui/ButtonGroup.svelte`
 - `Card` → `$lib/components/ui/Card.svelte`
+- `Checkbox` → `$lib/components/ui/Checkbox.svelte`
 - `Container` → `$lib/components/ui/Container.svelte`
 - `Divider` → `$lib/components/ui/Divider.svelte`
 - `Flex` → `$lib/components/ui/Flex.svelte`
@@ -190,10 +193,15 @@ These components already exist and can be extended or documented further:
 - `Icon` → `$lib/components/ui/Icon.svelte`
 - `IconButton` → `$lib/components/ui/IconButton.svelte`
 - `Input` → `$lib/components/ui/Input.svelte`
+- `LinkButton` → `$lib/components/ui/LinkButton.svelte`
 - `PageShell` → `$lib/components/ui/PageShell.svelte`
+- `Radio` → `$lib/components/ui/Radio.svelte`
 - `Section` → `$lib/components/ui/Section.svelte`
+- `Select` → `$lib/components/ui/Select.svelte`
 - `Slider` → `$lib/components/ui/Slider.svelte`
 - `Stack` → `$lib/components/ui/Stack.svelte`
+- `Switch` → `$lib/components/ui/Switch.svelte`
+- `Textarea` → `$lib/components/ui/Textarea.svelte`
 - `Typography` → `$lib/components/ui/Typography.svelte`
 
 
