@@ -64,7 +64,6 @@
 	}
 
 	function handleInputBlur(e: FocusEvent) {
-		// Delay to allow click on option
 		setTimeout(() => {
 			isOpen = false;
 			query = selectedLabel;
