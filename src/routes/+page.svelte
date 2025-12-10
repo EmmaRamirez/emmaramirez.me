@@ -102,9 +102,9 @@ type ProjectId =
 			<span
 				class="inline-flex flex-col items-center justify-center leading-none mx-2 align-middle"
 			>
-				<span class="tracking-[0.35em]">EM</span>
+				<span class="tracking-[0.35em] w-full text-balance">EM</span>
 				<span class="block h-[1rem] w-full bg-current my-[0.15em]"></span>
-				<span class="tracking-[0.35em]">MA</span>
+				<span class="tracking-[0.35em] w-full text-balance">MA</span>
 			</span>
 			<span>. This is my website.</span>
 		</h1>
