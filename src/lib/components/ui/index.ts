@@ -6,6 +6,7 @@ export { default as Card } from './Card.svelte';
 export { default as Checkbox } from './Checkbox.svelte';
 export { default as Container } from './Container.svelte';
 export { default as Divider } from './Divider.svelte';
+export { default as Drawer } from './Drawer.svelte';
 export { default as Flex } from './Flex.svelte';
 export { default as Grid } from './Grid.svelte';
 export { default as Icon } from './Icon.svelte';
