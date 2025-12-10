@@ -150,12 +150,15 @@ to the Svelte implementation is noted.
   - Top-level navigation bar with branding and primary actions.
 - [ ] **Sidebar / AppShell**
   - Shell layout with persistent navigation on the side.
-- [ ] **Tabs**
+- [x] **Tabs**
   - Switch between related views without navigation changes.
-- [ ] **Breadcrumbs**
+  - Existing: `Tabs` → `$lib/components/ui/Tabs.svelte`.
+- [x] **Breadcrumbs**
   - Show hierarchical navigation path.
-- [ ] **Pagination**
+  - Existing: `Breadcrumbs` → `$lib/components/ui/Breadcrumbs.svelte`.
+- [x] **Pagination**
   - Navigate between pages of content.
+  - Existing: `Pagination` → `$lib/components/ui/Pagination.svelte`.
 - [ ] **Stepper / Wizard**
   - Multi-step workflows with progress tracking.
 
