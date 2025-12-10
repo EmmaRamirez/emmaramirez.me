@@ -118,7 +118,6 @@
 		aria-modal="true"
 		aria-label="Command palette"
 	>
-		<!-- Search Input -->
 		<div class="flex items-center gap-3 px-4 py-3 border-b-2 border-[var(--liver-brown-500)]">
 			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--liver-brown-500)]">
 				<circle cx="11" cy="11" r="8"/>
@@ -137,7 +136,6 @@
 			</kbd>
 		</div>
 
-		<!-- Results -->
 		<div class="max-h-80 overflow-y-auto p-2">
 			{#if filteredCommands.length === 0}
 				<div class="px-4 py-8 text-center text-[var(--liver-brown-600)]">
