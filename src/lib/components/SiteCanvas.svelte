@@ -172,7 +172,7 @@
             vx: 0,
             vy: 0,
             mass: 1 + Math.random() * 0.5, // Slight mass variation
-            effectiveRadius: avgRadius * 1.1, // Collision radius slightly larger for more collisions
+            effectiveRadius: avgRadius * 1.8, // Much larger collision radius for frequent collisions
             color: activePalette[index % activePalette.length]
         };
     }
