@@ -191,6 +191,7 @@ to the Svelte implementation is noted.
 
 These components already exist and can be extended or documented further:
 
+- `Alert` → `$lib/components/ui/Alert.svelte`
 - `Avatar` → `$lib/components/ui/Avatar.svelte`
 - `Badge` → `$lib/components/ui/Badge.svelte`
 - `Button` → `$lib/components/ui/Button.svelte`
@@ -198,7 +199,11 @@ These components already exist and can be extended or documented further:
 - `Card` → `$lib/components/ui/Card.svelte`
 - `Checkbox` → `$lib/components/ui/Checkbox.svelte`
 - `Container` → `$lib/components/ui/Container.svelte`
+- `DescriptionList` → `$lib/components/ui/DescriptionList.svelte`
 - `Divider` → `$lib/components/ui/Divider.svelte`
+- `Drawer` → `$lib/components/ui/Drawer.svelte`
+- `EmptyState` → `$lib/components/ui/EmptyState.svelte`
+- `FileInput` → `$lib/components/ui/FileInput.svelte`
 - `Flex` → `$lib/components/ui/Flex.svelte`
 - `Grid` → `$lib/components/ui/Grid.svelte`
 - `Icon` → `$lib/components/ui/Icon.svelte`
@@ -206,13 +211,19 @@ These components already exist and can be extended or documented further:
 - `Input` → `$lib/components/ui/Input.svelte`
 - `LinkButton` → `$lib/components/ui/LinkButton.svelte`
 - `PageShell` → `$lib/components/ui/PageShell.svelte`
+- `ProgressBar` → `$lib/components/ui/ProgressBar.svelte`
 - `Radio` → `$lib/components/ui/Radio.svelte`
+- `SearchField` → `$lib/components/ui/SearchField.svelte`
 - `Section` → `$lib/components/ui/Section.svelte`
 - `Select` → `$lib/components/ui/Select.svelte`
 - `Slider` → `$lib/components/ui/Slider.svelte`
+- `Spinner` → `$lib/components/ui/Spinner.svelte`
 - `Stack` → `$lib/components/ui/Stack.svelte`
+- `Statistic` → `$lib/components/ui/Statistic.svelte`
 - `Switch` → `$lib/components/ui/Switch.svelte`
+- `Tag` → `$lib/components/ui/Tag.svelte`
 - `Textarea` → `$lib/components/ui/Textarea.svelte`
+- `Tooltip` → `$lib/components/ui/Tooltip.svelte`
 - `Typography` → `$lib/components/ui/Typography.svelte`
 
 
