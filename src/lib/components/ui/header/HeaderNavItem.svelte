@@ -30,5 +30,7 @@
 	)}
 	aria-current={active ? "page" : undefined}
 >
-	{@render children?.()}
+	{#if children}
+		{@render children()}
+	{/if}
 </a>
