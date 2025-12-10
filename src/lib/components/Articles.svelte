@@ -233,9 +233,12 @@
 				articleId={article.id}
 				class="h-full hover:border-[var(--liver-brown-700)] hover:shadow-md"
 				contentClass="line-clamp-4"
+				ontagclick={handleTagClick}
 			/>
 		{/each}
 	</div>
+
+	<TagDrawer open={drawerOpen} tag={selectedTag} onclose={closeDrawer} />
 
 	{#if displayArticles.length === 0}
 		<div class="empty-state text-center py-12 text-[var(--liver-brown-500)]">
