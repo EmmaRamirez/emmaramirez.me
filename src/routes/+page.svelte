@@ -1,87 +1,18 @@
 <script lang="ts">
-import SiteCanvas from '$lib/components/SiteCanvas.svelte';
-import DiscoBlock from '$lib/components/DiscoBlock.svelte';
-import ArticleBlock from '$lib/components/ArticleBlock.svelte';
-import type { Article } from '$lib/articles';
-import { defaultArticles } from '$lib/articles';
-import ProjectBlock from '$lib/components/ProjectBlock.svelte';
-import discoImage from '$lib/images/photos/disco.jpeg';
-import fakemonImage from '$lib/images/fakemon-generator.png';
-import nuzlockeImage from '$lib/images/nuzlocke-generator.jpg';
-import profileImage from '$lib/images/profile-2.png';
-import houstonImage from '$lib/images/photos/houston.jpeg';
-import svelteWelcomeImage from '$lib/images/svelte-welcome.webp';
-import profileAltImage from '$lib/images/profile.png';
-import redbullImage from '$lib/images/photos/redbull.jpeg';
-import svelteLogoImage from '$lib/images/svelte-logo.svg';
-import githubImage from '$lib/images/github.svg';
-import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
+	import DiscoBlock from '$lib/components/DiscoBlock.svelte';
+	import ArticleBlock from '$lib/components/ArticleBlock.svelte';
+	import ProjectBlock from '$lib/components/ProjectBlock.svelte';
+	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
+	import {
+		type Item,
+		getHomepageItems,
+		itemKey,
+		getProject,
+		getArticle,
+		getDisco
+	} from './+page';
 
-type ProjectId =
-	| 'fakemon'
-	| 'nuzlocke'
-	| 'site'
-	| 'discoProject'
-	| 'paraglide'
-	| 'designSystemLab'
-	| 'commitGarden'
-	| 'palettePlayground'
-	| 'a11yAuditKit'
-	| 'readmeStudio';
-
-	type Item =
-		| { kind: 'article'; article: Article }
-		| { kind: 'project'; id: ProjectId }
-		| { kind: 'disco' };
-
-	function seededShuffle<T>(items: T[], seed: number): T[] {
-		const result = items.slice();
-
-		// Simple LCG-based pseudo-random generator so layout is
-		// random-looking but deterministic across reloads
-		const m = 0x80000000;
-		const a = 1103515245;
-		const c = 12345;
-
-		let state = seed;
-
-		function random() {
-			state = (a * state + c) % m;
-			return state / (m - 1);
-		}
-
-		for (let i = result.length - 1; i > 0; i -= 1) {
-			const j = Math.floor(random() * (i + 1));
-			[result[i], result[j]] = [result[j], result[i]];
-		}
-
-		return result;
-	}
-
-	const homepageArticles = defaultArticles.slice(0, 8);
-
-	const items: Item[] = [
-		...homepageArticles.map<Item>((article: Article) => ({ kind: 'article', article })),
-		{ kind: 'project', id: 'fakemon' },
-		{ kind: 'project', id: 'nuzlocke' },
-		{ kind: 'project', id: 'site' },
-		{ kind: 'project', id: 'discoProject' },
-		{ kind: 'project', id: 'paraglide' },
-		{ kind: 'project', id: 'designSystemLab' },
-		{ kind: 'project', id: 'commitGarden' },
-		{ kind: 'project', id: 'palettePlayground' },
-		{ kind: 'project', id: 'a11yAuditKit' },
-		{ kind: 'project', id: 'readmeStudio' },
-		{ kind: 'disco' }
-	];
-
-	const shuffledItems = seededShuffle(items, 42);
-
-	function itemKey(item: Item): string {
-		if (item.kind === 'article') return `article-${item.article.id}`;
-		if (item.kind === 'project') return `project-${item.id}`;
-		return 'disco';
-	}
+	const shuffledItems = getHomepageItems();
 </script>
 
 <section class="relative w-screen min-h-screen">
@@ -102,9 +33,9 @@ type ProjectId =
 			<span
 				class="inline-flex flex-col items-center justify-center leading-none mx-2 align-middle"
 			>
-				<span class="tracking-[0.35em] w-full text-balance">EM</span>
+				<span class="tracking-[0.35em] w-full text-balance font-bold">EM</span>
 				<span class="block h-[1rem] w-full bg-current my-[0.15em]"></span>
-				<span class="tracking-[0.35em] w-full text-balance">MA</span>
+				<span class="tracking-[0.35em] w-full text-balance font-bold">MA</span>
 			</span>
 			<span>. This is my website.</span>
 		</h1>
