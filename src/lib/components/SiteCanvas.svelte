@@ -27,13 +27,13 @@
     // Animation constants - very slow for meditative feel (10-15 second cycles)
     const ANIMATION_SPEED = 0.0005; // ~12 second full cycle
     const MORPH_INTENSITY = 0.25; // 25% radius variation
-    const DRIFT_INTENSITY = 0.08; // 8% of cell size for position drift
+    const DRIFT_INTENSITY = 0.25; // 25% of cell size for position drift - more movement
     
-    // Configurable physics parameters
-    let waveForce = $state(4000); // Force applied by wave pulse (higher = stronger push)
-    let friction = $state(0.985); // Less damping = blobs travel further
-    let springForce = $state(0.004); // Weaker spring = slower return to original position
-    let collisionBounce = $state(0.95); // Higher = bouncier collisions
+    // Configurable physics parameters - tuned for more movement and collisions
+    let waveForce = $state(8000); // Strong force for bigger push
+    let friction = $state(0.995); // Very low friction = blobs travel much further
+    let springForce = $state(0.001); // Very weak spring = blobs stay displaced longer
+    let collisionBounce = $state(1.1); // Bouncy collisions that add energy
     let freeRoaming = $state(true); // Allow blobs to move freely outside their quadrants
     
     // Fixed physics constant
