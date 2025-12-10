@@ -87,19 +87,17 @@
 			<div class="shrink-0 {typeClasses[toast.type].icon}">
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<path d={icons[toast.type]}></path>
-				</svg>
-			</div>
+			</svg>
+		</div>
 
-			<!-- Content -->
-			<div class="flex-1 min-w-0">
+		<div class="flex-1 min-w-0">
 				{#if toast.title}
 					<p class="font-semibold text-[var(--liver-brown-900)] text-sm">{toast.title}</p>
 				{/if}
-				<p class="text-sm text-[var(--liver-brown-700)]">{toast.message}</p>
-			</div>
+				<p class="text-sm text-[var(--liver-brown-700)]">{toast.message}			</p>
+		</div>
 
-			<!-- Close button -->
-			<button
+		<button
 				type="button"
 				class="shrink-0 p-1 rounded-full hover:bg-black/10 transition-colors"
 				onclick={() => toasts.remove(toast.id)}

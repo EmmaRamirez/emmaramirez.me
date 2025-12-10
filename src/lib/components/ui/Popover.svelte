@@ -60,7 +60,6 @@
 <svelte:window onclick={handleClickOutside} onkeydown={handleKeydown} />
 
 <div class="relative inline-flex popover-container {className}">
-	<!-- Trigger -->
 	<div 
 		role="button"
 		tabindex="0"
@@ -72,7 +71,6 @@
 		{@render trigger?.()}
 	</div>
 
-	<!-- Popover Panel -->
 	{#if open}
 		<div
 			class="absolute z-50 min-w-48 bg-[var(--sandy-tan-200)] border-2 border-[var(--liver-brown-500)] rounded-lg shadow-xl {positionClasses[position]}"
