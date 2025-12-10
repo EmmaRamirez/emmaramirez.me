@@ -36,27 +36,27 @@
 	let time = $state(0);
 
 	// Generate discrete light beams simulating mirror facets
-	function generateBeams(count: number = 32): LightBeam[] {
+	function generateBeams(count: number = 80): LightBeam[] {
 		const beams: LightBeam[] = [];
 		
 		// Create multiple rings of beams at different distances
-		const rings = 4;
+		const rings = 6;
 		const beamsPerRing = Math.floor(count / rings);
 		
 		for (let ring = 0; ring < rings; ring++) {
-			const ringDistance = 40 + ring * 50; // Distance increases per ring
-			const ringSpeed = 0.3 + ring * 0.15; // Outer rings rotate slightly faster
+			const ringDistance = 30 + ring * 35; // Distance increases per ring
+			const ringSpeed = 0.25 + ring * 0.1; // Outer rings rotate slightly faster
 			
 			for (let i = 0; i < beamsPerRing; i++) {
 				const angleSpread = (Math.PI * 2) / beamsPerRing;
 				beams.push({
-					baseAngle: i * angleSpread + (ring * 0.5), // Offset each ring
-					distance: ringDistance + (Math.random() - 0.5) * 30,
-					size: 6 + Math.random() * 10 - ring * 1.5, // Inner beams slightly larger
-					speed: ringSpeed + (Math.random() - 0.5) * 0.2,
-					brightness: 0.4 + Math.random() * 0.6,
+					baseAngle: i * angleSpread + (ring * 0.4), // Offset each ring
+					distance: ringDistance + (Math.random() - 0.5) * 25,
+					size: 6 + Math.random() * 8,
+					speed: ringSpeed + (Math.random() - 0.5) * 0.15,
+					brightness: 0.5 + Math.random() * 0.5,
 					hue: Math.random() * 60 - 30, // Slight warm/cool variation
-					orbitRadius: 5 + Math.random() * 15, // Small orbital wobble
+					orbitRadius: 3 + Math.random() * 10, // Small orbital wobble
 					phaseOffset: Math.random() * Math.PI * 2,
 				});
 			}
