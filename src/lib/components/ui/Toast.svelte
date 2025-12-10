@@ -11,7 +11,6 @@
 		duration?: number;
 	};
 
-	// Toast store for managing toasts
 	function createToastStore() {
 		const { subscribe, update } = writable<ToastItem[]>([]);
 
@@ -22,7 +21,6 @@
 				const newToast: ToastItem = { id, ...toast };
 				update(toasts => [...toasts, newToast]);
 
-				// Auto-dismiss after duration
 				if (toast.duration !== 0) {
 					setTimeout(() => {
 						update(toasts => toasts.filter(t => t.id !== id));
@@ -86,7 +84,6 @@
 			class="pointer-events-auto flex gap-3 p-4 rounded-lg border-l-4 shadow-lg animate-toast-in {typeClasses[toast.type].bg} {typeClasses[toast.type].border}"
 			role="alert"
 		>
-			<!-- Icon -->
 			<div class="shrink-0 {typeClasses[toast.type].icon}">
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<path d={icons[toast.type]}></path>
