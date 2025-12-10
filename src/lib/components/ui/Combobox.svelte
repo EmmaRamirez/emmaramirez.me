@@ -147,7 +147,6 @@
 		</button>
 	</div>
 
-	<!-- Options Dropdown -->
 	{#if isOpen && filteredOptions.length > 0}
 		<ul
 			id="{generatedId}-listbox"
