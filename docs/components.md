@@ -112,8 +112,10 @@ to the Svelte implementation is noted.
 - [x] **DescriptionList (KeyValue)**
   - Name/value pairs for attribute display.
   - Existing: `DescriptionList` → `$lib/components/ui/DescriptionList.svelte`.
-- [ ] **List / ListItem**
+- [x] **List / ListItem**
   - Generic list with optional icons, metadata, and actions.
+  - Existing: `List` → `$lib/components/ui/List.svelte`.
+  - Existing: `ListItem` → `$lib/components/ui/ListItem.svelte`.
 - [x] **Statistic / KPI**
   - Highlighted numeric metrics with labels and trends.
   - Existing: `Statistic` → `$lib/components/ui/Statistic.svelte`.
@@ -131,8 +133,9 @@ to the Svelte implementation is noted.
 - [x] **Alert / Callout**
   - Inline status messages (info, success, warning, danger).
   - Existing: `Alert` → `$lib/components/ui/Alert.svelte`.
-- [ ] **Toast / Snackbar**
+- [x] **Toast / Snackbar**
   - Ephemeral notifications that stack and auto-dismiss.
+  - Existing: `Toast` → `$lib/components/ui/Toast.svelte`.
 - [ ] **Inline validation messages**
   - Field-level feedback tied to inputs.
 - [x] **EmptyState**
