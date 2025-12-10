@@ -139,7 +139,6 @@
 			aria-modal="true"
 			aria-label="Choose date"
 		>
-			<!-- Header -->
 			<div class="flex items-center justify-between mb-4">
 				<button
 					type="button"
@@ -166,7 +165,6 @@
 				</button>
 			</div>
 
-			<!-- Week Days -->
 			<div class="grid grid-cols-7 gap-1 mb-2">
 				{#each weekDays as day}
 					<div class="text-center text-xs font-medium text-[var(--liver-brown-600)] py-1">
@@ -175,7 +173,6 @@
 				{/each}
 			</div>
 
-			<!-- Days Grid -->
 			<div class="grid grid-cols-7 gap-1">
 				{#each daysInMonth as day}
 					{#if day}
@@ -197,7 +194,6 @@
 				{/each}
 			</div>
 
-			<!-- Today button -->
 			<button
 				type="button"
 				class="w-full mt-3 py-1.5 text-sm font-medium text-[var(--caroline-blue-700)] hover:bg-[var(--sandy-tan-400)] rounded transition-colors"
