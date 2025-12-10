@@ -57,20 +57,17 @@
 <svelte:window onkeydown={handleKeydown} />
 
 {#if open}
-	<!-- Backdrop -->
 	<div
 		class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
 		onclick={handleBackdropClick}
 		role="presentation"
 	>
-		<!-- Modal Panel -->
 		<div
 			class="w-full {sizeClasses[size]} bg-[var(--sandy-tan-200)] border-2 border-[var(--liver-brown-500)] rounded-xl shadow-2xl flex flex-col max-h-[90vh] animate-modal-in {className}"
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby={title ? 'modal-title' : undefined}
 		>
-			<!-- Header -->
 			{#if header || title}
 				<div class="flex items-center justify-between px-6 py-4 border-b-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)] rounded-t-xl">
 					{#if header}
@@ -94,12 +91,10 @@
 				</div>
 			{/if}
 
-			<!-- Content -->
 			<div class="flex-1 overflow-y-auto px-6 py-4">
 				{@render children?.()}
 			</div>
 
-			<!-- Footer -->
 			{#if footer}
 				<div class="flex items-center justify-end gap-3 px-6 py-4 border-t-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)] rounded-b-xl">
 					{@render footer()}

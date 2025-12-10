@@ -36,14 +36,12 @@
 <svelte:window onkeydown={handleKeydown} />
 
 {#if open}
-	<!-- Backdrop -->
 	<div 
 		class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity"
 		onclick={handleBackdropClick}
 		role="presentation"
 	></div>
 
-	<!-- Drawer Panel -->
 	<div
 		class={cn(
 			"fixed top-0 bottom-0 z-50 bg-[var(--sandy-tan-100)] border-[var(--liver-brown-500)] shadow-2xl flex flex-col overflow-hidden",
@@ -54,7 +52,6 @@
 		role="dialog"
 		aria-modal="true"
 	>
-		<!-- Header -->
 		{#if header}
 			<div class="flex items-center justify-between px-5 py-4 border-b-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)]">
 				<div class="flex-1">
@@ -73,7 +70,6 @@
 			</div>
 		{/if}
 
-		<!-- Content -->
 		<div class="flex-1 overflow-y-auto p-5">
 			{@render children?.()}
 		</div>

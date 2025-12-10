@@ -36,19 +36,16 @@
 	style="width: {collapsed ? '4rem' : width}"
 	aria-label="Sidebar"
 >
-	<!-- Header -->
 	{#if header}
 		<div class="shrink-0 border-b-2 border-[var(--liver-brown-500)] p-4">
 			{@render header()}
 		</div>
 	{/if}
 
-	<!-- Content -->
 	<div class="flex-1 overflow-y-auto p-4">
 		{@render children?.()}
 	</div>
 
-	<!-- Footer -->
 	{#if footer}
 		<div class="shrink-0 border-t-2 border-[var(--liver-brown-500)] p-4">
 			{@render footer()}

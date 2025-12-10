@@ -60,18 +60,13 @@
 		error: "text-red-600"
 	};
 
-	// Determine which element to render
 	const defaultElements: Record<TypographyVariant, string> = {
 		h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6',
 		p: 'p', span: 'span', small: 'small', lead: 'p', code: 'code', link: 'a'
 	};
 
 	const element = as ?? defaultElements[variant];
-
-	// For link variant, use the link-specific color unless overridden
 	const effectiveColor = variant === 'link' ? (color === 'default' ? 'primary' : color) : color;
-	
-	// Don't apply color styles for link variant (it has its own styling) or code (has its own bg)
 	const shouldApplyColorStyles = variant !== 'link' && variant !== 'code';
 	
 	const combinedClasses = `${variantStyles[variant]} ${weight ? weightStyles[weight] : ''} ${shouldApplyColorStyles ? colorStyles[effectiveColor] : ''} ${className}`.trim();

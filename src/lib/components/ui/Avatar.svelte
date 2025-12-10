@@ -41,7 +41,6 @@
 		square: 'rounded-lg'
 	};
 
-	// Generate initials from fallback
 	const initials = $derived(
 		fallback
 			.split(' ')

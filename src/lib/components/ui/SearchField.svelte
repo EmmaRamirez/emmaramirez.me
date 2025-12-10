@@ -45,7 +45,6 @@
 </script>
 
 <div class="relative {className}">
-	<!-- Search icon -->
 	<div class="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--liver-brown-500)] pointer-events-none">
 		{#if loading}
 			<div class="h-4 w-4 border-2 border-[var(--caroline-blue-600)] border-t-transparent rounded-full animate-spin"></div>
@@ -67,7 +66,6 @@
 		{...inputProps}
 	/>
 
-	<!-- Clear button -->
 	{#if value}
 		<button
 			type="button"

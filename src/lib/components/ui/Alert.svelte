@@ -65,7 +65,6 @@
 	class="flex gap-3 p-4 rounded-lg border-l-4 {variantClasses[variant].container} {className}"
 	role="alert"
 >
-	<!-- Icon -->
 	<div class="shrink-0 {variantClasses[variant].icon}">
 		{#if icon}
 			{@render icon()}
@@ -76,7 +75,6 @@
 		{/if}
 	</div>
 
-	<!-- Content -->
 	<div class="flex-1 min-w-0">
 		{#if title}
 			<h3 class="font-semibold mb-1 {variantClasses[variant].title}">
@@ -88,7 +86,6 @@
 		</div>
 	</div>
 
-	<!-- Dismiss button -->
 	{#if dismissible}
 		<button
 			type="button"

@@ -43,7 +43,6 @@
 			aria-describedby={description ? `${inputId}-description` : undefined}
 			{...inputProps}
 		/>
-		<!-- Inner dot -->
 		<div 
 			class="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--caroline-blue-700)] opacity-0 peer-checked:opacity-100 transition-opacity duration-200 pointer-events-none"
 		></div>

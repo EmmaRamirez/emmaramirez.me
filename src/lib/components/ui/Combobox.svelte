@@ -133,7 +133,6 @@
 			aria-invalid={error ? 'true' : undefined}
 		/>
 
-		<!-- Dropdown Icon -->
 		<button
 			type="button"
 			class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--liver-brown-500)] hover:text-[var(--liver-brown-700)]"

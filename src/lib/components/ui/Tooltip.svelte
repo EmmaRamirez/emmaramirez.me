@@ -74,7 +74,6 @@
 			class="absolute z-50 px-2 py-1 text-xs font-medium text-white bg-[var(--liver-brown-800)] rounded shadow-lg whitespace-nowrap pointer-events-none {positionClasses[position]}"
 		>
 			{text}
-			<!-- Arrow -->
 			<span 
 				class="absolute w-0 h-0 border-4 {arrowClasses[position]}"
 			></span>

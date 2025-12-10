@@ -43,7 +43,6 @@
 			aria-describedby={description ? `${inputId}-description` : undefined}
 			{...inputProps}
 		/>
-		<!-- Checkmark icon -->
 		<svg 
 			class="absolute left-0.5 top-0.5 h-4 w-4 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity duration-200"
 			xmlns="http://www.w3.org/2000/svg" 
@@ -56,7 +55,6 @@
 		>
 			<path d="M20 6 9 17l-5-5"/>
 		</svg>
-		<!-- Indeterminate icon -->
 		{#if indeterminate}
 			<svg 
 				class="absolute left-0.5 top-0.5 h-4 w-4 text-white pointer-events-none"

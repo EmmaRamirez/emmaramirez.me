@@ -24,8 +24,6 @@
 
 	const generatedId = `slider-${Math.random().toString(36).slice(2, 9)}`;
 	const inputId = $derived(id ?? generatedId);
-
-	// Calculate percentage for track fill
 	const percentage = $derived(((value - min) / (max - min)) * 100);
 </script>
 

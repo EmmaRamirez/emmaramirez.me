@@ -38,21 +38,18 @@
 >
 	<nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
 		<div class="flex h-16 items-center justify-between">
-			<!-- Brand -->
 			{#if brand}
 				<div class="flex-shrink-0">
 					{@render brand()}
 				</div>
 			{/if}
 
-			<!-- Navigation Links -->
 			{#if nav}
 				<div class="hidden md:flex md:items-center md:gap-1">
 					{@render nav()}
 				</div>
 			{/if}
 
-			<!-- Actions -->
 			{#if actions}
 				<div class="flex items-center gap-2">
 					{@render actions()}
