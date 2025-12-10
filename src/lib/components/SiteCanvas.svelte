@@ -169,8 +169,8 @@
             // Initialize physics properties with random initial velocity
             offsetX: 0,
             offsetY: 0,
-            vx: (Math.random() - 0.5) * 200, // Random initial velocity
-            vy: (Math.random() - 0.5) * 200,
+            vx: (Math.random() - 0.5) * 60, // Moderate random initial velocity
+            vy: (Math.random() - 0.5) * 60,
             mass: 1 + Math.random() * 0.5, // Slight mass variation
             effectiveRadius: avgRadius * 1.8, // Much larger collision radius for frequent collisions
             color: activePalette[index % activePalette.length]
