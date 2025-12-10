@@ -20,8 +20,18 @@
 	</Header>
 
 	<div class="flex justify-center items-center py-14 px-4">
-		<h1 class="uppercase text-5xl font-sans font-bold text-center">
-			Hi my name's Emma. This is my website.
+		<h1
+			class="text-5xl font-sans font-bold text-center uppercase flex flex-wrap items-center justify-center gap-x-3 gap-y-2"
+		>
+			<span>Hi my name's</span>
+			<span
+				class="inline-flex flex-col items-center justify-center leading-none mx-2 align-middle"
+			>
+				<span class="tracking-[0.35em]">EM</span>
+				<span class="block h-[0.08em] w-full bg-current my-[0.15em]"></span>
+				<span class="tracking-[0.35em]">MA</span>
+			</span>
+			<span>. This is my website.</span>
 		</h1>
 	</div>
 
