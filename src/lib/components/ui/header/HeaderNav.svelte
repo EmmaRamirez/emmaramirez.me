@@ -20,5 +20,7 @@
 		className
 	)}
 >
-	{@render children?.()}
+	{#if children}
+		{@render children()}
+	{/if}
 </nav>
