@@ -2,7 +2,8 @@
 	import SiteCanvas from '$lib/components/SiteCanvas.svelte';
 	import DiscoBlock from '$lib/components/DiscoBlock.svelte';
 	import ArticleBlock from '$lib/components/ArticleBlock.svelte';
-	import { defaultArticles, type Article } from '$lib/components/Articles.svelte';
+	import type { Article } from '$lib/articles';
+	import { defaultArticles } from '$lib/articles';
 	import ProjectBlock from '$lib/components/ProjectBlock.svelte';
 	import discoImage from '$lib/images/photos/disco.jpeg';
 	import fakemonImage from '$lib/images/fakemon-generator.png';
@@ -46,7 +47,7 @@
 	const homepageArticles = defaultArticles.slice(0, 8);
 
 	const items: Item[] = [
-		...homepageArticles.map((article) => ({ kind: 'article', article })),
+		...homepageArticles.map((article: Article) => ({ kind: 'article', article })),
 		{ kind: 'project', id: 'fakemon' },
 		{ kind: 'project', id: 'nuzlocke' },
 		{ kind: 'project', id: 'site' },
