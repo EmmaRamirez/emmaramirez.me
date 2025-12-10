@@ -128,14 +128,16 @@ to the Svelte implementation is noted.
 
 ## Feedback & Status
 
-- [ ] **Alert / Callout**
+- [x] **Alert / Callout**
   - Inline status messages (info, success, warning, danger).
+  - Existing: `Alert` → `$lib/components/ui/Alert.svelte`.
 - [ ] **Toast / Snackbar**
   - Ephemeral notifications that stack and auto-dismiss.
 - [ ] **Inline validation messages**
   - Field-level feedback tied to inputs.
-- [ ] **EmptyState**
+- [x] **EmptyState**
   - Illustrations and copy for when lists or views have no data.
+  - Existing: `EmptyState` → `$lib/components/ui/EmptyState.svelte`.
 
 ---
 
