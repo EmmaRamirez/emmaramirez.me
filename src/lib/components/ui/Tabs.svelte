@@ -57,7 +57,6 @@
 </script>
 
 <div class={className}>
-	<!-- Tab List -->
 	<div 
 		class="flex border-b-2 border-[var(--liver-brown-500)]"
 		role="tablist"
@@ -85,7 +84,6 @@
 		{/each}
 	</div>
 
-	<!-- Tab Panels -->
 	{#each tabs as tab (tab.id)}
 		<div
 			role="tabpanel"

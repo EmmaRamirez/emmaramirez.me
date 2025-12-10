@@ -31,7 +31,6 @@
 				{/if}
 
 				{#if i === items.length - 1}
-					<!-- Current page (last item) -->
 					<span 
 						class="font-medium text-[var(--liver-brown-800)]"
 						aria-current="page"
@@ -39,7 +38,6 @@
 						{item.label}
 					</span>
 				{:else if item.href}
-					<!-- Link to previous page -->
 					<a 
 						href={item.href}
 						class="text-[var(--caroline-blue-700)] hover:text-[var(--caroline-blue-900)] hover:underline transition-colors"
@@ -47,7 +45,6 @@
 						{item.label}
 					</a>
 				{:else}
-					<!-- Non-link item -->
 					<span class="text-[var(--liver-brown-600)]">
 						{item.label}
 					</span>
