@@ -71,6 +71,8 @@
 		
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		
+		const pixelSize = 10; // Square pixel size for that retro look
+		
 		for (const beam of lightBeams) {
 			// Calculate rotating position - simulates disco ball rotation
 			const rotatedAngle = beam.baseAngle + time * beam.speed;
@@ -82,9 +84,13 @@
 			const x = cursorX + Math.cos(rotatedAngle) * beam.distance + wobbleX;
 			const y = cursorY + Math.sin(rotatedAngle) * beam.distance + wobbleY;
 			
+			// Snap to pixel grid for crisp squares
+			const snappedX = Math.floor(x / pixelSize) * pixelSize;
+			const snappedY = Math.floor(y / pixelSize) * pixelSize;
+			
 			// Skip beams outside canvas bounds
-			if (x < -beam.size || x > canvas.width + beam.size || 
-				y < -beam.size || y > canvas.height + beam.size) {
+			if (snappedX < -pixelSize || snappedX > canvas.width + pixelSize || 
+				snappedY < -pixelSize || snappedY > canvas.height + pixelSize) {
 				continue;
 			}
 			
@@ -92,22 +98,14 @@
 			const angleBrightness = Math.sin(rotatedAngle * 3 + time) * 0.3 + 0.7;
 			const finalBrightness = beam.brightness * angleBrightness;
 			
-			// Draw glowing light spot with radial gradient
-			const gradient = ctx.createRadialGradient(x, y, 0, x, y, beam.size);
-			
 			// Warm white with slight hue variation
-			const hue = 45 + beam.hue; // Golden-white base
-			const saturation = 20 + Math.abs(beam.hue);
+			const hue = 45 + beam.hue;
+			const saturation = 15 + Math.abs(beam.hue) * 0.5;
+			const lightness = 90 + finalBrightness * 10;
 			
-			gradient.addColorStop(0, `hsla(${hue}, ${saturation}%, 95%, ${finalBrightness})`);
-			gradient.addColorStop(0.3, `hsla(${hue}, ${saturation}%, 85%, ${finalBrightness * 0.7})`);
-			gradient.addColorStop(0.6, `hsla(${hue}, ${saturation}%, 70%, ${finalBrightness * 0.3})`);
-			gradient.addColorStop(1, `hsla(${hue}, ${saturation}%, 60%, 0)`);
-			
-			ctx.beginPath();
-			ctx.arc(x, y, beam.size, 0, Math.PI * 2);
-			ctx.fillStyle = gradient;
-			ctx.fill();
+			// Draw pixely square
+			ctx.fillStyle = `hsla(${hue}, ${saturation}%, ${Math.min(lightness, 100)}%, ${finalBrightness})`;
+			ctx.fillRect(snappedX, snappedY, pixelSize, pixelSize);
 		}
 	}
 
