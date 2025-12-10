@@ -10,7 +10,7 @@
 		getProject,
 		getArticle,
 		getDisco
-	} from './+page';
+	} from '$lib/registry/homepage';
 
 	const shuffledItems = getHomepageItems();
 </script>
@@ -80,7 +80,7 @@
 						image={disco.image}
 						alt={disco.alt}
 						caption={disco.caption}
-						class={disco.class}
+						class={disco.class ?? 'w-full h-full'}
 					/>
 				{/if}
 			{/each}
