@@ -232,8 +232,6 @@
             if (progress >= 1) return;
             
             const currentRadius = progress * pulse.maxRadius;
-            // Force is stronger at the beginning, fades as wave expands
-            const forceMultiplier = (1 - progress) * (1 - progress);
             
             blobDataCache.forEach((blob, blobIndex) => {
                 // Skip if this blob was already hit by this pulse
@@ -252,6 +250,17 @@
                     // Calculate force direction (away from pulse center)
                     const normalX = distance > 0 ? dx / distance : 0;
                     const normalY = distance > 0 ? dy / distance : 0;
+                    
+                    // Force dissipates with distance traveled - inverse square falloff
+                    // At distance 0: full force, at maxRadius: minimal force
+                    const distanceRatio = distance / pulse.maxRadius;
+                    const dissipationFactor = Math.pow(1 - distanceRatio, 2); // Quadratic falloff
+                    
+                    // Also factor in time-based decay (wave loses energy as it expands)
+                    const timeDecay = Math.exp(-progress * 1.5); // Exponential decay over time
+                    
+                    // Combined force multiplier
+                    const forceMultiplier = dissipationFactor * timeDecay;
                     
                     // Apply force
                     const force = waveForce * forceMultiplier / blob.mass;
