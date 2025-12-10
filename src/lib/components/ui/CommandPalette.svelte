@@ -47,7 +47,6 @@
 		)
 	);
 
-	// Group commands
 	const groupedCommands = $derived.by(() => {
 		const groups: Record<string, CommandItem[]> = {};
 		for (const cmd of filteredCommands) {
@@ -88,7 +87,6 @@
 	}
 
 	function handleGlobalKeydown(e: KeyboardEvent) {
-		// Open with Cmd/Ctrl + K
 		if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
 			e.preventDefault();
 			open = !open;
@@ -108,14 +106,12 @@
 <svelte:window onkeydown={handleGlobalKeydown} />
 
 {#if open}
-	<!-- Backdrop -->
 	<div
 		class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
 		onclick={close}
 		role="presentation"
 	></div>
 
-	<!-- Command Palette -->
 	<div
 		class="fixed left-1/2 top-[15%] z-50 w-full max-w-xl -translate-x-1/2 bg-[var(--sandy-tan-200)] border-2 border-[var(--liver-brown-500)] rounded-xl shadow-2xl overflow-hidden {className}"
 		role="dialog"
