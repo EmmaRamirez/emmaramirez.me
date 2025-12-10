@@ -88,7 +88,7 @@ type ProjectId =
 	<Header sticky>
 		<HeaderLogo>EMZINNIA</HeaderLogo>
 		<HeaderNav>
-			<HeaderNavItem href="/" active>Home</HeaderNavItem>
+			<HeaderNavItem href="/" active class="text-black">Home</HeaderNavItem>
 			<HeaderNavItem href="/about">About</HeaderNavItem>
 			<HeaderNavItem href="/canvas">Canvas</HeaderNavItem>
 		</HeaderNav>
