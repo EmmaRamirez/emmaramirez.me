@@ -166,11 +166,11 @@
             quadrant,
             driftPhaseX: Math.random() * Math.PI * 2,
             driftPhaseY: Math.random() * Math.PI * 2,
-            // Initialize physics properties with random initial velocity
+            // Initialize physics properties
             offsetX: 0,
             offsetY: 0,
-            vx: (Math.random() - 0.5) * 60, // Moderate random initial velocity
-            vy: (Math.random() - 0.5) * 60,
+            vx: 0,
+            vy: 0,
             mass: 1 + Math.random() * 0.5, // Slight mass variation
             effectiveRadius: avgRadius * 1.8, // Much larger collision radius for frequent collisions
             color: activePalette[index % activePalette.length]

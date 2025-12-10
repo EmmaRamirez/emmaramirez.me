@@ -47,7 +47,7 @@
 	const homepageArticles = defaultArticles.slice(0, 8);
 
 	const items: Item[] = [
-		...homepageArticles.map((article: Article) => ({ kind: 'article', article })),
+		...homepageArticles.map<Item>((article: Article) => ({ kind: 'article', article })),
 		{ kind: 'project', id: 'fakemon' },
 		{ kind: 'project', id: 'nuzlocke' },
 		{ kind: 'project', id: 'site' },
