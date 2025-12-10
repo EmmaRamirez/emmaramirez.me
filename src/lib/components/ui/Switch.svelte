@@ -66,13 +66,15 @@
 	{#if label || description}
 		<div class="flex flex-col gap-0.5">
 			{#if label}
-				<label 
-					for={inputId} 
+				<span 
 					class="text-sm font-medium text-[var(--liver-brown-800)] cursor-pointer select-none"
+					role="button"
+					tabindex="0"
 					onclick={toggle}
+					onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
 				>
 					{label}
-				</label>
+				</span>
 			{/if}
 			{#if description}
 				<p id="{inputId}-description" class="text-sm text-[var(--liver-brown-600)]">
