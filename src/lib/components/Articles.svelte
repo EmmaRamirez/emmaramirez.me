@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import ArticleBlock from './ArticleBlock.svelte';
+	import TagDrawer from './TagDrawer.svelte';
 
 	interface Article {
 		id: string;
@@ -16,6 +17,18 @@
 	}
 
 	let { articles = [], class: className }: ArticlesProps = $props();
+
+	let drawerOpen = $state(false);
+	let selectedTag = $state('');
+
+	function handleTagClick(tag: string) {
+		selectedTag = tag;
+		drawerOpen = true;
+	}
+
+	function closeDrawer() {
+		drawerOpen = false;
+	}
 
 	// Default articles if none provided
 	const defaultArticles: Article[] = [
