@@ -58,7 +58,6 @@
 						onclick={() => handleStepClick(i)}
 						aria-current={getStepStatus(i) === 'current' ? 'step' : undefined}
 					>
-						<!-- Step indicator -->
 						<div class="flex items-center w-full">
 							<div class="flex items-center justify-center w-8 h-8 rounded-full shrink-0 transition-colors
 								{getStepStatus(i) === 'complete' ? 'bg-[var(--caroline-blue-700)] text-white' : ''}
@@ -74,7 +73,6 @@
 								{/if}
 							</div>
 
-							<!-- Connector line -->
 							{#if i < steps.length - 1}
 								<div class="flex-1 h-0.5 mx-2
 									{getStepStatus(i) === 'complete' ? 'bg-[var(--caroline-blue-700)]' : 'bg-[var(--liver-brown-400)]'}"
@@ -82,7 +80,6 @@
 							{/if}
 						</div>
 
-						<!-- Label -->
 						<div class="mt-2 text-center">
 							<span class="text-sm font-medium
 								{getStepStatus(i) === 'current' ? 'text-[var(--caroline-blue-700)]' : 'text-[var(--liver-brown-700)]'}">
@@ -99,7 +96,6 @@
 			{/each}
 		</ol>
 	{:else}
-		<!-- Vertical orientation -->
 		<ol class="flex flex-col">
 			{#each steps as step, i (step.id)}
 				<li class="relative {i < steps.length - 1 ? 'pb-8' : ''}">
