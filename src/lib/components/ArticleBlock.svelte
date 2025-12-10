@@ -12,9 +12,16 @@
         titleClass?: string;
         articleId?: string;
         contentClass?: string;
+        ontagclick?: (tag: string) => void;
     }
 
-    let { title, content, date, tags = [], width = 'sm', class: className, titleClass, articleId = 'article-block', contentClass }: ArticleBlockProps = $props();
+    let { title, content, date, tags = [], width = 'sm', class: className, titleClass, articleId = 'article-block', contentClass, ontagclick }: ArticleBlockProps = $props();
+
+    function handleTagClick(event: MouseEvent, tag: string) {
+        event.preventDefault();
+        event.stopPropagation();
+        ontagclick?.(tag);
+    }
 </script>
 
 <div class={cn("cursor-pointer article-block bg-[var(--transit-yellow-500)] border border-[var(--liver-brown-500)] rounded-lg flex flex-col relative overflow-hidden", className)} id={articleId}>
