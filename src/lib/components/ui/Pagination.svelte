@@ -42,12 +42,10 @@
 			range.push(i);
 		}
 
-		// Add ellipsis before last if needed
 		if (end < totalPages - 1) {
 			range.push('ellipsis');
 		}
 
-		// Always show last page (if more than 1 page)
 		if (totalPages > 1) {
 			range.push(totalPages);
 		}
@@ -62,7 +60,6 @@
 </script>
 
 <nav aria-label="Pagination" class="flex items-center gap-1 {className}">
-	<!-- Previous Button -->
 	<button
 		type="button"
 		class="{buttonBaseClass} {currentPage <= 1 ? disabledClass : inactiveClass}"
@@ -75,7 +72,6 @@
 		</svg>
 	</button>
 
-	<!-- Page Numbers -->
 	{#each pages as page, i (i)}
 		{#if page === 'ellipsis'}
 			<span class="w-9 h-9 flex items-center justify-center text-[var(--liver-brown-500)]">
@@ -93,7 +89,6 @@
 		{/if}
 	{/each}
 
-	<!-- Next Button -->
 	<button
 		type="button"
 		class="{buttonBaseClass} {currentPage >= totalPages ? disabledClass : inactiveClass}"
