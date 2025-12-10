@@ -107,8 +107,8 @@
         processedBlobs: Set<number>; // Track which blobs have been hit by this pulse
     }
     let wavePulses = $state<WavePulse[]>([]);
-    const pulseMaxRadius = 500;
-    const pulseDuration = 1200; // milliseconds
+    const pulseMaxRadius = 1000; // Large radius to hit more blobs
+    const pulseDuration = 1500; // milliseconds - longer duration
 
     function regenerateCanvas() {
         if (canvas) {
