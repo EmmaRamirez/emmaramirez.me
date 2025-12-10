@@ -27,21 +27,17 @@
 		}
 	}
 
-	// Generate page numbers to display
 	const pages = $derived.by(() => {
 		const range: (number | 'ellipsis')[] = [];
 		const start = Math.max(2, currentPage - siblingCount);
 		const end = Math.min(totalPages - 1, currentPage + siblingCount);
 
-		// Always show first page
 		range.push(1);
 
-		// Add ellipsis after first if needed
 		if (start > 2) {
 			range.push('ellipsis');
 		}
 
-		// Add middle pages
 		for (let i = start; i <= end; i++) {
 			range.push(i);
 		}
