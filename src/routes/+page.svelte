@@ -6,6 +6,9 @@
 	import discoImage from '$lib/images/photos/disco.jpeg';
 	import fakemonImage from '$lib/images/fakemon-generator.png';
 	import nuzlockeImage from '$lib/images/nuzlocke-generator.jpg';
+	import profileImage from '$lib/images/profile-2.png';
+	import houstonImage from '$lib/images/photos/houston.jpeg';
+	import svelteWelcomeImage from '$lib/images/svelte-welcome.webp';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 </script>
 
@@ -90,6 +93,48 @@
 					{#snippet description()}
 						A companion app for challenge runs that keeps teams, routes, and tense decisions tidy
 						without losing the charm of notebooks and scribbles.
+					{/snippet}
+				</ProjectBlock>
+
+				<ProjectBlock
+					title="This Personal Site"
+					pill="Design systems"
+					image={profileImage}
+					class="md:col-span-1"
+					contentClassName="md:flex-row md:items-center"
+					imageClassName="md:translate-x-0 md:ml-4"
+				>
+					{#snippet description()}
+						The hand-rolled design system and SvelteKit setup that powers this very site, experimenting
+						with typography, tokens, and a slightly feral layout grid.
+					{/snippet}
+				</ProjectBlock>
+
+				<ProjectBlock
+					title="Disco Canvas"
+					pill="Playful interfaces"
+					image={houstonImage}
+					class="md:col-span-1"
+					contentClassName="md:flex-row md:items-center"
+					imageClassName="md:translate-x-0 md:ml-4"
+				>
+					{#snippet description()}
+						An interactive playground for gradients, blobs, and motion—built to feel like a disco
+						floor you can doodle on.
+					{/snippet}
+				</ProjectBlock>
+
+				<ProjectBlock
+					title="Paraglide Playground"
+					pill="i18n & UX"
+					image={svelteWelcomeImage}
+					class="md:col-span-1"
+					contentClassName="md:flex-row md:items-center"
+					imageClassName="md:translate-x-0 md:ml-4"
+				>
+					{#snippet description()}
+						A multilingual SvelteKit demo using Paraglide that stress-tests copy, layout, and tone
+						across languages without turning the UI into a spreadsheet.
 					{/snippet}
 				</ProjectBlock>
 			</div>
