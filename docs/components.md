@@ -56,24 +56,30 @@ to the Svelte implementation is noted.
 - [x] **IconButton**
   - Square or circular button for icons only; label via `aria-label`.
   - Existing: `IconButton` → `$lib/components/ui/IconButton.svelte`.
-- [ ] **LinkButton / NavButton**
+- [x] **LinkButton / NavButton**
   - Navigation-focused button that renders as `<a>` or integrates with the router.
-- [ ] **Input (text)**
+  - Existing: `LinkButton` → `$lib/components/ui/LinkButton.svelte`.
+- [x] **Input (text)**
   - Standard text input with label, hint, and error messaging.
   - Existing: `Input` → `$lib/components/ui/Input.svelte`.
-- [ ] **Textarea**
+- [x] **Textarea**
   - Multiline text entry with character counts and resize controls.
-- [ ] **Select**
+  - Existing: `Textarea` → `$lib/components/ui/Textarea.svelte`.
+- [x] **Select**
   - Native `<select>` or custom listbox for single selection.
+  - Existing: `Select` → `$lib/components/ui/Select.svelte`.
 - [ ] **Combobox / Autocomplete**
   - Searchable selection with keyboard navigation.
-- [ ] **Checkbox**
+- [x] **Checkbox**
   - Boolean toggle, possibly in groups.
-- [ ] **Radio**
+  - Existing: `Checkbox` → `$lib/components/ui/Checkbox.svelte`.
+- [x] **Radio**
   - Single-choice selection from a group.
-- [ ] **Switch / Toggle**
+  - Existing: `Radio` → `$lib/components/ui/Radio.svelte`.
+- [x] **Switch / Toggle**
   - On/off control with clear visual affordance.
-- [ ] **Slider / RangeSlider**
+  - Existing: `Switch` → `$lib/components/ui/Switch.svelte`.
+- [x] **Slider / RangeSlider**
   - Numeric value selection by dragging a thumb.
   - Existing: `Slider` → `$lib/components/ui/Slider.svelte`.
 - [ ] **DatePicker / DateRangePicker**
