@@ -3,7 +3,7 @@
 	import ArticleBlock from './ArticleBlock.svelte';
 	import TagDrawer from './TagDrawer.svelte';
 
-	interface Article {
+	export interface Article {
 		id: string;
 		title: string;
 		content: string;
@@ -31,7 +31,7 @@
 	}
 
 	// Default articles if none provided
-	const defaultArticles: Article[] = [
+	export const defaultArticles: Article[] = [
 		{
 			id: 'hegel-web-design',
 			title: 'Hegel & Web Design',
