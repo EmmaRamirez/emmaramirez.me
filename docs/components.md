@@ -84,10 +84,12 @@ to the Svelte implementation is noted.
   - Existing: `Slider` → `$lib/components/ui/Slider.svelte`.
 - [ ] **DatePicker / DateRangePicker**
   - Calendar-based date selection.
-- [ ] **FileInput**
+- [x] **FileInput**
   - File upload with drag-and-drop support.
-- [ ] **SearchField**
+  - Existing: `FileInput` → `$lib/components/ui/FileInput.svelte`.
+- [x] **SearchField**
   - Input optimized for search, often with an icon and clear button.
+  - Existing: `SearchField` → `$lib/components/ui/SearchField.svelte`.
 
 ---
 
