@@ -842,6 +842,18 @@
                 </div>
                 
                 <div>
+                    <label for="free-roaming-input" class="flex items-center gap-2">
+                        <input
+                            id="free-roaming-input"
+                            type="checkbox"
+                            bind:checked={freeRoaming}
+                            class="rounded"
+                        />
+                        <span class="text-sm font-medium">Free Roaming (no quadrant lock)</span>
+                    </label>
+                </div>
+                
+                <div>
                     <label for="show-boxes-input" class="flex items-center gap-2">
                         <input
                             id="show-boxes-input"
