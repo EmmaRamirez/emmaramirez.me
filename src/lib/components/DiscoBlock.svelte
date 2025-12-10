@@ -122,7 +122,7 @@
 	function startDisco(event: MouseEvent) {
 		if (!isHovering) {
 			isHovering = true;
-			lightBeams = generateBeams(36);
+			lightBeams = generateBeams(96);
 			animationId = requestAnimationFrame(animate);
 		}
 		
