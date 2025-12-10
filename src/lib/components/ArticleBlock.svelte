@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { beforeNavigate, onNavigate } from "$app/navigation";
 	import { cn } from "$lib/utils";
 	import type { Snippet } from "svelte";
 
     interface ArticleBlockProps {
         title: string;
         content: string;
+        date?: string;
+        tags?: string[];
         width?: 'sm' | 'md' | 'lg';
         class?: string | Snippet;
         titleClass?: string;
@@ -13,85 +14,43 @@
         contentClass?: string;
     }
 
-    let { title, content, width = 'sm', class: className, titleClass, articleId = 'article-block', contentClass }: ArticleBlockProps = $props();
-
-    let isNavigating = $state(false);
-
-    const widthMap = {
-        'sm': 'max-w-48',
-        'md': 'max-w-96',
-        'lg': 'max-w-full'
-    }
-
-    beforeNavigate((event) => {
-        document.body.style.backgroundColor = 'var(--transit-yellow-500)';
-
-        const blocks = document.querySelectorAll('section > *');
-        Array.from(blocks).forEach((block) => {
-            if (block.id === articleId) {
-                console.log('article block detected');
-                return;
-            } else {
-                block.style.transition = 'opacity 0.5s ease-in-out';
-                block.style.opacity = '0';
-                block.style.pointerEvents = 'none';
-            }
-        });
-
-        isNavigating = true;
-    });
-
-    function delayNavigation() {
-        return new Promise((res) => setTimeout(res, 500));
-    }
-
-    onNavigate((navigation) => {
-        return delayNavigation();
-    });
-
-
-    let top = $state(0);
-
-    function slowScroll(content: HTMLElement) {
-        
-        content.style.overflow = 'auto';
-        const height = content?.scrollHeight;
-
-        const interval = setInterval(() => {
-            top = top + 20;
-            content?.scrollTo({
-                top,
-                behavior: 'smooth'
-            });
-
-            if (top >= height) {
-                clearInterval(interval);
-            }
-        }, 1000);
-    }
-
-    function handleMouseOver(e: MouseEvent) {
-        const content = document.getElementById('content');
-
-        slowScroll(content);
-    }
-
+    let { title, content, date, tags = [], width = 'sm', class: className, titleClass, articleId = 'article-block', contentClass }: ArticleBlockProps = $props();
 </script>
 
-<div class={cn("cursor-pointer article-block bg-[var(--transit-yellow-500)] border border-[var(--liver-brown-500)] rounded-lg flex flex-col gap-3 relative z-index-2 hover:scale-105 transition-all duration-300 overflow-hidden", isNavigating && "z-2", className)} id={articleId} on:mouseover={handleMouseOver}>
-    <a class="style-none cursor-pointer" href="blog/article">
-        <div class="flex items-center justify-between">
-            <div class={cn("article-block-title text-xl font-bold pl-4 py-2", titleClass)}>{title}</div>
-            <!-- <span class="article-block-content-tag bg-[var(--liver-brown-500)] text-white p-2 uppercase font-mono">Article</span> -->
-        </div>
-    <p id="content"class={cn("article-block-content bg-[var(--transit-yellow-500)] p-4 py-0 max-h-48 text-ellipsis {widthMap[width]}", contentClass)}>
-        {#if typeof content != 'string'}
-            {@render content()}
-        {:else}
-            {content}
+<div class={cn("cursor-pointer article-block bg-[var(--transit-yellow-500)] border border-[var(--liver-brown-500)] rounded-lg flex flex-col relative overflow-hidden", className)} id={articleId}>
+    <a class="style-none cursor-pointer block p-4" href="/blog/article">
+        <div class={cn("article-block-title text-xl font-bold mb-2 leading-tight", titleClass)}>{title}</div>
+        <p class={cn("article-block-content text-[var(--liver-brown-700)] leading-relaxed", contentClass)}>
+            {#if typeof content != 'string'}
+                {@render content()}
+            {:else}
+                {content}
+            {/if}
+        </p>
+        
+        {#if tags.length > 0 || date}
+            <div class="mt-4 pt-3 border-t border-[var(--liver-brown-300)] flex items-center justify-between gap-3">
+                {#if tags.length > 0}
+                    <div class="flex gap-2 flex-wrap">
+                        {#each tags as tag (tag)}
+                            <span class="text-xs px-2 py-1 rounded-full bg-[var(--sandy-tan-500)] text-[var(--liver-brown-700)] font-mono uppercase tracking-wider">
+                                {tag}
+                            </span>
+                        {/each}
+                    </div>
+                {/if}
+                {#if date}
+                    <time class="text-sm text-[var(--liver-brown-500)] font-mono whitespace-nowrap">
+                        {new Date(date).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'short', 
+                            day: 'numeric' 
+                        })}
+                    </time>
+                {/if}
+            </div>
         {/if}
-    </p>
-</a>
+    </a>
 </div>
 
 <style>

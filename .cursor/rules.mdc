@@ -1,0 +1,248 @@
+---
+alwaysApply: true
+---
+
+# **Cursor Rules — Svelte 5 / Tailwind / Vite / Vitest / ESLint / Playwright / Prisma**
+
+## **General Principles**
+
+* Prefer clarity over cleverness. Write code that future-you can understand.
+* Follow a **minimalism-first** approach — fewer abstractions until the need is proven.
+* Avoid **defensive coding** that a human wouldn’t do (checking impossible states, redundant null checks, type over-assertion).
+* Avoid comments unless documenting complex logic or non-obvious behavior.
+* Use strong conventions so that comments are unnecessary.
+* Prefer composition over inheritance (rarely applies directly but affects component design logic).
+* Keep functions small and pure unless there is a clear need for side effects.
+
+---
+
+# **Svelte 5 Best Practices**
+
+### **Component Structure**
+
+* Use the Svelte 5 `$state` and `$effect` primitives idiomatically.
+* Prefer **store modules** for shared state instead of prop drilling.
+* Co-locate files using the SvelteKit routing convention.
+* Keep each component focused on a single role; extract helpers into modules.
+
+### **Reactivity**
+
+* Use `$effect` for reactive relationships rather than manual subscriptions.
+* Avoid overly defensive reactive conditions; assume props are typed correctly.
+
+### **Props & State**
+
+* Use TypeScript interfaces for props.
+* Use `$state` only for *mutable local state*; prefer props for flow of data.
+* Never mutate props; derive new state instead.
+
+### **Accessibility**
+
+* Always ensure interactive elements have:
+
+  * a discernible text label,
+  * correct semantics (`<button>`, `<a>`, `<input>`),
+  * proper keyboard accessibility.
+* Use `aria-*` only when semantic HTML isn't enough.
+* Ensure form fields are properly labeled.
+
+### **Styling with Tailwind**
+
+* Use Tailwind utility classes for all styling.
+* Avoid writing custom CSS unless absolutely necessary.
+* Prefer semantic class groups: `flex`, `items-center`, `gap-4`, etc.
+* Use Tailwind’s design tokens (`text-lg`, `bg-primary`, etc.) instead of arbitrary values unless justified.
+* If a Tailwind class cluster repeats 3+ times, extract a component.
+
+---
+
+# **Vite**
+
+* Keep config minimal; only add plugins when necessary.
+* Prefer native ES modules and modern syntax.
+* Ensure Vite environment variables use `VITE_` prefix for the browser.
+
+---
+
+# **Prisma Database Practices**
+
+### **Schema Design**
+
+* Use meaningful naming conventions: singular model names, camelCase fields.
+* Add indexes explicitly when beneficial.
+* Prefer `@relation` fields for clarity over implicit relations.
+* Avoid unnecessary cascading deletes unless the domain guarantees it.
+
+### **Queries**
+
+* Co-locate database logic in `lib/server/db/*`.
+* Avoid business logic inside API routes.
+* Use `PrismaClient` via a singleton pattern.
+* Assume typed queries enforce correctness—do not add redundant runtime validations.
+
+### **Migrations**
+
+* Migrate often, in small steps.
+* Never manually edit migration SQL unless absolutely required.
+
+---
+
+# **Vitest**
+
+### **Unit Test Style**
+
+* Test behavior, not implementation details.
+* Keep tests small, readable, and deterministic.
+* Use `describe` blocks meaningfully to communicate intent.
+* Prefer `assert` over `expect` when clarity improves.
+* Do not mock unnecessarily; prefer realistic data.
+
+### **Svelte Component Tests**
+
+* Keep DOM queries semantic (`getByRole`, `getByLabelText`).
+* Don’t test Tailwind classes; test visible behavior.
+
+---
+
+# **Playwright E2E**
+
+### **Philosophy**
+
+* Test core user paths, not every permutation.
+* Use data-testid **sparingly**; prefer role-based selection.
+* Ensure tests assert on user-visible outcomes, not internal state.
+
+### **Structure**
+
+* Use Page Objects when interactions become repetitive.
+* Keep tests parallelizable.
+
+### **Accessibility in E2E**
+
+* Include scanning for basic a11y regressions in CI (`npx @axe-core/playwright` if desired).
+
+---
+
+# **ESLint / Formatting**
+
+* Use ESLint with:
+
+  * TypeScript rules,
+  * Svelte plugin,
+  * Tailwind class sorting plugin,
+  * Prettier for formatting.
+* Enforce consistent import ordering.
+* Ban default exports except for Svelte components.
+* Do not disable lint rules unless there is strong justification.
+
+---
+
+# **Architecture & Project Structure**
+
+### **Directory Structure**
+
+```
+src/
+  lib/
+    components/
+    stores/
+    utils/
+    server/
+      db/
+      services/
+  routes/
+  styles/
+```
+
+### **Principles**
+
+* Keep domain logic in `lib/server/services`, not routes.
+* Keep utilities pure; avoid hidden side effects.
+* Return typed values everywhere—never `any`.
+* Never put environment-dependent behavior in shared client/server modules.
+
+---
+
+# **Design Principles**
+
+### **UX**
+
+* Favor simplicity: minimal clicks, clear flows.
+* Keep interactive elements spaced and easily targetable.
+* Tailwind spacing rules (`gap-*`, `space-y-*`) should reflect real hierarchy.
+
+### **Consistency**
+
+* Adopt a spacing scale and stick to it (`2, 4, 6, 8` etc.).
+* Align components to a design system:
+
+  * consistent colors,
+  * consistent typography,
+  * consistent radii.
+
+### **Responsiveness**
+
+* Mobile-first design.
+* Use Tailwind breakpoints systematically (`sm:`, `md:`, `lg:`).
+
+---
+
+# **Error Handling & Data Flow**
+
+* Do not add defensive guards for impossible situations (type system ensures correctness).
+* Use SvelteKit’s `fail()` and `error()` helpers for consistent error handling.
+* Handle expected failure states gracefully through UI states (loading, error, empty).
+* Do not use `try/catch` around every async call—only where meaningful.
+
+---
+
+# **Performance**
+
+* Use `await Promise.all()` for parallel async calls.
+* Avoid unnecessary reactivity that triggers rerenders.
+* Use Vite’s built-in optimizations—do not micro-optimize unless profiling demands it.
+* Prefer lazy loading for large components and routes.
+
+---
+
+# **Security**
+
+* Validate all incoming user data on server routes (zod recommended).
+* Never trust client-side validation.
+* Keep secrets server-side; no `VITE_` prefix for sensitive values.
+* Sanitize and encode user-facing fields when needed.
+
+---
+
+# **Comments Policy**
+
+* **Do NOT use comments** unless:
+
+  * explaining a complex algorithm,
+  * documenting a non-obvious workaround,
+  * explaining a domain rule not apparent in the code.
+
+---
+
+# **Output Expectations for Cursor**
+
+When Cursor generates code:
+
+### **Always:**
+
+* Follow Svelte 5 idioms.
+* Use Tailwind for styling.
+* Use TypeScript everywhere.
+* Maintain accessibility.
+* Keep functions small and clear.
+* Prefer semantic HTML.
+
+### **Never:**
+
+* Write unnecessary comments.
+* Write defensive code for impossible states.
+* Add redundant null checks.
+* Implement complicated abstractions prematurely.
+* Use default exports (except Svelte components).
+* Add CSS files unless unavoidable.
+

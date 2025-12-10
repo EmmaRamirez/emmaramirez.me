@@ -3,8 +3,8 @@
 
     let canvas: HTMLCanvasElement | null = null;
 
-    let columns = $state(100);
-    let rows = $state(100);
+    let columns = $state(10);
+    let rows = $state(10);
     let mouseX = $state(0);
     let mouseY = $state(0);
     
@@ -13,11 +13,53 @@
     let minRadiusMultiplier = $state(0.19);
     let maxRadiusMultiplier = $state(0.36);
     let circleRadius = $state(100);
-    let nearColor = $state('red');
-    let farColor = $state('blue');
+    let nearColor = $state('#ff0000');
+    let farColor = $state('#ff0000');
+    let gridColor = $state('#000000');
     let alpha = $state(0.7);
-    let showBoxes = $state(true);
+    let showBoxes = $state(false);
     let showControls = $state(true);
+    
+    // Animation state for continuous blob morphing and drifting
+    let animationTime = $state(0);
+    let animationFrameId: number | null = null;
+    let lastTimestamp = 0;
+    
+    // Animation constants - very slow for meditative feel (10-15 second cycles)
+    const ANIMATION_SPEED = 0.0005; // ~12 second full cycle
+    const MORPH_INTENSITY = 0.25; // 25% radius variation
+    const DRIFT_INTENSITY = 0.08; // 8% of cell size for position drift
+    
+    // Configurable physics parameters
+    let waveForce = $state(4000); // Force applied by wave pulse (higher = stronger push)
+    let friction = $state(0.985); // Less damping = blobs travel further
+    let springForce = $state(0.004); // Weaker spring = slower return to original position
+    let collisionBounce = $state(0.95); // Higher = bouncier collisions
+    
+    // Fixed physics constant
+    const MIN_VELOCITY = 0.01; // Threshold to stop movement
+    
+    // Color palette presets
+    const PALETTE_PRESETS: Record<string, string[]> = {
+        sunset: ['#FF6B6B', '#FEC89A', '#FFD93D', '#FF8C42', '#C73E1D'],
+        ocean: ['#0077B6', '#00B4D8', '#90E0EF', '#CAF0F8', '#023E8A'],
+        forest: ['#2D6A4F', '#40916C', '#52B788', '#74C69D', '#95D5B2'],
+        neon: ['#FF00FF', '#00FFFF', '#FF0080', '#80FF00', '#FFFF00'],
+        monochrome: ['#1A1A2E', '#16213E', '#0F3460', '#533483', '#E94560'],
+        candy: ['#FF69B4', '#FFB6C1', '#DDA0DD', '#E6E6FA', '#F0E68C'],
+        earth: ['#8B4513', '#A0522D', '#CD853F', '#DEB887', '#D2691E']
+    };
+    
+    let selectedPreset = $state<string>('sunset');
+    let activePalette = $state<string[]>(PALETTE_PRESETS.sunset);
+    
+    function handlePaletteChange() {
+        activePalette = PALETTE_PRESETS[selectedPreset];
+        // Reassign colors to existing blobs
+        blobDataCache.forEach((blob, index) => {
+            blob.color = activePalette[index % activePalette.length];
+        });
+    }
 
     const setBoxes = (canvas: HTMLCanvasElement) => {
         const boxes = [];
@@ -30,7 +72,30 @@
     };
 
     let boxes = $state<{ x: number, y: number, width: number, height: number }[]>([]);
-    let blobPointsCache = $state<{ points: { x: number; y: number }[]; quadrant: { x: number, y: number, width: number, height: number } }[]>([]);
+    
+    // Enhanced blob data structure for animation
+    interface BlobPointData {
+        angle: number;
+        baseRadius: number;
+        phaseOffset: number; // unique phase for organic movement
+    }
+    
+    interface BlobData {
+        basePoints: BlobPointData[];
+        quadrant: { x: number; y: number; width: number; height: number };
+        driftPhaseX: number; // unique phase for X position drift
+        driftPhaseY: number; // unique phase for Y position drift
+        // Physics properties
+        offsetX: number; // Current displacement from base position
+        offsetY: number;
+        vx: number; // Velocity
+        vy: number;
+        mass: number; // For collision physics
+        effectiveRadius: number; // For collision detection
+        color: string; // Hex color assigned from palette
+    }
+    
+    let blobDataCache = $state<BlobData[]>([]);
     
     // Wave pulse animation state
     interface WavePulse {
@@ -39,26 +104,20 @@
         startTime: number;
         maxRadius: number;
         duration: number;
+        processedBlobs: Set<number>; // Track which blobs have been hit by this pulse
     }
     let wavePulses = $state<WavePulse[]>([]);
     const pulseMaxRadius = 500;
-    const pulseDuration = 1000; // milliseconds
+    const pulseDuration = 1200; // milliseconds
 
     function regenerateCanvas() {
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx) {
                 boxes = setBoxes(canvas);
-                // Regenerate blob points
-                blobPointsCache = boxes.map(quadrant => ({
-                    points: generateBlobPoints(quadrant),
-                    quadrant
-                }));
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                createboxes(ctx, canvas, boxes);
-                blobPointsCache.forEach(({ points, quadrant }) => {
-                    generateBlob(ctx, canvas!, quadrant, points);
-                });
+                // Regenerate blob data with animation metadata
+                blobDataCache = boxes.map((quadrant, index) => generateBlobData(quadrant, index));
+                renderCanvas();
             }
         }
     }
@@ -78,38 +137,239 @@
         boxes: { x: number, y: number, width: number, height: number }[]
     ) {
         if (ctx && showBoxes) {
-            ctx.strokeStyle = 'blue';
+            ctx.strokeStyle = gridColor;
             boxes.forEach(quadrant => {
                 ctx.strokeRect(quadrant.x, quadrant.y, quadrant.width, quadrant.height);
             });
         }
     }
 
-    function generateBlobPoints(
-        quadrant: { x: number, y: number, width: number, height: number }
-    ): { x: number; y: number }[] {
-        // Blob params
-        const centerX = quadrant.x + quadrant.width / 2;
-        const centerY = quadrant.y + quadrant.height / 2;
+    function generateBlobData(
+        quadrant: { x: number, y: number, width: number, height: number },
+        index: number
+    ): BlobData {
         const minRadius = Math.min(quadrant.width, quadrant.height) * minRadiusMultiplier;
         const maxRadius = Math.min(quadrant.width, quadrant.height) * maxRadiusMultiplier;
 
-        // Generate random radii for blob shape
-        const radii = Array.from({ length: blobPoints }, () =>
-            minRadius + Math.random() * (maxRadius - minRadius)
-        );
+        // Generate base points with random radii and phase offsets
+        const basePoints: BlobPointData[] = Array.from({ length: blobPoints }, (_, i) => ({
+            angle: ((Math.PI * 2) / blobPoints) * i,
+            baseRadius: minRadius + Math.random() * (maxRadius - minRadius),
+            phaseOffset: Math.random() * Math.PI * 2 // Random phase for organic movement
+        }));
+        
+        // Calculate average radius for collision detection
+        const avgRadius = basePoints.reduce((sum, p) => sum + p.baseRadius, 0) / basePoints.length;
 
-        // Generate blob points
-        const blobPointsArray: { x: number; y: number }[] = [];
-        for (let i = 0; i < blobPoints; i++) {
-            const angle = ((Math.PI * 2) / blobPoints) * i;
-            const radius = radii[i];
-            const x = centerX + Math.cos(angle) * radius;
-            const y = centerY + Math.sin(angle) * radius;
-            blobPointsArray.push({ x, y });
+        return {
+            basePoints,
+            quadrant,
+            driftPhaseX: Math.random() * Math.PI * 2,
+            driftPhaseY: Math.random() * Math.PI * 2,
+            // Initialize physics properties
+            offsetX: 0,
+            offsetY: 0,
+            vx: 0,
+            vy: 0,
+            mass: 1 + Math.random() * 0.5, // Slight mass variation
+            effectiveRadius: avgRadius * 1.1, // Collision radius slightly larger for more collisions
+            color: activePalette[index % activePalette.length]
+        };
+    }
+
+    function getAnimatedBlobPoints(
+        blobData: BlobData,
+        time: number
+    ): { x: number; y: number }[] {
+        const { basePoints, quadrant, driftPhaseX, driftPhaseY, offsetX, offsetY } = blobData;
+        
+        // Calculate center with drift offset
+        const baseCenterX = quadrant.x + quadrant.width / 2;
+        const baseCenterY = quadrant.y + quadrant.height / 2;
+        
+        // Apply slow drifting to the center position
+        const driftRangeX = quadrant.width * DRIFT_INTENSITY;
+        const driftRangeY = quadrant.height * DRIFT_INTENSITY;
+        // Add physics offset to the center position
+        const centerX = baseCenterX + Math.sin(time + driftPhaseX) * driftRangeX + offsetX;
+        const centerY = baseCenterY + Math.sin(time * 0.7 + driftPhaseY) * driftRangeY + offsetY;
+        
+        // Generate animated points
+        return basePoints.map(point => {
+            // Morph the radius with sine wave based on time and unique phase offset
+            const morphAmount = point.baseRadius * MORPH_INTENSITY;
+            const animatedRadius = point.baseRadius + Math.sin(time + point.phaseOffset) * morphAmount;
+            
+            return {
+                x: centerX + Math.cos(point.angle) * animatedRadius,
+                y: centerY + Math.sin(point.angle) * animatedRadius
+            };
+        });
+    }
+    
+    // Get the current center position of a blob (for physics calculations)
+    function getBlobCenter(blobData: BlobData, time: number): { x: number; y: number } {
+        const { quadrant, driftPhaseX, driftPhaseY, offsetX, offsetY } = blobData;
+        const baseCenterX = quadrant.x + quadrant.width / 2;
+        const baseCenterY = quadrant.y + quadrant.height / 2;
+        const driftRangeX = quadrant.width * DRIFT_INTENSITY;
+        const driftRangeY = quadrant.height * DRIFT_INTENSITY;
+        
+        return {
+            x: baseCenterX + Math.sin(time + driftPhaseX) * driftRangeX + offsetX,
+            y: baseCenterY + Math.sin(time * 0.7 + driftPhaseY) * driftRangeY + offsetY
+        };
+    }
+    
+    // Apply wave pulse force to blobs
+    function applyWaveForces(deltaTime: number) {
+        const now = Date.now();
+        const waveWidth = 60; // Width of the wave ring that applies force
+        
+        wavePulses.forEach((pulse, pulseIndex) => {
+            const elapsed = now - pulse.startTime;
+            const progress = elapsed / pulse.duration;
+            if (progress >= 1) return;
+            
+            const currentRadius = progress * pulse.maxRadius;
+            // Force is stronger at the beginning, fades as wave expands
+            const forceMultiplier = (1 - progress) * (1 - progress);
+            
+            blobDataCache.forEach((blob, blobIndex) => {
+                // Skip if this blob was already hit by this pulse
+                if (pulse.processedBlobs.has(blobIndex)) return;
+                
+                const center = getBlobCenter(blob, animationTime);
+                const dx = center.x - pulse.x;
+                const dy = center.y - pulse.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Check if blob is within the wave ring
+                if (distance > currentRadius - waveWidth && distance < currentRadius + waveWidth) {
+                    // Mark this blob as processed by this pulse
+                    pulse.processedBlobs.add(blobIndex);
+                    
+                    // Calculate force direction (away from pulse center)
+                    const normalX = distance > 0 ? dx / distance : 0;
+                    const normalY = distance > 0 ? dy / distance : 0;
+                    
+                    // Apply force
+                    const force = waveForce * forceMultiplier / blob.mass;
+                    blob.vx += normalX * force * deltaTime;
+                    blob.vy += normalY * force * deltaTime;
+                }
+            });
+        });
+    }
+    
+    // Mix two hex colors by averaging their RGB values
+    function mixColors(color1: string, color2: string): string {
+        // Parse hex to RGB
+        const parseHex = (hex: string) => {
+            const clean = hex.replace('#', '');
+            return {
+                r: parseInt(clean.substring(0, 2), 16),
+                g: parseInt(clean.substring(2, 4), 16),
+                b: parseInt(clean.substring(4, 6), 16)
+            };
+        };
+        
+        const c1 = parseHex(color1);
+        const c2 = parseHex(color2);
+        
+        // Average the RGB values
+        const mixed = {
+            r: Math.round((c1.r + c2.r) / 2),
+            g: Math.round((c1.g + c2.g) / 2),
+            b: Math.round((c1.b + c2.b) / 2)
+        };
+        
+        // Convert back to hex
+        const toHex = (n: number) => n.toString(16).padStart(2, '0');
+        return `#${toHex(mixed.r)}${toHex(mixed.g)}${toHex(mixed.b)}`;
+    }
+    
+    // Detect and resolve collisions between blobs
+    function handleCollisions() {
+        for (let i = 0; i < blobDataCache.length; i++) {
+            for (let j = i + 1; j < blobDataCache.length; j++) {
+                const blobA = blobDataCache[i];
+                const blobB = blobDataCache[j];
+                
+                const centerA = getBlobCenter(blobA, animationTime);
+                const centerB = getBlobCenter(blobB, animationTime);
+                
+                const dx = centerB.x - centerA.x;
+                const dy = centerB.y - centerA.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const minDist = blobA.effectiveRadius + blobB.effectiveRadius;
+                
+                if (distance < minDist && distance > 0) {
+                    // Collision detected - calculate collision response
+                    const normalX = dx / distance;
+                    const normalY = dy / distance;
+                    
+                    // Relative velocity
+                    const relVelX = blobA.vx - blobB.vx;
+                    const relVelY = blobA.vy - blobB.vy;
+                    const relVelDotNormal = relVelX * normalX + relVelY * normalY;
+                    
+                    // Only resolve if blobs are moving toward each other
+                    if (relVelDotNormal > 0) {
+                        // Calculate impulse scalar (using masses)
+                        const totalMass = blobA.mass + blobB.mass;
+                        const impulse = (2 * relVelDotNormal * collisionBounce) / totalMass;
+                        
+                        // Apply impulse to velocities
+                        blobA.vx -= impulse * blobB.mass * normalX;
+                        blobA.vy -= impulse * blobB.mass * normalY;
+                        blobB.vx += impulse * blobA.mass * normalX;
+                        blobB.vy += impulse * blobA.mass * normalY;
+                        
+                        // Separate blobs to prevent overlap
+                        const overlap = minDist - distance;
+                        const separationX = (overlap / 2) * normalX * 1.1;
+                        const separationY = (overlap / 2) * normalY * 1.1;
+                        
+                        blobA.offsetX -= separationX;
+                        blobA.offsetY -= separationY;
+                        blobB.offsetX += separationX;
+                        blobB.offsetY += separationY;
+                        
+                        // Mix colors on collision
+                        const mixedColor = mixColors(blobA.color, blobB.color);
+                        blobA.color = mixedColor;
+                        blobB.color = mixedColor;
+                    }
+                }
+            }
         }
-
-        return blobPointsArray;
+    }
+    
+    // Update blob physics (velocity, position, spring back)
+    function updateBlobPhysics(deltaTime: number) {
+        blobDataCache.forEach(blob => {
+            // Apply spring force to pull back to original position
+            blob.vx -= blob.offsetX * springForce;
+            blob.vy -= blob.offsetY * springForce;
+            
+            // Apply friction
+            blob.vx *= friction;
+            blob.vy *= friction;
+            
+            // Stop very slow movement
+            if (Math.abs(blob.vx) < MIN_VELOCITY) blob.vx = 0;
+            if (Math.abs(blob.vy) < MIN_VELOCITY) blob.vy = 0;
+            
+            // Update position offset
+            blob.offsetX += blob.vx * deltaTime;
+            blob.offsetY += blob.vy * deltaTime;
+            
+            // Clamp offset to prevent blobs from flying too far (larger range = more movement)
+            const maxOffset = Math.min(blob.quadrant.width, blob.quadrant.height) * 3;
+            blob.offsetX = Math.max(-maxOffset, Math.min(maxOffset, blob.offsetX));
+            blob.offsetY = Math.max(-maxOffset, Math.min(maxOffset, blob.offsetY));
+        });
     }
 
     function checkIsNearMouse(
@@ -136,33 +396,35 @@
         ctx: CanvasRenderingContext2D,
         blobData: { points: { x: number; y: number }[]; isNearMouse: boolean }
     ) {
+        const points = blobData.points;
+        if (points.length < 3) return;
+        
         ctx.save();
         ctx.beginPath();
-        blobData.points.forEach((point, i) => {
-            if (i === 0) {
-                ctx.moveTo(point.x, point.y);
-            } else {
-                ctx.lineTo(point.x, point.y);
-            }
-        });
+        
+        // Use quadratic bezier curves for smooth blob shape
+        // Start at the midpoint between the last and first point
+        const startX = (points[points.length - 1].x + points[0].x) / 2;
+        const startY = (points[points.length - 1].y + points[0].y) / 2;
+        ctx.moveTo(startX, startY);
+        
+        // Draw smooth curves through midpoints, using actual points as control points
+        for (let i = 0; i < points.length; i++) {
+            const current = points[i];
+            const next = points[(i + 1) % points.length];
+            const midX = (current.x + next.x) / 2;
+            const midY = (current.y + next.y) / 2;
+            
+            // Quadratic bezier: control point is the current point, end point is midpoint
+            ctx.quadraticCurveTo(current.x, current.y, midX, midY);
+        }
+        
         ctx.closePath();
         ctx.fillStyle = blobData.isNearMouse ? nearColor : farColor;
         ctx.globalAlpha = alpha;
         ctx.fill();
         ctx.globalAlpha = 1.0;
         ctx.restore();
-    }
-
-    function generateBlob(
-        ctx: CanvasRenderingContext2D | null, 
-        canvas: HTMLCanvasElement, 
-        quadrant: { x: number, y: number, width: number, height: number },
-        blobPoints: { x: number; y: number }[]
-    ) {
-        if (ctx) {
-            const isNearMouse = checkIsNearMouse(quadrant);
-            drawBlob(ctx, { points: blobPoints, isNearMouse });
-        }
     }
 
     function drawWavePulses(ctx: CanvasRenderingContext2D) {
@@ -204,18 +466,17 @@
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         createboxes(ctx, canvas, boxes);
-        blobPointsCache.forEach(({ points, quadrant }) => {
-            generateBlob(ctx, canvas!, quadrant, points);
+        
+        // Render blobs with animated positions
+        blobDataCache.forEach(blobData => {
+            const animatedPoints = getAnimatedBlobPoints(blobData, animationTime);
+            const isNearMouse = checkIsNearMouse(blobData.quadrant);
+            drawBlob(ctx, { points: animatedPoints, isNearMouse });
         });
+        
         drawWavePulses(ctx);
     }
 
-    function generateBlobs(event: MouseEvent, ctx: CanvasRenderingContext2D | null, canvas: HTMLCanvasElement) {
-        mouseX = event.clientX;
-        mouseY = event.clientY;
-        renderCanvas();
-    }
-    
     function handleClick(event: MouseEvent) {
         // Create a new wave pulse at the click position
         wavePulses = [...wavePulses, {
@@ -223,16 +484,39 @@
             y: event.clientY,
             startTime: Date.now(),
             maxRadius: pulseMaxRadius,
-            duration: pulseDuration
+            duration: pulseDuration,
+            processedBlobs: new Set<number>()
         }];
         
         renderCanvas();
     }
     
-    function animationLoop() {
-        if (wavePulses.length > 0) {
-            renderCanvas();
-            requestAnimationFrame(animationLoop);
+    function animate(timestamp: number) {
+        // Calculate delta time in seconds
+        const deltaTime = lastTimestamp > 0 ? Math.min((timestamp - lastTimestamp) / 1000, 0.1) : 0.016;
+        lastTimestamp = timestamp;
+        
+        animationTime = timestamp * ANIMATION_SPEED;
+        
+        // Run physics simulation
+        applyWaveForces(deltaTime);
+        handleCollisions();
+        updateBlobPhysics(deltaTime);
+        
+        renderCanvas();
+        animationFrameId = requestAnimationFrame(animate);
+    }
+    
+    function startAnimation() {
+        if (animationFrameId === null) {
+            animationFrameId = requestAnimationFrame(animate);
+        }
+    }
+    
+    function stopAnimation() {
+        if (animationFrameId !== null) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
         }
     }
 
@@ -273,31 +557,30 @@
     onMount(() => {
         canvas = document.getElementById('site-canvas') as HTMLCanvasElement;
         resizeCanvas();
-        const ctx = canvas?.getContext('2d') || null;
-        if (canvas && ctx) {
+        if (canvas) {
             regenerateCanvas();
+            // Start continuous animation loop
+            startAnimation();
         }
-        
 
         const onMouseMove = (event: MouseEvent) => {
-            window.requestAnimationFrame(() => {
-                generateBlobs(event, ctx, canvas!);
-            });
+            // Just update mouse position - animation loop handles rendering
+            mouseX = event.clientX;
+            mouseY = event.clientY;
         };
         
         const onClick = (event: MouseEvent) => {
             handleClick(event);
-            // Start animation loop if not already running
-            if (wavePulses.length === 1) {
-                animationLoop();
-            }
         };
 
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('click', onClick);
+        
         return () => {
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('click', onClick);
+            // Stop animation loop on unmount
+            stopAnimation();
         };
     });
 
@@ -424,6 +707,62 @@
                         class="w-full"
                     />
                     <span class="text-xs text-gray-500">{alpha.toFixed(2)}</span>
+                </div>
+                
+                <div>
+                    <label for="wave-force-input" class="block text-sm font-medium mb-1">Wave Push Force</label>
+                    <input
+                        id="wave-force-input"
+                        type="range"
+                        bind:value={waveForce}
+                        min="0"
+                        max="8000"
+                        step="100"
+                        class="w-full"
+                    />
+                    <span class="text-xs text-gray-500">{waveForce}</span>
+                </div>
+                
+                <div>
+                    <label for="friction-input" class="block text-sm font-medium mb-1">Friction</label>
+                    <input
+                        id="friction-input"
+                        type="range"
+                        bind:value={friction}
+                        min="0.9"
+                        max="0.999"
+                        step="0.001"
+                        class="w-full"
+                    />
+                    <span class="text-xs text-gray-500">{friction.toFixed(3)}</span>
+                </div>
+                
+                <div>
+                    <label for="spring-force-input" class="block text-sm font-medium mb-1">Spring Force</label>
+                    <input
+                        id="spring-force-input"
+                        type="range"
+                        bind:value={springForce}
+                        min="0"
+                        max="0.05"
+                        step="0.001"
+                        class="w-full"
+                    />
+                    <span class="text-xs text-gray-500">{springForce.toFixed(3)}</span>
+                </div>
+                
+                <div>
+                    <label for="collision-bounce-input" class="block text-sm font-medium mb-1">Collision Bounce</label>
+                    <input
+                        id="collision-bounce-input"
+                        type="range"
+                        bind:value={collisionBounce}
+                        min="0"
+                        max="1.5"
+                        step="0.05"
+                        class="w-full"
+                    />
+                    <span class="text-xs text-gray-500">{collisionBounce.toFixed(2)}</span>
                 </div>
                 
                 <div>

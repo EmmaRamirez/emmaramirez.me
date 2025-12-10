@@ -18,7 +18,7 @@
 	<figure class="absolute top-0 left-0 h-full w-full">
 		<img id={imageId} src={image} {alt} class="rounded-lg h-full w-full object-cover" />
 		{#if caption}
-            <figcaption>{caption}</figcaption>
+            <figcaption class="uppercase text-xl text-gray-500 text-center font-bold">{caption}</figcaption>
         {/if}
 	</figure>
     {@render children?.()}
