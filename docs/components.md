@@ -202,17 +202,21 @@ to the Svelte implementation is noted.
 
 These components already exist and can be extended or documented further:
 
+- `Accordion` → `$lib/components/ui/Accordion.svelte`
 - `Alert` → `$lib/components/ui/Alert.svelte`
 - `Avatar` → `$lib/components/ui/Avatar.svelte`
 - `Badge` → `$lib/components/ui/Badge.svelte`
+- `Breadcrumbs` → `$lib/components/ui/Breadcrumbs.svelte`
 - `Button` → `$lib/components/ui/Button.svelte`
 - `ButtonGroup` → `$lib/components/ui/ButtonGroup.svelte`
 - `Card` → `$lib/components/ui/Card.svelte`
 - `Checkbox` → `$lib/components/ui/Checkbox.svelte`
+- `Collapse` → `$lib/components/ui/Collapse.svelte`
 - `Container` → `$lib/components/ui/Container.svelte`
 - `DescriptionList` → `$lib/components/ui/DescriptionList.svelte`
 - `Divider` → `$lib/components/ui/Divider.svelte`
 - `Drawer` → `$lib/components/ui/Drawer.svelte`
+- `DropdownMenu` → `$lib/components/ui/DropdownMenu.svelte`
 - `EmptyState` → `$lib/components/ui/EmptyState.svelte`
 - `FileInput` → `$lib/components/ui/FileInput.svelte`
 - `Flex` → `$lib/components/ui/Flex.svelte`
@@ -221,7 +225,12 @@ These components already exist and can be extended or documented further:
 - `IconButton` → `$lib/components/ui/IconButton.svelte`
 - `Input` → `$lib/components/ui/Input.svelte`
 - `LinkButton` → `$lib/components/ui/LinkButton.svelte`
+- `List` → `$lib/components/ui/List.svelte`
+- `ListItem` → `$lib/components/ui/ListItem.svelte`
+- `Modal` → `$lib/components/ui/Modal.svelte`
 - `PageShell` → `$lib/components/ui/PageShell.svelte`
+- `Pagination` → `$lib/components/ui/Pagination.svelte`
+- `Popover` → `$lib/components/ui/Popover.svelte`
 - `ProgressBar` → `$lib/components/ui/ProgressBar.svelte`
 - `Radio` → `$lib/components/ui/Radio.svelte`
 - `SearchField` → `$lib/components/ui/SearchField.svelte`
@@ -232,8 +241,10 @@ These components already exist and can be extended or documented further:
 - `Stack` → `$lib/components/ui/Stack.svelte`
 - `Statistic` → `$lib/components/ui/Statistic.svelte`
 - `Switch` → `$lib/components/ui/Switch.svelte`
+- `Tabs` → `$lib/components/ui/Tabs.svelte`
 - `Tag` → `$lib/components/ui/Tag.svelte`
 - `Textarea` → `$lib/components/ui/Textarea.svelte`
+- `Toast` → `$lib/components/ui/Toast.svelte`
 - `Tooltip` → `$lib/components/ui/Tooltip.svelte`
 - `Typography` → `$lib/components/ui/Typography.svelte`
 
