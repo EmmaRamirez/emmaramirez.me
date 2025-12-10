@@ -19,8 +19,10 @@
 		</HeaderNav>
 	</Header>
 
-	<div class="">
-		<h1>Hi my name's Emma. This is my website.</h1>
+	<div class="flex justify-center items-center py-14 px-4">
+		<h1 class="text-5xl font-sans font-bold text-center">
+			Hi my name's Emma. This is my website.
+		</h1>
 	</div>
 
 	<div class="content-grid max-w-6xl mx-auto px-4 py-8 mt-16">
