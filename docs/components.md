@@ -166,24 +166,29 @@ to the Svelte implementation is noted.
 
 ## Overlays & Surfaces
 
-- [ ] **Modal / Dialog**
+- [x] **Modal / Dialog**
   - Focus-trapped overlay for blocking interactions.
+  - Existing: `Modal` → `$lib/components/ui/Modal.svelte`.
 - [x] **Drawer / Sheet**
   - Slide-in panel from edge of screen.
   - Existing: `Drawer` → `$lib/components/ui/Drawer.svelte`.
-- [ ] **Popover**
+- [x] **Popover**
   - Contextual panel anchored to a trigger.
-- [ ] **DropdownMenu / ContextMenu**
+  - Existing: `Popover` → `$lib/components/ui/Popover.svelte`.
+- [x] **DropdownMenu / ContextMenu**
   - Menu of actions or navigation attached to a trigger.
+  - Existing: `DropdownMenu` → `$lib/components/ui/DropdownMenu.svelte`.
 
 ---
 
 ## Interactive & Complex Components
 
-- [ ] **Accordion**
+- [x] **Accordion**
   - Expand/collapse panels for grouped content.
-- [ ] **Collapse / Disclosure**
+  - Existing: `Accordion` → `$lib/components/ui/Accordion.svelte`.
+- [x] **Collapse / Disclosure**
   - Simple show/hide section with a header.
+  - Existing: `Collapse` → `$lib/components/ui/Collapse.svelte`.
 - [ ] **Carousel / Content Slider**
   - Rotate between panels or media items.
 - [ ] **Tooltip-rich controls**
