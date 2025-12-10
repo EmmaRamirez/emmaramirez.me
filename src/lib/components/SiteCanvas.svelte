@@ -34,6 +34,7 @@
     let friction = $state(0.985); // Less damping = blobs travel further
     let springForce = $state(0.004); // Weaker spring = slower return to original position
     let collisionBounce = $state(0.95); // Higher = bouncier collisions
+    let freeRoaming = $state(true); // Allow blobs to move freely outside their quadrants
     
     // Fixed physics constant
     const MIN_VELOCITY = 0.01; // Threshold to stop movement
