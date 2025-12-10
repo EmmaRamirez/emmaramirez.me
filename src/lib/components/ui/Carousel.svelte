@@ -46,7 +46,6 @@
 		goToSlide(currentSlide + 1);
 	}
 
-	// Auto-play functionality
 	$effect(() => {
 		if (autoPlay > 0) {
 			intervalId = setInterval(() => {
@@ -61,7 +60,6 @@
 		};
 	});
 
-	// Pause on hover
 	let isPaused = $state(false);
 
 	$effect(() => {
@@ -84,7 +82,6 @@
 	onmouseenter={() => isPaused = true}
 	onmouseleave={() => isPaused = false}
 >
-	<!-- Slides Container -->
 	<div
 		class="flex transition-transform duration-500 ease-out"
 		style="transform: translateX(-{currentSlide * 100}%)"
@@ -104,7 +101,6 @@
 		{/each}
 	</div>
 
-	<!-- Navigation Arrows -->
 	{#if showArrows && slideCount > 1}
 		<button
 			type="button"
@@ -129,7 +125,6 @@
 		</button>
 	{/if}
 
-	<!-- Dot Indicators -->
 	{#if showDots && slideCount > 1}
 		<div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
 			{#each Array(slideCount) as _, i (i)}
