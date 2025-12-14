@@ -37,7 +37,7 @@
 				<span class="block h-[1rem] w-full bg-current my-[0.15em]"></span>
 				<span class="tracking-[0.35em] w-full text-balance font-bold">MA</span>
 			</span>
-			<span>. This is my website.</span>
+			<span>This is my website</span>
 		</h1>
 	</div>
 
