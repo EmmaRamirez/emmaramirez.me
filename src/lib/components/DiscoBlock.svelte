@@ -30,6 +30,9 @@
 	let cursorX = $state(0);
 	let cursorY = $state(0);
 	let container: HTMLDivElement | null = $state(null);
+	let imageBlock: HTMLElement | null = $state(null);
+	let canvasWidth = $state(0);
+	let canvasHeight = $state(0);
 
 	// Light beams state for disco ball physics
 	let lightBeams: LightBeam[] = $state([]);
@@ -69,7 +72,7 @@
 	function drawDiscoBeams() {
 		if (!ctx || !canvas) return;
 		
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 		
 		const pixelSize = 10; // Square pixel size for that retro look
 		
@@ -89,8 +92,8 @@
 			const snappedY = Math.floor(y / pixelSize) * pixelSize;
 			
 			// Skip beams outside canvas bounds
-			if (snappedX < -pixelSize || snappedX > canvas.width + pixelSize || 
-				snappedY < -pixelSize || snappedY > canvas.height + pixelSize) {
+			if (snappedX < -pixelSize || snappedX > canvasWidth + pixelSize || 
+				snappedY < -pixelSize || snappedY > canvasHeight + pixelSize) {
 				continue;
 			}
 			
@@ -135,31 +138,85 @@
 
 	function stopDisco() {
 		if (!ctx || !canvas) return;
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 		cancelAnimationFrame(animationId);
 		isHovering = false;
 		lightBeams = [];
 	}
 
+	function updateCanvasSize() {
+		if (!canvas || !imageBlock || !ctx) return;
+		const bounds = imageBlock.getBoundingClientRect();
+		const dpr = window.devicePixelRatio || 1;
+		
+		canvasWidth = bounds.width;
+		canvasHeight = bounds.height;
+		
+		canvas.width = bounds.width * dpr;
+		canvas.height = bounds.height * dpr;
+		canvas.style.width = `${bounds.width}px`;
+		canvas.style.height = `${bounds.height}px`;
+		
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
+		ctx.scale(dpr, dpr);
+	}
+
 	onMount(() => {
-		canvas = document.getElementById('disco-canvas') as HTMLCanvasElement;
-		ctx = canvas.getContext('2d');
-		const imageBlock = document.getElementById('disco-image');
-		const imageBlockBounds = imageBlock?.getBoundingClientRect();
-		canvas.width = imageBlockBounds?.width ?? 0;
-		canvas.height = imageBlockBounds?.height ?? 0;
+		let resizeObserver: ResizeObserver | null = null;
+		let imageLoadHandler: (() => void) | null = null;
+		
+		// Use setTimeout to ensure DOM is ready
+		const timeoutId = setTimeout(() => {
+			canvas = document.getElementById('disco-canvas') as HTMLCanvasElement;
+			if (!canvas) return;
+			
+			ctx = canvas.getContext('2d');
+			imageBlock = document.getElementById('disco-image');
+			
+			if (!ctx || !imageBlock) return;
+			
+			// Update canvas size initially
+			updateCanvasSize();
+			
+			// Update when image loads
+			if (imageBlock instanceof HTMLImageElement) {
+				if (imageBlock.complete) {
+					updateCanvasSize();
+				} else {
+					imageLoadHandler = () => updateCanvasSize();
+					imageBlock.addEventListener('load', imageLoadHandler, { once: true });
+				}
+			}
+			
+			// Update on resize
+			resizeObserver = new ResizeObserver(() => {
+				updateCanvasSize();
+			});
+			
+			resizeObserver.observe(imageBlock);
+		}, 0);
+		
+		return () => {
+			clearTimeout(timeoutId);
+			if (resizeObserver) {
+				resizeObserver.disconnect();
+			}
+			if (imageBlock instanceof HTMLImageElement && imageLoadHandler) {
+				imageBlock.removeEventListener('load', imageLoadHandler);
+			}
+		};
 	});
 </script>
 
 <div
 	role="presentation"
-	class="relative"
+	class="relative w-full"
 	bind:this={container}
 	onmousemove={startDisco}
 	onmouseleave={stopDisco}
 >
 	<ImageBlock {image} {alt} {caption} class={className} imageId="disco-image">
-		<canvas class="absolute top-0 left-0 pointer-events-none" id="disco-canvas"></canvas>
+		<canvas class="absolute top-0 left-0 pointer-events-none w-full h-full" id="disco-canvas"></canvas>
 
 		{#if isHovering}
 			<div

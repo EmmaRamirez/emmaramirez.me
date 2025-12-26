@@ -49,6 +49,7 @@ export { default as Table } from './Table.svelte';
 export { default as Tabs } from './Tabs.svelte';
 export { default as Tag } from './Tag.svelte';
 export { default as Textarea } from './Textarea.svelte';
+export { default as ThemeToggle } from './ThemeToggle.svelte';
 export { default as Toast, toasts } from './Toast.svelte';
 export { default as Tooltip } from './Tooltip.svelte';
 export { default as Typography } from './Typography.svelte';

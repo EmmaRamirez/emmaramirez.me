@@ -1,13 +1,7 @@
 import type { Article } from '$lib/articles';
 import { defaultArticles } from '$lib/articles';
-import fakemonImage from '$lib/images/fakemon-generator.png';
-import nuzlockeImage from '$lib/images/nuzlocke-generator.jpg';
-import profileImage from '$lib/images/profile-2.png';
 import houstonImage from '$lib/images/photos/houston.jpeg';
-import svelteWelcomeImage from '$lib/images/svelte-welcome.webp';
-import profileAltImage from '$lib/images/profile.png';
-import redbullImage from '$lib/images/photos/redbull.jpeg';
-import svelteLogoImage from '$lib/images/svelte-logo.svg';
+import profileImage from '$lib/images/profile.png';
 import githubImage from '$lib/images/github.svg';
 import discoImage from '$lib/images/photos/disco.jpeg';
 
@@ -65,7 +59,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		id: 'fakemon',
 		title: 'Fakemon Generator',
 		pill: 'Creative coding',
-		image: fakemonImage,
+		image: profileImage,
 		description: 'A playful generator for imaginary Pokémon-style creatures, blending design systems, randomness, and cozy UI details.',
 		class: 'h-full',
 		contentClassName: 'md:flex-row md:items-center',
@@ -76,7 +70,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		id: 'nuzlocke',
 		title: 'Nuzlocke Tracker',
 		pill: 'UX for constraints',
-		image: nuzlockeImage,
+		image: profileImage,
 		description: 'A companion app for challenge runs that keeps teams, routes, and tense decisions tidy without losing the charm of notebooks and scribbles.',
 		class: 'h-full',
 		contentClassName: 'md:flex-row md:items-center',
@@ -109,7 +103,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		id: 'paraglide',
 		title: 'Paraglide Playground',
 		pill: 'i18n & UX',
-		image: svelteWelcomeImage,
+		image: profileImage,
 		description: 'A multilingual SvelteKit demo using Paraglide that stress-tests copy, layout, and tone across languages without turning the UI into a spreadsheet.',
 		class: 'h-full',
 		contentClassName: 'md:flex-row md:items-center',
@@ -120,7 +114,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		id: 'designSystemLab',
 		title: 'Design System Lab',
 		pill: 'Design systems',
-		image: svelteLogoImage,
+		image: githubImage,
 		description: 'A sandbox for tokens, components, and documentation that explores how far a Svelte-powered design system can be pushed before it begs for refactors.',
 		class: 'h-full',
 		contentClassName: 'md:flex-row md:items-center',
@@ -142,7 +136,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		id: 'palettePlayground',
 		title: 'Palette Playground',
 		pill: 'Color & theming',
-		image: profileAltImage,
+		image: profileImage,
 		description: 'An interactive color lab for testing palettes against real content, dark mode, and accessibility constraints without leaving the browser.',
 		class: 'h-full',
 		contentClassName: 'md:flex-row md:items-center',
@@ -153,7 +147,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		id: 'a11yAuditKit',
 		title: 'A11y Audit Kit',
 		pill: 'Accessibility',
-		image: redbullImage,
+		image: houstonImage,
 		description: 'A weekend-sized toolkit for running lightweight accessibility audits—checklists, notes, and quick wins bundled into a friendly interface.',
 		class: 'h-full',
 		contentClassName: 'md:flex-row md:items-center',
