@@ -2,6 +2,7 @@
 	import type { Snippet } from "svelte";
 	import type { ClassValue } from "clsx";
 	import { cn } from "$lib/utils";
+	import { getContext, onMount } from "svelte";
 
 	interface HeaderNavItemProps {
 		class?: ClassValue;
@@ -16,16 +17,39 @@
 		active = false,
 		children,
 	}: HeaderNavItemProps = $props();
+
+	let itemRef: HTMLElement | undefined = $state();
+	
+	const navContext = getContext<{ updateIndicator: (el: HTMLElement) => void }>('header-nav');
+
+	// Update indicator when active changes or on mount
+	$effect(() => {
+		if (active && itemRef && navContext) {
+			navContext.updateIndicator(itemRef);
+		}
+	});
+
+	// Also update on resize to keep indicator position accurate
+	onMount(() => {
+		const handleResize = () => {
+			if (active && itemRef && navContext) {
+				navContext.updateIndicator(itemRef);
+			}
+		};
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	});
 </script>
 
 <a
+	bind:this={itemRef}
 	{href}
 	class={cn(
-		"style-none px-4 py-2 rounded-lg text-sm font-medium",
+		"style-none px-4 py-2 text-sm font-medium",
 		"transition-all duration-200",
 		active
-			? "bg-[var(--caroline-blue-600)] text-white shadow-sm"
-			: "text-[var(--liver-brown-600)] hover:bg-[var(--sandy-tan-500)] hover:text-[var(--liver-brown-800)]",
+			? "text-(--text-primary)"
+			: "text-(--text-secondary) hover:text-(--text-primary)",
 		className
 	)}
 	aria-current={active ? "page" : undefined}

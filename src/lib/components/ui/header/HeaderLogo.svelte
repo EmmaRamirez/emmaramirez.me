@@ -20,7 +20,7 @@
 	{href}
 	class={cn(
 		"style-none flex items-center gap-3 font-semibold text-lg",
-		"text-[var(--liver-brown-700)] hover:text-[var(--liver-brown-900)]",
+		"text-(--text-primary) hover:text-(--text-secondary)",
 		"transition-colors duration-200",
 		className
 	)}

@@ -57,7 +57,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	fakemon: {
 		kind: 'project',
 		id: 'fakemon',
-		title: 'Fakemon Generator',
+		title: 'fakemon-generator',
 		pill: 'Creative coding',
 		image: profileImage,
 		description: 'A playful generator for imaginary Pokémon-style creatures, blending design systems, randomness, and cozy UI details.',
@@ -68,7 +68,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	nuzlocke: {
 		kind: 'project',
 		id: 'nuzlocke',
-		title: 'Nuzlocke Tracker',
+		title: 'nuzlocke-tracker',
 		pill: 'UX for constraints',
 		image: profileImage,
 		description: 'A companion app for challenge runs that keeps teams, routes, and tense decisions tidy without losing the charm of notebooks and scribbles.',
@@ -79,7 +79,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	site: {
 		kind: 'project',
 		id: 'site',
-		title: 'This Personal Site',
+		title: 'emmaramirez.me',
 		pill: 'Design systems',
 		image: profileImage,
 		description: 'The hand-rolled design system and SvelteKit setup that powers this very site, experimenting with typography, tokens, and a slightly feral layout grid.',
@@ -90,7 +90,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	discoProject: {
 		kind: 'project',
 		id: 'discoProject',
-		title: 'Disco Canvas',
+		title: 'disco-canvas',
 		pill: 'Playful interfaces',
 		image: houstonImage,
 		description: 'An interactive playground for gradients, blobs, and motion—built to feel like a disco floor you can doodle on.',
@@ -101,7 +101,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	paraglide: {
 		kind: 'project',
 		id: 'paraglide',
-		title: 'Paraglide Playground',
+		title: 'paraglide-playground',
 		pill: 'i18n & UX',
 		image: profileImage,
 		description: 'A multilingual SvelteKit demo using Paraglide that stress-tests copy, layout, and tone across languages without turning the UI into a spreadsheet.',
@@ -112,7 +112,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	designSystemLab: {
 		kind: 'project',
 		id: 'designSystemLab',
-		title: 'Design System Lab',
+		title: 'design-system-lab',
 		pill: 'Design systems',
 		image: githubImage,
 		description: 'A sandbox for tokens, components, and documentation that explores how far a Svelte-powered design system can be pushed before it begs for refactors.',
@@ -123,7 +123,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	commitGarden: {
 		kind: 'project',
 		id: 'commitGarden',
-		title: 'Commit Garden',
+		title: 'commit-garden',
 		pill: 'Developer tooling',
 		image: githubImage,
 		description: 'A tiny dashboard that turns git history into a garden view, nudging you toward smaller, story-shaped commits instead of one giant "final-final" push.',
@@ -134,7 +134,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	palettePlayground: {
 		kind: 'project',
 		id: 'palettePlayground',
-		title: 'Palette Playground',
+		title: 'palette-playground',
 		pill: 'Color & theming',
 		image: profileImage,
 		description: 'An interactive color lab for testing palettes against real content, dark mode, and accessibility constraints without leaving the browser.',
@@ -145,7 +145,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	a11yAuditKit: {
 		kind: 'project',
 		id: 'a11yAuditKit',
-		title: 'A11y Audit Kit',
+		title: 'a11y-audit-kit',
 		pill: 'Accessibility',
 		image: houstonImage,
 		description: 'A weekend-sized toolkit for running lightweight accessibility audits—checklists, notes, and quick wins bundled into a friendly interface.',
@@ -156,7 +156,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	readmeStudio: {
 		kind: 'project',
 		id: 'readmeStudio',
-		title: 'README Studio',
+		title: 'readme-studio',
 		pill: 'Writing & docs',
 		image: profileImage,
 		description: 'A structured editor for project READMEs that helps you go from blank page to clear, kind documentation without feeling like a corporate template.',

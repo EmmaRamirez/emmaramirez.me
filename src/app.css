@@ -27,6 +27,9 @@
     --card-bg: hsl(36, 38%, 95%);
     --link-color: hsl(0, 9%, 32%);
     --link-hover: hsl(0, 9%, 15%);
+    --surface-hover: hsla(36, 38%, 70%, 0.4);
+    --selection-bg: hsl(217, 78%, 55%);
+    --selection-text: hsl(0, 0%, 100%);
 
     --caroline-blue-base: hsla(217, 97%, 76%, 1);
     --caroline-blue-100: hsl(217, 68%, 63%);
@@ -86,39 +89,43 @@
   }
 
   .dark {
-    /* Dark theme semantic colors - warm charcoal with cream accents */
-    --page-bg: hsl(30, 8%, 12%);
-    --page-bg-subtle: hsl(30, 6%, 18%);
-    --page-bg-muted: hsl(30, 6%, 15%);
-    --text-primary: hsl(36, 30%, 92%);
-    --text-secondary: hsl(36, 20%, 75%);
-    --text-muted: hsl(36, 15%, 60%);
-    --border-color: hsl(36, 10%, 30%);
-    --header-bg: hsl(30, 8%, 15%);
-    --card-bg: hsl(30, 6%, 18%);
-    --link-color: hsl(217, 78%, 70%);
-    --link-hover: hsl(217, 78%, 80%);
+    /* Dark theme - midnight navy palette based on #1a1b27 */
+    --page-bg: #1a1b27;
+    --page-bg-subtle: #24253a;
+    --page-bg-muted: #1f2033;
+    --text-primary: #e8e9f0;
+    --text-secondary: #a8aabe;
+    --text-muted: #6b6d85;
+    --border-color: #363850;
+    --header-bg: #1f2033;
+    --card-bg: #24253a;
+    --link-color: #7aa2f7;
+    --link-hover: #9dbcff;
+    --surface-hover: hsla(235, 20%, 30%, 0.5);
+    --selection-bg: hsl(217, 92%, 72%);
+    --selection-text: hsl(235, 20%, 13%);
 
-    /* Inverted/adjusted palettes for dark mode */
-    --sandy-tan-200: hsl(30, 6%, 22%);
-    --sandy-tan-300: hsl(30, 6%, 18%);
-    --sandy-tan-400: hsl(30, 6%, 18%);
-    --sandy-tan-500: hsl(30, 6%, 20%);
-    --sandy-tan-600: hsl(30, 8%, 12%);
-    --sandy-tan-700: hsl(30, 8%, 15%);
-    --sandy-tan-800: hsl(30, 8%, 18%);
-    --sandy-tan-900: hsl(30, 8%, 22%);
+    /* Navy-tinted surface colors */
+    --sandy-tan-200: #2a2c42;
+    --sandy-tan-300: #24253a;
+    --sandy-tan-400: #24253a;
+    --sandy-tan-500: #1f2033;
+    --sandy-tan-600: #1a1b27;
+    --sandy-tan-700: #1f2033;
+    --sandy-tan-800: #24253a;
+    --sandy-tan-900: #2a2c42;
 
-    --liver-brown-500: hsl(36, 15%, 60%);
-    --liver-brown-600: hsl(36, 20%, 70%);
-    --liver-brown-700: hsl(36, 25%, 78%);
-    --liver-brown-800: hsl(36, 28%, 85%);
-    --liver-brown-900: hsl(36, 30%, 92%);
+    /* Light text scale for dark mode */
+    --liver-brown-500: #6b6d85;
+    --liver-brown-600: #8486a0;
+    --liver-brown-700: #a8aabe;
+    --liver-brown-800: #c8cad8;
+    --liver-brown-900: #e8e9f0;
 
-    /* Softer accent colors for dark mode */
-    --blush-pink-500: #f0b4f2;
-    --light-rose-500: #ffd6d6;
-    --magic-mint-500: #c8ffe9;
+    /* Vibrant accent colors for dark mode */
+    --blush-pink-500: #f7a8e0;
+    --light-rose-500: #ffa7a7;
+    --magic-mint-500: #9eecd9;
   }
 }
 
@@ -154,144 +161,71 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  /* Apply dark theme based on system preference */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      /* Semantic colors */
-      --page-bg: hsl(30, 8%, 12%);
-      --page-bg-subtle: hsl(30, 6%, 18%);
-      --page-bg-muted: hsl(30, 6%, 15%);
-      --text-primary: hsl(36, 30%, 92%);
-      --text-secondary: hsl(36, 20%, 75%);
-      --text-muted: hsl(36, 15%, 60%);
-      --border-color: hsl(36, 10%, 30%);
-      --header-bg: hsl(30, 8%, 15%);
-      --card-bg: hsl(30, 6%, 18%);
-      --link-color: hsl(217, 78%, 70%);
-      --link-hover: hsl(217, 78%, 80%);
-
-      /* UI component variables */
-      --background: 20 14.3% 4.1%;
-      --foreground: 60 9.1% 97.8%;
-      --muted: 12 6.5% 15.1%;
-      --muted-foreground: 24 5.4% 63.9%;
-      --popover: 20 14.3% 4.1%;
-      --popover-foreground: 60 9.1% 97.8%;
-      --card: 20 14.3% 4.1%;
-      --card-foreground: 60 9.1% 97.8%;
-      --border: 12 6.5% 15.1%;
-      --input: 12 6.5% 15.1%;
-      --primary: 60 9.1% 97.8%;
-      --primary-foreground: 24 9.8% 10%;
-      --secondary: 12 6.5% 15.1%;
-      --secondary-foreground: 60 9.1% 97.8%;
-      --accent: 12 6.5% 15.1%;
-      --accent-foreground: 60 9.1% 97.8%;
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 60 9.1% 97.8%;
-      --ring: 24 5.7% 82.9%;
-      --sidebar-background: 240 5.9% 10%;
-      --sidebar-foreground: 240 4.8% 95.9%;
-      --sidebar-primary: 224.3 76.3% 48%;
-      --sidebar-primary-foreground: 0 0% 100%;
-      --sidebar-accent: 240 3.7% 15.9%;
-      --sidebar-accent-foreground: 240 4.8% 95.9%;
-      --sidebar-border: 240 3.7% 15.9%;
-      --sidebar-ring: 217.2 91.2% 59.8%;
-
-      /* Dark mode custom palette */
-      --sandy-tan-200: hsl(30, 6%, 22%);
-      --sandy-tan-300: hsl(30, 6%, 18%);
-      --sandy-tan-400: hsl(30, 6%, 18%);
-      --sandy-tan-500: hsl(30, 6%, 20%);
-      --sandy-tan-600: hsl(30, 8%, 12%);
-      --sandy-tan-700: hsl(30, 8%, 15%);
-      --sandy-tan-800: hsl(30, 8%, 18%);
-      --sandy-tan-900: hsl(30, 8%, 22%);
-
-      --liver-brown-500: hsl(36, 15%, 60%);
-      --liver-brown-600: hsl(36, 20%, 70%);
-      --liver-brown-700: hsl(36, 25%, 78%);
-      --liver-brown-800: hsl(36, 28%, 85%);
-      --liver-brown-900: hsl(36, 30%, 92%);
-
-      /* Softer accent colors for dark mode */
-      --blush-pink-500: #f0b4f2;
-      --light-rose-500: #ffd6d6;
-      --magic-mint-500: #c8ffe9;
-    }
-  }
-
-  /* Manual .dark class override (for toggle support) */
+  /* Dark theme via .dark class - midnight navy palette */
   .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 60 9.1% 97.8%;
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
-    --popover: 20 14.3% 4.1%;
-    --popover-foreground: 60 9.1% 97.8%;
-    --card: 20 14.3% 4.1%;
-    --card-foreground: 60 9.1% 97.8%;
-    --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
-    --primary: 60 9.1% 97.8%;
-    --primary-foreground: 24 9.8% 10%;
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 60 9.1% 97.8%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --ring: 24 5.7% 82.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* #1a1b27 = hsl(235, 20%, 13%) base */
+    --background: 235 20% 13%;
+    --foreground: 234 20% 93%;
+    --muted: 235 18% 19%;
+    --muted-foreground: 235 12% 55%;
+    --popover: 235 20% 13%;
+    --popover-foreground: 234 20% 93%;
+    --card: 235 18% 19%;
+    --card-foreground: 234 20% 93%;
+    --border: 235 15% 26%;
+    --input: 235 15% 26%;
+    --primary: 234 20% 93%;
+    --primary-foreground: 235 20% 13%;
+    --secondary: 235 18% 19%;
+    --secondary-foreground: 234 20% 93%;
+    --accent: 217 92% 72%;
+    --accent-foreground: 235 20% 13%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 234 20% 93%;
+    --ring: 217 92% 72%;
+    --sidebar-background: 235 18% 15%;
+    --sidebar-foreground: 234 20% 93%;
+    --sidebar-primary: 217 92% 72%;
+    --sidebar-primary-foreground: 235 20% 13%;
+    --sidebar-accent: 235 18% 22%;
+    --sidebar-accent-foreground: 234 20% 93%;
+    --sidebar-border: 235 15% 26%;
+    --sidebar-ring: 217 92% 72%;
 
-    /* Dark mode custom colors */
-    --sandy-tan-200: hsl(36, 15%, 18%);
-    --sandy-tan-300: hsl(36, 15%, 16%);
-    --sandy-tan-400: hsl(36, 15%, 14%);
-    --sandy-tan-500: hsl(36, 15%, 12%);
-    --sandy-tan-600: hsl(36, 15%, 10%);
-    --sandy-tan-700: hsl(36, 15%, 8%);
-    --sandy-tan-800: hsl(36, 15%, 6%);
-    --sandy-tan-900: hsl(36, 15%, 4%);
+    /* Navy surface scale */
+    --sandy-tan-200: #2a2c42;
+    --sandy-tan-300: #24253a;
+    --sandy-tan-400: #24253a;
+    --sandy-tan-500: #1f2033;
+    --sandy-tan-600: #1a1b27;
+    --sandy-tan-700: #1f2033;
+    --sandy-tan-800: #24253a;
+    --sandy-tan-900: #2a2c42;
 
-    --liver-brown-500: hsl(0, 9%, 75%);
-    --liver-brown-600: hsl(0, 9%, 70%);
-    --liver-brown-700: hsl(0, 9%, 80%);
-    --liver-brown-800: hsl(0, 9%, 85%);
-    --liver-brown-900: hsl(0, 9%, 92%);
+    /* Light text scale */
+    --liver-brown-500: #6b6d85;
+    --liver-brown-600: #8486a0;
+    --liver-brown-700: #a8aabe;
+    --liver-brown-800: #c8cad8;
+    --liver-brown-900: #e8e9f0;
   }
 }
 
-
-.source-serif-4-<uniquifier> {
-  font-family: "Source Serif 4", serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-}
-
-
-.inter-<uniquifier> {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
+::selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
 }
 
 body {
   background-color: var(--page-bg);
   color: var(--text-primary);
-  font-family: "Source Serif 4", serif;
+  font-family: "Lora", serif;
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='26' fill='none' viewBox='0 0 24 26'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.69 2.69a2.357 2.357 0 0 1 2.495-.54L21.47 8.632a2.357 2.357 0 0 1-.255 4.494l-7.271 1.818-1.818 7.27a2.357 2.357 0 0 1-4.494.256L1.15 5.185a2.357 2.357 0 0 1 .54-2.495Z' fill='%23fff'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3.633 3.622A.786.786 0 0 0 2.62 4.633L9.103 21.92a.786.786 0 0 0 1.498-.086l2.047-8.185 8.185-2.046a.785.785 0 0 0 .086-1.498L3.633 3.622Z' fill='%23010101'/%3E%3C/svg%3E"), auto;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "DM Serif Text", serif;
 }
 
 .dark body {

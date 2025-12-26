@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '../app.css';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { theme } from '$lib/stores';
