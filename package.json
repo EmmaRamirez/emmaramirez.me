@@ -48,6 +48,7 @@
 	},
 	"dependencies": {
 		"@neoconfetti/svelte": "^2.2.2",
+		"@vercel/analytics": "^1.6.1",
 		"tailwind-merge": "^3.4.0"
 	},
 	"overrides": {

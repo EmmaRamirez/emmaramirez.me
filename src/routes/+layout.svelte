@@ -4,8 +4,12 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { theme } from '$lib/stores';
 	import { onMount } from 'svelte';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	import { dev } from '$app/environment';
 	
 	let { children } = $props();
+
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 	onMount(() => {
 		theme.init();
