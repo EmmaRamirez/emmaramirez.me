@@ -11,6 +11,7 @@
 	import me from '$lib/images/photos/me.jpeg';
 	import me4 from '$lib/images/photos/me4.png';
 	import me5 from '$lib/images/photos/me5.png';
+	import githubIcon from '$lib/images/github.svg';
 	import { onMount } from 'svelte';
 
 	let debugMenuOpen = $state(false);
@@ -142,7 +143,16 @@
 				<HeaderNavItem href="/blog">Essays</HeaderNavItem>
 				<HeaderNavItem href="/about">About</HeaderNavItem>
 			{/if}
-			<ThemeToggle class="ml-4" />
+			<a
+				href="https://github.com/emzinnia"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="ml-4 p-2 rounded-lg hover:bg-(--surface-hover) transition-colors"
+				aria-label="GitHub profile"
+			>
+				<img src={githubIcon} alt="GitHub" class="w-5 h-5 brightness-0 dark:invert dark:brightness-100 transition-all" />
+			</a>
+			<ThemeToggle class="ml-2" />
 		</HeaderNav>
 	</Header>
 
