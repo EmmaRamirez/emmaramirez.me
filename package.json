@@ -49,5 +49,8 @@
 	"dependencies": {
 		"@neoconfetti/svelte": "^2.2.2",
 		"tailwind-merge": "^3.4.0"
+	},
+	"overrides": {
+		"estree-walker": "^2.0.2"
 	}
 }
