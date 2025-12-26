@@ -17,7 +17,6 @@
 	let navRef: HTMLElement | undefined = $state();
 	let indicatorStyle = $state({ left: 0, width: 0, visible: false });
 
-	// Context for nav items to register and update the indicator
 	const navContext = {
 		updateIndicator: (element: HTMLElement) => {
 			if (navRef && element) {
@@ -46,7 +45,6 @@
 		{@render children()}
 	{/if}
 	
-	<!-- Sliding indicator -->
 	<span
 		class={cn(
 			"absolute bottom-0 h-[2px] bg-(--caroline-blue-600) transition-all duration-300 ease-out",

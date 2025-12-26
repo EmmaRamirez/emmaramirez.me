@@ -22,14 +22,12 @@
 	
 	const navContext = getContext<{ updateIndicator: (el: HTMLElement) => void }>('header-nav');
 
-	// Update indicator when active changes or on mount
 	$effect(() => {
 		if (active && itemRef && navContext) {
 			navContext.updateIndicator(itemRef);
 		}
 	});
 
-	// Also update on resize to keep indicator position accurate
 	onMount(() => {
 		const handleResize = () => {
 			if (active && itemRef && navContext) {

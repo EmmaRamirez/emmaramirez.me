@@ -4,7 +4,8 @@
 	import ProjectBlock from '$lib/components/ProjectBlock.svelte';
 	import ArticleReaderPanel from '$lib/components/ArticleReaderPanel.svelte';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
-	import { ThemeToggle } from '$lib/components/ui';
+	import { ThemeToggle, Modal, Select, Switch } from '$lib/components/ui';
+	import { showSections } from '$lib/stores';
 	import type { Article } from '$lib/articles';
 	import { getHomepageItems, getProject, getArticle, getDisco } from '$lib/registry/homepage';
 	import me from '$lib/images/photos/me.jpeg';
@@ -12,28 +13,64 @@
 	import me5 from '$lib/images/photos/me5.png';
 	import { onMount } from 'svelte';
 
+	let debugMenuOpen = $state(false);
+	let headerBlendMode = $state('difference');
+	let showSectionsEnabled = $state(false);
+	let storeInitialized = false;
+
+	// Subscribe to the store and sync with local state
+	$effect(() => {
+		const unsubscribe = showSections.subscribe((value) => {
+			showSectionsEnabled = value;
+			storeInitialized = true;
+		});
+		return unsubscribe;
+	});
+
+	// Sync local state changes back to store
+	$effect(() => {
+		if (storeInitialized) {
+			showSections.set(showSectionsEnabled);
+		}
+	});
+
+	const blendModeOptions = [
+		{ value: 'normal', label: 'Normal' },
+		{ value: 'multiply', label: 'Multiply' },
+		{ value: 'screen', label: 'Screen' },
+		{ value: 'overlay', label: 'Overlay' },
+		{ value: 'darken', label: 'Darken' },
+		{ value: 'lighten', label: 'Lighten' },
+		{ value: 'color-dodge', label: 'Color Dodge' },
+		{ value: 'color-burn', label: 'Color Burn' },
+		{ value: 'hard-light', label: 'Hard Light' },
+		{ value: 'soft-light', label: 'Soft Light' },
+		{ value: 'difference', label: 'Difference' },
+		{ value: 'exclusion', label: 'Exclusion' },
+		{ value: 'hue', label: 'Hue' },
+		{ value: 'saturation', label: 'Saturation' },
+		{ value: 'color', label: 'Color' },
+		{ value: 'luminosity', label: 'Luminosity' }
+	];
+
+	function handleGlobalKeydown(event: KeyboardEvent) {
+		if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+			return;
+		}
+		if (event.key === 'd' || event.key === 'D') {
+			debugMenuOpen = !debugMenuOpen;
+		}
+	}
+
 	const homepageItems = getHomepageItems();
 
-	// Mouse position tracking for mask effect (in pixels for precise positioning)
 	let maskX = $state(0);
 	let maskY = $state(0);
 	let isHovering = $state(false);
-	const BLOB_SIZE = 180; // Size of the blob in pixels
-
-	// Blob path animation
-	const blobPaths = [
-		'M39.5,-51.1C52.9,-42.7,66.8,-33.4,72.4,-20.3C78,-7.2,75.3,9.7,68.1,23.8C60.9,37.9,49.2,49.2,35.6,56.8C22,64.4,6.5,68.3,-8.8,67.8C-24.1,67.3,-39.2,62.4,-51.2,53C-63.2,43.6,-72.1,29.7,-75.3,14.3C-78.5,-1.1,-76,-18,-68.2,-31.5C-60.4,-45,-47.3,-55.1,-33.5,-63.3C-19.7,-71.5,-5.2,-77.8,5.9,-74.3C17,-70.8,26.1,-59.5,39.5,-51.1Z',
-		'M42,-48C55,-40,68,-30,74,-18C80,-5,77,12,70,26C63,40,51,51,38,59C24,67,8,70,-7,69C-22,68,-37,64,-49,55C-61,46,-70,32,-73,17C-76,2,-74,-16,-66,-30C-58,-44,-45,-54,-32,-62C-18,-70,-4,-76,8,-72C20,-68,28,-58,42,-48Z',
-		'M37,-54C51,-46,65,-36,71,-23C77,-10,74,7,66,21C58,35,47,47,33,55C19,63,4,67,-11,66C-26,65,-41,60,-53,51C-65,42,-74,28,-77,12C-80,-4,-78,-20,-70,-33C-62,-46,-49,-56,-35,-64C-21,-72,-7,-78,4,-75C15,-72,24,-62,37,-54Z',
-		'M41,-49C54,-41,67,-32,73,-19C79,-6,76,10,69,24C62,38,50,50,36,58C22,66,7,69,-8,68C-23,67,-38,63,-50,54C-62,45,-71,30,-74,15C-77,0,-75,-17,-67,-30C-59,-44,-46,-55,-33,-63C-20,-71,-6,-77,6,-74C18,-71,29,-57,41,-49Z'
-	];
-	let currentBlobIndex = $state(0);
-	let blobPath = $derived(blobPaths[currentBlobIndex]);
-	let maskSvgUrl = $derived(`url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='black' d='${blobPath}' transform='translate(100 100)'/%3E%3C/svg%3E")`);
+	const BLOB_SIZE = 180;
 
 	function handleMouseMove(event: MouseEvent) {
 		const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-		// Get pixel position relative to the header, centered on cursor
 		maskX = event.clientX - rect.left - BLOB_SIZE / 2;
 		maskY = event.clientY - rect.top - BLOB_SIZE / 2;
 	}
@@ -45,14 +82,6 @@
 	function handleMouseLeave() {
 		isHovering = false;
 	}
-
-	// Animate blob path
-	$effect(() => {
-		const interval = setInterval(() => {
-			currentBlobIndex = (currentBlobIndex + 1) % blobPaths.length;
-		}, 1000);
-		return () => clearInterval(interval);
-	});
 
 	const homepageArticles: Article[] = homepageItems
 		.filter((item) => item.kind === 'article')
@@ -72,7 +101,6 @@
 	);
 	const hasMoreArticles = homepageArticles.length > ESSAYS_LIMIT;
 
-	// Article reader panel state
 	let readerPanelOpen = $state(false);
 	let selectedArticleId = $state<string | null>(null);
 
@@ -83,7 +111,6 @@
 
 	function closeArticleReader() {
 		readerPanelOpen = false;
-		// Small delay before clearing article to allow exit animation
 		setTimeout(() => {
 			if (!readerPanelOpen) {
 				selectedArticleId = null;
@@ -91,7 +118,6 @@
 		}, 300);
 	}
 
-	// Listen for navigation events from the panel
 	onMount(() => {
 		const handleNavigateArticle = (event: CustomEvent<{ id: string }>) => {
 			selectedArticleId = event.detail.id;
@@ -105,13 +131,17 @@
 	});
 </script>
 
+<svelte:window onkeydown={handleGlobalKeydown} />
+
 <section class="page-container relative w-full min-h-screen" class:panel-open={readerPanelOpen}>
 	<Header sticky>
 		<HeaderLogo>EMZINNIA</HeaderLogo>
 		<HeaderNav>
 			<HeaderNavItem href="/" active class="text-(--text-primary)">Home</HeaderNavItem>
-			<HeaderNavItem href="/blog">Essays</HeaderNavItem>
-			<HeaderNavItem href="/about">About</HeaderNavItem>
+			{#if showSectionsEnabled}
+				<HeaderNavItem href="/blog">Essays</HeaderNavItem>
+				<HeaderNavItem href="/about">About</HeaderNavItem>
+			{/if}
 			<ThemeToggle class="ml-4" />
 		</HeaderNav>
 	</Header>
@@ -120,7 +150,6 @@
 		class="main-content mx-auto max-w-6xl px-4 py-16 space-y-12"
 		class:panel-open={readerPanelOpen}
 	>
-		<!-- Hero header with image reveal -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<header
 			class="hero-header relative overflow-hidden"
@@ -129,33 +158,20 @@
 			onmouseleave={handleMouseLeave}
 			style="--mask-x: {maskX}px; --mask-y: {maskY}px;"
 		>
-			<!-- Base image (photo) -->
 			<img src={me} alt="" class="hero-base-image" aria-hidden="true" />
 			
-			<!-- Reveal layer 1: me4 image with blob mask -->
-			<img 
-				src={me5} 
-				alt="" 
-				class="hero-reveal-image hero-reveal-me4"
+			<div 
+				class="blob-mask-container"
 				class:is-hovering={isHovering}
+				style="top: {maskY}px; left: {maskX}px; --img-offset-x: {-maskX}px; --img-offset-y: {-maskY}px;"
 				aria-hidden="true"
-				style="-webkit-mask-image: {maskSvgUrl}; mask-image: {maskSvgUrl};"
-			/>
+			>
+				<img src={me5} alt="" class="blob-reveal-image blob-reveal-me4" />
+				<img src={me} alt="" class="blob-reveal-image blob-reveal-negative" style="mix-blend-mode: {headerBlendMode};" />
+			</div>
 			
-			<!-- Reveal layer 2: negative filter with blob mask -->
-			<img 
-				src={me} 
-				alt="" 
-				class="hero-reveal-image hero-reveal-negative"
-				class:is-hovering={isHovering}
-				aria-hidden="true"
-				style="-webkit-mask-image: {maskSvgUrl}; mask-image: {maskSvgUrl};"
-			/>
-			
-			<!-- Blue overlay for right side -->
 			<div class="hero-blue-overlay" aria-hidden="true"></div>
 			
-			<!-- Content overlay -->
 			<div class="hero-content">
 				<h1 class="text-4xl md:text-5xl font-serif leading-tight text-white mb-4 drop-shadow-lg">
 					currently building things.
@@ -166,69 +182,73 @@
 			</div>
 		</header>
 
-		<section aria-labelledby="essays-heading" class="space-y-6">
-			<h2
-				id="essays-heading"
-				class="text-sm font-semibold uppercase tracking-[0.2em] text-(--text-secondary)"
-			>
-				Essays
-			</h2>
-			<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				{#each visibleArticles as article (article.id)}
-					<li>
-						<button
-							type="button"
-							onclick={() => openArticleReader(article.id)}
-							class="article-card style-none w-full text-left flex flex-col gap-2 p-4 -m-4 rounded-lg transition-all duration-200 hover:bg-(--surface-hover) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--text-primary) focus-visible:ring-offset-2"
-							class:article-card-active={selectedArticleId === article.id && readerPanelOpen}
-						>
-							<span class="text-lg font-semibold text-(--text-primary) leading-snug">
-								{article.title}
-							</span>
-							{#if article.date}
-								<span class="text-sm text-(--text-secondary)">
-									{article.date}
-								</span>
-							{/if}
-							<p class="text-base text-(--text-muted) leading-relaxed line-clamp-3">
-								{article.content}
-							</p>
-						</button>
-					</li>
-				{/each}
-			</ul>
-			{#if hasMoreArticles}
-				<button
-					onclick={() => (essaysExpanded = !essaysExpanded)}
-					class="text-base text-(--text-secondary) hover:text-(--text-primary) hover:underline cursor-pointer transition-colors"
+		{#if showSectionsEnabled}
+			<section aria-labelledby="essays-heading" class="space-y-6">
+				<h2
+					id="essays-heading"
+					class="text-sm font-semibold uppercase tracking-[0.2em] text-(--text-secondary)"
 				>
-					{essaysExpanded ? '← Show less' : `Show all ${homepageArticles.length} essays →`}
-				</button>
-			{/if}
-		</section>
-
-		<section aria-labelledby="projects-heading" class="space-y-4">
-			<h2
-				id="projects-heading"
-				class="text-xs font-semibold uppercase tracking-[0.25em] text-(--text-secondary)"
-			>
-				Selected projects
-			</h2>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-				{#each homepageProjects as project (project.id)}
-					<ProjectBlock
-						title={project.title}
-						pill={project.pill}
-						class={project.class}
-						contentClassName={project.contentClassName}
+					Essays
+				</h2>
+				<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{#each visibleArticles as article (article.id)}
+						<li>
+							<button
+								type="button"
+								onclick={() => openArticleReader(article.id)}
+								class="article-card style-none w-full text-left flex flex-col gap-2 p-4 -m-4 rounded-lg transition-all duration-200 hover:bg-(--surface-hover) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--text-primary) focus-visible:ring-offset-2"
+								class:article-card-active={selectedArticleId === article.id && readerPanelOpen}
+							>
+								<span class="text-lg font-semibold text-(--text-primary) leading-snug">
+									{article.title}
+								</span>
+								{#if article.date}
+									<span class="text-sm text-(--text-secondary)">
+										{article.date}
+									</span>
+								{/if}
+								<p class="text-base text-(--text-muted) leading-relaxed line-clamp-3">
+									{article.content}
+								</p>
+							</button>
+						</li>
+					{/each}
+				</ul>
+				{#if hasMoreArticles}
+					<button
+						onclick={() => (essaysExpanded = !essaysExpanded)}
+						class="text-base text-(--text-secondary) hover:text-(--text-primary) hover:underline cursor-pointer transition-colors"
 					>
-						{#snippet description()}
-							{project.description}
-						{/snippet}
-					</ProjectBlock>
-				{/each}
-			</div>
-		</section>
+						{essaysExpanded ? '← Show less' : `Show all ${homepageArticles.length} essays →`}
+					</button>
+				{/if}
+			</section>
+		{/if}
+
+		{#if showSectionsEnabled}
+			<section aria-labelledby="projects-heading" class="space-y-4">
+				<h2
+					id="projects-heading"
+					class="text-xs font-semibold uppercase tracking-[0.25em] text-(--text-secondary)"
+				>
+					Selected projects
+				</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+					{#each homepageProjects as project (project.id)}
+						<ProjectBlock
+							title={project.title}
+							pill={project.pill}
+							class={project.class}
+							contentClassName={project.contentClassName}
+						>
+							{#snippet description()}
+								{project.description}
+							{/snippet}
+						</ProjectBlock>
+					{/each}
+				</div>
+			</section>
+		{/if}
 
 		<section aria-labelledby="fun-heading" class="space-y-4">
 			<h2
@@ -250,12 +270,34 @@
 		</section>
 	</div>
 
-	<!-- Article Reader Panel -->
 	<ArticleReaderPanel
 		open={readerPanelOpen}
 		articleId={selectedArticleId}
 		onclose={closeArticleReader}
 	/>
+
+	<Modal
+		open={debugMenuOpen}
+		onclose={() => (debugMenuOpen = false)}
+		title="🔧 Super Secret Debug Menu"
+		size="sm"
+	>
+		<div class="space-y-4">
+			<Select
+				label="Header Image Blend Mode"
+				bind:value={headerBlendMode}
+				options={blendModeOptions}
+			/>
+			<Switch
+				label="Show Essays & Projects"
+				description="Toggle visibility of Essays and Projects sections"
+				bind:checked={showSectionsEnabled}
+			/>
+			<p class="text-xs text-(--liver-brown-600) italic">
+				Press D to toggle this menu
+			</p>
+		</div>
+	</Modal>
 </section>
 
 <style>
@@ -295,8 +337,7 @@
 		cursor: crosshair;
 	}
 
-	.hero-base-image,
-	.hero-reveal-image {
+	.hero-base-image {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -307,37 +348,66 @@
 		border-radius: 2rem 0 0 2rem;
 	}
 
-	.hero-reveal-image {
+	/* Animated blob mask container */
+	.blob-mask-container {
+		position: absolute;
+		width: 180px;
+		height: 180px;
+		overflow: hidden;
 		opacity: 0;
-		/* Mask size and position - image is set inline for animation */
-		mask-size: 180px 180px;
-		mask-position: var(--mask-x, 0) var(--mask-y, 0);
-		mask-repeat: no-repeat;
-		-webkit-mask-size: 180px 180px;
-		-webkit-mask-position: var(--mask-x, 0) var(--mask-y, 0);
-		-webkit-mask-repeat: no-repeat;
-		transition: opacity 0.1s ease, mask-image 0.5s ease;
+		transition: opacity 0.15s ease;
+		/* Animated blob shape using border-radius */
+		border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+		animation: blob-morph 8s ease-in-out infinite;
+		pointer-events: none;
+		z-index: 5;
 	}
 
-	.hero-reveal-image.is-hovering {
+	.blob-mask-container.is-hovering {
 		opacity: 1;
 	}
 
-	/* me4 reveal layer - shown below the negative filter */
-	.hero-reveal-me4 {
-		z-index: 2;
+	/* Smooth organic blob morphing animation */
+	@keyframes blob-morph {
+		0%, 100% {
+			border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+		}
+		25% {
+			border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+		}
+		50% {
+			border-radius: 50% 60% 30% 60% / 40% 30% 70% 50%;
+		}
+		75% {
+			border-radius: 60% 40% 60% 40% / 70% 50% 40% 60%;
+		}
+	}
+
+	/* Images inside the blob container */
+	.blob-reveal-image {
+		position: absolute;
+		/* Position the image so the cursor area is visible - offset by container position */
+		top: var(--img-offset-y, 0);
+		left: var(--img-offset-x, 0);
+		/* Calculate the width relative to the header */
+		width: calc(0.55 * (100vw - 2rem));
+		max-width: calc(0.55 * (72rem - 2rem));
+		height: 320px;
+		object-fit: cover;
+		object-position: 50% 35%;
+	}
+
+	/* me5 reveal layer */
+	.blob-reveal-me4 {
+		z-index: 1;
 	}
 
 	/* Negative filter layer - blended on top */
-	.hero-reveal-negative {
-		z-index: 3;
-		/* filter: invert(1) hue-rotate(180deg); */
-		mix-blend-mode: multiply;
-		opacity: 1;
-	}
-
-	.hero-reveal-negative.is-hovering {
-		opacity: 1;
+	.blob-reveal-negative {
+		z-index: 2;
+		filter: invert(1) hue-rotate(180deg);
+		mix-blend-mode: difference;
+		opacity: 0.5;
 	}
 
 	.hero-blue-overlay {
@@ -374,12 +444,17 @@
 			height: 400px;
 		}
 
-		.hero-base-image,
-		.hero-reveal-image {
+		.hero-base-image {
 			width: 100%;
 			height: 55%;
 			object-position: center 25%;
 			border-radius: 2rem 2rem 0 0;
+		}
+
+		.blob-reveal-image {
+			width: 100%;
+			height: 400px;
+			object-position: center 25%;
 		}
 
 		.hero-blue-overlay {

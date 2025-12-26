@@ -7,11 +7,9 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
-	// Get article from URL params
 	const articleId = $derived($page.url.searchParams.get('id') ?? 'hegel-web-design');
 	const article = $derived(defaultArticles.find(a => a.id === articleId) ?? defaultArticles[0]);
 	
-	// Find adjacent articles for navigation
 	const currentIndex = $derived(defaultArticles.findIndex(a => a.id === articleId));
 	const prevArticle = $derived(currentIndex > 0 ? defaultArticles[currentIndex - 1] : null);
 	const nextArticle = $derived(currentIndex < defaultArticles.length - 1 ? defaultArticles[currentIndex + 1] : null);
@@ -21,7 +19,6 @@
 		headerColor.set('var(--page-bg-subtle)');
 	});
 
-	// Reading progress
 	let scrollProgress = $state(0);
 	let articleElement: HTMLElement;
 	
@@ -47,7 +44,6 @@
 		});
 	}
 
-	// Estimate reading time (assuming ~200 words per minute)
 	const readingTime = $derived(Math.max(1, Math.ceil(article.content.split(/\s+/).length / 200)));
 </script>
 
@@ -56,7 +52,6 @@
 	<meta name="description" content={article.content.slice(0, 160)} />
 </svelte:head>
 
-<!-- Reading progress bar -->
 <div 
 	class="fixed top-0 left-0 h-[3px] bg-(--text-primary) z-50 transition-all duration-75"
 	style="width: {scrollProgress}%"
@@ -77,7 +72,6 @@
 		bind:this={articleElement}
 		class="article-container mx-auto max-w-2xl px-6 py-16"
 	>
-		<!-- Back link -->
 		<a 
 			href="/blog"
 			class="style-none inline-flex items-center gap-2 text-sm text-(--text-muted) hover:text-(--text-primary) transition-colors mb-12 group"
@@ -89,9 +83,7 @@
 			<span class="font-sans">Back to essays</span>
 		</a>
 
-		<!-- Article header -->
 		<header class="mb-12" in:fly={{ y: 20, duration: 400, delay: 100 }}>
-			<!-- Decorative element -->
 			<div class="mb-6 flex items-center gap-3">
 				<span class="block w-12 h-12 rounded-full bg-(--text-primary) opacity-5"></span>
 				<div class="flex flex-col gap-1">
@@ -125,17 +117,14 @@
 			</div>
 		</header>
 
-		<!-- Drop cap opening -->
 		<div 
 			class="article-content prose-custom"
 			in:fly={{ y: 20, duration: 400, delay: 200 }}
 		>
-			<!-- Opening paragraph with drop cap -->
 			<p class="first-paragraph">
 				{article.content}
 			</p>
 
-			<!-- Extended content for demo -->
 			<p>
 				The interplay between form and function has always fascinated me. In the digital realm, 
 				we face constraints that both limit and liberate our creativity. The browser window, 
@@ -172,7 +161,6 @@
 			</p>
 		</div>
 
-		<!-- Tags at bottom -->
 		{#if article.tags && article.tags.length > 0}
 			<footer 
 				class="mt-16 pt-8 border-t border-(--border-color)"
@@ -191,7 +179,6 @@
 			</footer>
 		{/if}
 
-		<!-- Article navigation -->
 		<nav 
 			class="mt-12 pt-8 border-t border-(--border-color)"
 			in:fly={{ y: 20, duration: 400, delay: 350 }}

@@ -50,9 +50,6 @@
 	let blob = $state();
 	let pathEl = $state<SVGPathElement>();
 
-    // $inspect('path', path);
-    // $inspect('points', points, 'path', path);
-
 	function map(n: number, start1: number, end1: number, start2: number, end2: number) {
 		return ((n - start1) / (end1 - start1)) * (end2 - start2) + start2;
 	}
@@ -100,8 +97,6 @@
 			points.push({
 				x: x,
 				y: y,
-				/* we need to keep a reference to the point's original {x, y} coordinates 
-      for when we modulate the values later */
 				originX: x,
 				originY: y,
 				noiseOffsetX: Math.random() * 1000,
@@ -113,8 +108,6 @@
 	}
 
 	let previousSignature = $derived([radius, numPoints, baseNoiseStep]);
-
-	$inspect('previousSignature', previousSignature);
 
 	$effect(() => {
 		previousSignature = [radius, numPoints, baseNoiseStep];
@@ -151,41 +144,19 @@
 	}
 
 	onMount(() => {
-		// animate();
-
         window.addEventListener('click', () => {
             animate();
         });
-
-        // const svgEl = document.getElementById('svg');
-        // window.addEventListener('mousemove', (event) => {
-        //     // get svg coordinates
-        //     const coords = svgEl?.getBoundingClientRect();
-
-        //     // get mouse coordinates
-        //     const mouseCoords = { x: event.clientX, y: event.clientY };
-
-        //     // get the distance between the mouse and the svg
-        //     const difference = {
-        //         x: mouseCoords.x - coords?.left || 0,
-        //         y: mouseCoords.y - coords?.top || 0,
-        //     };
-
-        //     noiseStep = Math.min(Math.abs(map(0, difference.x, difference.y, 0.0005, 0.005)), 0.005);
-        // });
 	});
 
     function stop() {
         cancelAnimationFrame(animationId);
-        console.log('called stop on ', animationId);
     }
 </script>
 
 <svg viewBox="0 0 200 200" class={className} bind:this={blob} {...svgProps}>
 	<defs>
-		<!-- Our gradient fill #gradient -->
 		<linearGradient id="gradient-{id}" gradientTransform="rotate(90)">
-			<!-- Use CSS custom properties for the start / stop colors of the gradient -->
 			<stop id="gradientStop1" offset="0%" stop-color={startColor} />
 			<stop id="gradientStop2 " offset="100%" stop-color={stopColor} />
 		</linearGradient>
@@ -193,8 +164,7 @@
 
 	<path {stroke} stroke-width={strokeWidth} bind:this={pathEl} d={path} fill="url(#gradient-{id})" />
 
-	<!-- smily face path -->
-	 {#if smileyFace}
+	{#if smileyFace}
 		<path id="smily-face" d="M 80 100 Q 100 120 120 100" stroke="black" stroke-width="2" fill="none" />
 		<circle id="left-eye" cx="85" cy="85" r="5" fill="black" />
 		<circle id="right-eye" cx="115" cy="85" r="5" fill="black" />

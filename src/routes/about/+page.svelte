@@ -8,7 +8,6 @@
 	let ctx: CanvasRenderingContext2D;
 	let animationId: number;
 
-	// Ink wash particles - organic blob shapes that drift and morph
 	interface InkDrop {
 		x: number;
 		y: number;
@@ -30,21 +29,20 @@
 	let drops: InkDrop[] = [];
 	let time = 0;
 
-	// Color palette that matches the site
 	const getColors = (isDark: boolean) => {
 		if (isDark) {
 			return [
-				{ h: 235, s: 20, l: 25 }, // Navy muted
-				{ h: 217, s: 60, l: 45 }, // Caroline blue muted
-				{ h: 235, s: 15, l: 30 }, // Subtle purple-navy
-				{ h: 200, s: 25, l: 35 }, // Teal hint
+				{ h: 235, s: 20, l: 25 },
+				{ h: 217, s: 60, l: 45 },
+				{ h: 235, s: 15, l: 30 },
+				{ h: 200, s: 25, l: 35 },
 			];
 		} else {
 			return [
-				{ h: 36, s: 38, l: 75 }, // Sandy tan
-				{ h: 36, s: 30, l: 70 }, // Lighter tan
-				{ h: 47, s: 60, l: 80 }, // Transit yellow hint
-				{ h: 30, s: 35, l: 72 }, // Warm neutral
+				{ h: 36, s: 38, l: 75 },
+				{ h: 36, s: 30, l: 70 },
+				{ h: 47, s: 60, l: 80 },
+				{ h: 30, s: 35, l: 72 },
 			];
 		}
 	};
@@ -80,7 +78,6 @@
 
 		for (let i = 0; i <= points; i++) {
 			const angle = i * angleStep;
-			// Create organic wobble using multiple sine waves
 			const wobble1 = Math.sin(angle * 2 + drop.wobblePhase) * drop.wobbleAmplitude;
 			const wobble2 = Math.sin(angle * 3 + drop.wobblePhase * 1.3) * drop.wobbleAmplitude * 0.5;
 			const wobble3 = Math.sin(angle * 5 + drop.phase) * drop.wobbleAmplitude * 0.3;
@@ -94,7 +91,6 @@
 			if (i === 0) {
 				ctx.moveTo(x, y);
 			} else {
-				// Use quadratic curves for smoother shapes
 				const prevAngle = (i - 1) * angleStep;
 				const prevWobble1 = Math.sin(prevAngle * 2 + drop.wobblePhase) * drop.wobbleAmplitude;
 				const prevWobble2 =
@@ -115,7 +111,6 @@
 
 		ctx.closePath();
 
-		// Create soft gradient fill
 		const gradient = ctx.createRadialGradient(
 			drop.x,
 			drop.y,
@@ -137,16 +132,13 @@
 	};
 
 	const updateDrop = (drop: InkDrop) => {
-		// Slow drift movement
 		drop.x += drop.vx;
 		drop.y += drop.vy;
 
-		// Organic pulsing
 		drop.radius = drop.baseRadius * (1 + Math.sin(drop.phase) * 0.1);
 		drop.phase += drop.phaseSpeed;
 		drop.wobblePhase += drop.wobbleSpeed;
 
-		// Wrap around edges with padding
 		const padding = drop.radius * 2;
 		if (drop.x < -padding) drop.x = canvas.width + padding;
 		if (drop.x > canvas.width + padding) drop.x = -padding;
@@ -157,7 +149,6 @@
 	const animate = () => {
 		if (!ctx || !canvas) return;
 
-		// Clear with slight fade for trail effect
 		const isDark = document.documentElement.classList.contains('dark');
 		if (isDark) {
 			ctx.fillStyle = 'rgba(26, 27, 39, 0.05)';
@@ -166,7 +157,6 @@
 		}
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		// Update and draw drops
 		drops.forEach((drop) => {
 			updateDrop(drop);
 			drawOrganicBlob(drop);
@@ -188,7 +178,6 @@
 		ctx = canvas.getContext('2d')!;
 		ctx.scale(dpr, dpr);
 
-		// Initialize drops
 		const isDark = document.documentElement.classList.contains('dark');
 		const colors = getColors(isDark);
 
@@ -198,7 +187,6 @@
 			drops.push(createDrop(colors));
 		}
 
-		// Fill initial background
 		if (isDark) {
 			ctx.fillStyle = 'rgba(26, 27, 39, 1)';
 		} else {
@@ -211,7 +199,6 @@
 		initCanvas();
 	};
 
-	// Watch for theme changes
 	$effect(() => {
 		const isDark = $theme === 'dark';
 		if (drops.length > 0 && canvas) {
@@ -244,7 +231,6 @@
 </svelte:head>
 
 <section class="relative w-full min-h-screen overflow-hidden">
-	<!-- Canvas background -->
 	<canvas bind:this={canvas} class="absolute inset-0 w-full h-full -z-10" aria-hidden="true"
 	></canvas>
 
@@ -259,7 +245,6 @@
 	</Header>
 
 	<div class="mx-auto max-w-3xl px-4 py-16 space-y-16">
-		<!-- Hero section -->
 		<header class="space-y-6">
 			<h1 class="text-5xl md:text-6xl font-serif leading-tight text-(--text-primary)">
 				hi, i'm emma.
@@ -270,7 +255,6 @@
 			</p>
 		</header>
 
-		<!-- About content -->
 		<section class="space-y-8">
 			<div class="space-y-4">
 				<h2
@@ -397,7 +381,6 @@
 			</div>
 		</section>
 
-		<!-- Footer spacer -->
 		<div class="h-16"></div>
 	</div>
 </section>

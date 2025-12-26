@@ -1,8 +1,29 @@
 import { writable } from "svelte/store";
-import { browser } from "$app/environment";
+import { browser, dev } from "$app/environment";
 
 export const title = writable('hi, welcome to my website.');
 export const headerColor = writable('var(--caroline-blue-600)');
+
+// Debug store for showing essays/projects sections (default: true in dev, false in prod)
+function createShowSectionsStore() {
+	const defaultValue = browser
+		? (localStorage.getItem('debug-show-sections') === 'true') || dev
+		: dev;
+	
+	const { subscribe, set } = writable<boolean>(defaultValue);
+
+	return {
+		subscribe,
+		set: (value: boolean) => {
+			if (browser) {
+				localStorage.setItem('debug-show-sections', String(value));
+			}
+			set(value);
+		}
+	};
+}
+
+export const showSections = createShowSectionsStore();
 
 // Theme store with localStorage persistence and system preference detection
 function createThemeStore() {

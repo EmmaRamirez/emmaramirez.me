@@ -14,7 +14,6 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<!-- Prevent flash of wrong theme -->
 	<script>
 		(function() {
 			const stored = localStorage.getItem('theme');

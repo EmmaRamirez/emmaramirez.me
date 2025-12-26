@@ -8,7 +8,6 @@
 	title.set('blog');
 	headerColor.set('var(--page-bg-subtle)');
 
-	// Group articles by year
 	const articlesByYear = $derived.by(() => {
 		const grouped = new Map<string, Article[]>();
 		for (const article of defaultArticles) {
@@ -18,7 +17,6 @@
 			}
 			grouped.get(year)!.push(article);
 		}
-		// Sort years descending
 		return [...grouped.entries()].sort((a, b) => b[0].localeCompare(a[0]));
 	});
 
@@ -74,7 +72,6 @@
 	</Header>
 
 	<div class="blog-container mx-auto max-w-2xl px-6 py-16">
-		<!-- Header -->
 		<header class="mb-16" in:fade={{ duration: 400 }}>
 			<div class="flex items-center gap-3 mb-4">
 				<span class="inline-block w-8 h-px bg-(--text-muted)"></span>
@@ -88,7 +85,6 @@
 			</p>
 		</header>
 
-		<!-- Tag filter -->
 		<nav class="mb-12 pb-6 border-b border-(--border-color)" in:fade={{ duration: 400, delay: 100 }}>
 			<div class="flex flex-wrap gap-2">
 				<button
@@ -108,7 +104,6 @@
 			</div>
 		</nav>
 
-		<!-- Articles by year -->
 		<div class="space-y-12">
 			{#each filteredArticlesByYear as [year, articles], yearIndex (year)}
 				<section 
@@ -152,7 +147,6 @@
 			{/each}
 		</div>
 
-		<!-- Footer flourish -->
 		<footer class="mt-20 pt-8 border-t border-(--border-color) text-center">
 			<p class="text-sm text-(--text-muted) italic">
 				{defaultArticles.length} essays and counting

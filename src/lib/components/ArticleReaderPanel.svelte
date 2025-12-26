@@ -11,19 +11,16 @@
 
 	let { open = false, articleId = null, onclose }: ArticleReaderPanelProps = $props();
 
-	// Get article data
 	const article = $derived(
 		articleId ? defaultArticles.find((a) => a.id === articleId) ?? null : null
 	);
 
-	// Find adjacent articles for navigation
 	const currentIndex = $derived(articleId ? defaultArticles.findIndex((a) => a.id === articleId) : -1);
 	const prevArticle = $derived(currentIndex > 0 ? defaultArticles[currentIndex - 1] : null);
 	const nextArticle = $derived(
 		currentIndex < defaultArticles.length - 1 ? defaultArticles[currentIndex + 1] : null
 	);
 
-	// Reading time estimate
 	const readingTime = $derived(
 		article ? Math.max(1, Math.ceil(article.content.split(/\s+/).length / 200)) : 0
 	);
@@ -45,7 +42,6 @@
 	}
 
 	function navigateToArticle(id: string) {
-		// This will be handled by parent component
 		const customEvent = new CustomEvent('navigatearticle', { detail: { id } });
 		document.dispatchEvent(customEvent);
 	}
@@ -60,7 +56,6 @@
 		out:fly={{ x: -100, duration: 250, opacity: 1 }}
 		aria-label="Article reader"
 	>
-		<!-- Hotkey indicator header -->
 		<header class="panel-header">
 			<div class="hotkey-indicator">
 				<kbd class="key-badge">Esc</kbd>
@@ -83,9 +78,7 @@
 			</button>
 		</header>
 
-		<!-- Article content -->
 		<article class="panel-content">
-			<!-- Article header -->
 			<div class="article-header" in:fade={{ duration: 200, delay: 100 }}>
 				{#if article.tags && article.tags.length > 0}
 					<div class="article-tags">
@@ -106,11 +99,9 @@
 				</div>
 			</div>
 
-			<!-- Article body -->
 			<div class="article-body" in:fade={{ duration: 200, delay: 150 }}>
 				<p class="first-paragraph">{article.content}</p>
 
-				<!-- Extended content for demo -->
 				<p>
 					The interplay between form and function has always fascinated me. In the digital realm, we
 					face constraints that both limit and liberate our creativity. The browser window,
@@ -142,7 +133,6 @@
 				</p>
 			</div>
 
-			<!-- Article navigation -->
 			{#if prevArticle || nextArticle}
 				<nav class="article-nav" in:fade={{ duration: 200, delay: 200 }}>
 					<div class="nav-grid">
@@ -166,7 +156,6 @@
 				</nav>
 			{/if}
 
-			<!-- Link to full article -->
 			<div class="full-article-link" in:fade={{ duration: 200, delay: 250 }}>
 				<a href={`/blog/article?id=${article.id}`} class="style-none read-full-link">
 					Read full article
