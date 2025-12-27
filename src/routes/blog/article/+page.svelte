@@ -6,6 +6,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import githubIcon from '$lib/images/github.svg';
 
 	const articleId = $derived($page.url.searchParams.get('id') ?? 'hegel-web-design');
 	const article = $derived(defaultArticles.find(a => a.id === articleId) ?? defaultArticles[0]);
@@ -64,7 +65,20 @@
 			<HeaderNavItem href="/">Home</HeaderNavItem>
 			<HeaderNavItem href="/blog" active>Essays</HeaderNavItem>
 			<HeaderNavItem href="/about">About</HeaderNavItem>
-			<ThemeToggle class="ml-4" />
+			<a
+				href="https://github.com/emzinnia"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="ml-4 rounded-lg p-2 transition-colors hover:bg-(--surface-hover)"
+				aria-label="GitHub profile"
+			>
+				<img
+					src={githubIcon}
+					alt="GitHub"
+					class="h-5 w-5 brightness-0 transition-all dark:brightness-100 dark:invert"
+				/>
+			</a>
+			<ThemeToggle class="ml-2" />
 		</HeaderNav>
 	</Header>
 
@@ -241,18 +255,6 @@
 		position: relative;
 	}
 
-	/* Decorative marker for h2 */
-	.prose-custom h2::before {
-		content: '';
-		position: absolute;
-		left: -1.5rem;
-		top: 0.5em;
-		width: 4px;
-		height: 4px;
-		background: var(--text-muted);
-		border-radius: 50%;
-	}
-
 	.prose-custom blockquote {
 		margin: 2.5rem 0;
 		padding: 1.5rem 2rem;
@@ -267,7 +269,6 @@
 		margin-bottom: 0;
 	}
 
-	/* Drop cap for first paragraph */
 	.first-paragraph::first-letter {
 		float: left;
 		font-family: "Source Serif 4", serif;
@@ -279,7 +280,6 @@
 		font-weight: 600;
 	}
 
-	/* Better link styling in content */
 	.prose-custom a {
 		color: var(--text-primary);
 		text-decoration: underline;

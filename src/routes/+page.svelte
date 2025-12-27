@@ -134,7 +134,7 @@
 
 <svelte:window onkeydown={handleGlobalKeydown} />
 
-<section class="page-container relative w-full min-h-screen" class:panel-open={readerPanelOpen}>
+<section class="page-container relative min-h-screen w-full" class:panel-open={readerPanelOpen}>
 	<Header sticky>
 		<HeaderLogo>EMZINNIA</HeaderLogo>
 		<HeaderNav>
@@ -147,17 +147,17 @@
 				href="https://github.com/emzinnia"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="ml-4 p-2 rounded-lg hover:bg-(--surface-hover) transition-colors"
+				class="ml-4 rounded-lg p-2 transition-colors hover:bg-(--surface-hover) text-(--text-primary)"
 				aria-label="GitHub profile"
 			>
-				<img src={githubIcon} alt="GitHub" class="w-5 h-5 brightness-0 dark:invert dark:brightness-100 transition-all" />
+				<svg class="h-5 w-5" viewBox="0 0 98 96" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"/></svg>
 			</a>
 			<ThemeToggle class="ml-2" />
 		</HeaderNav>
 	</Header>
 
 	<div
-		class="main-content mx-auto max-w-6xl px-4 py-16 space-y-12"
+		class="main-content mx-auto max-w-6xl space-y-12 px-4 py-16"
 		class:panel-open={readerPanelOpen}
 	>
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -169,25 +169,31 @@
 			style="--mask-x: {maskX}px; --mask-y: {maskY}px;"
 		>
 			<img src={me} alt="" class="hero-base-image" aria-hidden="true" />
-			
-			<div 
+
+			<div
 				class="blob-mask-container"
 				class:is-hovering={isHovering}
 				style="top: {maskY}px; left: {maskX}px; --img-offset-x: {-maskX}px; --img-offset-y: {-maskY}px;"
 				aria-hidden="true"
 			>
 				<img src={me5} alt="" class="blob-reveal-image blob-reveal-me4" />
-				<img src={me} alt="" class="blob-reveal-image blob-reveal-negative" style="mix-blend-mode: {headerBlendMode};" />
+				<img
+					src={me}
+					alt=""
+					class="blob-reveal-image blob-reveal-negative"
+					style="mix-blend-mode: {headerBlendMode};"
+				/>
 			</div>
-			
+
 			<div class="hero-blue-overlay" aria-hidden="true"></div>
-			
+
 			<div class="hero-content">
-				<h1 class="text-4xl md:text-5xl font-serif leading-tight text-white mb-4 drop-shadow-lg">
-					currently building things.
+				<h1 class="mb-4 font-serif text-4xl leading-tight text-white drop-shadow-lg md:text-5xl">
+					welcome to my internet.
 				</h1>
-				<p class="text-white/90 text-xl md:text-2xl text-balance drop-shadow-md max-w-lg">
-					my name's emma and my biggest passion is making stuff with code. i'm into startups, finance, and fashion.
+				<p class="max-w-lg text-xl text-balance text-white/90 drop-shadow-md md:text-2xl">
+					my name's emma and my biggest passion is making stuff with code. i'm into startups,
+					finance, and fashion.
 				</p>
 			</div>
 		</header>
@@ -196,20 +202,20 @@
 			<section aria-labelledby="essays-heading" class="space-y-6">
 				<h2
 					id="essays-heading"
-					class="text-sm font-semibold uppercase tracking-[0.2em] text-(--text-secondary)"
+					class="text-sm font-semibold tracking-[0.2em] text-(--text-secondary) uppercase"
 				>
 					Essays
 				</h2>
-				<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{#each visibleArticles as article (article.id)}
 						<li>
 							<button
 								type="button"
 								onclick={() => openArticleReader(article.id)}
-								class="article-card style-none w-full text-left flex flex-col gap-2 p-4 -m-4 rounded-lg transition-all duration-200 hover:bg-(--surface-hover) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--text-primary) focus-visible:ring-offset-2"
+								class="article-card style-none -m-4 flex w-full flex-col gap-2 rounded-lg p-4 text-left transition-all duration-200 hover:bg-(--surface-hover) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--text-primary) focus-visible:ring-offset-2"
 								class:article-card-active={selectedArticleId === article.id && readerPanelOpen}
 							>
-								<span class="text-lg font-semibold text-(--text-primary) leading-snug">
+								<span class="text-lg leading-snug font-semibold text-(--text-primary)">
 									{article.title}
 								</span>
 								{#if article.date}
@@ -217,7 +223,7 @@
 										{article.date}
 									</span>
 								{/if}
-								<p class="text-base text-(--text-muted) leading-relaxed line-clamp-3">
+								<p class="line-clamp-3 text-base leading-relaxed text-(--text-muted)">
 									{article.content}
 								</p>
 							</button>
@@ -227,7 +233,7 @@
 				{#if hasMoreArticles}
 					<button
 						onclick={() => (essaysExpanded = !essaysExpanded)}
-						class="text-base text-(--text-secondary) hover:text-(--text-primary) hover:underline cursor-pointer transition-colors"
+						class="cursor-pointer text-base text-(--text-secondary) transition-colors hover:text-(--text-primary) hover:underline"
 					>
 						{essaysExpanded ? '← Show less' : `Show all ${homepageArticles.length} essays →`}
 					</button>
@@ -239,11 +245,11 @@
 			<section aria-labelledby="projects-heading" class="space-y-4">
 				<h2
 					id="projects-heading"
-					class="text-xs font-semibold uppercase tracking-[0.25em] text-(--text-secondary)"
+					class="text-xs font-semibold tracking-[0.25em] text-(--text-secondary) uppercase"
 				>
 					Selected projects
 				</h2>
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{#each homepageProjects as project (project.id)}
 						<ProjectBlock
 							title={project.title}
@@ -263,20 +269,19 @@
 		<section aria-labelledby="fun-heading" class="space-y-4">
 			<h2
 				id="fun-heading"
-				class="text-xs font-semibold uppercase tracking-[0.25em] text-(--text-secondary)"
+				class="text-xs font-semibold tracking-[0.25em] text-(--text-secondary) uppercase"
 			>
 				miscellaneous
 			</h2>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 				<DiscoBlock
 					image={disco.image}
 					alt={disco.alt}
 					caption={disco.caption}
-					class={disco.class ?? 'w-full h-full'}
+					class={disco.class ?? 'h-full w-full'}
 				/>
 				<HomeBlock class="col-span-2" />
 			</div>
-
 		</section>
 	</div>
 
@@ -303,9 +308,7 @@
 				description="Toggle visibility of Essays and Projects sections"
 				bind:checked={showSectionsEnabled}
 			/>
-			<p class="text-xs text-(--liver-brown-600) italic">
-				Press D to toggle this menu
-			</p>
+			<p class="text-xs text-(--liver-brown-600) italic">Press D to toggle this menu</p>
 		</div>
 	</Modal>
 </section>
@@ -318,7 +321,8 @@
 
 	/* Main content push animation */
 	.main-content {
-		transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
+		transition:
+			transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
 			width 0.35s cubic-bezier(0.32, 0.72, 0, 1);
 		will-change: transform, width;
 	}
@@ -379,7 +383,8 @@
 
 	/* Smooth organic blob morphing animation */
 	@keyframes blob-morph {
-		0%, 100% {
+		0%,
+		100% {
 			border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
 		}
 		25% {
@@ -426,12 +431,7 @@
 		right: 0;
 		width: 50%;
 		height: 100%;
-		background: linear-gradient(
-			to right,
-			transparent 0%,
-			#5ba4d4 10%,
-			#5ba4d4 100%
-		);
+		background: linear-gradient(to right, transparent 0%, #5ba4d4 10%, #5ba4d4 100%);
 		border-radius: 0 2rem 2rem 0;
 	}
 
@@ -461,10 +461,9 @@
 			border-radius: 2rem 2rem 0 0;
 		}
 
-		.blob-reveal-image {
-			width: 100%;
-			height: 400px;
-			object-position: center 25%;
+		.blob-mask-container {
+			/* Hide the blob effect on mobile - touch interactions differ */
+			display: none;
 		}
 
 		.hero-blue-overlay {
@@ -472,12 +471,7 @@
 			height: 55%;
 			top: auto;
 			bottom: 0;
-			background: linear-gradient(
-				to bottom,
-				transparent 0%,
-				#5ba4d4 15%,
-				#5ba4d4 100%
-			);
+			background: linear-gradient(to bottom, transparent 0%, #5ba4d4 15%, #5ba4d4 100%);
 			border-radius: 0 0 2rem 2rem;
 		}
 

@@ -35,9 +35,22 @@
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
-		if (event.key === 'Escape' && open) {
+		if (!open) return;
+		
+		if (event.key === 'Escape') {
 			event.preventDefault();
 			onclose?.();
+		}
+		
+		if (event.key === 'r' || event.key === 'R') {
+			// Don't trigger if user is typing in an input
+			if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+				return;
+			}
+			event.preventDefault();
+			if (article) {
+				window.location.href = `/blog/article?id=${article.id}`;
+			}
 		}
 	}
 
@@ -57,9 +70,16 @@
 		aria-label="Article reader"
 	>
 		<header class="panel-header">
-			<div class="hotkey-indicator">
-				<kbd class="key-badge">Esc</kbd>
-				<span class="key-label">to close</span>
+			<div class="hotkey-indicators">
+				<div class="hotkey-indicator">
+					<kbd class="key-badge">Esc</kbd>
+					<span class="key-label">to close</span>
+				</div>
+				<div class="hotkey-divider"></div>
+				<div class="hotkey-indicator">
+					<kbd class="key-badge">R</kbd>
+					<span class="key-label">read mode</span>
+				</div>
 			</div>
 			<button class="close-button" onclick={() => onclose?.()} aria-label="Close article panel">
 				<svg
@@ -201,10 +221,22 @@
 		background: var(--page-bg-subtle);
 	}
 
+	.hotkey-indicators {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
 	.hotkey-indicator {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
+	}
+
+	.hotkey-divider {
+		width: 1px;
+		height: 16px;
+		background: var(--border-color);
 	}
 
 	.key-badge {

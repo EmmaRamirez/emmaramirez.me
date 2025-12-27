@@ -3,6 +3,7 @@
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
 	import { theme } from '$lib/stores';
+	import githubIcon from '$lib/images/github.svg';
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;
@@ -240,7 +241,20 @@
 			<HeaderNavItem href="/">Home</HeaderNavItem>
 			<HeaderNavItem href="/blog">Essays</HeaderNavItem>
 			<HeaderNavItem href="/about" active class="text-(--text-primary)">About</HeaderNavItem>
-			<ThemeToggle class="ml-4" />
+			<a
+				href="https://github.com/emzinnia"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="ml-4 rounded-lg p-2 transition-colors hover:bg-(--surface-hover)"
+				aria-label="GitHub profile"
+			>
+				<img
+					src={githubIcon}
+					alt="GitHub"
+					class="h-5 w-5 brightness-0 transition-all dark:brightness-100 dark:invert"
+				/>
+			</a>
+			<ThemeToggle class="ml-2" />
 		</HeaderNav>
 	</Header>
 
