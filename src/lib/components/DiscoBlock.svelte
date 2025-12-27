@@ -48,8 +48,8 @@
 	let volatility = $state(0);
 	let targetVolatility = $state(0);
 
-const MIN_BEAMS = 60;
-const MAX_BEAMS = 800;
+	const MIN_BEAMS = 60;
+	const MAX_BEAMS = 800;
 	const VOLATILITY_SMOOTHING = 0.15;
 	const VOLATILITY_DECAY = 0.92;
 
@@ -122,38 +122,38 @@ const MAX_BEAMS = 800;
 		return Math.floor(MIN_BEAMS + (MAX_BEAMS - MIN_BEAMS) * volatility);
 	}
 
-function getBeamReach(): number {
-	const baseReach = Math.hypot(canvasWidth, canvasHeight) * 1.05;
-	return Math.max(320, baseReach);
-}
-
-function generateBeams(count: number = 200, reach: number = 400): LightBeam[] {
-	const beams: LightBeam[] = [];
-	
-	const rings = 10;
-	const beamsPerRing = Math.floor(count / rings);
-	const ringSpacing = reach / rings;
-	
-	for (let ring = 0; ring < rings; ring++) {
-		const ringDistance = (ring + 0.5 + Math.random() * 0.25) * ringSpacing;
-		const ringSpeed = 0.2 + ring * 0.08;
-		
-		for (let i = 0; i < beamsPerRing; i++) {
-			const angleSpread = (Math.PI * 2) / beamsPerRing;
-			beams.push({
-				baseAngle: i * angleSpread + ring * 0.3,
-				distance: ringDistance + (Math.random() - 0.5) * ringSpacing * 0.4,
-				size: 5 + Math.random() * 10,
-				speed: ringSpeed + (Math.random() - 0.5) * 0.12,
-				brightness: 0.4 + Math.random() * 0.6,
-				hue: Math.random() * 80 - 40,
-				orbitRadius: 2 + Math.random() * 12,
-				phaseOffset: Math.random() * Math.PI * 2,
-			});
-		}
+	function getBeamReach(): number {
+		const baseReach = Math.hypot(canvasWidth, canvasHeight) * 1.05;
+		return Math.max(320, baseReach);
 	}
-	
-	return beams;
+
+	function generateBeams(count: number = 200, reach: number = 400): LightBeam[] {
+		const beams: LightBeam[] = [];
+		
+		const rings = 10;
+		const beamsPerRing = Math.floor(count / rings);
+		const ringSpacing = reach / rings;
+		
+		for (let ring = 0; ring < rings; ring++) {
+			const ringDistance = (ring + 0.5 + Math.random() * 0.25) * ringSpacing;
+			const ringSpeed = 0.2 + ring * 0.08;
+			
+			for (let i = 0; i < beamsPerRing; i++) {
+				const angleSpread = (Math.PI * 2) / beamsPerRing;
+				beams.push({
+					baseAngle: i * angleSpread + ring * 0.3,
+					distance: ringDistance + (Math.random() - 0.5) * ringSpacing * 0.4,
+					size: 5 + Math.random() * 10,
+					speed: ringSpeed + (Math.random() - 0.5) * 0.12,
+					brightness: 0.4 + Math.random() * 0.6,
+					hue: Math.random() * 80 - 40,
+					orbitRadius: 2 + Math.random() * 12,
+					phaseOffset: Math.random() * Math.PI * 2,
+				});
+			}
+		}
+		
+		return beams;
 	}
 
 	function drawDiscoBeams() {
@@ -311,12 +311,19 @@ function generateBeams(count: number = 200, reach: number = 400): LightBeam[] {
 			}
 		};
 	});
+
+	function assignContainer(node: HTMLDivElement) {
+		container = node;
+		return () => {
+			if (container === node) container = null;
+		};
+	}
 </script>
 
 <div
 	role="presentation"
 	class="disco-block relative w-full overflow-hidden rounded-lg"
-	bind:this={container}
+	{@attach assignContainer}
 	onmousemove={startDisco}
 	onmouseleave={stopDisco}
 >
