@@ -42,6 +42,19 @@
 		background: var(--card-bg);
 	}
 
+	/* When spanning rows, fill the full height instead of using aspect-ratio */
+	:global(.md\:row-span-2).home-block {
+		aspect-ratio: unset;
+		height: 100%;
+	}
+
+	@media (min-width: 768px) {
+		:global(.md\:row-span-2).home-block {
+			aspect-ratio: unset;
+			height: 100%;
+		}
+	}
+
 	.home-image {
 		position: absolute;
 		top: 0;

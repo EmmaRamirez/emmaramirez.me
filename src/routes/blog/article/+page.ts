@@ -1,5 +1,3 @@
-import { dev } from '$app/environment';
-
 // we need CSR for URL parameter reading
 export const csr = true;
 

@@ -54,6 +54,17 @@ export interface HomepageRegistry {
 
 // Project Registry
 export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
+	nuzlocke: {
+		kind: 'project',
+		id: 'nuzlocke',
+		title: 'nuzlocke-generator',
+		pill: 'UX for constraints',
+		image: profileImage,
+		description: 'A layout generator for Nuzlocke challenges. Built with React, Typescript, and Tailwind.',
+		class: 'h-full',
+		contentClassName: 'md:flex-row md:items-center',
+		imageClassName: 'md:translate-x-0 md:ml-4'
+	},
 	fakemon: {
 		kind: 'project',
 		id: 'fakemon',
@@ -61,17 +72,6 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		pill: 'Creative coding',
 		image: profileImage,
 		description: 'A playful generator for imaginary Pokémon-style creatures, blending design systems, randomness, and cozy UI details.',
-		class: 'h-full',
-		contentClassName: 'md:flex-row md:items-center',
-		imageClassName: 'md:translate-x-0 md:ml-4'
-	},
-	nuzlocke: {
-		kind: 'project',
-		id: 'nuzlocke',
-		title: 'nuzlocke-tracker',
-		pill: 'UX for constraints',
-		image: profileImage,
-		description: 'A companion app for challenge runs that keeps teams, routes, and tense decisions tidy without losing the charm of notebooks and scribbles.',
 		class: 'h-full',
 		contentClassName: 'md:flex-row md:items-center',
 		imageClassName: 'md:translate-x-0 md:ml-4'

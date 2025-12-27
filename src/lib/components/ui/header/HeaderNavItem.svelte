@@ -43,7 +43,7 @@
 	bind:this={itemRef}
 	{href}
 	class={cn(
-		"style-none px-4 py-2 text-sm font-medium",
+		"style-none px-2 py-1.5 text-sm font-medium whitespace-nowrap md:px-4 md:py-2",
 		"transition-all duration-200",
 		active
 			? "text-(--text-primary)"
