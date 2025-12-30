@@ -20,6 +20,14 @@
 		phaseOffset: number;
 	}
 
+	interface DiscoBall {
+		id: number;
+		x: number;
+		y: number;
+		beams: LightBeam[];
+		volatility: number;
+	}
+
 	interface CursorSample {
 		x: number;
 		y: number;
@@ -43,6 +51,10 @@
 	let lightBeams: LightBeam[] = $state([]);
 	let time = $state(0);
 
+	let discoBalls: DiscoBall[] = $state([]);
+	let nextBallId = $state(1);
+	let fadeOut = $state(0);
+
 	const SAMPLE_HISTORY_SIZE = 12;
 	let cursorHistory: CursorSample[] = $state([]);
 	let volatility = $state(0);
@@ -50,8 +62,20 @@
 
 	const MIN_BEAMS = 60;
 	const MAX_BEAMS = 800;
+	const CLICK_BEAM_COUNT = 420;
+	const CLICK_BASE_VOLATILITY = 0.7;
 	const VOLATILITY_SMOOTHING = 0.15;
 	const VOLATILITY_DECAY = 0.92;
+
+	function shouldAnimate() {
+		return isHovering || discoBalls.length > 0 || fadeOut > 0.01 || volatility > 0.01;
+	}
+
+	function ensureAnimation() {
+		if (!animationId && shouldAnimate()) {
+			animationId = requestAnimationFrame(animate);
+		}
+	}
 
 	function calculateVolatility(): number {
 		if (cursorHistory.length < 3) return 0;
@@ -65,19 +89,19 @@
 			const prev = cursorHistory[i - 1];
 			const curr = cursorHistory[i];
 			const dt = Math.max(curr.time - prev.time, 1);
-			
+
 			const dx = curr.x - prev.x;
 			const dy = curr.y - prev.y;
 			const distance = Math.sqrt(dx * dx + dy * dy);
 			const speed = distance / dt;
-			
+
 			totalSpeed += speed;
 
 			if (i > 1) {
 				const dotProduct = dx * prevDx + dy * prevDy;
 				const magPrev = Math.sqrt(prevDx * prevDx + prevDy * prevDy);
 				const magCurr = Math.sqrt(dx * dx + dy * dy);
-				
+
 				if (magPrev > 0.5 && magCurr > 0.5) {
 					const cosAngle = dotProduct / (magPrev * magCurr);
 					directionChanges += (1 - cosAngle) / 2;
@@ -99,9 +123,9 @@
 
 	function updateCursorTracking(x: number, y: number) {
 		const now = performance.now();
-		
+
 		cursorHistory.push({ x, y, time: now });
-		
+
 		if (cursorHistory.length > SAMPLE_HISTORY_SIZE) {
 			cursorHistory = cursorHistory.slice(-SAMPLE_HISTORY_SIZE);
 		}
@@ -118,8 +142,8 @@
 		}
 	}
 
-	function getVisibleBeamCount(): number {
-		return Math.floor(MIN_BEAMS + (MAX_BEAMS - MIN_BEAMS) * volatility);
+	function getVisibleBeamCount(currentVolatility: number = volatility): number {
+		return Math.floor(MIN_BEAMS + (MAX_BEAMS - MIN_BEAMS) * currentVolatility);
 	}
 
 	function getBeamReach(): number {
@@ -129,15 +153,15 @@
 
 	function generateBeams(count: number = 200, reach: number = 400): LightBeam[] {
 		const beams: LightBeam[] = [];
-		
+
 		const rings = 10;
 		const beamsPerRing = Math.floor(count / rings);
 		const ringSpacing = reach / rings;
-		
+
 		for (let ring = 0; ring < rings; ring++) {
 			const ringDistance = (ring + 0.5 + Math.random() * 0.25) * ringSpacing;
 			const ringSpeed = 0.2 + ring * 0.08;
-			
+
 			for (let i = 0; i < beamsPerRing; i++) {
 				const angleSpread = (Math.PI * 2) / beamsPerRing;
 				beams.push({
@@ -152,66 +176,102 @@
 				});
 			}
 		}
-		
+
 		return beams;
 	}
 
-	function drawDiscoBeams() {
+	function drawBeamsForSource(
+		originX: number,
+		originY: number,
+		beams: LightBeam[],
+		currentVolatility: number,
+		fadeFactor: number = 1
+	) {
 		if (!ctx || !canvas) return;
-		
-		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-		
+
 		const pixelSize = 10;
-		const visibleCount = getVisibleBeamCount();
-		
-		for (let i = 0; i < Math.min(visibleCount, lightBeams.length); i++) {
-			const beam = lightBeams[i];
-			
+		const visibleCount = getVisibleBeamCount(currentVolatility);
+
+		for (let i = 0; i < Math.min(visibleCount, beams.length); i++) {
+			const beam = beams[i];
+
 			const rotatedAngle = beam.baseAngle + time * beam.speed;
-			
-			const volatilityBoost = 1 + volatility * 2;
+
+			const volatilityBoost = 1 + currentVolatility * 2;
 			const wobbleX = Math.cos(time * 2 + beam.phaseOffset) * beam.orbitRadius * volatilityBoost;
 			const wobbleY = Math.sin(time * 3 + beam.phaseOffset) * beam.orbitRadius * 0.5 * volatilityBoost;
-			
-			const x = cursorX + Math.cos(rotatedAngle) * beam.distance + wobbleX;
-			const y = cursorY + Math.sin(rotatedAngle) * beam.distance + wobbleY;
-			
+
+			const x = originX + Math.cos(rotatedAngle) * beam.distance + wobbleX;
+			const y = originY + Math.sin(rotatedAngle) * beam.distance + wobbleY;
+
 			const snappedX = Math.floor(x / pixelSize) * pixelSize;
 			const snappedY = Math.floor(y / pixelSize) * pixelSize;
-			
-			if (snappedX < -pixelSize || snappedX > canvasWidth + pixelSize || 
-				snappedY < -pixelSize || snappedY > canvasHeight + pixelSize) {
+
+			if (snappedX < -pixelSize || snappedX > canvasWidth + pixelSize || snappedY < -pixelSize || snappedY > canvasHeight + pixelSize) {
 				continue;
 			}
-			
-			const distanceToCursor = Math.hypot(snappedX - cursorX, snappedY - cursorY);
+
+			const distanceToCursor = Math.hypot(snappedX - originX, snappedY - originY);
 			const falloffRadius = Math.max(canvasWidth, canvasHeight) * 0.85;
 			const distanceFade = Math.exp(-distanceToCursor / Math.max(falloffRadius, 1));
 			const baseFade = 0.08;
 			const visibility = baseFade + distanceFade * (1 - baseFade);
-			
-			const pulseIntensity = 0.3 + volatility * 0.3;
+
+			const pulseIntensity = 0.3 + currentVolatility * 0.3;
 			const angleBrightness = Math.sin(rotatedAngle * 3 + time) * pulseIntensity + (1 - pulseIntensity / 2);
-			const finalBrightness = beam.brightness * angleBrightness * visibility;
-			
-			const hue = 45 + beam.hue * (1 + volatility);
-			const saturation = 15 + Math.abs(beam.hue) * 0.5 + volatility * 20;
+		const finalBrightness = beam.brightness * angleBrightness * visibility * fadeFactor;
+
+			const hue = 45 + beam.hue * (1 + currentVolatility);
+			const saturation = 15 + Math.abs(beam.hue) * 0.5 + currentVolatility * 20;
 			const lightness = 90 + finalBrightness * 10;
-			
+
 			if (finalBrightness < 0.02) continue;
-			
+
 			ctx.fillStyle = `hsla(${hue}, ${saturation}%, ${Math.min(lightness, 100)}%, ${finalBrightness})`;
 			ctx.fillRect(snappedX, snappedY, pixelSize, pixelSize);
+		}
+	}
+
+	function drawAllDiscoBeams(fadeFactor: number = 1) {
+		if (!ctx || !canvas) return;
+
+		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+		if (isHovering && lightBeams.length) {
+			drawBeamsForSource(cursorX, cursorY, lightBeams, volatility, fadeFactor);
+		}
+
+		if (discoBalls.length) {
+			for (const ball of discoBalls) {
+				drawBeamsForSource(ball.x, ball.y, ball.beams, ball.volatility, fadeFactor);
+			}
 		}
 	}
 
 	function animate(timestamp: number) {
 		time = timestamp * 0.001;
 		updateVolatility();
-		drawDiscoBeams();
-		
-		if (isHovering) {
+		const fadeFactor = isHovering ? 1 : fadeOut || 0;
+		drawAllDiscoBeams(fadeFactor);
+
+		if (!isHovering && fadeOut > 0) {
+			fadeOut *= 0.98;
+			if (fadeOut < 0.01) fadeOut = 0;
+		}
+
+		if (shouldAnimate()) {
 			animationId = requestAnimationFrame(animate);
+		} else {
+			animationId = 0;
+			if (ctx && canvas) {
+				ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+			}
+			lightBeams = [];
+			discoBalls = [];
+			cursorHistory = [];
+			volatility = 0;
+			targetVolatility = 0;
+			fadeOut = 0;
 		}
 	}
 
@@ -223,68 +283,77 @@
 			cursorHistory = [];
 			volatility = 0;
 			targetVolatility = 0;
-			animationId = requestAnimationFrame(animate);
 		}
-		
+
 		if (container) {
 			const bounds = container.getBoundingClientRect();
 			const newX = event.clientX - bounds.left;
 			const newY = event.clientY - bounds.top;
-			
+
 			updateCursorTracking(newX, newY);
-			
+
 			cursorX = newX;
 			cursorY = newY;
 		}
+
+		ensureAnimation();
 	}
 
 	function stopDisco() {
-		if (!ctx || !canvas) return;
-		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-		cancelAnimationFrame(animationId);
 		isHovering = false;
-		lightBeams = [];
-		cursorHistory = [];
-		volatility = 0;
 		targetVolatility = 0;
+		fadeOut = 1;
+		ensureAnimation();
 	}
 
 	function updateCanvasSize() {
 		if (!canvas || !container || !ctx) return;
 		const bounds = container.getBoundingClientRect();
 		const dpr = window.devicePixelRatio || 1;
-		
+
 		canvasWidth = bounds.width;
 		canvasHeight = bounds.height;
-		
+
 		canvas.width = bounds.width * dpr;
 		canvas.height = bounds.height * dpr;
 		canvas.style.width = `${bounds.width}px`;
 		canvas.style.height = `${bounds.height}px`;
-		
+
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		ctx.scale(dpr, dpr);
-		
+
 		if (isHovering) {
 			lightBeams = generateBeams(MAX_BEAMS, getBeamReach());
+		}
+
+		if (discoBalls.length) {
+			const reach = getBeamReach();
+			discoBalls = discoBalls.map((ball) => ({
+				...ball,
+				beams: generateBeams(CLICK_BEAM_COUNT, reach),
+			}));
+		}
+
+		if (shouldAnimate()) {
+			ensureAnimation();
 		}
 	}
 
 	onMount(() => {
 		let resizeObserver: ResizeObserver | null = null;
 		let imageLoadHandler: (() => void) | null = null;
-		
+
 		const timeoutId = setTimeout(() => {
 			canvas = document.getElementById('disco-canvas') as HTMLCanvasElement;
 			if (!canvas) return;
-			
+
 			ctx = canvas.getContext('2d');
 			imageBlock = document.getElementById('disco-image');
-			
+
 			if (!ctx || !container) return;
-			
+
 			updateCanvasSize();
-			
+
 			if (imageBlock instanceof HTMLImageElement) {
 				if (imageBlock.complete) {
 					updateCanvasSize();
@@ -293,14 +362,14 @@
 					imageBlock.addEventListener('load', imageLoadHandler, { once: true });
 				}
 			}
-			
+
 			resizeObserver = new ResizeObserver(() => {
 				updateCanvasSize();
 			});
-			
+
 			resizeObserver.observe(container);
 		}, 0);
-		
+
 		return () => {
 			clearTimeout(timeoutId);
 			if (resizeObserver) {
@@ -311,6 +380,31 @@
 			}
 		};
 	});
+
+	function addDiscoBall(event: MouseEvent) {
+		if (!container) return;
+
+		const bounds = container.getBoundingClientRect();
+		const x = event.clientX - bounds.left;
+		const y = event.clientY - bounds.top;
+
+		const beamReach = getBeamReach();
+		const beams = generateBeams(CLICK_BEAM_COUNT, beamReach);
+		const ballVolatility = Math.max(volatility, CLICK_BASE_VOLATILITY);
+
+		discoBalls = [
+			...discoBalls,
+			{
+				id: nextBallId++,
+				x,
+				y,
+				beams,
+				volatility: ballVolatility,
+			},
+		];
+
+		ensureAnimation();
+	}
 
 	function assignContainer(node: HTMLDivElement) {
 		container = node;
@@ -326,6 +420,7 @@
 	{@attach assignContainer}
 	onmousemove={startDisco}
 	onmouseleave={stopDisco}
+	onclick={addDiscoBall}
 >
 	<ImageBlock {image} {alt} {caption} class={className} imageId="disco-image" />
 	<canvas class="absolute top-0 left-0 pointer-events-none w-full h-full z-20 rounded-lg" id="disco-canvas"></canvas>
@@ -380,3 +475,4 @@
 		animation: disco-glint 1.8s ease-in-out infinite;
 	}
 </style>
+
