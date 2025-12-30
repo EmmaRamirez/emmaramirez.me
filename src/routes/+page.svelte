@@ -4,15 +4,14 @@
 	import PokemonBlock from '$lib/components/PokemonBlock.svelte';
 	import ProjectBlock from '$lib/components/ProjectBlock.svelte';
 	import ArticleReaderPanel from '$lib/components/ArticleReaderPanel.svelte';
+	import ProjectReaderPanel from '$lib/components/ProjectReaderPanel.svelte';
+	import Hero from '$lib/components/Hero.svelte';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle, Modal, Select, Switch } from '$lib/components/ui';
 	import { showSections } from '$lib/stores';
 	import type { Article } from '$lib/articles';
-	import { getHomepageItems, getProject, getArticle, getDisco } from '$lib/registry/homepage';
+	import { getHomepageItems, getProject, getArticle, getDisco, type ProjectId } from '$lib/registry/homepage';
 	import { pokemonTeam } from '$lib/website.config';
-	import me from '$lib/images/photos/me.jpeg';
-	import me4 from '$lib/images/photos/me4.png';
-	import me5 from '$lib/images/photos/me5.png';
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
 
@@ -20,15 +19,6 @@
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
 	let storeInitialized = false;
-
-	// Subscribe to the store and sync with local state
-	$effect(() => {
-		const unsubscribe = showSections.subscribe((value) => {
-			showSectionsEnabled = value;
-			storeInitialized = true;
-		});
-		return unsubscribe;
-	});
 
 	// Sync local state changes back to store
 	$effect(() => {
@@ -67,25 +57,6 @@
 
 	const homepageItems = getHomepageItems();
 
-	let maskX = $state(0);
-	let maskY = $state(0);
-	let isHovering = $state(false);
-	const BLOB_SIZE = 180;
-
-	function handleMouseMove(event: MouseEvent) {
-		const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-		maskX = event.clientX - rect.left - BLOB_SIZE / 2;
-		maskY = event.clientY - rect.top - BLOB_SIZE / 2;
-	}
-
-	function handleMouseEnter() {
-		isHovering = true;
-	}
-
-	function handleMouseLeave() {
-		isHovering = false;
-	}
-
 	const homepageArticles: Article[] = homepageItems
 		.filter((item) => item.kind === 'article')
 		.map((item) => getArticle(item.article.id)!)
@@ -104,39 +75,81 @@
 	);
 	const hasMoreArticles = homepageArticles.length > ESSAYS_LIMIT;
 
-	let readerPanelOpen = $state(false);
+	// Article reader panel state
+	let articleReaderPanelOpen = $state(false);
 	let selectedArticleId = $state<string | null>(null);
 
 	function openArticleReader(articleId: string) {
+		// Close project panel if open
+		if (projectReaderPanelOpen) {
+			closeProjectReader();
+		}
 		selectedArticleId = articleId;
-		readerPanelOpen = true;
+		articleReaderPanelOpen = true;
 	}
 
 	function closeArticleReader() {
-		readerPanelOpen = false;
+		articleReaderPanelOpen = false;
 		setTimeout(() => {
-			if (!readerPanelOpen) {
+			if (!articleReaderPanelOpen) {
 				selectedArticleId = null;
 			}
 		}, 300);
 	}
 
+	// Project reader panel state
+	let projectReaderPanelOpen = $state(false);
+	let selectedProjectId = $state<ProjectId | null>(null);
+
+	function openProjectReader(projectId: ProjectId) {
+		// Close article panel if open
+		if (articleReaderPanelOpen) {
+			closeArticleReader();
+		}
+		selectedProjectId = projectId;
+		projectReaderPanelOpen = true;
+	}
+
+	function closeProjectReader() {
+		projectReaderPanelOpen = false;
+		setTimeout(() => {
+			if (!projectReaderPanelOpen) {
+				selectedProjectId = null;
+			}
+		}, 300);
+	}
+
+	// Derived state for any panel being open
+	const anyPanelOpen = $derived(articleReaderPanelOpen || projectReaderPanelOpen);
+
 	onMount(() => {
+		const unsubscribeShowSections = showSections.subscribe((value) => {
+			showSectionsEnabled = value;
+			storeInitialized = true;
+		});
+
 		const handleNavigateArticle = (event: CustomEvent<{ id: string }>) => {
 			selectedArticleId = event.detail.id;
 		};
 
+		const handleNavigateProject = (event: CustomEvent<{ id: ProjectId }>) => {
+			selectedProjectId = event.detail.id;
+		};
+
 		document.addEventListener('navigatearticle', handleNavigateArticle as EventListener);
+		document.addEventListener('navigateproject', handleNavigateProject as EventListener);
 
 		return () => {
+			unsubscribeShowSections();
 			document.removeEventListener('navigatearticle', handleNavigateArticle as EventListener);
+			document.removeEventListener('navigateproject', handleNavigateProject as EventListener);
 		};
 	});
 </script>
 
 <svelte:window onkeydown={handleGlobalKeydown} />
 
-<section class="page-container relative min-h-screen w-full" class:panel-open={readerPanelOpen}>
+<section class="page-container relative min-h-screen w-full" class:panel-open={anyPanelOpen}>
 	<Header sticky>
 		<HeaderLogo>EMZINNIA</HeaderLogo>
 		<HeaderNav>
@@ -160,54 +173,12 @@
 
 	<div
 		class="main-content mx-auto max-w-6xl space-y-12 px-4 py-16"
-		class:panel-open={readerPanelOpen}
+		class:panel-open={anyPanelOpen}
 	>
-		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<header
-			class="hero-header relative overflow-hidden"
-			onmousemove={handleMouseMove}
-			onmouseenter={handleMouseEnter}
-			onmouseleave={handleMouseLeave}
-			style="--mask-x: {maskX}px; --mask-y: {maskY}px;"
-		>
-			<img src={me} alt="" class="hero-base-image" aria-hidden="true" />
-
-			<div
-				class="blob-mask-container"
-				class:is-hovering={isHovering}
-				style="top: {maskY}px; left: {maskX}px; --img-offset-x: {-maskX}px; --img-offset-y: {-maskY}px;"
-				aria-hidden="true"
-			>
-				<img src={me5} alt="" class="blob-reveal-image blob-reveal-me4" />
-				<img
-					src={me}
-					alt=""
-					class="blob-reveal-image blob-reveal-negative"
-					style="mix-blend-mode: {headerBlendMode};"
-				/>
-			</div>
-
-			<div class="hero-blue-overlay" aria-hidden="true"></div>
-
-			<div class="hero-content">
-				<h1 class="mb-4 font-serif text-4xl leading-tight text-white drop-shadow-lg md:text-5xl">
-					welcome to my internet.
-				</h1>
-				<p class="max-w-lg text-xl text-balance text-white/90 drop-shadow-md md:text-2xl">
-					my name's emma and my biggest passion is making stuff with code. i'm into startups,
-					finance, and fashion.
-				</p>
-			</div>
-		</header>
+		<Hero blendMode={headerBlendMode} />
 
 		{#if showSectionsEnabled}
-			<section aria-labelledby="essays-heading" class="space-y-6">
-				<h2
-					id="essays-heading"
-					class="text-sm font-semibold tracking-[0.2em] text-(--text-secondary) uppercase"
-				>
-					Essays
-				</h2>
+			<section aria-label="Essays" class="space-y-6">
 				<ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{#each visibleArticles as article (article.id)}
 						<li>
@@ -215,7 +186,7 @@
 								type="button"
 								onclick={() => openArticleReader(article.id)}
 								class="article-card style-none -m-4 flex w-full flex-col gap-2 rounded-lg p-4 text-left transition-all duration-200 hover:bg-(--surface-hover) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--text-primary) focus-visible:ring-offset-2"
-								class:article-card-active={selectedArticleId === article.id && readerPanelOpen}
+								class:article-card-active={selectedArticleId === article.id && articleReaderPanelOpen}
 							>
 								<span class="text-lg leading-snug font-semibold text-(--text-primary)">
 									{article.title}
@@ -244,37 +215,32 @@
 		{/if}
 
 		{#if showSectionsEnabled}
-			<section aria-labelledby="projects-heading" class="space-y-4">
-				<h2
-					id="projects-heading"
-					class="text-xs font-semibold tracking-[0.25em] text-(--text-secondary) uppercase"
-				>
-					Selected projects
-				</h2>
+			<section aria-label="Selected projects" class="space-y-4">
 				<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{#each homepageProjects as project (project.id)}
-						<ProjectBlock
-							title={project.title}
-							pill={project.pill}
-							class={project.class}
-							contentClassName={project.contentClassName}
+						<button
+							type="button"
+							onclick={() => openProjectReader(project.id)}
+							class="project-card style-none text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-(--text-primary) focus-visible:ring-offset-2"
+							class:project-card-active={selectedProjectId === project.id && projectReaderPanelOpen}
 						>
-							{#snippet description()}
-								{project.description}
-							{/snippet}
-						</ProjectBlock>
+							<ProjectBlock
+								title={project.title}
+								pill={project.pill}
+								class={project.class}
+								contentClassName={project.contentClassName}
+							>
+								{#snippet description()}
+									{project.description}
+								{/snippet}
+							</ProjectBlock>
+						</button>
 					{/each}
 				</div>
 			</section>
 		{/if}
 
-		<section aria-labelledby="fun-heading" class="space-y-4">
-			<h2
-				id="fun-heading"
-				class="text-xs font-semibold tracking-[0.25em] text-(--text-secondary) uppercase"
-			>
-				miscellaneous
-			</h2>
+		<section aria-label="Miscellaneous" class="space-y-4">
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:grid-rows-2">
 				<DiscoBlock
 					image={disco.image}
@@ -291,9 +257,15 @@
 	</div>
 
 	<ArticleReaderPanel
-		open={readerPanelOpen}
+		open={articleReaderPanelOpen}
 		articleId={selectedArticleId}
 		onclose={closeArticleReader}
+	/>
+
+	<ProjectReaderPanel
+		open={projectReaderPanelOpen}
+		projectId={selectedProjectId}
+		onclose={closeProjectReader}
 	/>
 
 	<Modal
@@ -339,8 +311,8 @@
 	/* Article card styles */
 	.article-card {
 		cursor: pointer;
-		border: 1px solid transparent;
-		background: transparent;
+		border: 1px solid var(--border-color);
+		background: var(--surface);
 	}
 
 	.article-card-active {
@@ -348,144 +320,23 @@
 		border-color: var(--border-color);
 	}
 
-	/* Hero header with squircle borders */
-	.hero-header {
-		border-radius: 2rem;
-		height: 320px;
-		background: #5ba4d4; /* Blue from the photo */
-		cursor: crosshair;
+	/* Project card styles */
+	.project-card {
+		cursor: pointer;
+		border-radius: 0.5rem;
 	}
 
-	.hero-base-image {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 55%;
-		height: 100%;
-		object-fit: cover;
-		object-position: 50% 35%;
-		border-radius: 2rem 0 0 2rem;
+	.project-card:hover :global(.project-block-content) {
+		background: var(--surface-hover);
 	}
 
-	/* Animated blob mask container */
-	.blob-mask-container {
-		position: absolute;
-		width: 180px;
-		height: 180px;
-		overflow: hidden;
-		opacity: 0;
-		transition: opacity 0.15s ease;
-		/* Animated blob shape using border-radius */
-		border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-		animation: blob-morph 8s ease-in-out infinite;
-		pointer-events: none;
-		z-index: 5;
-	}
-
-	.blob-mask-container.is-hovering {
-		opacity: 1;
-	}
-
-	/* Smooth organic blob morphing animation */
-	@keyframes blob-morph {
-		0%,
-		100% {
-			border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-		}
-		25% {
-			border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
-		}
-		50% {
-			border-radius: 50% 60% 30% 60% / 40% 30% 70% 50%;
-		}
-		75% {
-			border-radius: 60% 40% 60% 40% / 70% 50% 40% 60%;
-		}
-	}
-
-	/* Images inside the blob container */
-	.blob-reveal-image {
-		position: absolute;
-		/* Position the image so the cursor area is visible - offset by container position */
-		top: var(--img-offset-y, 0);
-		left: var(--img-offset-x, 0);
-		/* Calculate the width relative to the header */
-		width: calc(0.55 * (100vw - 2rem));
-		max-width: calc(0.55 * (72rem - 2rem));
-		height: 320px;
-		object-fit: cover;
-		object-position: 50% 35%;
-	}
-
-	/* me5 reveal layer */
-	.blob-reveal-me4 {
-		z-index: 1;
-	}
-
-	/* Negative filter layer - blended on top */
-	.blob-reveal-negative {
-		z-index: 2;
-		filter: invert(1) hue-rotate(180deg);
-		mix-blend-mode: difference;
-		opacity: 0.5;
-	}
-
-	.hero-blue-overlay {
-		position: absolute;
-		top: 0;
-		right: 0;
-		width: 50%;
-		height: 100%;
-		background: linear-gradient(to right, transparent 0%, #5ba4d4 10%, #5ba4d4 100%);
-		border-radius: 0 2rem 2rem 0;
-	}
-
-	.hero-content {
-		position: relative;
-		z-index: 10;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		height: 100%;
-		margin-left: auto;
-		width: 50%;
-		text-align: left;
-		padding: 2rem;
+	.project-card-active :global(.project-block-content) {
+		background: var(--surface-hover);
+		border-color: var(--text-muted);
 	}
 
 	/* Responsive adjustments */
 	@media (max-width: 768px) {
-		.hero-header {
-			height: 400px;
-		}
-
-		.hero-base-image {
-			width: 100%;
-			height: 55%;
-			object-position: center 25%;
-			border-radius: 2rem 2rem 0 0;
-		}
-
-		.blob-mask-container {
-			/* Hide the blob effect on mobile - touch interactions differ */
-			display: none;
-		}
-
-		.hero-blue-overlay {
-			width: 100%;
-			height: 55%;
-			top: auto;
-			bottom: 0;
-			background: linear-gradient(to bottom, transparent 0%, #5ba4d4 15%, #5ba4d4 100%);
-			border-radius: 0 0 2rem 2rem;
-		}
-
-		.hero-content {
-			width: 100%;
-			justify-content: flex-end;
-			padding: 1.5rem;
-		}
-
 		/* Full screen panel on mobile - no push */
 		.main-content.panel-open {
 			transform: none;
