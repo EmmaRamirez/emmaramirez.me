@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { Article } from '$lib/articles';
-	import { defaultArticles } from '$lib/articles';
+	import { getArticles, type ArticleFull } from '$lib/articles';
 	import { fly, fade } from 'svelte/transition';
 
 	interface ArticleReaderPanelProps {
@@ -11,18 +10,22 @@
 
 	let { open = false, articleId = null, onclose }: ArticleReaderPanelProps = $props();
 
-	const article = $derived(
-		articleId ? defaultArticles.find((a) => a.id === articleId) ?? null : null
+	// Get all full articles with components
+	const allArticles = getArticles();
+
+	// Find the full article by slug (articleId is the slug)
+	const article = $derived<ArticleFull | null>(
+		articleId ? allArticles.find((a) => a.slug === articleId) ?? null : null
 	);
 
-	const currentIndex = $derived(articleId ? defaultArticles.findIndex((a) => a.id === articleId) : -1);
-	const prevArticle = $derived(currentIndex > 0 ? defaultArticles[currentIndex - 1] : null);
+	const currentIndex = $derived(articleId ? allArticles.findIndex((a) => a.slug === articleId) : -1);
+	const prevArticle = $derived(currentIndex > 0 ? allArticles[currentIndex - 1] : null);
 	const nextArticle = $derived(
-		currentIndex < defaultArticles.length - 1 ? defaultArticles[currentIndex + 1] : null
+		currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null
 	);
 
 	const readingTime = $derived(
-		article ? Math.max(1, Math.ceil(article.content.split(/\s+/).length / 200)) : 0
+		article ? Math.max(1, Math.ceil(article.frontmatter.description.split(/\s+/).length / 200)) : 0
 	);
 
 	function formatDate(dateStr: string | undefined) {
@@ -49,7 +52,7 @@
 			}
 			event.preventDefault();
 			if (article) {
-				window.location.href = `/blog/article?id=${article.id}`;
+				window.location.href = `/blog/${article.slug}`;
 			}
 		}
 	}
@@ -71,15 +74,15 @@
 	>
 		<header class="panel-header">
 			<div class="hotkey-indicators">
-				<div class="hotkey-indicator">
+				<button class="hotkey-indicator" onclick={() => onclose?.()} aria-label="Close panel">
 					<kbd class="key-badge">Esc</kbd>
 					<span class="key-label">to close</span>
-				</div>
+				</button>
 				<div class="hotkey-divider"></div>
-				<div class="hotkey-indicator">
+				<button class="hotkey-indicator" onclick={() => article && (window.location.href = `/blog/${article.slug}`)} aria-label="Open read mode">
 					<kbd class="key-badge">R</kbd>
 					<span class="key-label">read mode</span>
-				</div>
+				</button>
 			</div>
 			<button class="close-button" onclick={() => onclose?.()} aria-label="Close article panel">
 				<svg
@@ -100,19 +103,19 @@
 
 		<article class="panel-content">
 			<div class="article-header" in:fade={{ duration: 200, delay: 100 }}>
-				{#if article.tags && article.tags.length > 0}
+				{#if article.frontmatter.tags && article.frontmatter.tags.length > 0}
 					<div class="article-tags">
-						{#each article.tags as tag}
+						{#each article.frontmatter.tags as tag}
 							<span class="tag">{tag}</span>
 						{/each}
 					</div>
 				{/if}
 
-				<h1 class="article-title">{article.title}</h1>
+				<h1 class="article-title">{article.frontmatter.title}</h1>
 
 				<div class="article-meta">
-					{#if article.date}
-						<time datetime={article.date}>{formatDate(article.date)}</time>
+					{#if article.frontmatter.date}
+						<time datetime={article.frontmatter.date}>{formatDate(article.frontmatter.date)}</time>
 					{/if}
 					<span class="meta-separator">·</span>
 					<span>{readingTime} min read</span>
@@ -120,37 +123,7 @@
 			</div>
 
 			<div class="article-body" in:fade={{ duration: 200, delay: 150 }}>
-				<p class="first-paragraph">{article.content}</p>
-
-				<p>
-					The interplay between form and function has always fascinated me. In the digital realm, we
-					face constraints that both limit and liberate our creativity. The browser window,
-					responsive breakpoints, loading times—these are the boundaries within which we paint.
-				</p>
-
-				<h2>The Nature of Cycles</h2>
-				<p>
-					Looking back at the history of web design, one can trace distinct movements. The early
-					web, constrained by technology, embraced simplicity out of necessity. Then came the era of
-					excess—Flash animations, elaborate navigation systems, and designs that prioritized
-					spectacle over substance.
-				</p>
-				<p>
-					Today, we find ourselves in a synthesis phase. We have the technology to create nearly
-					anything, yet the best designs exercise restraint. They understand that the medium serves
-					the message, not the other way around.
-				</p>
-
-				<blockquote>
-					<p>"The synthesis is not a compromise. It is a transcendence."</p>
-				</blockquote>
-
-				<h2>Looking Forward</h2>
-				<p>
-					As we move forward, new technologies will emerge, new constraints will form, and new
-					possibilities will unfold. The key is to remain adaptable, to understand that each moment
-					in design history builds upon those that came before.
-				</p>
+				<svelte:component this={article.component} />
 			</div>
 
 			{#if prevArticle || nextArticle}
@@ -158,17 +131,17 @@
 					<div class="nav-grid">
 						<div class="nav-prev">
 							{#if prevArticle}
-								<button class="nav-link" onclick={() => navigateToArticle(prevArticle.id)}>
+								<button class="nav-link" onclick={() => navigateToArticle(prevArticle.slug)}>
 									<span class="nav-direction">← Previous</span>
-									<span class="nav-title">{prevArticle.title}</span>
+									<span class="nav-title">{prevArticle.frontmatter.title}</span>
 								</button>
 							{/if}
 						</div>
 						<div class="nav-next">
 							{#if nextArticle}
-								<button class="nav-link" onclick={() => navigateToArticle(nextArticle.id)}>
+								<button class="nav-link nav-link-next" onclick={() => navigateToArticle(nextArticle.slug)}>
 									<span class="nav-direction">Next →</span>
-									<span class="nav-title">{nextArticle.title}</span>
+									<span class="nav-title">{nextArticle.frontmatter.title}</span>
 								</button>
 							{/if}
 						</div>
@@ -176,24 +149,7 @@
 				</nav>
 			{/if}
 
-			<div class="full-article-link" in:fade={{ duration: 200, delay: 250 }}>
-				<a href={`/blog/article?id=${article.id}`} class="style-none read-full-link">
-					Read full article
-					<svg
-						width="16"
-						height="16"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					>
-						<path d="M5 12h14M12 5l7 7-7 7" />
-					</svg>
-				</a>
-			</div>
-		</article>
+			</article>
 	</aside>
 {/if}
 
@@ -231,6 +187,21 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
+		background: none;
+		border: none;
+		padding: 0.25rem 0.5rem;
+		margin: -0.25rem -0.5rem;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: background 0.15s ease;
+	}
+
+	.hotkey-indicator:hover {
+		background: var(--surface-hover);
+	}
+
+	.hotkey-indicator:hover .key-badge {
+		border-color: var(--text-muted);
 	}
 
 	.hotkey-divider {
@@ -409,6 +380,11 @@
 		background: var(--surface-hover);
 	}
 
+	.nav-link-next {
+		align-items: flex-end;
+		margin-left: auto;
+	}
+
 	.nav-direction {
 		font-size: 0.7rem;
 		text-transform: uppercase;
@@ -420,33 +396,6 @@
 		font-size: 0.9rem;
 		font-weight: 500;
 		color: var(--text-primary);
-	}
-
-	.full-article-link {
-		margin-top: 2rem;
-		padding-top: 1.5rem;
-		border-top: 1px solid var(--border-color);
-	}
-
-	.read-full-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.75rem 1.25rem;
-		font-size: 0.85rem;
-		font-weight: 500;
-		color: var(--text-primary);
-		background: var(--page-bg-subtle);
-		border: 1px solid var(--border-color);
-		border-radius: 8px;
-		transition: all 0.15s ease;
-		text-decoration: none;
-	}
-
-	.read-full-link:hover {
-		background: var(--text-primary);
-		color: var(--page-bg);
-		border-color: var(--text-primary);
 	}
 
 	/* Responsive */
