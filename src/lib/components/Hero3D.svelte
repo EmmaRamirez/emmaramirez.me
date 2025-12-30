@@ -4,9 +4,39 @@
 
 	interface Props {
 		class?: string;
+		depthScale?: number;
+		revealRadius?: number;
+		parallaxXY?: number;
+		parallaxZ?: number;
+		splatStretch?: number;
+		splatCompress?: number;
+		depthBulge?: number;
+		contourOffset?: number;
+		blobAmplitude?: number;
+		noiseAmplitude?: number;
+		contourInfluence?: number;
+		edgeSoftness?: number;
+		saturationBoost?: number;
+		contrastBoost?: number;
 	}
 
-	let { class: className = '' }: Props = $props();
+	let { 
+		class: className = '',
+		depthScale = 0.12,
+		revealRadius = 0.3,
+		parallaxXY = 0.12,
+		parallaxZ = 0.3,
+		splatStretch = 2.5,
+		splatCompress = 0.6,
+		depthBulge = 0.35,
+		contourOffset = 0.5,
+		blobAmplitude = 0.03,
+		noiseAmplitude = 0.04,
+		contourInfluence = 0.6,
+		edgeSoftness = 0.06,
+		saturationBoost = 1.15,
+		contrastBoost = 1.05
+	}: Props = $props();
 
 	let containerElement: HTMLDivElement;
 	let mouseX = $state(0.5);
@@ -38,7 +68,25 @@
 	onmouseleave={handleMouseLeave}
 >
 	<Canvas toneMapping={0} colorManagementEnabled={false} renderMode="always">
-		<Hero3DScene {mouseX} {mouseY} {isHovering} />
+		<Hero3DScene 
+			{mouseX} 
+			{mouseY} 
+			{isHovering}
+			{depthScale}
+			{revealRadius}
+			{parallaxXY}
+			{parallaxZ}
+			{splatStretch}
+			{splatCompress}
+			{depthBulge}
+			{contourOffset}
+			{blobAmplitude}
+			{noiseAmplitude}
+			{contourInfluence}
+			{edgeSoftness}
+			{saturationBoost}
+			{contrastBoost}
+		/>
 	</Canvas>
 </div>
 

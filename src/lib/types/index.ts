@@ -11,3 +11,5 @@ export interface Point {
     noiseOffsetX: number;
     noiseOffsetY: number;
 }
+
+export * from './homepage';

@@ -4,6 +4,7 @@
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
 	import { fade, fly } from 'svelte/transition';
+	import { formatShortDate } from '$lib/utils';
 
 	title.set('blog');
 	headerColor.set('var(--page-bg-subtle)');
@@ -42,11 +43,7 @@
 	});
 
 	function formatDate(dateStr: string | undefined) {
-		if (!dateStr) return '';
-		return new Date(dateStr).toLocaleDateString('en-US', {
-			month: 'short',
-			day: 'numeric'
-		});
+		return formatShortDate(dateStr);
 	}
 </script>
 

@@ -10,10 +10,8 @@
 
 	let { open = false, articleId = null, onclose }: ArticleReaderPanelProps = $props();
 
-	// Get all full articles with components
 	const allArticles = getArticles();
 
-	// Find the full article by slug (articleId is the slug)
 	const article = $derived<ArticleFull | null>(
 		articleId ? allArticles.find((a) => a.slug === articleId) ?? null : null
 	);
@@ -39,15 +37,20 @@
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (!open) return;
-		
+
+	const targetIsTextInput =
+		event.target instanceof HTMLElement &&
+		(event.target.tagName === 'INPUT' ||
+			event.target.tagName === 'TEXTAREA' ||
+			event.target.isContentEditable);
+
 		if (event.key === 'Escape') {
 			event.preventDefault();
 			onclose?.();
 		}
-		
+
 		if (event.key === 'r' || event.key === 'R') {
-			// Don't trigger if user is typing in an input
-			if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+		if (targetIsTextInput) {
 				return;
 			}
 			event.preventDefault();
@@ -55,6 +58,16 @@
 				window.location.href = `/blog/${article.slug}`;
 			}
 		}
+
+	if ((event.key === 'ArrowLeft' || event.key === 'ArrowRight') && !targetIsTextInput) {
+		event.preventDefault();
+		if (event.key === 'ArrowLeft' && prevArticle) {
+			navigateToArticle(prevArticle.slug);
+		}
+		if (event.key === 'ArrowRight' && nextArticle) {
+			navigateToArticle(nextArticle.slug);
+		}
+	}
 	}
 
 	function navigateToArticle(id: string) {

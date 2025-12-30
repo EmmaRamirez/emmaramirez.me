@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from "$lib/utils";
+	import { cn, formatRelativeDate } from "$lib/utils";
 	import type { Snippet } from "svelte";
 
     interface ArticleBlockProps {
@@ -52,11 +52,7 @@
                 {/if}
                 {#if date}
                     <time class="text-sm text-[var(--liver-brown-500)] font-mono whitespace-nowrap">
-                        {new Date(date).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'short', 
-                            day: 'numeric' 
-                        })}
+                        {formatRelativeDate(date)}
                     </time>
                 {/if}
             </div>

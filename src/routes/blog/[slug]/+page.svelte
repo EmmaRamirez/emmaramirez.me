@@ -5,6 +5,7 @@
 	import { getArticleBySlug, getArticles } from '$lib/articles';
 	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
+	import { formatRelativeDate } from '$lib/utils';
 
 	let { data } = $props();
 
@@ -36,12 +37,7 @@
 	});
 
 	function formatDate(dateStr: string | undefined) {
-		if (!dateStr) return '';
-		return new Date(dateStr).toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		});
+		return formatRelativeDate(dateStr);
 	}
 
 	const readingTime = $derived(Math.max(1, Math.ceil(data.description.split(/\s+/).length / 200)));

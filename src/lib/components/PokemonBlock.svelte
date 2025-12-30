@@ -41,6 +41,15 @@
 		return `pokemon-popover-${id}`;
 	}
 
+	function registerPopover(node: HTMLDivElement, id: number) {
+		popoverRefs[id] = node;
+		return {
+			destroy() {
+				popoverRefs[id] = null;
+			}
+		};
+	}
+
 	function hideAllPopovers(exceptId?: number) {
 		for (const [key, el] of Object.entries(popoverRefs)) {
 			if (Number(key) !== exceptId) {
@@ -137,15 +146,13 @@
 
 
 	<div class="relative z-10 flex h-full flex-col justify-between p-5">
-		<span class="text-xl font-serif text-white text-center">My Team</span>
-
-		<div class="grid grid-cols-3 gap-3">
+		<div class="pokemon-team-grid">
 			{#each team as pokemon (pokemon.id)}
 				<button
 					type="button"
 					id={getAnchorId(pokemon.id)}
 					style={`anchor-name: ${getAnchorName(pokemon.id)};`}
-					class="pokemon-sprite-container flex w-full flex-col items-center justify-center rounded-md transition-colors"
+					class="pokemon-sprite-container"
 					class:selected={selectedPokemonId === pokemon.id}
 					onmouseenter={async () => {
 						cancelHide();
@@ -162,11 +169,11 @@
 					<img
 						src={getSpriteUrl(pokemon.id)}
 						alt={pokemon.name}
-						class="pokemon-sprite h-20 w-20 md:h-24 md:w-24"
+						class="pokemon-sprite"
 						class:selected={selectedPokemonId === pokemon.id}
+						style:image-rendering="pixelated"
 						loading="lazy"
 					/>
-					<span class="mt-2 text-sm font-semibold text-white drop-shadow-sm">{pokemon.name}</span>
 				</button>
 
 				<div
@@ -176,7 +183,7 @@
 					aria-label={`${pokemon.name} Pokédex info`}
 					style={`position-anchor: ${getAnchorName(pokemon.id)};`}
 					class="pokemon-popover"
-					bind:this={popoverRefs[pokemon.id]}
+					use:registerPopover={pokemon.id}
 					onmouseenter={cancelHide}
 					onmouseleave={() => scheduleHide(pokemon.id)}
 				>
@@ -202,24 +209,60 @@
 		background: var(--card-bg);
 	}
 
+	.pokemon-team-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		align-items: center;
+		justify-items: center;
+	}
+
 	.pokemon-bg {
 		background: linear-gradient(135deg, var(--caroline-blue-600), var(--caroline-blue-800));
 	}
 
 	.pokemon-sprite {
+		height: 4.75rem;
+		width: 4.75rem;
+		max-width: 100%;
+		object-fit: contain;
 		image-rendering: pixelated;
 	}
 
 	.pokemon-sprite-container {
-		padding: 0.5rem;
-		background: transparent;
-		border: none;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4rem;
+		width: 100%;
+		max-width: 7rem;
+		aspect-ratio: 1 / 1;
+		padding: 0.75rem;
+		background: rgba(255, 255, 255, 0.06);
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 0.75rem;
 		cursor: pointer;
 		appearance: none;
+		transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
 	}
 
 	.pokemon-sprite.selected {
 		filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.95));
+	}
+
+	.pokemon-sprite-container:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+		background: rgba(255, 255, 255, 0.1);
+	}
+
+	.pokemon-sprite__label {
+		margin-top: 0.15rem;
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: #fff;
+		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
 	}
 
 	.pokemon-popover {
@@ -232,7 +275,7 @@
 		color: var(--text-primary);
 		margin: 0;
 		inset: unset;
-		top: anchor(center);
+		top: anchor(bottom);
 		left: anchor(center);
 		translate: -50% 0;
 		text-align: center;

@@ -33,7 +33,6 @@
 		}
 		
 		if (event.key === 'r' || event.key === 'R') {
-			// Don't trigger if user is typing in an input
 			if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
 				return;
 			}

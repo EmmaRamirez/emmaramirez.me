@@ -65,7 +65,6 @@ export interface HomepageRegistry {
 	disco: DiscoRegistryEntry;
 }
 
-// Project Registry
 export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 	nuzlocke: {
 		kind: 'project',
@@ -73,7 +72,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		title: 'nuzlocke-generator',
 		pill: 'UX for constraints',
 		image: profileImage,
-		description: 'A layout generator for Nuzlocke challenges. Built with React, Typescript, and Tailwind.',
+		description: 'highly collaborative,customizable image generator for Pokémon Nuzlocke challenges. built with React and Elixir. has over 10k users and vibrant community.',
 		content: `The Nuzlocke Generator started as a weekend project born from my own frustration with tracking Pokémon runs. Nuzlocke challenges add permadeath and catch limits to the games, and keeping track of everything on paper felt wrong for 2024.
 
 The tool lets you design custom layouts for your team, encounters, and graveyard. Drag-and-drop reordering, automatic type matchup hints, and a clean export for sharing on social media.
@@ -327,12 +326,10 @@ Export is a single markdown file. No lock-in, no special syntax. The tool gets o
 	}
 };
 
-// Get all projects as an array (useful for navigation)
 export function getAllProjects(): ProjectRegistryEntry[] {
 	return Object.values(projectRegistry);
 }
 
-// Get project IDs in display order
 export const projectIds: ProjectId[] = [
 	'nuzlocke',
 	'fakemon',
@@ -346,7 +343,6 @@ export const projectIds: ProjectId[] = [
 	'readmeStudio'
 ];
 
-// Article Registry - create entries for all articles
 export const articleRegistry: Record<string, ArticleRegistryEntry> = Object.fromEntries(
 	defaultArticles.map((article) => [
 		article.id,
@@ -357,7 +353,6 @@ export const articleRegistry: Record<string, ArticleRegistryEntry> = Object.from
 	])
 ) as Record<string, ArticleRegistryEntry>;
 
-// Disco Registry
 export const discoRegistry: DiscoRegistryEntry = {
 	kind: 'disco',
 	image: discoImage,
@@ -366,14 +361,12 @@ export const discoRegistry: DiscoRegistryEntry = {
 	class: 'w-full h-full'
 };
 
-// Complete Registry
 export const homepageRegistry: HomepageRegistry = {
 	projects: projectRegistry,
 	articles: articleRegistry,
 	disco: discoRegistry
 };
 
-// Helper functions
 export function getProject(id: ProjectId): ProjectRegistryEntry {
 	return projectRegistry[id];
 }
@@ -386,18 +379,14 @@ export function getDisco(): DiscoRegistryEntry {
 	return discoRegistry;
 }
 
-// Item type for the homepage
 export type Item =
 	| { kind: 'article'; article: Article }
 	| { kind: 'project'; id: ProjectId }
 	| { kind: 'disco' };
 
-// Utility functions
 export function seededShuffle<T>(items: T[], seed: number): T[] {
 	const result = items.slice();
 
-	// Simple LCG-based pseudo-random generator so layout is
-	// random-looking but deterministic across reloads
 	const m = 0x80000000;
 	const a = 1103515245;
 	const c = 12345;
@@ -423,7 +412,6 @@ export function itemKey(item: Item): string {
 	return 'disco';
 }
 
-// Get homepage items
 export function getHomepageItems(): Item[] {
 	const homepageArticles = defaultArticles.slice(0, 8);
 

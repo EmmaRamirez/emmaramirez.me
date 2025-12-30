@@ -12,25 +12,53 @@
 		mouseX?: number;
 		mouseY?: number;
 		isHovering?: boolean;
+		depthScale?: number;
+		revealRadius?: number;
+		parallaxXY?: number;
+		parallaxZ?: number;
+		splatStretch?: number;
+		splatCompress?: number;
+		depthBulge?: number;
+		contourOffset?: number;
+		blobAmplitude?: number;
+		noiseAmplitude?: number;
+		contourInfluence?: number;
+		edgeSoftness?: number;
+		saturationBoost?: number;
+		contrastBoost?: number;
 	}
 
-	let { mouseX = 0.5, mouseY = 0.5, isHovering = false }: Props = $props();
+	let { 
+		mouseX = 0.5, 
+		mouseY = 0.5, 
+		isHovering = false,
+		depthScale = 0.12,
+		revealRadius = 0.3,
+		parallaxXY = 0.12,
+		parallaxZ = 0.3,
+		splatStretch = 2.5,
+		splatCompress = 0.6,
+		depthBulge = 0.35,
+		contourOffset = 0.5,
+		blobAmplitude = 0.03,
+		noiseAmplitude = 0.04,
+		contourInfluence = 0.6,
+		edgeSoftness = 0.06,
+		saturationBoost = 1.15,
+		contrastBoost = 1.05
+	}: Props = $props();
 
-	// Get access to the Threlte context
 	const { renderer } = useThrelte();
 
-	// Configure renderer for accurate color reproduction
 	$effect(() => {
 		const r = (renderer as { current?: THREE.WebGLRenderer })?.current;
 		if (r) {
-			r.setClearColor(new THREE.Color('#5ba4d4'), 0); // Transparent to blend
+		r.setClearColor(new THREE.Color('#5ba4d4'), 0);
 			r.toneMapping = THREE.NoToneMapping;
-			// Use Linear color space - shader will handle sRGB conversion
 			r.outputColorSpace = THREE.LinearSRGBColorSpace;
 		}
 	});
 
-	// Load textures using Threlte's useTexture (returns a promise)
 	const texturePromise = useTexture({
 		textureMe: meImage,
 		textureRobot: meRobotImage,
@@ -38,39 +66,81 @@
 		depthRobot: meRobotDepthImage
 	});
 
-	// Store the shader material reference so we can update uniforms
 	let shaderMaterialRef: THREE.ShaderMaterial | null = null;
 
-	// Shader uniforms state
-	let time = $state(0);
-	let targetMouse = { x: 0.5, y: 0.5 };
-	let currentMouse = { x: 0.5, y: 0.5 };
-	let revealProgress = $state(0);
+	const refs = {
+		time: 0,
+		targetMouse: { x: 0.5, y: 0.5 },
+		currentMouse: { x: 0.5, y: 0.5 },
+		revealProgress: 0,
+		isHovering: false,
+		depthScale: 0.12,
+		revealRadius: 0.3,
+		parallaxXY: 0.12,
+		parallaxZ: 0.3,
+		splatStretch: 2.5,
+		splatCompress: 0.6,
+		depthBulge: 0.35,
+		contourOffset: 0.5,
+		blobAmplitude: 0.03,
+		noiseAmplitude: 0.04,
+		contourInfluence: 0.6,
+		edgeSoftness: 0.06,
+		saturationBoost: 1.15,
+		contrastBoost: 1.05
+	};
 
-	// Smooth mouse following and uniform updates
-	useTask((delta) => {
-		time += delta;
-
-		// Lerp mouse position for smooth movement
-		currentMouse.x += (targetMouse.x - currentMouse.x) * 0.08;
-		currentMouse.y += (targetMouse.y - currentMouse.y) * 0.08;
-
-		// Animate reveal progress
-		const targetProgress = isHovering ? 1 : 0;
-		revealProgress += (targetProgress - revealProgress) * 0.05;
-
-		// Update shader uniforms
-		if (shaderMaterialRef) {
-			shaderMaterialRef.uniforms.uTime.value = time;
-			shaderMaterialRef.uniforms.uMouse.value.set(currentMouse.x, currentMouse.y);
-			shaderMaterialRef.uniforms.uProgress.value = revealProgress;
-		}
+	$effect(() => {
+		refs.targetMouse.x = mouseX;
+		refs.targetMouse.y = mouseY;
+		refs.isHovering = isHovering;
+	});
+	
+	$effect(() => {
+		refs.depthScale = depthScale;
+		refs.revealRadius = revealRadius;
+		refs.parallaxXY = parallaxXY;
+		refs.parallaxZ = parallaxZ;
+		refs.splatStretch = splatStretch;
+		refs.splatCompress = splatCompress;
+		refs.depthBulge = depthBulge;
+		refs.contourOffset = contourOffset;
+		refs.blobAmplitude = blobAmplitude;
+		refs.noiseAmplitude = noiseAmplitude;
+		refs.contourInfluence = contourInfluence;
+		refs.edgeSoftness = edgeSoftness;
+		refs.saturationBoost = saturationBoost;
+		refs.contrastBoost = contrastBoost;
 	});
 
-	// Update target mouse when props change
-	$effect(() => {
-		targetMouse.x = mouseX;
-		targetMouse.y = mouseY;
+	useTask((delta) => {
+		refs.time += delta;
+
+		refs.currentMouse.x += (refs.targetMouse.x - refs.currentMouse.x) * 0.08;
+		refs.currentMouse.y += (refs.targetMouse.y - refs.currentMouse.y) * 0.08;
+
+		const targetProgress = refs.isHovering ? 1 : 0;
+		refs.revealProgress += (targetProgress - refs.revealProgress) * 0.05;
+
+		if (shaderMaterialRef) {
+			shaderMaterialRef.uniforms.uTime.value = refs.time;
+			shaderMaterialRef.uniforms.uMouse.value.set(refs.currentMouse.x, refs.currentMouse.y);
+			shaderMaterialRef.uniforms.uProgress.value = refs.revealProgress;
+			shaderMaterialRef.uniforms.uDepthScale.value = refs.depthScale;
+			shaderMaterialRef.uniforms.uRevealRadius.value = refs.revealRadius;
+			shaderMaterialRef.uniforms.uParallaxXY.value = refs.parallaxXY;
+			shaderMaterialRef.uniforms.uParallaxZ.value = refs.parallaxZ;
+			shaderMaterialRef.uniforms.uSplatStretch.value = refs.splatStretch;
+			shaderMaterialRef.uniforms.uSplatCompress.value = refs.splatCompress;
+			shaderMaterialRef.uniforms.uDepthBulge.value = refs.depthBulge;
+			shaderMaterialRef.uniforms.uContourOffset.value = refs.contourOffset;
+			shaderMaterialRef.uniforms.uBlobAmplitude.value = refs.blobAmplitude;
+			shaderMaterialRef.uniforms.uNoiseAmplitude.value = refs.noiseAmplitude;
+			shaderMaterialRef.uniforms.uContourInfluence.value = refs.contourInfluence;
+			shaderMaterialRef.uniforms.uEdgeSoftness.value = refs.edgeSoftness;
+			shaderMaterialRef.uniforms.uSaturationBoost.value = refs.saturationBoost;
+			shaderMaterialRef.uniforms.uContrastBoost.value = refs.contrastBoost;
+		}
 	});
 
 	// Image aspect ratio (me.jpeg is 3024x4032 - portrait)
@@ -114,8 +184,21 @@
 				uMouse: { value: new THREE.Vector2(0.5, 0.5) },
 				uProgress: { value: 0 },
 				uTime: { value: 0 },
-				uDepthScale: { value: 0.12 },
-				uRevealRadius: { value: 0.3 },
+				// Tweakable parameters
+				uDepthScale: { value: depthScale },
+				uRevealRadius: { value: revealRadius },
+				uParallaxXY: { value: parallaxXY },
+				uParallaxZ: { value: parallaxZ },
+				uSplatStretch: { value: splatStretch },
+				uSplatCompress: { value: splatCompress },
+				uDepthBulge: { value: depthBulge },
+				uContourOffset: { value: contourOffset },
+				uBlobAmplitude: { value: blobAmplitude },
+				uNoiseAmplitude: { value: noiseAmplitude },
+				uContourInfluence: { value: contourInfluence },
+				uEdgeSoftness: { value: edgeSoftness },
+				uSaturationBoost: { value: saturationBoost },
+				uContrastBoost: { value: contrastBoost },
 				// UV scale/offset for "cover" behavior
 				uVScale: { value: vScale },
 				uVOffset: { value: vOffset }
@@ -137,6 +220,8 @@
 		uniform float uProgress;
 		uniform float uTime;
 		uniform float uDepthScale;
+		uniform float uParallaxXY;
+		uniform float uParallaxZ;
 		uniform float uVScale;
 		uniform float uVOffset;
 		
@@ -166,9 +251,9 @@
 			// Parallax effect - closer objects (lighter depth) move more
 			float parallaxStrength = depth * uDepthScale;
 			vec3 displaced = position;
-			displaced.x += mouseOffset.x * parallaxStrength * 0.12;
-			displaced.y += mouseOffset.y * parallaxStrength * 0.12;
-			displaced.z += depth * uDepthScale * 0.3;
+			displaced.x += mouseOffset.x * parallaxStrength * uParallaxXY;
+			displaced.y += mouseOffset.y * parallaxStrength * uParallaxXY;
+			displaced.z += depth * uDepthScale * uParallaxZ;
 			
 			gl_Position = projectionMatrix * modelViewMatrix * vec4(displaced, 1.0);
 		}
@@ -183,6 +268,16 @@
 		uniform float uProgress;
 		uniform float uTime;
 		uniform float uRevealRadius;
+		uniform float uSplatStretch;
+		uniform float uSplatCompress;
+		uniform float uDepthBulge;
+		uniform float uContourOffset;
+		uniform float uBlobAmplitude;
+		uniform float uNoiseAmplitude;
+		uniform float uContourInfluence;
+		uniform float uEdgeSoftness;
+		uniform float uSaturationBoost;
+		uniform float uContrastBoost;
 		
 		varying vec2 vUv;
 		varying vec2 vRawUv;
@@ -246,57 +341,73 @@
 			float baseDist = length(toMouse);
 			float baseAngle = atan(toMouse.y, toMouse.x);
 			
-			// ===== DEPTH-BASED SHAPE WARPING (UNIFORM) =====
+			// ===== 3D SPLAT EFFECT - BLOB WARPS ONTO SURFACE =====
 			
-			// 1. Gentle depth-based radial adjustment - closer areas slightly expand
-			float depthRadialWarp = (depth - 0.5) * 0.25 * uProgress;
-			float warpedRadius = baseDist - depthRadialWarp;
+			// The blob "splats" onto the 3D surface like paint
+			// It stretches along the surface slope and compresses where facing camera
 			
-			// 2. Subtle contour-following offset for depth awareness
-			vec2 contourOffset = depthGradient * 0.4 * uProgress;
-			vec2 warpedCoords = toMouse + contourOffset;
+			// 1. Calculate surface orientation from depth gradient
+			// gradientDir points "downhill" on the depth surface
+			vec2 perpDir = vec2(-gradientDir.y, gradientDir.x); // Along contour lines
 			
-			float dist = length(warpedCoords) - depthRadialWarp;
-			float angle = atan(warpedCoords.y, warpedCoords.x);
+			// 2. Project toMouse vector onto surface orientation
+			// Split into component along gradient (into/out of surface) and along contour
+			float alongGradient = dot(toMouse, gradientDir);
+			float alongContour = dot(toMouse, perpDir);
 			
-			// ===== UNIFORM ORGANIC BLOB SHAPE =====
+			// 3. SPLAT DISTORTION: stretch along contours, compress along gradient
+			// This simulates the blob being "painted" onto the angled surface
+			float splatStretchVal = 1.0 + gradientStrength * uSplatStretch * uProgress;
+			float splatCompressVal = 1.0 - gradientStrength * uSplatCompress * uProgress;
 			
-			// Subtle depth modulation - keeps shape cohesive
-			float depthNoiseMod = 1.0 + (1.0 - depth) * 0.3;
+			// Reconstruct with splat distortion
+			vec2 splatCoords = perpDir * alongContour * splatStretchVal 
+			                 + gradientDir * alongGradient * splatCompressVal;
 			
-			// Create smooth, uniform blob shape with gentle organic edges
+			// 4. Depth-based bulging - closer areas expand outward
+			float depthBulgeVal = (depth - 0.5) * uDepthBulge * uProgress;
+			splatCoords *= (1.0 - depthBulgeVal);
+			
+			// 5. Gentle offset along depth contours
+			splatCoords += depthGradient * uContourOffset * uProgress;
+			
+			float dist = length(splatCoords);
+			float angle = atan(splatCoords.y, splatCoords.x);
+			
+			// ===== SMOOTH ORGANIC BLOB SHAPE =====
+			
+			// Very smooth, low-frequency noise for soft edges
 			float blob = 0.0;
 			
-			// Primary blob shape - smooth, low frequency
-			blob += snoise(vec2(angle * 1.5 + uTime * 0.2, dist * 2.0)) * 0.08;
+			// Primary shape - very smooth sine wave
+			blob += sin(angle * 1.0 + uTime * 0.15) * uBlobAmplitude;
+			blob += sin(angle * 2.0 - uTime * 0.1 + depth * 1.5) * (uBlobAmplitude * 0.67);
 			
-			// Secondary gentle wave - adds organic feel without chaos
-			blob += snoise(vec2(angle * 2.5 - uTime * 0.15 + depth * 1.0, dist * 3.0)) * 0.05;
+			// Gentle organic variation - single low frequency noise
+			blob += snoise(vec2(angle * 0.8 + uTime * 0.1, dist * 1.5)) * uNoiseAmplitude;
 			
-			// Subtle depth-aware edge - follows contours gently
-			blob += gradientStrength * 0.4 * sin(angle * 2.0 + uTime * 0.3 + depth * 2.0);
-			
-			// Gentle depth-based bulging
-			blob -= depthRadialWarp * 0.3;
+			// Depth-aware contouring - blob edge follows 3D form
+			float contourInfluenceVal = gradientStrength * uContourInfluence;
+			blob += contourInfluenceVal * sin(angle * 1.5 + depth * 3.0 + uTime * 0.2);
 			
 			// Blob-distorted distance
 			float blobDist = dist + blob * uProgress;
 			
-			// Create blob mask - slightly softer edge for organic feel
+			// Create blob mask - very soft edge for smooth look
 			float revealSize = uRevealRadius * uProgress;
-			float mask = smoothstep(revealSize + 0.05, revealSize - 0.04, blobDist);
+			float mask = smoothstep(revealSize + uEdgeSoftness, revealSize - (uEdgeSoftness * 0.83), blobDist);
 			
 			// Mix textures with depth-warped blob mask
 			vec4 finalColor = mix(color1, color2, mask);
 			
 			// Color correction for accurate reproduction
-			// Boost saturation slightly to match source vibrancy
+			// Boost saturation to match source vibrancy
 			vec3 rgb = finalColor.rgb;
 			float luminance = dot(rgb, vec3(0.299, 0.587, 0.114));
-			rgb = mix(vec3(luminance), rgb, 1.15); // 15% saturation boost
+			rgb = mix(vec3(luminance), rgb, uSaturationBoost);
 			
-			// Slight contrast adjustment
-			rgb = (rgb - 0.5) * 1.05 + 0.5;
+			// Contrast adjustment
+			rgb = (rgb - 0.5) * uContrastBoost + 0.5;
 			
 			// Ensure colors stay in valid range
 			rgb = clamp(rgb, 0.0, 1.0);

@@ -5,11 +5,40 @@
 
 	interface Props {
 		blendMode?: string;
+		depthScale?: number;
+		revealRadius?: number;
+		parallaxXY?: number;
+		parallaxZ?: number;
+		splatStretch?: number;
+		splatCompress?: number;
+		depthBulge?: number;
+		contourOffset?: number;
+		blobAmplitude?: number;
+		noiseAmplitude?: number;
+		contourInfluence?: number;
+		edgeSoftness?: number;
+		saturationBoost?: number;
+		contrastBoost?: number;
 	}
 
-	let { blendMode = 'difference' }: Props = $props();
+	let { 
+		blendMode = 'difference',
+		depthScale = 0.12,
+		revealRadius = 0.3,
+		parallaxXY = 0.12,
+		parallaxZ = 0.3,
+		splatStretch = 2.5,
+		splatCompress = 0.6,
+		depthBulge = 0.35,
+		contourOffset = 0.5,
+		blobAmplitude = 0.03,
+		noiseAmplitude = 0.04,
+		contourInfluence = 0.6,
+		edgeSoftness = 0.06,
+		saturationBoost = 1.15,
+		contrastBoost = 1.05
+	}: Props = $props();
 
-	// Check if we should use 3D mode (desktop only for performance)
 	let isMobile = $state(false);
 
 	$effect(() => {
@@ -28,7 +57,22 @@
 	<!-- 3D Canvas for desktop -->
 	{#if !isMobile && browser}
 		<div class="hero-3d-wrapper">
-			<Hero3D />
+			<Hero3D 
+				{depthScale}
+				{revealRadius}
+				{parallaxXY}
+				{parallaxZ}
+				{splatStretch}
+				{splatCompress}
+				{depthBulge}
+				{contourOffset}
+				{blobAmplitude}
+				{noiseAmplitude}
+				{contourInfluence}
+				{edgeSoftness}
+				{saturationBoost}
+				{contrastBoost}
+			/>
 		</div>
 	{:else}
 		<!-- Static fallback for mobile / SSR -->
@@ -51,15 +95,13 @@
 </header>
 
 <style>
-	/* Hero header with squircle borders */
 	.hero-header {
 		border-radius: 2rem;
 		height: 320px;
-		background: #5ba4d4; /* Blue from the photo */
+		background: #5ba4d4;
 		cursor: crosshair;
 	}
 
-	/* 3D canvas wrapper - takes up the left 55% */
 	.hero-3d-wrapper {
 		position: absolute;
 		top: 0;
@@ -68,10 +110,9 @@
 		height: 100%;
 		border-radius: 2rem 0 0 2rem;
 		overflow: hidden;
-		background: #5ba4d4; /* Match header background for seamless blend */
+		background: #5ba4d4;
 	}
 
-	/* Static fallback image for mobile */
 	.hero-base-image {
 		position: absolute;
 		top: 0;
@@ -107,7 +148,6 @@
 		padding: 2rem;
 	}
 
-	/* Responsive adjustments */
 	@media (max-width: 768px) {
 		.hero-header {
 			height: 400px;

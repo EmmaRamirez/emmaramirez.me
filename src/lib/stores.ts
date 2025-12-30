@@ -4,7 +4,6 @@ import { browser, dev } from "$app/environment";
 export const title = writable('hi, welcome to my website.');
 export const headerColor = writable('var(--caroline-blue-600)');
 
-// Debug store for showing essays/projects sections (default: true in dev, false in prod)
 function createShowSectionsStore() {
 	const defaultValue = browser
 		? (localStorage.getItem('debug-show-sections') === 'true') || dev
@@ -25,7 +24,6 @@ function createShowSectionsStore() {
 
 export const showSections = createShowSectionsStore();
 
-// Theme store with localStorage persistence and system preference detection
 function createThemeStore() {
 	const getSystemPreference = () => 
 		window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -66,7 +64,6 @@ function createThemeStore() {
 				applyTheme(initialTheme);
 				set(initialTheme);
 
-				// Listen for system preference changes (only apply if no explicit user preference)
 				window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
 					if (!localStorage.getItem('theme')) {
 						const newTheme = e.matches ? 'dark' : 'light';

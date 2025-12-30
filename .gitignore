@@ -1,6 +1,9 @@
 test-results
 node_modules
 
+# Prisma
+/generated
+
 # Output
 .output
 .vercel

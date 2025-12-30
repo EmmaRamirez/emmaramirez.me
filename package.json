@@ -14,9 +14,15 @@
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"db:generate": "prisma generate",
+		"db:migrate": "prisma migrate dev",
+		"db:push": "prisma db push",
+		"db:studio": "prisma studio"
 	},
 	"devDependencies": {
+		"dotenv": "^17.2.3",
+		"prisma": "^7.1.0",
 		"@eslint/compat": "^1.4.0",
 		"@eslint/js": "^9.39.1",
 		"@playwright/test": "^1.56.1",
@@ -48,6 +54,7 @@
 		"vitest-browser-svelte": "^2.0.1"
 	},
 	"dependencies": {
+		"@prisma/client": "^7.1.0",
 		"@neoconfetti/svelte": "^2.2.2",
 		"@threlte/core": "^8.3.1",
 		"@threlte/extras": "^9.7.1",

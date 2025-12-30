@@ -17,7 +17,6 @@
 
 	let { open = false, tag = '', onclose }: TagDrawerProps = $props();
 
-	// Mock articles data matching the tag
 	const mockArticlesByTag: Record<string, Article[]> = {
 		'philosophy': [
 			{ id: 'hegel-web-design', title: 'Hegel & Web Design', content: 'As much as web design is a visual medium both restrained and bolstered by technological innovations...', date: '2024-12-01', tags: ['philosophy', 'design'] },

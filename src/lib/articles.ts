@@ -8,14 +8,12 @@ export interface ArticleFrontmatter {
 	draft?: boolean;
 }
 
-// Full article with component for rendering
 export interface ArticleFull {
 	slug: string;
 	frontmatter: ArticleFrontmatter;
 	component: typeof SvelteComponent;
 }
 
-// Legacy article type for homepage components (backwards compatibility)
 export interface Article {
 	id: string;
 	title: string;
@@ -37,13 +35,11 @@ type ArticleModule = {
 	metadata: ArticleFrontmatter;
 };
 
-// Import all markdown/mdx/mdsvex files from the articles directory
 const articleModules = import.meta.glob<ArticleModule>('/src/articles/**/*.{md,mdx,mdsvex}', {
 	eager: true
 });
 
 function extractSlugFromPath(path: string): string {
-	// Path format: /src/articles/2024/article-slug.md
 	const filename = path.split('/').pop() ?? '';
 	return filename.replace(/\.(md|mdx|mdsvex)$/, '');
 }
@@ -65,12 +61,10 @@ function parseArticles(): ArticleFull[] {
 		const slug = extractSlugFromPath(path);
 		const frontmatter = module.metadata;
 
-		// Skip if no metadata or frontmatter
 		if (!frontmatter) {
 			continue;
 		}
 
-		// Skip drafts in production
 		if (frontmatter.draft && import.meta.env.PROD) {
 			continue;
 		}
@@ -82,10 +76,8 @@ function parseArticles(): ArticleFull[] {
 		});
 	}
 
-	// Validate no duplicate slugs
 	validateDuplicateSlugs(articles);
 
-	// Sort by date, newest first
 	articles.sort((a, b) => {
 		const dateA = new Date(a.frontmatter.date).getTime();
 		const dateB = new Date(b.frontmatter.date).getTime();
@@ -95,11 +87,8 @@ function parseArticles(): ArticleFull[] {
 	return articles;
 }
 
-// Parse articles once at module load
 const allArticles = parseArticles();
 
-// Export for homepage registry (provides article metadata for homepage grid)
-// Uses 'content' instead of 'description' for backwards compatibility with existing components
 export const defaultArticles = allArticles.map((article) => ({
 	id: article.slug,
 	title: article.frontmatter.title,

@@ -1,50 +1,41 @@
 <script lang="ts">
-	import DiscoBlock from '$lib/components/DiscoBlock.svelte';
-	import HomeBlock from '$lib/components/HomeBlock.svelte';
-	import PokemonBlock from '$lib/components/PokemonBlock.svelte';
-	import ProjectBlock from '$lib/components/ProjectBlock.svelte';
 	import ArticleReaderPanel from '$lib/components/ArticleReaderPanel.svelte';
 	import ProjectReaderPanel from '$lib/components/ProjectReaderPanel.svelte';
 	import Hero from '$lib/components/Hero.svelte';
+	import DebugMenu from '$lib/components/DebugMenu.svelte';
+	import MainGrid from '$lib/components/MainGrid.svelte';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
-	import { ThemeToggle, Modal, Select, Switch } from '$lib/components/ui';
+	import { ThemeToggle } from '$lib/components/ui';
 	import { showSections } from '$lib/stores';
+	import {
+		openArticleReader,
+		closeArticleReader,
+		openProjectReader,
+		closeProjectReader,
+		getArticleOpen,
+		getProjectOpen,
+		getSelectedArticleId,
+		getSelectedProjectId,
+		getAnyPanelOpen,
+		setSelectedArticleId,
+		setSelectedProjectId
+	} from '$lib/stores/readerPanelStore.svelte';
+	import { hero3dParams } from '$lib/stores/hero3dParams.svelte';
 	import type { Article } from '$lib/articles';
-	import { getHomepageItems, getProject, getArticle, getDisco, type ProjectId } from '$lib/registry/homepage';
-	import { pokemonTeam } from '$lib/website.config';
+	import { defaultArticles } from '$lib/articles';
+	import {
+		getDisco,
+		projectRegistry,
+		seededShuffle,
+		type ProjectId,
+		type ProjectRegistryEntry
+	} from '$lib/registry/homepage';
+	import type { GridItem } from '$lib/types/homepage';
 	import { onMount } from 'svelte';
-	import { dev } from '$app/environment';
 
 	let debugMenuOpen = $state(false);
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
-	let storeInitialized = false;
-
-	// Sync local state changes back to store
-	$effect(() => {
-		if (storeInitialized) {
-			showSections.set(showSectionsEnabled);
-		}
-	});
-
-	const blendModeOptions = [
-		{ value: 'normal', label: 'Normal' },
-		{ value: 'multiply', label: 'Multiply' },
-		{ value: 'screen', label: 'Screen' },
-		{ value: 'overlay', label: 'Overlay' },
-		{ value: 'darken', label: 'Darken' },
-		{ value: 'lighten', label: 'Lighten' },
-		{ value: 'color-dodge', label: 'Color Dodge' },
-		{ value: 'color-burn', label: 'Color Burn' },
-		{ value: 'hard-light', label: 'Hard Light' },
-		{ value: 'soft-light', label: 'Soft Light' },
-		{ value: 'difference', label: 'Difference' },
-		{ value: 'exclusion', label: 'Exclusion' },
-		{ value: 'hue', label: 'Hue' },
-		{ value: 'saturation', label: 'Saturation' },
-		{ value: 'color', label: 'Color' },
-		{ value: 'luminosity', label: 'Luminosity' }
-	];
 
 	function handleGlobalKeydown(event: KeyboardEvent) {
 		if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
@@ -55,85 +46,49 @@
 		}
 	}
 
-	const homepageItems = getHomepageItems();
+	const homepageArticles: Article[] = defaultArticles.slice(0, 5);
 
-	const homepageArticles: Article[] = homepageItems
-		.filter((item) => item.kind === 'article')
-		.map((item) => getArticle(item.article.id)!)
-		.slice(0, 10);
-
-	const homepageProjects = homepageItems
-		.filter((item) => item.kind === 'project')
-		.map((item) => getProject(item.id));
+	const homepageProjects: ProjectRegistryEntry[] = Object.values(projectRegistry)
+		.toSorted(
+			(a, b) => Number.parseInt(b.year ?? '0', 10) - Number.parseInt(a.year ?? '0', 10)
+		)
+		.slice(0, 5);
 
 	const disco = getDisco();
 
-	const ESSAYS_LIMIT = 5;
-	let essaysExpanded = $state(false);
-	const visibleArticles = $derived(
-		essaysExpanded ? homepageArticles : homepageArticles.slice(0, ESSAYS_LIMIT)
+	const gridItems = $derived<GridItem[]>(
+		seededShuffle<GridItem>(
+			[
+				{ kind: 'disco' as const },
+				{ kind: 'home' as const },
+				{ kind: 'pokemon' as const },
+				{ kind: 'top-languages' as const },
+				{ kind: 'city' as const },
+				...homepageArticles.map((article) => ({ kind: 'article' as const, article })),
+				...homepageProjects.map((project) => ({ kind: 'project' as const, project })),
+				{ kind: 'design-system' as const }
+			],
+			101
+		)
 	);
-	const hasMoreArticles = homepageArticles.length > ESSAYS_LIMIT;
 
-	// Article reader panel state
-	let articleReaderPanelOpen = $state(false);
-	let selectedArticleId = $state<string | null>(null);
-
-	function openArticleReader(articleId: string) {
-		// Close project panel if open
-		if (projectReaderPanelOpen) {
-			closeProjectReader();
-		}
-		selectedArticleId = articleId;
-		articleReaderPanelOpen = true;
-	}
-
-	function closeArticleReader() {
-		articleReaderPanelOpen = false;
-		setTimeout(() => {
-			if (!articleReaderPanelOpen) {
-				selectedArticleId = null;
-			}
-		}, 300);
-	}
-
-	// Project reader panel state
-	let projectReaderPanelOpen = $state(false);
-	let selectedProjectId = $state<ProjectId | null>(null);
-
-	function openProjectReader(projectId: ProjectId) {
-		// Close article panel if open
-		if (articleReaderPanelOpen) {
-			closeArticleReader();
-		}
-		selectedProjectId = projectId;
-		projectReaderPanelOpen = true;
-	}
-
-	function closeProjectReader() {
-		projectReaderPanelOpen = false;
-		setTimeout(() => {
-			if (!projectReaderPanelOpen) {
-				selectedProjectId = null;
-			}
-		}, 300);
-	}
-
-	// Derived state for any panel being open
-	const anyPanelOpen = $derived(articleReaderPanelOpen || projectReaderPanelOpen);
+	const articleReaderPanelOpen = $derived(getArticleOpen());
+	const projectReaderPanelOpen = $derived(getProjectOpen());
+	const selectedArticleId = $derived(getSelectedArticleId());
+	const selectedProjectId = $derived(getSelectedProjectId());
+	const anyPanelOpen = $derived(getAnyPanelOpen());
 
 	onMount(() => {
 		const unsubscribeShowSections = showSections.subscribe((value) => {
 			showSectionsEnabled = value;
-			storeInitialized = true;
 		});
 
 		const handleNavigateArticle = (event: CustomEvent<{ id: string }>) => {
-			selectedArticleId = event.detail.id;
+			setSelectedArticleId(event.detail.id);
 		};
 
 		const handleNavigateProject = (event: CustomEvent<{ id: ProjectId }>) => {
-			selectedProjectId = event.detail.id;
+			setSelectedProjectId(event.detail.id);
 		};
 
 		document.addEventListener('navigatearticle', handleNavigateArticle as EventListener);
@@ -175,85 +130,36 @@
 		class="main-content mx-auto max-w-6xl space-y-12 px-4 py-16"
 		class:panel-open={anyPanelOpen}
 	>
-		<Hero blendMode={headerBlendMode} />
+		<Hero 
+			blendMode={headerBlendMode}
+			depthScale={hero3dParams.depthScale}
+			revealRadius={hero3dParams.revealRadius}
+			parallaxXY={hero3dParams.parallaxXY}
+			parallaxZ={hero3dParams.parallaxZ}
+			splatStretch={hero3dParams.splatStretch}
+			splatCompress={hero3dParams.splatCompress}
+			depthBulge={hero3dParams.depthBulge}
+			contourOffset={hero3dParams.contourOffset}
+			blobAmplitude={hero3dParams.blobAmplitude}
+			noiseAmplitude={hero3dParams.noiseAmplitude}
+			contourInfluence={hero3dParams.contourInfluence}
+			edgeSoftness={hero3dParams.edgeSoftness}
+			saturationBoost={hero3dParams.saturationBoost}
+			contrastBoost={hero3dParams.contrastBoost}
+		/>
 
 		{#if showSectionsEnabled}
-			<section aria-label="Essays" class="space-y-6">
-				<ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{#each visibleArticles as article (article.id)}
-						<li>
-							<button
-								type="button"
-								onclick={() => openArticleReader(article.id)}
-								class="article-card style-none -m-4 flex w-full flex-col gap-2 rounded-lg p-4 text-left transition-all duration-200 hover:bg-(--surface-hover) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--text-primary) focus-visible:ring-offset-2"
-								class:article-card-active={selectedArticleId === article.id && articleReaderPanelOpen}
-							>
-								<span class="text-lg leading-snug font-semibold text-(--text-primary)">
-									{article.title}
-								</span>
-								{#if article.date}
-									<span class="text-sm text-(--text-secondary)">
-										{article.date}
-									</span>
-								{/if}
-								<p class="line-clamp-3 text-base leading-relaxed text-(--text-muted)">
-									{article.content}
-								</p>
-							</button>
-						</li>
-					{/each}
-				</ul>
-				{#if hasMoreArticles}
-					<button
-						onclick={() => (essaysExpanded = !essaysExpanded)}
-						class="cursor-pointer text-base text-(--text-secondary) transition-colors hover:text-(--text-primary) hover:underline"
-					>
-						{essaysExpanded ? '← Show less' : `Show all ${homepageArticles.length} essays →`}
-					</button>
-				{/if}
-			</section>
+			<MainGrid
+				items={gridItems}
+				{disco}
+				{selectedArticleId}
+				{selectedProjectId}
+				articlePanelOpen={articleReaderPanelOpen}
+				projectPanelOpen={projectReaderPanelOpen}
+				onArticleClick={openArticleReader}
+				onProjectClick={openProjectReader}
+			/>
 		{/if}
-
-		{#if showSectionsEnabled}
-			<section aria-label="Selected projects" class="space-y-4">
-				<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-					{#each homepageProjects as project (project.id)}
-						<button
-							type="button"
-							onclick={() => openProjectReader(project.id)}
-							class="project-card style-none text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-(--text-primary) focus-visible:ring-offset-2"
-							class:project-card-active={selectedProjectId === project.id && projectReaderPanelOpen}
-						>
-							<ProjectBlock
-								title={project.title}
-								pill={project.pill}
-								class={project.class}
-								contentClassName={project.contentClassName}
-							>
-								{#snippet description()}
-									{project.description}
-								{/snippet}
-							</ProjectBlock>
-						</button>
-					{/each}
-				</div>
-			</section>
-		{/if}
-
-		<section aria-label="Miscellaneous" class="space-y-4">
-			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:grid-rows-2">
-				<DiscoBlock
-					image={disco.image}
-					alt={disco.alt}
-					caption={disco.caption}
-					class={disco.class ?? 'h-full w-full'}
-				/>
-				<HomeBlock class="md:row-span-2" />
-				{#if dev}
-					<PokemonBlock team={pokemonTeam} />
-				{/if}
-			</div>
-		</section>
 	</div>
 
 	<ArticleReaderPanel
@@ -268,26 +174,11 @@
 		onclose={closeProjectReader}
 	/>
 
-	<Modal
+	<DebugMenu
 		open={debugMenuOpen}
 		onclose={() => (debugMenuOpen = false)}
-		title="🔧 Super Secret Debug Menu"
-		size="sm"
-	>
-		<div class="space-y-4">
-			<Select
-				label="Header Image Blend Mode"
-				bind:value={headerBlendMode}
-				options={blendModeOptions}
-			/>
-			<Switch
-				label="Show Essays & Projects"
-				description="Toggle visibility of Essays and Projects sections"
-				bind:checked={showSectionsEnabled}
-			/>
-			<p class="text-xs text-(--liver-brown-600) italic">Press D to toggle this menu</p>
-		</div>
-	</Modal>
+		bind:headerBlendMode
+	/>
 </section>
 
 <style>
@@ -306,33 +197,6 @@
 
 	.main-content.panel-open {
 		transform: translateX(42%);
-	}
-
-	/* Article card styles */
-	.article-card {
-		cursor: pointer;
-		border: 1px solid var(--border-color);
-		background: var(--surface);
-	}
-
-	.article-card-active {
-		background: var(--surface-hover);
-		border-color: var(--border-color);
-	}
-
-	/* Project card styles */
-	.project-card {
-		cursor: pointer;
-		border-radius: 0.5rem;
-	}
-
-	.project-card:hover :global(.project-block-content) {
-		background: var(--surface-hover);
-	}
-
-	.project-card-active :global(.project-block-content) {
-		background: var(--surface-hover);
-		border-color: var(--text-muted);
 	}
 
 	/* Responsive adjustments */

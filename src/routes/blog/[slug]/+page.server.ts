@@ -18,7 +18,6 @@ export const load: PageServerLoad = async ({ params }) => {
 	};
 };
 
-// Generate static pages for all articles at build time
 export const entries: EntryGenerator = () => {
 	return getArticles().map((article) => ({
 		slug: article.slug

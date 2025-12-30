@@ -1,6 +1,10 @@
 <script lang="ts">
 	type SwitchSize = 'sm' | 'md' | 'lg';
 
+	type $$Events = {
+		click: MouseEvent;
+	};
+
 	interface SwitchProps extends Omit<svelteHTML.HTMLAttributes<HTMLButtonElement>, 'type'> {
 		/** Custom class names */
 		class?: string;
