@@ -1,0 +1,48 @@
+---
+title: "Design Systems in the Wild"
+date: 2024-09-22
+tags: [design, systems]
+description: "What happens when a design system escapes the comfy confines of Figma and lands in production? Lots of duct tape, delight, and a few sharp corners."
+---
+
+<script>
+    let number = 45
+</script>
+
+<div>{number}</div>
+
+What happens when a design system escapes the comfy confines of Figma and lands in production? Lots of duct tape, delight, and a few sharp corners.
+
+## The Gap Between Design and Code
+
+<button>hello</button>
+
+Every design system starts with beautiful intentions. Pixel-perfect components in Figma. Comprehensive documentation. Clear naming conventions. And then reality hits.
+
+Browsers have opinions. Accessibility requirements add complexity. Edge cases multiply like rabbits. The pristine vision meets the messy world.
+
+## What Actually Ships
+
+The design systems that work aren't the most comprehensive—they're the most pragmatic. They acknowledge that:
+
+- **Tokens are contracts**, not suggestions
+- **Components need escape hatches** for edge cases
+- **Documentation is never done**, it's maintained
+- **Adoption beats perfection**
+
+## The Duct Tape Moments
+
+Every mature system has them. The workaround for that one legacy page. The component variant that exists for a single use case. The prop that nobody remembers why it exists.
+
+> A design system without duct tape is a design system that hasn't shipped.
+
+## Building for Change
+
+The best design systems I've worked with embrace evolution. They version aggressively, deprecate gracefully, and measure adoption relentlessly.
+
+They know that the goal isn't a perfect component library—it's enabling teams to build consistent experiences faster than they could alone.
+
+## The Human Layer
+
+Ultimately, design systems are about people. The best technical implementation fails if designers and developers don't adopt it. Invest in the relationships as much as the code.
+
