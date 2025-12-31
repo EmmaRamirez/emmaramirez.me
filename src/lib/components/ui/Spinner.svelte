@@ -33,7 +33,9 @@
 		white: 'border-white border-t-transparent'
 	};
 
-	const combinedClasses = `inline-block rounded-full animate-spin ${sizeClasses[size]} ${variantClasses[variant]} ${className}`.trim();
+	const combinedClasses = $derived(
+		`inline-block rounded-full animate-spin ${sizeClasses[size]} ${variantClasses[variant]} ${className}`.trim()
+	);
 </script>
 
 <div
@@ -43,4 +45,3 @@
 >
 	<span class="sr-only">{ariaLabel}</span>
 </div>
-

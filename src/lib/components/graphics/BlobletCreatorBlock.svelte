@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import Bloblet3 from './Bloblet3.svelte';
-	import ColorPicker from './ColorPicker.svelte';
-	import { Button } from './ui';
+	import { Bloblet3 } from '$lib/components/graphics';
+	import { ColorPicker } from '$lib/components/dev';
+	import { Button } from '$lib/components/ui';
 
 	let startColor = $state('var(--caroline-blue-500)');
 	let stopColor = $state('var(--caroline-blue-700)');
@@ -43,13 +43,13 @@
 	let published = $state(false);
 	let blobletClass = $state('');
 
-	let interval: number | undefined = $state(undefined);
+	let interval: ReturnType<typeof setTimeout> | undefined = $state(undefined);
 
 	function handlePublish() {
 		blobletClass = 'fly-away';
 
 		if (published) {
-			clearInterval(interval);
+			clearTimeout(interval);
 		}
 
 		interval = setTimeout(() => {
@@ -105,7 +105,7 @@
 						/>
 					</svg>
 					your bloblet went up to the great bloblet farm in the sky.
-                    <a class="p-2" href="">Visit the Farm</a>
+                    <span class="p-2 text-[var(--liver-brown-600)]">Visit the Farm</span>
 				</div>
 			{/if}
 			<Button class="w-48  uppercase" onclick={handlePublish}

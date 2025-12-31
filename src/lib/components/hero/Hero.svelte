@@ -54,7 +54,6 @@
 </script>
 
 <header class="hero-header relative overflow-hidden">
-	<!-- 3D Canvas for desktop -->
 	{#if !isMobile && browser}
 		<div class="hero-3d-wrapper">
 			<Hero3D 
@@ -75,21 +74,17 @@
 			/>
 		</div>
 	{:else}
-		<!-- Static fallback for mobile / SSR -->
 		<img src={me} alt="" class="hero-base-image" aria-hidden="true" />
 	{/if}
 
-	<!-- Blue overlay on the right side -->
 	<div class="hero-blue-overlay" aria-hidden="true"></div>
 
-	<!-- Text content overlay -->
 	<div class="hero-content">
 		<h1 class="mb-4 font-serif text-4xl leading-tight text-white drop-shadow-lg md:text-5xl">
 			welcome to my internet.
 		</h1>
 		<p class="max-w-lg text-xl text-balance text-white/90 drop-shadow-md md:text-2xl">
-			my name's emma and my biggest passion is making stuff with code. i'm into startups, finance,
-			and fashion.
+			my name's emma and my biggest passion is making stuff with code. i'm into startups, fashion, finance, and AI.
 		</p>
 	</div>
 </header>

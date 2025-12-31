@@ -417,8 +417,6 @@
 	`;
 </script>
 
-<!-- PerspectiveCamera with lower FOV to reduce distortion -->
-<!-- Position camera further back with narrower FOV = less perspective distortion -->
 <T.PerspectiveCamera
 	makeDefault
 	position={[0, 0, 2.5]}
@@ -429,22 +427,17 @@
 
 <T.AmbientLight intensity={1} />
 
-<!-- Wrap entire mesh in await block for proper Threlte handling -->
-<!-- Plane sized to fill the viewport: height ~2.07 at fov=45, z=2.5. Make it slightly larger to ensure fill -->
 {#await texturePromise}
-	<!-- Loading state: blue plane -->
 	<T.Mesh position={[0, 0, 0]}>
 		<T.PlaneGeometry args={[4.5, 2.3, 1, 1]} />
 		<T.MeshBasicMaterial color="#5ba4d4" side={THREE.DoubleSide} />
 	</T.Mesh>
 {:then textures}
-	<!-- Loaded: plane with parallax shader -->
 	<T.Mesh position={[0, 0, 0]}>
 		<T.PlaneGeometry args={[4.5, 2.3, 128, 128]} />
 		<T is={createShaderMaterial(textures)} />
 	</T.Mesh>
 {:catch}
-	<!-- Error state: red plane -->
 	<T.Mesh position={[0, 0, 0]}>
 		<T.PlaneGeometry args={[4.5, 2.3, 1, 1]} />
 		<T.MeshBasicMaterial color="#ff0000" side={THREE.DoubleSide} />

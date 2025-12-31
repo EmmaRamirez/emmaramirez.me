@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Bloblet from './Bloblet.svelte';
 	import Bloblet2 from './Bloblet2.svelte';
-    import { Blob } from '$lib/types/Blob';
+    import { Blob } from '$lib/types';
 
     interface BlobProps {
         class?: string;

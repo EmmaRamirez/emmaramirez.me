@@ -160,8 +160,14 @@
 					class="px-3 py-2 cursor-pointer transition-colors
 						{value === option.value ? 'bg-[var(--caroline-blue-100)] text-[var(--caroline-blue-800)]' : ''}
 						{highlightedIndex === i ? 'bg-[var(--sandy-tan-400)]' : ''}
-						{option.disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[var(--sandy-tan-400)]'}"
+					{option.disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[var(--sandy-tan-400)]'}"
 					onclick={() => selectOption(option)}
+					onkeydown={(event) => {
+						if (event.key === 'Enter' || event.key === ' ') {
+							event.preventDefault();
+							selectOption(option);
+						}
+					}}
 					onmouseenter={() => highlightedIndex = i}
 				>
 					{option.label}
@@ -180,4 +186,3 @@
 		<p class="mt-1.5 text-sm text-[var(--liver-brown-600)]">{hint}</p>
 	{/if}
 </div>
-

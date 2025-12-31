@@ -25,23 +25,39 @@
 	);
 
 	function handleKeydown(event: KeyboardEvent) {
-		if (!open) return;
-		
-		if (event.key === 'Escape') {
-			event.preventDefault();
-			onclose?.();
-		}
-		
-		if (event.key === 'r' || event.key === 'R') {
-			if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
-				return;
-			}
-			event.preventDefault();
-			if (project) {
-				window.location.href = `/projects/project?id=${project.id}`;
-			}
-		}
-	}
+  if (!open) return;
+
+  const targetIsTextInput =
+    event.target instanceof HTMLElement &&
+    (event.target.tagName === 'INPUT' ||
+      event.target.tagName === 'TEXTAREA' ||
+      event.target.isContentEditable);
+
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    onclose?.();
+  }
+
+  if (event.key === 'r' || event.key === 'R') {
+    if (targetIsTextInput) {
+      return;
+    }
+    event.preventDefault();
+    if (project) {
+      window.location.href = `/projects/project?id=${project.id}`;
+    }
+  }
+
+    if ((event.key === 'k' || event.key === 'K' || event.key === 'j' || event.key === 'J') && !targetIsTextInput) {
+      event.preventDefault();
+      if ((event.key === 'k' || event.key === 'K') && prevProject) {
+        navigateToProject(prevProject.id);
+      }
+      if ((event.key === 'j' || event.key === 'J') && nextProject) {
+        navigateToProject(nextProject.id);
+      }
+    }
+  }
 
 	function navigateToProject(id: ProjectId) {
 		const customEvent = new CustomEvent('navigateproject', { detail: { id } });
@@ -87,6 +103,21 @@
 					<kbd class="key-badge">R</kbd>
 					<span class="key-label">read mode</span>
 				</button>
+				{#if prevProject || nextProject}
+					<div class="hotkey-divider"></div>
+					{#if prevProject}
+						<button class="hotkey-indicator" onclick={() => navigateToProject(prevProject.id)} aria-label="Previous project">
+							<kbd class="key-badge">K</kbd>
+							<span class="key-label">previous</span>
+						</button>
+					{/if}
+					{#if nextProject}
+						<button class="hotkey-indicator" onclick={() => navigateToProject(nextProject.id)} aria-label="Next project">
+							<kbd class="key-badge">J</kbd>
+							<span class="key-label">next</span>
+						</button>
+					{/if}
+				{/if}
 			</div>
 			<button class="close-button" onclick={() => onclose?.()} aria-label="Close project panel">
 				<svg
@@ -196,9 +227,9 @@
 				</nav>
 			{/if}
 
-			<div class="full-project-link" in:fade={{ duration: 200, delay: 250 }}>
-				<a href={`/projects/project?id=${project.id}`} class="style-none read-full-link">
-					View full project
+		<div class="full-project-link" in:fade={{ duration: 200, delay: 250 }}>
+			<a href={`/projects/project?id=${project.id}`} class="style-none read-full-link">
+				View full project
 					<svg
 						width="16"
 						height="16"
@@ -317,12 +348,13 @@
 	.panel-content {
 		flex: 1;
 		overflow-y: auto;
-		padding: 2rem;
+		padding: 2.5rem 3rem;
 		scroll-behavior: smooth;
 	}
 
 	.project-header {
-		margin-bottom: 2rem;
+		margin-bottom: 2.5rem;
+		max-width: 65ch;
 	}
 
 	.project-meta-row {
@@ -376,18 +408,18 @@
 
 	.project-title {
 		font-family: 'JetBrains Mono', 'Fira Code', monospace;
-		font-size: 1.5rem;
+		font-size: 2rem;
 		font-weight: 600;
-		line-height: 1.3;
+		line-height: 1.25;
 		color: var(--text-primary);
-		margin-bottom: 0.75rem;
+		margin-bottom: 1rem;
 	}
 
 	.project-description {
-		font-size: 1rem;
-		line-height: 1.6;
+		font-size: 1.125rem;
+		line-height: 1.7;
 		color: var(--text-secondary);
-		margin-bottom: 1rem;
+		margin-bottom: 1.25rem;
 	}
 
 	.project-technologies {
@@ -435,24 +467,25 @@
 	}
 
 	.project-body {
-		font-size: 1rem;
-		line-height: 1.75;
+		font-size: 1.125rem;
+		line-height: 1.8;
 		color: var(--text-secondary);
 		border-top: 1px solid var(--border-color);
 		padding-top: 2rem;
+		max-width: 65ch;
 	}
 
 	.project-body p {
-		margin-bottom: 1.25rem;
+		margin-bottom: 1.5rem;
 	}
 
 	.first-paragraph::first-letter {
 		float: left;
 		font-family: 'JetBrains Mono', monospace;
-		font-size: 2.5rem;
-		line-height: 0.85;
-		padding-right: 0.4rem;
-		padding-top: 0.15rem;
+		font-size: 3rem;
+		line-height: 0.8;
+		padding-right: 0.5rem;
+		padding-top: 0.2rem;
 		color: var(--text-primary);
 		font-weight: 700;
 	}
@@ -541,7 +574,6 @@
 		border-color: var(--text-primary);
 	}
 
-	/* Responsive */
 	@media (max-width: 1024px) {
 		.project-reader-panel {
 			width: min(720px, 85vw);
@@ -554,4 +586,3 @@
 		}
 	}
 </style>
-

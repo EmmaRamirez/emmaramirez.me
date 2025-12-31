@@ -54,7 +54,9 @@
 	const showFallback = $derived(!showImage);
 
 	const baseClasses = "inline-flex items-center justify-center overflow-hidden shrink-0";
-	const combinedClasses = `${baseClasses} ${sizeClasses[size].container} ${shapeClasses[shape]} ${className}`.trim();
+	const combinedClasses = $derived(
+		`${baseClasses} ${sizeClasses[size].container} ${shapeClasses[shape]} ${className}`.trim()
+	);
 </script>
 
 <span class={combinedClasses}>
@@ -74,4 +76,3 @@
 		</span>
 	{/if}
 </span>
-

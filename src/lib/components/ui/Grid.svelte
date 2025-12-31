@@ -83,17 +83,22 @@
 		xl: 'gap-8'
 	};
 
-	const responsiveCols = [
-		colClasses[cols],
-		colsSm ? colSmClasses[colsSm] : '',
-		colsMd ? colMdClasses[colsMd] : '',
-		colsLg ? colLgClasses[colsLg] : ''
-	].filter(Boolean).join(' ');
+	const responsiveCols = $derived(
+		[
+			colClasses[cols],
+			colsSm ? colSmClasses[colsSm] : '',
+			colsMd ? colMdClasses[colsMd] : '',
+			colsLg ? colLgClasses[colsLg] : ''
+		]
+			.filter(Boolean)
+			.join(' ')
+	);
 
-	const combinedClasses = `grid ${responsiveCols} ${gapClasses[gap]} ${className}`.trim();
+	const combinedClasses = $derived(
+		`grid ${responsiveCols} ${gapClasses[gap]} ${className}`.trim()
+	);
 </script>
 
 <div class={combinedClasses}>
 	{@render children?.()}
 </div>
-

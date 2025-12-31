@@ -38,15 +38,12 @@
 		strokeWidth = 2
 	}: Bloblet3Props = $props();
 
-    let points =
-		$state<
-			Point[]
-		>(basePoints ?? createPoints());
+	let points = $state<Point[]>([]);
 	
 	let simplex = createNoise2D();
 	let noiseStep = 0.0001;
     let animationId: number = $state(0);
-    let path = $derived(spline(points, 1, true));
+	let path = $state('');
 	let blob = $state();
 	let pathEl = $state<SVGPathElement>();
 
@@ -103,22 +100,9 @@
 		return points;
 	}
 
-	let previousSignature = $derived([radius, numPoints, baseNoiseStep]);
-
 	$effect(() => {
-		previousSignature = [radius, numPoints, baseNoiseStep];
-
-		if (JSON.stringify(previousSignature) !== JSON.stringify([radius, numPoints, baseNoiseStep])) {
-			console.log('recreating points with', radius, numPoints, baseNoiseStep);
-			points = createPoints();
-			path = spline(points, 
-						1,
-						true
-					);
-
-			animate();
-		}
-
+		points = basePoints && basePoints.length ? basePoints : createPoints();
+		path = spline(points, 1, true);
 	});
 
 	function animate() {
@@ -127,13 +111,10 @@
                 true
 			);
 
-        if (points.includes('NaN')) {
-        } else {
-            pathEl?.setAttribute(
+        pathEl?.setAttribute(
 			'd',
-               path
-            );
-        }
+            path
+        );
 
 	
 		animationId = requestAnimationFrame(animate);

@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * Format a date as a human-readable relative time string
  * Shows relative time for recent dates ("2 days ago", "last week")
- * and absolute dates for older content ("Dec 30, 2024")
+ * and absolute dates for older content ("December 30, 2024")
  */
 export function formatRelativeDate(dateStr: string | undefined): string {
 	if (!dateStr) return '';
@@ -20,7 +20,7 @@ export function formatRelativeDate(dateStr: string | undefined): string {
 	const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 	
 	if (diffDays < 0) {
-		return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+		return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 	}
 	
 	if (diffDays === 0) {
@@ -53,7 +53,7 @@ export function formatRelativeDate(dateStr: string | undefined): string {
 		return `${months} months ago`;
 	}
 	
-	return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+	return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
 /**
@@ -92,6 +92,8 @@ export function parseSVGPath(pathString: string) {
 	
 	let currentX = 0;
 	let currentY = 0;
+	
+	if (!commands) return points;
 	
 	commands.forEach(command => {
 	  const type = command[0];
@@ -153,6 +155,8 @@ export function parseSVGPath(pathString: string) {
   export function parseDataPoints(pathString: string) {
 	const points: Point[] = [];
 	const commands = pathString.match(/[MmLlHhVvCcSsQqTtAaZz][^MmLlHhVvCcSsQqTtAaZz]*/g);
+	
+	if (!commands) return points;
 	
 	commands.forEach(command => {
 	  const type = command[0];

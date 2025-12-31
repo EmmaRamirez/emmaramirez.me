@@ -64,12 +64,13 @@
 		'wrap-reverse': 'flex-wrap-reverse'
 	};
 
-	const directionClass = reverse ? 'flex-row-reverse' : 'flex-row';
+	const directionClass = $derived(reverse ? 'flex-row-reverse' : 'flex-row');
 
-	const combinedClasses = `flex ${directionClass} ${gapClasses[gap]} ${alignClasses[align]} ${justifyClasses[justify]} ${wrapClasses[wrap]} ${className}`.trim();
+	const combinedClasses = $derived(
+		`flex ${directionClass} ${gapClasses[gap]} ${alignClasses[align]} ${justifyClasses[justify]} ${wrapClasses[wrap]} ${className}`.trim()
+	);
 </script>
 
 <div class={combinedClasses}>
 	{@render children?.()}
 </div>
-

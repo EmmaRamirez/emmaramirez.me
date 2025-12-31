@@ -65,11 +65,15 @@
 		p: 'p', span: 'span', small: 'small', lead: 'p', code: 'code', link: 'a'
 	};
 
-	const element = as ?? defaultElements[variant];
-	const effectiveColor = variant === 'link' ? (color === 'default' ? 'primary' : color) : color;
-	const shouldApplyColorStyles = variant !== 'link' && variant !== 'code';
+	const element = $derived(as ?? defaultElements[variant]);
+	const effectiveColor = $derived(
+		variant === 'link' ? (color === 'default' ? 'primary' : color) : color
+	);
+	const shouldApplyColorStyles = $derived(variant !== 'link' && variant !== 'code');
 	
-	const combinedClasses = `${variantStyles[variant]} ${weight ? weightStyles[weight] : ''} ${shouldApplyColorStyles ? colorStyles[effectiveColor] : ''} ${className}`.trim();
+	const combinedClasses = $derived(
+		`${variantStyles[variant]} ${weight ? weightStyles[weight] : ''} ${shouldApplyColorStyles ? colorStyles[effectiveColor] : ''} ${className}`.trim()
+	);
 </script>
 
 {#if element === 'h1'}
@@ -104,4 +108,3 @@
 {:else}
 	<p class={combinedClasses}>{@render children?.()}</p>
 {/if}
-

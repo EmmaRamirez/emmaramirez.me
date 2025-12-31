@@ -3,6 +3,7 @@
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
 	import { theme } from '$lib/stores';
+	import { dev } from '$app/environment';
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;
@@ -240,6 +241,9 @@
 			<HeaderNavItem href="/">Home</HeaderNavItem>
 			<HeaderNavItem href="/blog">Essays</HeaderNavItem>
 			<HeaderNavItem href="/about" active class="text-(--text-primary)">About</HeaderNavItem>
+			{#if dev}
+				<HeaderNavItem href="/editor">Editor</HeaderNavItem>
+			{/if}
 			<a
 				href="https://github.com/emzinnia"
 				target="_blank"

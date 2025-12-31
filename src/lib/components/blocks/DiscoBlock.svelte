@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import ImageBlock from './ImageBlock.svelte';
+	import { ImageBlock } from '$lib/components/blocks';
 
 	interface DiscoBlockProps {
 		image: string;

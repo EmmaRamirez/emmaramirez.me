@@ -21,6 +21,7 @@
 	const detailsCache = $state<Record<number, PokemonDetails>>({});
 	const popoverRefs = $state<Record<number, HTMLDivElement | null>>({});
 	let selectedPokemonId = $state<number | null>(null);
+	let lastSelectedPokemonId = $state<number | null>(null);
 	let loadingId = $state<number | null>(null);
 	let error = $state<string | null>(null);
 	let hideTimer: ReturnType<typeof setTimeout> | null = null;
@@ -88,6 +89,7 @@
 
 	async function selectPokemon(id: number) {
 		selectedPokemonId = id;
+		lastSelectedPokemonId = id;
 		error = null;
 
 		if (detailsCache[id]) {
@@ -137,6 +139,14 @@
 			loadingId = null;
 		}
 	}
+
+	const selectedPokemon = $derived(
+		lastSelectedPokemonId ? team.find((pokemon) => pokemon.id === lastSelectedPokemonId) ?? null : null
+	);
+
+	const selectedDetails = $derived(
+		lastSelectedPokemonId ? detailsCache[lastSelectedPokemonId] ?? null : null
+	);
 </script>
 
 <div
@@ -159,8 +169,9 @@
 						await selectPokemon(pokemon.id);
 						showPopover(pokemon.id);
 					}}
-					onfocus={() => {
+					onfocus={async () => {
 						cancelHide();
+						await selectPokemon(pokemon.id);
 						showPopover(pokemon.id);
 					}}
 					onmouseleave={() => scheduleHide(pokemon.id)}
@@ -200,6 +211,47 @@
 				</div>
 			{/each}
 		</div>
+
+		<div class="pokemon-inline">
+			{#if selectedPokemon}
+				<div class="pokemon-inline__header">
+					<span class="pokemon-inline__title">#{selectedPokemon.id} {selectedPokemon.name}</span>
+					{#if selectedDetails?.types?.length}
+						<span class="pokemon-inline__types">{selectedDetails.types.join(' / ')}</span>
+					{/if}
+				</div>
+				{#if loadingId === selectedPokemon.id}
+					<p class="pokemon-inline__status">Loading extra data...</p>
+				{:else if error}
+					<p class="pokemon-inline__status text-red-600">Unable to load details.</p>
+				{:else if selectedDetails}
+					<div class="pokemon-inline__details">
+						<div class="pokemon-inline__stat">
+							<span class="pokemon-inline__label">Height</span>
+							<span class="pokemon-inline__value">{selectedDetails.height}</span>
+						</div>
+						<div class="pokemon-inline__stat">
+							<span class="pokemon-inline__label">Weight</span>
+							<span class="pokemon-inline__value">{selectedDetails.weight}</span>
+						</div>
+						<div class="pokemon-inline__stat">
+							<span class="pokemon-inline__label">Base XP</span>
+							<span class="pokemon-inline__value">{selectedDetails.baseExperience}</span>
+						</div>
+						<div class="pokemon-inline__stat pokemon-inline__stat--wide">
+							<span class="pokemon-inline__label">Abilities</span>
+							<span class="pokemon-inline__value">
+								{selectedDetails.abilities.join(', ')}
+							</span>
+						</div>
+					</div>
+				{:else}
+					<p class="pokemon-inline__status">Hover a Pokemon to load details.</p>
+				{/if}
+			{:else}
+				<p class="pokemon-inline__status">Hover a Pokemon to load details.</p>
+			{/if}
+		</div>
 	</div>
 </div>
 
@@ -207,6 +259,8 @@
 	.pokemon-block {
 		aspect-ratio: 4 / 3;
 		background: var(--card-bg);
+		container-type: size;
+		container-name: pokemon-block;
 	}
 
 	.pokemon-team-grid {
@@ -306,5 +360,76 @@
 		font-size: 0.75rem;
 		color: var(--text-muted);
 		text-transform: capitalize;
+	}
+
+	.pokemon-inline {
+		display: none;
+		margin-top: 1.5rem;
+		padding: 1rem;
+		border-radius: 0.75rem;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(7, 12, 30, 0.35);
+		color: #fff;
+		backdrop-filter: blur(6px);
+	}
+
+	.pokemon-inline__header {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1rem;
+		align-items: baseline;
+		justify-content: space-between;
+		margin-bottom: 0.75rem;
+	}
+
+	.pokemon-inline__title {
+		font-size: 1rem;
+		font-weight: 700;
+		text-transform: capitalize;
+	}
+
+	.pokemon-inline__types {
+		font-size: 0.8rem;
+		text-transform: capitalize;
+		color: rgba(255, 255, 255, 0.75);
+	}
+
+	.pokemon-inline__status {
+		font-size: 0.85rem;
+		color: rgba(255, 255, 255, 0.7);
+	}
+
+	.pokemon-inline__details {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.75rem 1rem;
+	}
+
+	.pokemon-inline__stat {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.pokemon-inline__stat--wide {
+		grid-column: span 2;
+	}
+
+	.pokemon-inline__label {
+		font-size: 0.7rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.6);
+	}
+
+	.pokemon-inline__value {
+		font-size: 0.9rem;
+		text-transform: capitalize;
+	}
+
+	@container pokemon-block (min-height: 500px) {
+		.pokemon-inline {
+			display: block;
+		}
 	}
 </style>

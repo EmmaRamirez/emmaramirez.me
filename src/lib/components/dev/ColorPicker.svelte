@@ -3,8 +3,12 @@
 
 	let { label, value, colors, onColorChange, name } = $props();
 
-	let color = $state(value);
+	let color = $state('');
 	let colorPickerOpen = $state(false);
+
+	$effect(() => {
+		color = value ?? '';
+	});
 
 	function toggleColorPicker() {
 		colorPickerOpen = !colorPickerOpen;
@@ -19,11 +23,13 @@
 <div class="flex items-center gap-4">
 	<label class="w-20 text-sm font-medium" for={name}>{label}</label>
 	<div class="flex items-center gap-2">
-		<div
+		<button
+			type="button"
 			onclick={toggleColorPicker}
 			class="h-4 w-4 cursor-pointer rounded-lg"
 			style="background-color: {color}"
-		></div>
+			aria-label={`Pick ${label ?? 'color'}`}
+		></button>
 		<input
 			type="text"
 			id={name}
@@ -38,11 +44,13 @@
 	<div class="color-picker rounded-lg border bg-white p-2" transition:fade={{ duration: 250 }}>
 		<div class="color-picker-list flex flex-wrap gap-2">
 			{#each colors as color}
-				<div
+				<button
+					type="button"
 					class="color-picker-item h-8 w-8 rounded-lg cursor-pointer"
 					style="background-color: {color}"
 					onclick={() => handleColorChange(color, name)}
-				></div>
+					aria-label={`Select ${color}`}
+				></button>
 			{/each}
 		</div>
 	</div>

@@ -42,7 +42,9 @@
 		primary: 'bg-[var(--caroline-blue-100)]'
 	};
 
-	const combinedClasses = `${spacingClasses[spacing]} ${backgroundClasses[background]} ${className}`.trim();
+	const combinedClasses = $derived(
+		`${spacingClasses[spacing]} ${backgroundClasses[background]} ${className}`.trim()
+	);
 </script>
 
 <section
@@ -52,4 +54,3 @@
 >
 	{@render children?.()}
 </section>
-

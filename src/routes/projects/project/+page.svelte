@@ -3,6 +3,7 @@
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
 	import { getProject, projectIds, type ProjectId } from '$lib/registry/homepage';
+	import { dev } from '$app/environment';
 	import { fade, fly } from 'svelte/transition';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
@@ -75,6 +76,9 @@
 			<HeaderNavItem href="/">Home</HeaderNavItem>
 			<HeaderNavItem href="/blog">Essays</HeaderNavItem>
 			<HeaderNavItem href="/about">About</HeaderNavItem>
+			{#if dev}
+				<HeaderNavItem href="/editor">Editor</HeaderNavItem>
+			{/if}
 			<a
 				href="https://github.com/emzinnia"
 				target="_blank"
@@ -344,7 +348,6 @@
 		color: var(--page-bg);
 	}
 
-	/* Custom prose styling */
 	.prose-custom {
 		font-size: 1.125rem;
 		line-height: 1.8;

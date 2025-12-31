@@ -38,10 +38,11 @@
 		lg: 'px-8 sm:px-12'
 	};
 
-	const combinedClasses = `w-full ${sizeClasses[size]} ${paddingClasses[padding]} ${centered ? 'mx-auto' : ''} ${className}`.trim();
+	const combinedClasses = $derived(
+		`w-full ${sizeClasses[size]} ${paddingClasses[padding]} ${centered ? 'mx-auto' : ''} ${className}`.trim()
+	);
 </script>
 
 <div class={combinedClasses}>
 	{@render children?.()}
 </div>
-

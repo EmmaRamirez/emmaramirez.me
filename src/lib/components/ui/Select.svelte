@@ -41,11 +41,15 @@
 
 	const baseSelectClasses = "w-full px-3 py-2 pr-10 rounded-lg border-2 bg-(--card-bg) text-(--text-primary) focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-(--page-bg) transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed appearance-none cursor-pointer";
 	
-	const stateClasses = error
-		? "border-red-500 focus:ring-red-400"
-		: "border-(--border-color) focus:ring-(--caroline-blue-500) focus:border-(--caroline-blue-600)";
+	const stateClasses = $derived(
+		error
+			? "border-red-500 focus:ring-red-400"
+			: "border-(--border-color) focus:ring-(--caroline-blue-500) focus:border-(--caroline-blue-600)"
+	);
 
-	const combinedSelectClasses = `${baseSelectClasses} ${stateClasses} ${className}`;
+	const combinedSelectClasses = $derived(
+		`${baseSelectClasses} ${stateClasses} ${className}`
+	);
 </script>
 
 <div class="flex flex-col gap-1.5">
@@ -94,4 +98,3 @@
 		</p>
 	{/if}
 </div>
-

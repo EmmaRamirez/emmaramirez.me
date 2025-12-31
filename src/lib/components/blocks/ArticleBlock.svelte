@@ -4,11 +4,11 @@
 
     interface ArticleBlockProps {
         title: string;
-        content: string;
+        content: string | Snippet;
         date?: string;
         tags?: string[];
         width?: 'sm' | 'md' | 'lg';
-        class?: string | Snippet;
+        class?: string;
         titleClass?: string;
         articleId?: string;
         contentClass?: string;

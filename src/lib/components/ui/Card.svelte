@@ -26,7 +26,9 @@
 		outlined: "bg-transparent border-2 border-[var(--liver-brown-500)]"
 	};
 
-	const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${className}`;
+	const combinedClasses = $derived(
+		`${baseClasses} ${variantClasses[variant]} ${className}`
+	);
 </script>
 
 <div 
@@ -49,4 +51,3 @@
 		</div>
 	{/if}
 </div>
-

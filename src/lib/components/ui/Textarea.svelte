@@ -53,11 +53,15 @@
 
 	const baseTextareaClasses = "w-full px-3 py-2 rounded-lg border-2 bg-[var(--eggshell-white-500)] text-[var(--liver-brown-800)] placeholder:text-[var(--liver-brown-500)] focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
 	
-	const stateClasses = error
-		? "border-red-500 focus:ring-red-400"
-		: "border-[var(--liver-brown-500)] focus:ring-[var(--caroline-blue-500)] focus:border-[var(--caroline-blue-600)]";
+	const stateClasses = $derived(
+		error
+			? "border-red-500 focus:ring-red-400"
+			: "border-[var(--liver-brown-500)] focus:ring-[var(--caroline-blue-500)] focus:border-[var(--caroline-blue-600)]"
+	);
 
-	const combinedTextareaClasses = `${baseTextareaClasses} ${stateClasses} ${resizeClasses[resize]} ${className}`;
+	const combinedTextareaClasses = $derived(
+		`${baseTextareaClasses} ${stateClasses} ${resizeClasses[resize]} ${className}`
+	);
 </script>
 
 <div class="flex flex-col gap-1.5">
@@ -101,4 +105,3 @@
 		{/if}
 	</div>
 </div>
-

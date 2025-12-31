@@ -28,9 +28,11 @@
 		xl: 'w-8 h-8'
 	};
 
-	const isDecorative = !ariaLabel;
+	const isDecorative = $derived(!ariaLabel);
 
-	const combinedClasses = `inline-flex items-center justify-center shrink-0 ${sizeClasses[size]} ${className}`.trim();
+	const combinedClasses = $derived(
+		`inline-flex items-center justify-center shrink-0 ${sizeClasses[size]} ${className}`.trim()
+	);
 </script>
 
 <span
@@ -41,4 +43,3 @@
 >
 	{@render children?.()}
 </span>
-

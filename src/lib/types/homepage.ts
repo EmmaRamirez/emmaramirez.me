@@ -8,6 +8,7 @@ import type { ProjectRegistryEntry } from '$lib/registry/homepage';
 export type GridItem =
 	| { kind: 'article'; article: Article }
 	| { kind: 'project'; project: ProjectRegistryEntry }
+	| { kind: 'hero' }
 	| { kind: 'disco' }
 	| { kind: 'home' }
 	| { kind: 'design-system' }

@@ -33,7 +33,6 @@
 		</Header>
 
 		<div class="editor-layout mx-auto max-w-7xl px-4 py-8">
-			<!-- Section tabs -->
 			<nav class="mb-8 flex gap-1 rounded-xl bg-(--surface) p-1.5" aria-label="Editor sections">
 				<button
 					type="button"
@@ -79,7 +78,6 @@
 				</button>
 			</nav>
 
-			<!-- Section content -->
 			<div class="editor-content">
 				{#if activeSection === 'grid'}
 					<EditorGridSection />

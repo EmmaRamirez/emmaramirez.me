@@ -34,7 +34,6 @@
 
 <header 
 	class="w-full z-40 {sticky ? 'sticky top-0' : ''} {variantClasses[variant]} {className}"
-	role="banner"
 >
 	<nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
 		<div class="flex h-16 items-center justify-between">
@@ -58,4 +57,3 @@
 		</div>
 	</nav>
 </header>
-

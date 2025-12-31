@@ -6,6 +6,8 @@
 	import { onMount } from 'svelte';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
+	import { fade } from 'svelte/transition';
+	import { page } from '$app/state';
 
 	import { dev } from '$app/environment';
 	
@@ -34,5 +36,19 @@
 </svelte:head>
 
 <main>
-	{@render children()}
+	{#key page.url.pathname}
+		<div
+			class="page-transition-wrapper"
+			in:fade={{ duration: 300, delay: 150 }}
+			out:fade={{ duration: 200 }}
+		>
+			{@render children()}
+		</div>
+	{/key}
 </main>
+
+<style>
+	.page-transition-wrapper {
+		min-height: 100vh;
+	}
+</style>

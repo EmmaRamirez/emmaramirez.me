@@ -53,9 +53,11 @@
 		info: 'bg-blue-500'
 	};
 
-	const shapeClass = pill ? 'rounded-full' : 'rounded';
+	const shapeClass = $derived(pill ? 'rounded-full' : 'rounded');
 
-	const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${shapeClass} ${className}`.trim();
+	const combinedClasses = $derived(
+		`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${shapeClass} ${className}`.trim()
+	);
 </script>
 
 <span class={combinedClasses}>
@@ -64,4 +66,3 @@
 	{/if}
 	{@render children?.()}
 </span>
-

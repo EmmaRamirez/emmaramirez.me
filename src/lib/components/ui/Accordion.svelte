@@ -26,7 +26,11 @@
 		defaultOpen = []
 	}: AccordionProps = $props();
 
-	let openPanels = $state<Set<string>>(new Set(defaultOpen));
+	let openPanels = $state<Set<string>>(new Set());
+
+	$effect(() => {
+		openPanels = new Set(defaultOpen);
+	});
 
 	function togglePanel(id: string) {
 		if (openPanels.has(id)) {
@@ -108,4 +112,3 @@
 		animation: accordion-open 0.2s ease-out;
 	}
 </style>
-

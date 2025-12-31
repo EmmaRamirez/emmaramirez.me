@@ -50,7 +50,9 @@
 		ghost: 'text-[var(--liver-brown-700)] hover:bg-[var(--sandy-tan-400)] focus:ring-[var(--sandy-tan-600)] bg-transparent'
 	};
 
-	const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${shapeClasses[shape]} ${variantClasses[variant]} ${className}`.trim();
+	const combinedClasses = $derived(
+		`${baseClasses} ${sizeClasses[size]} ${shapeClasses[shape]} ${variantClasses[variant]} ${className}`.trim()
+	);
 </script>
 
 <button
@@ -60,4 +62,3 @@
 >
 	{@render children?.()}
 </button>
-

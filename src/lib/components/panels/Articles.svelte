@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
-	import ArticleBlock from './ArticleBlock.svelte';
-	import TagDrawer from './TagDrawer.svelte';
+	import { ArticleBlock } from '$lib/components/blocks';
+	import { TagDrawer } from '$lib/components/panels';
 	import type { Article } from '$lib/articles';
 	import { defaultArticles } from '$lib/articles';
 

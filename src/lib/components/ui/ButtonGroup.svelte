@@ -21,7 +21,9 @@
 		vertical: "flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:last-child)]:rounded-b-none [&>*:not(:first-child)]:border-t-0"
 	};
 
-	const combinedClasses = `${baseClasses} ${orientationClasses[orientation]} ${className}`;
+	const combinedClasses = $derived(
+		`${baseClasses} ${orientationClasses[orientation]} ${className}`
+	);
 </script>
 
 <div 
@@ -31,4 +33,3 @@
 >
 	{@render children?.()}
 </div>
-

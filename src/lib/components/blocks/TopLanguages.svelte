@@ -19,7 +19,6 @@
 <div class={cn("vintage-ad relative overflow-hidden", className)}>
 	<div class="ad-frame">
 		<div class="ad-content">
-			<!-- Top banner -->
 			<div class="top-banner">
 				<span class="banner-wing">★ ★ ★</span>
 				<span class="banner-text">SINCE 2018</span>
@@ -33,7 +32,6 @@
 				<div class="headline-underline"></div>
 			</header>
 
-			<!-- Language listings -->
 			<div class="languages-list">
 				{#each languages as language, i (language.name)}
 					<div class="language-row" style="--lang-color: {language.color};">
@@ -49,7 +47,6 @@
 				{/each}
 			</div>
 
-			<!-- Bottom divider -->
 			<div class="bottom-divider">
 				<span class="divider-dot">◆</span>
 				<span class="divider-line"></span>

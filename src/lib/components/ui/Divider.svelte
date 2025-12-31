@@ -50,17 +50,20 @@
 		lg: 'mx-8'
 	};
 
-	const isHorizontal = orientation === 'horizontal';
+	const isHorizontal = $derived(orientation === 'horizontal');
 
-	const orientationClasses = isHorizontal
-		? `w-full border-t ${horizontalSpacing[spacing]}`
-		: `h-full border-l self-stretch ${verticalSpacing[spacing]}`;
+	const orientationClasses = $derived(
+		isHorizontal
+			? `w-full border-t ${horizontalSpacing[spacing]}`
+			: `h-full border-l self-stretch ${verticalSpacing[spacing]}`
+	);
 
-	const combinedClasses = `${orientationClasses} ${variantClasses[variant]} ${colorClasses[color]} ${className}`.trim();
+	const combinedClasses = $derived(
+		`${orientationClasses} ${variantClasses[variant]} ${colorClasses[color]} ${className}`.trim()
+	);
 </script>
 
 <hr
 	class={combinedClasses}
 	aria-orientation={orientation}
 />
-

@@ -27,7 +27,7 @@
 		striped = false
 	}: DescriptionListProps = $props();
 
-	const isHorizontal = layout === 'horizontal';
+	const isHorizontal = $derived(layout === 'horizontal');
 </script>
 
 <dl class={className}>
@@ -55,4 +55,3 @@
 		</div>
 	{/each}
 </dl>
-

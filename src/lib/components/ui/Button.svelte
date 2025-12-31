@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
+	import type { HTMLButtonAttributes } from "svelte/elements";
 
-	interface ButtonProps extends svelteHTML.HTMLAttributes<HTMLButtonElement> {
+	interface ButtonProps extends HTMLButtonAttributes {
 		class?: string;
 		variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
 		size?: 'sm' | 'md' | 'lg';
@@ -31,7 +32,9 @@
 		ghost: "text-[var(--liver-brown-700)] hover:bg-[var(--sandy-tan-400)] focus:ring-[var(--sandy-tan-600)] bg-transparent"
 	};
 
-	const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
+	const combinedClasses = $derived(
+		`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`
+	);
 </script>
 
 <button 
@@ -40,4 +43,3 @@
 >
 	{@render children?.()}
 </button>
-

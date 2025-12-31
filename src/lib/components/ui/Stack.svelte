@@ -37,10 +37,11 @@
 		stretch: 'items-stretch'
 	};
 
-	const combinedClasses = `flex flex-col ${gapClasses[gap]} ${alignClasses[align]} ${className}`.trim();
+	const combinedClasses = $derived(
+		`flex flex-col ${gapClasses[gap]} ${alignClasses[align]} ${className}`.trim()
+	);
 </script>
 
 <div class={combinedClasses}>
 	{@render children?.()}
 </div>
-

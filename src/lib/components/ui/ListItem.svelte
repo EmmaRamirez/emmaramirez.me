@@ -28,11 +28,13 @@
 		description
 	}: ListItemProps = $props();
 
-	const isInteractive = href || onclick;
+	const isInteractive = $derived(href || onclick);
 	const baseClasses = "flex items-center gap-3 px-4 py-3";
-	const interactiveClasses = isInteractive 
-		? "hover:bg-[var(--sandy-tan-400)] cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-inset" 
-		: "";
+	const interactiveClasses = $derived(
+		isInteractive
+			? "hover:bg-[var(--sandy-tan-400)] cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-inset"
+			: ""
+	);
 </script>
 
 {#if href}
@@ -110,4 +112,3 @@
 		{/if}
 	</li>
 {/if}
-

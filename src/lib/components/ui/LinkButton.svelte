@@ -45,9 +45,13 @@
 		ghost: "text-[var(--liver-brown-700)] hover:bg-[var(--sandy-tan-400)] focus:ring-[var(--sandy-tan-600)] bg-transparent"
 	};
 
-	const disabledClasses = disabled ? "opacity-50 pointer-events-none cursor-not-allowed" : "cursor-pointer";
+	const disabledClasses = $derived(
+		disabled ? "opacity-50 pointer-events-none cursor-not-allowed" : "cursor-pointer"
+	);
 
-	const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${disabledClasses} ${className} style-none`.trim();
+	const combinedClasses = $derived(
+		`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${disabledClasses} ${className} style-none`.trim()
+	);
 </script>
 
 <a
@@ -60,4 +64,3 @@
 >
 	{@render children?.()}
 </a>
-

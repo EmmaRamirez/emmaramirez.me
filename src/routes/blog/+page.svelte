@@ -3,6 +3,7 @@
 	import { getArticleMetas, getAllTags, type ArticleMeta } from '$lib/articles';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
+	import { dev } from '$app/environment';
 	import { fade, fly } from 'svelte/transition';
 	import { formatShortDate } from '$lib/utils';
 
@@ -62,6 +63,9 @@
 			<HeaderNavItem href="/">Home</HeaderNavItem>
 			<HeaderNavItem href="/blog" active class="text-(--text-primary)">Essays</HeaderNavItem>
 			<HeaderNavItem href="/about">About</HeaderNavItem>
+			{#if dev}
+				<HeaderNavItem href="/editor">Editor</HeaderNavItem>
+			{/if}
 			<a
 				href="https://github.com/emzinnia"
 				target="_blank"

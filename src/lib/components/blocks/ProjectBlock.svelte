@@ -18,20 +18,23 @@
 	}: ProjectBlockProps = $props();
 </script>
 
-<div class="project-block flex flex-col gap-2 {className}">
+<div class="project-block flex h-full flex-col gap-2 {className}">
 	<div
-		class="project-block-content flex flex-col gap-3 rounded-lg border border-(--border-color) bg-(--card-bg) p-4"
+		class="project-block-content flex h-full flex-col gap-3 rounded-lg border border-(--border-color) bg-(--card-bg) p-4"
 	>
+		<span class="text-xs font-semibold uppercase tracking-[0.18em] text-(--text-secondary)">
+			Project
+		</span>
 		<div
 			class="project-block-header flex justify-between transition-colors duration-300 ease-in-out cursor-pointer"
 		>
 			<span class="font-mono text-sm text-(--text-secondary)">/{title}</span>
-			<div class="flex justify-between">
-				<div class="pill opacity-50">{pill}</div>
-			</div>
+		</div>
+		<div class="flex justify-between">
+			<div class="pill opacity-50">{pill}</div>
 		</div>
 
-		<div class="project-block-body flex flex-col gap-2 {contentClassName}">
+		<div class="project-block-body flex flex-1 flex-col gap-2 text-balance {contentClassName}">
 			<p class="project-block-description">
 				{@render description()}
 			</p>

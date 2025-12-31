@@ -19,7 +19,7 @@
 		children
 	}: PageShellProps = $props();
 
-	const shellClasses = `min-h-screen flex flex-col ${className}`.trim();
+	const shellClasses = $derived(`min-h-screen flex flex-col ${className}`.trim());
 </script>
 
 <div class={shellClasses}>
@@ -39,4 +39,3 @@
 		</footer>
 	{/if}
 </div>
-

@@ -51,7 +51,9 @@
 		error: 'hover:bg-red-600/20'
 	};
 
-	const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`.trim();
+	const combinedClasses = $derived(
+		`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`.trim()
+	);
 </script>
 
 <span class={combinedClasses}>
@@ -70,4 +72,3 @@
 		</button>
 	{/if}
 </span>
-

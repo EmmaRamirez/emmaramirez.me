@@ -10,7 +10,7 @@ export type ProjectId =
 	| 'nuzlocke'
 	| 'site'
 	| 'discoProject'
-	| 'paraglide'
+	| 'kj-photography'
 	| 'designSystemLab'
 	| 'commitGarden'
 	| 'palettePlayground'
@@ -70,7 +70,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		kind: 'project',
 		id: 'nuzlocke',
 		title: 'nuzlocke-generator',
-		pill: 'UX for constraints',
+		pill: 'nuzlocke templating engine',
 		image: profileImage,
 		description: 'highly collaborative,customizable image generator for Pokémon Nuzlocke challenges. built with React and Elixir. has over 10k users and vibrant community.',
 		content: `The Nuzlocke Generator started as a weekend project born from my own frustration with tracking Pokémon runs. Nuzlocke challenges add permadeath and catch limits to the games, and keeping track of everything on paper felt wrong for 2024.
@@ -83,7 +83,7 @@ The trickiest part was making it feel fast. React's reconciliation kept causing 
 		technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Zustand', 'Framer Motion'],
 		links: {
 			github: 'https://github.com/emzinnia/nuzlocke-generator',
-			demo: 'https://nuzlocke.emmaramirez.me'
+			demo: 'https://nuzlocke-generator.com'
 		},
 		year: '2024',
 		status: 'active',
@@ -168,21 +168,15 @@ There's no save feature, no export, no share button. It's ephemeral by design. Y
 		contentClassName: 'md:flex-row md:items-center',
 		imageClassName: 'md:translate-x-0 md:ml-4'
 	},
-	paraglide: {
+	'kj-photography': {
 		kind: 'project',
-		id: 'paraglide',
-		title: 'paraglide-playground',
-		pill: 'i18n & UX',
+		id: 'kj-photography',
+		title: 'kj.photography',
+		pill: 'interactive photography portfolio',
 		image: profileImage,
-		description: 'A multilingual SvelteKit demo using Paraglide that stress-tests copy, layout, and tone across languages without turning the UI into a spreadsheet.',
-		content: `I built the Paraglide Playground to figure out how far you can push type-safe internationalization before it becomes annoying.
-
-Paraglide (from Inlang) generates TypeScript functions from your message files, so you get autocomplete and compile-time errors when translations are missing. The playground tests edge cases: pluralization rules, date formatting, right-to-left layouts, and strings that are way longer in German than English.
-
-The demo includes a fake e-commerce flow with product cards, checkout, and confirmation emails. Each step exercises different i18n patterns: interpolated variables, contextual translations (formal vs. casual), and currency formatting.
-
-What I learned: the tooling is ready for production, but the design process needs to change. You can't just "add translations later"—layouts need to be flexible from the start, and copywriters need to see their text in context.`,
-		technologies: ['SvelteKit', 'Paraglide', 'TypeScript', 'Tailwind CSS'],
+		description: 'photography portfolio built with SvelteKit, ThreeJS, and Convex DB',
+		content: `I built the KJ Photography portfolio to showcase my photography and share my passion for the art.`,
+		technologies: ['SvelteKit', 'ThreeJS', 'Convex DB'],
 		links: {
 			github: 'https://github.com/emzinnia/paraglide-playground',
 			demo: 'https://paraglide.emmaramirez.me'
@@ -335,7 +329,7 @@ export const projectIds: ProjectId[] = [
 	'fakemon',
 	'site',
 	'discoProject',
-	'paraglide',
+	'kj-photography',
 	'designSystemLab',
 	'commitGarden',
 	'palettePlayground',
@@ -421,7 +415,7 @@ export function getHomepageItems(): Item[] {
 		{ kind: 'project', id: 'nuzlocke' },
 		{ kind: 'project', id: 'site' },
 		{ kind: 'project', id: 'discoProject' },
-		{ kind: 'project', id: 'paraglide' },
+		{ kind: 'project', id: 'kj-photography' },
 		{ kind: 'project', id: 'designSystemLab' },
 		{ kind: 'project', id: 'commitGarden' },
 		{ kind: 'project', id: 'palettePlayground' },

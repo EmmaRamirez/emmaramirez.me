@@ -52,9 +52,9 @@
 			{min}
 			{max}
 			{step}
-			bind:value
 			style="--slider-percentage: {percentage}%"
 			{...inputProps}
+			bind:value
 		/>
 	</div>
 	

@@ -106,7 +106,6 @@
 			/>
 		</div>
 
-		<!-- Hero 3D Debug Parameters -->
 		<div class="space-y-3 rounded-lg border border-(--border-color) bg-(--surface) p-3 sm:p-4">
 			<div class="flex items-start justify-between gap-3">
 				<div>
@@ -118,59 +117,59 @@
 			<div class="grid grid-cols-2 gap-x-4 gap-y-3">
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Depth Scale: {depthScale.toFixed(2)}</span>
-					<Slider bind:value={depthScale} min={0} max={0.5} step={0.01} />
+					<Slider bind:value={depthScale} min={0} max={0.5} step={0.01} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Reveal Radius: {revealRadius.toFixed(2)}</span>
-					<Slider bind:value={revealRadius} min={0.1} max={1} step={0.01} />
+					<Slider bind:value={revealRadius} min={0.1} max={1} step={0.01} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Parallax XY: {parallaxXY.toFixed(2)}</span>
-					<Slider bind:value={parallaxXY} min={0} max={0.5} step={0.01} />
+					<Slider bind:value={parallaxXY} min={0} max={0.5} step={0.01} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Parallax Z: {parallaxZ.toFixed(2)}</span>
-					<Slider bind:value={parallaxZ} min={0} max={1} step={0.01} />
+					<Slider bind:value={parallaxZ} min={0} max={1} step={0.01} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Splat Stretch: {splatStretch.toFixed(1)}</span>
-					<Slider bind:value={splatStretch} min={0} max={5} step={0.1} />
+					<Slider bind:value={splatStretch} min={0} max={5} step={0.1} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Splat Compress: {splatCompress.toFixed(2)}</span>
-					<Slider bind:value={splatCompress} min={0} max={2} step={0.05} />
+					<Slider bind:value={splatCompress} min={0} max={2} step={0.05} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Depth Bulge: {depthBulge.toFixed(2)}</span>
-					<Slider bind:value={depthBulge} min={0} max={1} step={0.01} />
+					<Slider bind:value={depthBulge} min={0} max={1} step={0.01} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Contour Offset: {contourOffset.toFixed(2)}</span>
-					<Slider bind:value={contourOffset} min={0} max={2} step={0.05} />
+					<Slider bind:value={contourOffset} min={0} max={2} step={0.05} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Blob Amplitude: {blobAmplitude.toFixed(3)}</span>
-					<Slider bind:value={blobAmplitude} min={0} max={0.15} step={0.005} />
+					<Slider bind:value={blobAmplitude} min={0} max={0.15} step={0.005} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Noise Amplitude: {noiseAmplitude.toFixed(3)}</span>
-					<Slider bind:value={noiseAmplitude} min={0} max={0.2} step={0.005} />
+					<Slider bind:value={noiseAmplitude} min={0} max={0.2} step={0.005} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Contour Influence: {contourInfluence.toFixed(2)}</span>
-					<Slider bind:value={contourInfluence} min={0} max={2} step={0.05} />
+					<Slider bind:value={contourInfluence} min={0} max={2} step={0.05} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Edge Softness: {edgeSoftness.toFixed(3)}</span>
-					<Slider bind:value={edgeSoftness} min={0.01} max={0.2} step={0.005} />
+					<Slider bind:value={edgeSoftness} min={0.01} max={0.2} step={0.005} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Saturation: {saturationBoost.toFixed(2)}</span>
-					<Slider bind:value={saturationBoost} min={0.5} max={2} step={0.05} />
+					<Slider bind:value={saturationBoost} min={0.5} max={2} step={0.05} showValue={false} />
 				</div>
 				<div>
 					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Contrast: {contrastBoost.toFixed(2)}</span>
-					<Slider bind:value={contrastBoost} min={0.5} max={2} step={0.05} />
+					<Slider bind:value={contrastBoost} min={0.5} max={2} step={0.05} showValue={false} />
 				</div>
 			</div>
 		</div>

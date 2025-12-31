@@ -1,12 +1,11 @@
 <script lang="ts">
-	import ArticleReaderPanel from '$lib/components/ArticleReaderPanel.svelte';
-	import ProjectReaderPanel from '$lib/components/ProjectReaderPanel.svelte';
-	import Hero from '$lib/components/Hero.svelte';
-	import DebugMenu from '$lib/components/DebugMenu.svelte';
-	import MainGrid from '$lib/components/MainGrid.svelte';
+	import { ArticleReaderPanel, ProjectReaderPanel } from '$lib/components/panels';
+	import { DebugMenu } from '$lib/components/dev';
+	import { MainGrid } from '$lib/components/grids';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
 	import { showSections } from '$lib/stores';
+	import { dev } from '$app/environment';
 	import {
 		openArticleReader,
 		closeArticleReader,
@@ -20,13 +19,11 @@
 		setSelectedArticleId,
 		setSelectedProjectId
 	} from '$lib/stores/readerPanelStore.svelte';
-	import { hero3dParams } from '$lib/stores/hero3dParams.svelte';
 	import type { Article } from '$lib/articles';
 	import { defaultArticles } from '$lib/articles';
 	import {
 		getDisco,
 		projectRegistry,
-		seededShuffle,
 		type ProjectId,
 		type ProjectRegistryEntry
 	} from '$lib/registry/homepage';
@@ -36,6 +33,15 @@
 	let debugMenuOpen = $state(false);
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
+	let designSystemBrowserOpen = $state(false);
+
+	function openDesignSystemBrowser() {
+		designSystemBrowserOpen = true;
+	}
+
+	function closeDesignSystemBrowser() {
+		designSystemBrowserOpen = false;
+	}
 
 	function handleGlobalKeydown(event: KeyboardEvent) {
 		if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
@@ -56,21 +62,17 @@
 
 	const disco = getDisco();
 
-	const gridItems = $derived<GridItem[]>(
-		seededShuffle<GridItem>(
-			[
-				{ kind: 'disco' as const },
-				{ kind: 'home' as const },
-				{ kind: 'pokemon' as const },
-				{ kind: 'top-languages' as const },
-				{ kind: 'city' as const },
-				...homepageArticles.map((article) => ({ kind: 'article' as const, article })),
-				...homepageProjects.map((project) => ({ kind: 'project' as const, project })),
-				{ kind: 'design-system' as const }
-			],
-			101
-		)
-	);
+	const gridItems: GridItem[] = [
+		{ kind: 'hero' as const },
+		{ kind: 'disco' as const },
+		{ kind: 'home' as const },
+		{ kind: 'pokemon' as const },
+		{ kind: 'top-languages' as const },
+		{ kind: 'city' as const },
+		...homepageArticles.map((article) => ({ kind: 'article' as const, article })),
+		...homepageProjects.map((project) => ({ kind: 'project' as const, project })),
+		{ kind: 'design-system' as const }
+	];
 
 	const articleReaderPanelOpen = $derived(getArticleOpen());
 	const projectReaderPanelOpen = $derived(getProjectOpen());
@@ -113,6 +115,9 @@
 				<HeaderNavItem href="/blog">Essays</HeaderNavItem>
 				<HeaderNavItem href="/about">About</HeaderNavItem>
 			{/if}
+			{#if dev}
+				<HeaderNavItem href="/editor">Editor</HeaderNavItem>
+			{/if}
 			<a
 				href="https://github.com/emzinnia"
 				target="_blank"
@@ -130,24 +135,6 @@
 		class="main-content mx-auto max-w-6xl space-y-12 px-4 py-16"
 		class:panel-open={anyPanelOpen}
 	>
-		<Hero 
-			blendMode={headerBlendMode}
-			depthScale={hero3dParams.depthScale}
-			revealRadius={hero3dParams.revealRadius}
-			parallaxXY={hero3dParams.parallaxXY}
-			parallaxZ={hero3dParams.parallaxZ}
-			splatStretch={hero3dParams.splatStretch}
-			splatCompress={hero3dParams.splatCompress}
-			depthBulge={hero3dParams.depthBulge}
-			contourOffset={hero3dParams.contourOffset}
-			blobAmplitude={hero3dParams.blobAmplitude}
-			noiseAmplitude={hero3dParams.noiseAmplitude}
-			contourInfluence={hero3dParams.contourInfluence}
-			edgeSoftness={hero3dParams.edgeSoftness}
-			saturationBoost={hero3dParams.saturationBoost}
-			contrastBoost={hero3dParams.contrastBoost}
-		/>
-
 		{#if showSectionsEnabled}
 			<MainGrid
 				items={gridItems}
@@ -156,8 +143,11 @@
 				{selectedProjectId}
 				articlePanelOpen={articleReaderPanelOpen}
 				projectPanelOpen={projectReaderPanelOpen}
+				designSystemOpen={designSystemBrowserOpen}
 				onArticleClick={openArticleReader}
 				onProjectClick={openProjectReader}
+				onDesignSystemClick={openDesignSystemBrowser}
+				onDesignSystemClose={closeDesignSystemBrowser}
 			/>
 		{/if}
 	</div>
@@ -179,15 +169,14 @@
 		onclose={() => (debugMenuOpen = false)}
 		bind:headerBlendMode
 	/>
+
 </section>
 
 <style>
-	/* Page container - prevent horizontal scroll when panel is open */
 	.page-container.panel-open {
 		overflow-x: hidden;
 	}
 
-	/* Main content push animation */
 	.main-content {
 		transition:
 			transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
@@ -199,9 +188,7 @@
 		transform: translateX(42%);
 	}
 
-	/* Responsive adjustments */
 	@media (max-width: 768px) {
-		/* Full screen panel on mobile - no push */
 		.main-content.panel-open {
 			transform: none;
 		}
