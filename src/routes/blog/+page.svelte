@@ -89,7 +89,7 @@
 	<div class="blog-container mx-auto max-w-2xl px-6 py-16">
 		<header class="mb-16" in:fade={{ duration: 400 }}>
 			<div class="flex items-center gap-3 mb-4">
-				<span class="inline-block w-8 h-px bg-(--text-muted)"></span>
+				<span class="inline-block w-8 h-[0.0625rem] bg-(--text-muted)"></span>
 				<span class="text-xs uppercase tracking-[0.3em] text-(--text-muted) font-sans"
 					>Writing</span
 				>
@@ -123,7 +123,7 @@
 				<section class="year-section" in:fly={{ y: 20, duration: 400, delay: 150 + yearIndex * 50 }}>
 					<div class="flex items-center gap-4 mb-6">
 						<h2 class="text-sm font-mono text-(--text-muted) tabular-nums">{year}</h2>
-						<span class="flex-1 h-px bg-(--border-color) opacity-50"></span>
+						<span class="flex-1 h-[0.0625rem] bg-(--border-color) opacity-50"></span>
 					</div>
 
 					<ul class="space-y-1">
@@ -143,7 +143,7 @@
 											<span class="hidden sm:inline-flex gap-1.5 ml-3">
 												{#each article.tags.slice(0, 2) as tag}
 													<span
-														class="text-[10px] uppercase tracking-wider text-(--text-muted) font-sans"
+														class="text-[0.625rem] uppercase tracking-wider text-(--text-muted) font-sans"
 													>
 														{tag}
 													</span>
@@ -178,8 +178,8 @@
 		font-size: 0.75rem;
 		text-transform: lowercase;
 		letter-spacing: 0.05em;
-		border-radius: 9999px;
-		border: 1px solid var(--border-color);
+		border-radius: 624.9375rem;
+		border: 0.0625rem solid var(--border-color);
 		background: transparent;
 		color: var(--text-secondary);
 		cursor: pointer;
@@ -211,7 +211,7 @@
 		content: '';
 		position: absolute;
 		left: -1rem;
-		width: 3px;
+		width: 0.1875rem;
 		height: 0;
 		background: var(--text-primary);
 		opacity: 0;

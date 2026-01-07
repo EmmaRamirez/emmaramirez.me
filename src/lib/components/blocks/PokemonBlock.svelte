@@ -1,15 +1,6 @@
 <script lang="ts">
+	import { fetchPokemonDetails, getPokemonSpriteUrl, type PokemonDetails } from '$lib/api/pokemon';
 	import type { Pokemon } from '$lib/website.config';
-
-	type PokemonDetails = {
-		id: number;
-		height: number;
-		weight: number;
-		baseExperience: number;
-		types: string[];
-		abilities: string[];
-		sprite: string | null;
-	};
 
 	interface PokemonBlockProps {
 		team: Pokemon[];
@@ -25,10 +16,6 @@
 	let loadingId = $state<number | null>(null);
 	let error = $state<string | null>(null);
 	let hideTimer: ReturnType<typeof setTimeout> | null = null;
-
-	function getSpriteUrl(id: number): string {
-		return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-	}
 
 	function getAnchorId(id: number) {
 		return `pokemon-anchor-${id}`;
@@ -99,37 +86,7 @@
 		loadingId = id;
 
 		try {
-			const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-
-			if (!response.ok) {
-				throw new Error('Unable to load Pokédex info. Please try again.');
-			}
-
-			const data: {
-				id: number;
-				height: number;
-				weight: number;
-				base_experience: number;
-				types: { type: { name: string } }[];
-				abilities: { ability: { name: string } }[];
-				sprites: {
-					other?: { ['official-artwork']?: { front_default: string | null } };
-					front_default: string | null;
-				};
-			} = await response.json();
-
-			const sprite =
-				data.sprites.other?.['official-artwork']?.front_default ?? data.sprites.front_default;
-
-			detailsCache[id] = {
-				id: data.id,
-				height: data.height,
-				weight: data.weight,
-				baseExperience: data.base_experience,
-				types: data.types.map((type) => type.type.name),
-				abilities: data.abilities.map((ability) => ability.ability.name),
-				sprite
-			};
+			detailsCache[id] = await fetchPokemonDetails(id);
 		} catch (fetchError) {
 			error =
 				fetchError instanceof Error
@@ -178,7 +135,7 @@
 					onblur={() => scheduleHide(pokemon.id)}
 				>
 					<img
-						src={getSpriteUrl(pokemon.id)}
+						src={getPokemonSpriteUrl(pokemon.id)}
 						alt={pokemon.name}
 						class="pokemon-sprite"
 						class:selected={selectedPokemonId === pokemon.id}
@@ -276,8 +233,8 @@
 	}
 
 	.pokemon-sprite {
-		height: 4.75rem;
-		width: 4.75rem;
+		height: 96px;
+		width: 96px;
 		max-width: 100%;
 		object-fit: contain;
 		image-rendering: pixelated;
@@ -290,11 +247,11 @@
 		justify-content: center;
 		gap: 0.4rem;
 		width: 100%;
-		max-width: 7rem;
+		max-width: 120px;
 		aspect-ratio: 1 / 1;
-		padding: 0.75rem;
+		padding: 12px;
 		background: rgba(255, 255, 255, 0.06);
-		border: 1px solid rgba(255, 255, 255, 0.08);
+		border: 0.0625rem solid rgba(255, 255, 255, 0.08);
 		border-radius: 0.75rem;
 		cursor: pointer;
 		appearance: none;
@@ -302,12 +259,12 @@
 	}
 
 	.pokemon-sprite.selected {
-		filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.95));
+		filter: drop-shadow(0 0 0.0625rem rgba(255, 255, 255, 0.95));
 	}
 
 	.pokemon-sprite-container:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+		transform: translateY(-0.125rem);
+		box-shadow: 0 0.625rem 1.5625rem rgba(0, 0, 0, 0.12);
 		background: rgba(255, 255, 255, 0.1);
 	}
 
@@ -316,16 +273,16 @@
 		font-size: 0.95rem;
 		font-weight: 700;
 		color: #fff;
-		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+		text-shadow: 0 0.0625rem 0.0625rem rgba(0, 0, 0, 0.35);
 	}
 
 	.pokemon-popover {
 		position: fixed;
 		padding: 0.5rem 0.75rem;
 		background: var(--page-bg);
-		border: 1px solid var(--border-color);
+		border: 0.0625rem solid var(--border-color);
 		border-radius: 0.5rem;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
 		color: var(--text-primary);
 		margin: 0;
 		inset: unset;
@@ -367,10 +324,10 @@
 		margin-top: 1.5rem;
 		padding: 1rem;
 		border-radius: 0.75rem;
-		border: 1px solid rgba(255, 255, 255, 0.12);
+		border: 0.0625rem solid rgba(255, 255, 255, 0.12);
 		background: rgba(7, 12, 30, 0.35);
 		color: #fff;
-		backdrop-filter: blur(6px);
+		backdrop-filter: blur(0.375rem);
 	}
 
 	.pokemon-inline__header {
@@ -427,7 +384,7 @@
 		text-transform: capitalize;
 	}
 
-	@container pokemon-block (min-height: 500px) {
+	@container pokemon-block (min-height: 31.25rem) {
 		.pokemon-inline {
 			display: block;
 		}

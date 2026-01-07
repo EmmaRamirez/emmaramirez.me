@@ -108,7 +108,7 @@
 	@keyframes modal-in {
 		from {
 			opacity: 0;
-			transform: scale(0.95) translateY(-10px);
+			transform: scale(0.95) translateY(-0.625rem);
 		}
 		to {
 			opacity: 1;

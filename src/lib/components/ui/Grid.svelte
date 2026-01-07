@@ -38,7 +38,7 @@
 		5: 'grid-cols-5',
 		6: 'grid-cols-6',
 		12: 'grid-cols-12',
-		auto: 'grid-cols-[repeat(auto-fit,minmax(200px,1fr))]'
+		auto: 'grid-cols-[repeat(auto-fit,minmax(12.5rem,1fr))]'
 	};
 
 	const colSmClasses: Record<GridCols, string> = {
@@ -49,7 +49,7 @@
 		5: 'sm:grid-cols-5',
 		6: 'sm:grid-cols-6',
 		12: 'sm:grid-cols-12',
-		auto: 'sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]'
+		auto: 'sm:grid-cols-[repeat(auto-fit,minmax(12.5rem,1fr))]'
 	};
 
 	const colMdClasses: Record<GridCols, string> = {
@@ -60,7 +60,7 @@
 		5: 'md:grid-cols-5',
 		6: 'md:grid-cols-6',
 		12: 'md:grid-cols-12',
-		auto: 'md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]'
+		auto: 'md:grid-cols-[repeat(auto-fit,minmax(12.5rem,1fr))]'
 	};
 
 	const colLgClasses: Record<GridCols, string> = {
@@ -71,7 +71,7 @@
 		5: 'lg:grid-cols-5',
 		6: 'lg:grid-cols-6',
 		12: 'lg:grid-cols-12',
-		auto: 'lg:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]'
+		auto: 'lg:grid-cols-[repeat(auto-fit,minmax(12.5rem,1fr))]'
 	};
 
 	const gapClasses: Record<GridGap, string> = {

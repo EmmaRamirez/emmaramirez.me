@@ -14,7 +14,9 @@ export type GridItem =
 	| { kind: 'design-system' }
 	| { kind: 'city' }
 	| { kind: 'pokemon' }
-	| { kind: 'top-languages' };
+	| { kind: 'top-languages' }
+	| { kind: 'location' }
+	| { kind: 'api-explorer' };
 
 export type FeaturedItem =
 	| { kind: 'article'; article: Article }

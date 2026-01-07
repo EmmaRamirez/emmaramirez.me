@@ -26,8 +26,10 @@ function getDefaultLayout(item: GridItem): GridItemLayout {
 	
 	if (item.kind === 'hero') return { key, colSpan: 3, rowSpan: 2 };
 	if (item.kind === 'home') return { key, colSpan: 2, rowSpan: 2 };
+	if (item.kind === 'location') return { key, colSpan: 2, rowSpan: 1 };
 	if (item.kind === 'city') return { key, colSpan: 3, rowSpan: 1 };
 	if (item.kind === 'design-system') return { key, colSpan: 2, rowSpan: 1 };
+	if (item.kind === 'api-explorer') return { key, colSpan: 1, rowSpan: 2 };
 	
 	return { key, colSpan: 1, rowSpan: 1 };
 }

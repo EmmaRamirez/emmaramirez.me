@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArticleReaderPanel, ProjectReaderPanel } from '$lib/components/panels';
+	import { ArticleReaderPanel, Omnibar, ProjectReaderPanel } from '$lib/components/panels';
 	import { DebugMenu } from '$lib/components/dev';
 	import { MainGrid } from '$lib/components/grids';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
@@ -34,6 +34,8 @@
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
 	let designSystemBrowserOpen = $state(false);
+	let apiExplorerOpen = $state(false);
+	let omnibarOpen = $state(false);
 
 	function openDesignSystemBrowser() {
 		designSystemBrowserOpen = true;
@@ -41,6 +43,14 @@
 
 	function closeDesignSystemBrowser() {
 		designSystemBrowserOpen = false;
+	}
+
+	function openApiExplorer() {
+		apiExplorerOpen = true;
+	}
+
+	function closeApiExplorer() {
+		apiExplorerOpen = false;
 	}
 
 	function handleGlobalKeydown(event: KeyboardEvent) {
@@ -66,12 +76,14 @@
 		{ kind: 'hero' as const },
 		{ kind: 'disco' as const },
 		{ kind: 'home' as const },
+		{ kind: 'location' as const },
 		{ kind: 'pokemon' as const },
 		{ kind: 'top-languages' as const },
 		{ kind: 'city' as const },
 		...homepageArticles.map((article) => ({ kind: 'article' as const, article })),
 		...homepageProjects.map((project) => ({ kind: 'project' as const, project })),
-		{ kind: 'design-system' as const }
+		{ kind: 'design-system' as const },
+		{ kind: 'api-explorer' as const }
 	];
 
 	const articleReaderPanelOpen = $derived(getArticleOpen());
@@ -118,6 +130,19 @@
 			{#if dev}
 				<HeaderNavItem href="/editor">Editor</HeaderNavItem>
 			{/if}
+			<button
+				type="button"
+				onclick={() => omnibarOpen = true}
+				class="search-trigger ml-2 flex items-center gap-2 rounded-lg border border-(--border-color) bg-(--surface) px-2.5 py-1.5 text-sm text-(--text-muted) transition-all hover:border-(--text-muted) hover:text-(--text-primary) md:ml-3"
+				aria-label="Open search"
+			>
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="11" cy="11" r="8"/>
+					<path d="m21 21-4.3-4.3"/>
+				</svg>
+				<span class="hidden sm:inline">Search</span>
+				<kbd class="hidden rounded bg-(--page-bg) px-1.5 py-0.5 font-mono text-[0.65rem] text-(--text-muted) sm:inline">⌘K</kbd>
+			</button>
 			<a
 				href="https://github.com/emzinnia"
 				target="_blank"
@@ -131,10 +156,7 @@
 		</HeaderNav>
 	</Header>
 
-	<div
-		class="main-content mx-auto max-w-6xl space-y-12 px-4 py-16"
-		class:panel-open={anyPanelOpen}
-	>
+	<div class="main-content mx-auto max-w-6xl space-y-12 px-4 py-16">
 		{#if showSectionsEnabled}
 			<MainGrid
 				items={gridItems}
@@ -144,10 +166,13 @@
 				articlePanelOpen={articleReaderPanelOpen}
 				projectPanelOpen={projectReaderPanelOpen}
 				designSystemOpen={designSystemBrowserOpen}
+				{apiExplorerOpen}
 				onArticleClick={openArticleReader}
 				onProjectClick={openProjectReader}
 				onDesignSystemClick={openDesignSystemBrowser}
 				onDesignSystemClose={closeDesignSystemBrowser}
+				onApiExplorerOpen={openApiExplorer}
+				onApiExplorerClose={closeApiExplorer}
 			/>
 		{/if}
 	</div>
@@ -170,33 +195,24 @@
 		bind:headerBlendMode
 	/>
 
+	<Omnibar
+		bind:open={omnibarOpen}
+		items={gridItems}
+		onArticleSelect={openArticleReader}
+		onProjectSelect={openProjectReader}
+		onItemSelect={(item) => {
+			if (item.kind === 'design-system') {
+				openDesignSystemBrowser();
+			}
+			if (item.kind === 'api-explorer') {
+				openApiExplorer();
+			}
+		}}
+	/>
 </section>
 
 <style>
 	.page-container.panel-open {
 		overflow-x: hidden;
-	}
-
-	.main-content {
-		transition:
-			transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
-			width 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-		will-change: transform, width;
-	}
-
-	.main-content.panel-open {
-		transform: translateX(42%);
-	}
-
-	@media (max-width: 768px) {
-		.main-content.panel-open {
-			transform: none;
-		}
-	}
-
-	@media (min-width: 1400px) {
-		.main-content.panel-open {
-			transform: translateX(38%);
-		}
 	}
 </style>

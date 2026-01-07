@@ -85,6 +85,32 @@ export function formatShortDate(dateStr: string | undefined): string {
 	});
 }
 
+/**
+ * Format date as a long absolute string (e.g., January 12, 2024).
+ */
+export function formatLongDate(dateStr: string | undefined): string {
+	if (!dateStr) return '';
+
+	return new Date(dateStr).toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric'
+	});
+}
+
+/**
+ * Format date as a short absolute string (e.g., Jan 12, 2024).
+ */
+export function formatShortDateAbsolute(dateStr: string | undefined): string {
+	if (!dateStr) return '';
+
+	return new Date(dateStr).toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric'
+	});
+}
+
 export function parseSVGPath(pathString: string) {
 	const points: Point[] = [];
 	

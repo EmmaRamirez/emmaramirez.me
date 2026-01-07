@@ -47,10 +47,10 @@
 	
 	<span
 		class={cn(
-			"absolute bottom-0 h-[2px] bg-(--caroline-blue-600) transition-all duration-300 ease-out",
+			"absolute bottom-0 h-[0.125rem] bg-(--caroline-blue-600) transition-all duration-300 ease-out",
 			!indicatorStyle.visible && "opacity-0"
 		)}
-		style="left: {indicatorStyle.left}px; width: {indicatorStyle.width}px;"
+		style="left: {indicatorStyle.left / 16}rem; width: {indicatorStyle.width / 16}rem;"
 		aria-hidden="true"
 	></span>
 </nav>

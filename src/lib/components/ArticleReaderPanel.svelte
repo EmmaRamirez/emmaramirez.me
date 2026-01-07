@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getArticles, type ArticleFull } from '$lib/articles';
+	import { formatLongDate } from '$lib/utils';
 	import { fly, fade } from 'svelte/transition';
 
 	interface ArticleReaderPanelProps {
@@ -25,15 +26,6 @@
 	const readingTime = $derived(
 		article ? Math.max(1, Math.ceil(article.frontmatter.description.split(/\s+/).length / 200)) : 0
 	);
-
-	function formatDate(dateStr: string | undefined) {
-		if (!dateStr) return '';
-		return new Date(dateStr).toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		});
-	}
 
 	function handleKeydown(event: KeyboardEvent) {
   if (!open) return;
@@ -144,7 +136,9 @@
 
 				<div class="article-meta">
 					{#if article.frontmatter.date}
-						<time datetime={article.frontmatter.date}>{formatDate(article.frontmatter.date)}</time>
+						<time datetime={article.frontmatter.date}>
+							{formatLongDate(article.frontmatter.date)}
+						</time>
 					{/if}
 					<span class="meta-separator">·</span>
 					<span>{readingTime} min read</span>
@@ -195,13 +189,13 @@
 		top: 0;
 		left: 0;
 		bottom: 0;
-		width: min(1100px, 80vw);
+		width: min(68.75rem, 80vw);
 		background: var(--page-bg);
-		border-right: 1px solid var(--border-color);
+		border-right: 0.0625rem solid var(--border-color);
 		z-index: 60; /* Above sticky header (z-50) */
 		display: flex;
 		flex-direction: column;
-		box-shadow: 8px 0 32px -8px rgba(0, 0, 0, 0.15);
+		box-shadow: 0.5rem 0 2rem -0.5rem rgba(0, 0, 0, 0.15);
 	}
 
 	.panel-header {
@@ -209,7 +203,7 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 0.75rem 1.25rem;
-		border-bottom: 1px solid var(--border-color);
+		border-bottom: 0.0625rem solid var(--border-color);
 		background: var(--page-bg-subtle);
 	}
 
@@ -227,7 +221,7 @@
 		border: none;
 		padding: 0.25rem 0.5rem;
 		margin: -0.25rem -0.5rem;
-		border-radius: 6px;
+		border-radius: 0.375rem;
 		cursor: pointer;
 		transition: background 0.15s ease;
 	}
@@ -241,8 +235,8 @@
 	}
 
 	.hotkey-divider {
-		width: 1px;
-		height: 16px;
+		width: 0.0625rem;
+		height: 1rem;
 		background: var(--border-color);
 	}
 
@@ -257,10 +251,10 @@
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		background: var(--page-bg);
-		border: 1px solid var(--border-color);
-		border-radius: 4px;
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.25rem;
 		color: var(--text-secondary);
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+		box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.08);
 	}
 
 	.key-label {
@@ -273,7 +267,7 @@
 		align-items: center;
 		justify-content: center;
 		padding: 0.5rem;
-		border-radius: 6px;
+		border-radius: 0.375rem;
 		background: transparent;
 		border: none;
 		color: var(--text-muted);
@@ -312,7 +306,7 @@
 		color: var(--text-muted);
 		padding: 0.2rem 0.6rem;
 		background: var(--page-bg-subtle);
-		border-radius: 100px;
+		border-radius: 6.25rem;
 	}
 
 	.article-title {
@@ -386,7 +380,7 @@
 	:global(.article-body) blockquote {
 		margin: 2rem 0;
 		padding: 1.25rem 1.5rem;
-		border-left: 3px solid var(--text-primary);
+		border-left: 0.1875rem solid var(--text-primary);
 		background: var(--page-bg-subtle);
 		font-style: italic;
 		font-size: 1.25rem;
@@ -412,7 +406,7 @@
 	.article-nav {
 		margin-top: 2.5rem;
 		padding-top: 1.5rem;
-		border-top: 1px solid var(--border-color);
+		border-top: 0.0625rem solid var(--border-color);
 	}
 
 	.nav-grid {
@@ -437,7 +431,7 @@
 		border: none;
 		padding: 0.5rem;
 		margin: -0.5rem;
-		border-radius: 8px;
+		border-radius: 0.5rem;
 		cursor: pointer;
 		text-align: inherit;
 		transition: background 0.15s ease;
@@ -466,13 +460,13 @@
 	}
 
 	/* Responsive */
-	@media (max-width: 1024px) {
+	@media (max-width: 64rem) {
 		.article-reader-panel {
-			width: min(720px, 85vw);
+			width: min(45rem, 85vw);
 		}
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 48rem) {
 		.article-reader-panel {
 			width: 100vw;
 		}

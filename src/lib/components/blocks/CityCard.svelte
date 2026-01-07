@@ -25,8 +25,8 @@
 	.city-card {
 		height: 16rem;
 		box-shadow:
-			0 16px 38px rgba(0, 0, 0, 0.16),
-			0 8px 12px rgba(0, 0, 0, 0.12);
+			0 1rem 2.375rem rgba(0, 0, 0, 0.16),
+			0 0.5rem 0.75rem rgba(0, 0, 0, 0.12);
 	}
 
 	.city-image {
@@ -42,15 +42,15 @@
 		bottom: 1rem;
 		left: 1rem;
 		padding: 0.35rem 0.9rem;
-		border-radius: 9999px;
+		border-radius: 624.9375rem;
 		background: color-mix(in srgb, var(--surface) 82%, transparent);
 		color: var(--text-primary);
 		text-transform: uppercase;
 		font-weight: 700;
 		letter-spacing: 0.16em;
 		font-size: 0.72rem;
-		backdrop-filter: blur(6px);
-		border: 1px solid var(--border-color);
+		backdrop-filter: blur(0.375rem);
+		border: 0.0625rem solid var(--border-color);
 	}
 </style>
 

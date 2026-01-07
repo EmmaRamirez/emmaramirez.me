@@ -28,8 +28,8 @@
 	.design-system-ad {
 		background: var(--surface);
 		box-shadow:
-			0 20px 50px rgba(0, 0, 0, 0.25),
-			0 0 0 1px var(--border-color);
+			0 1.25rem 3.125rem rgba(0, 0, 0, 0.25),
+			0 0 0 0.0625rem var(--border-color);
 		position: relative;
 	}
 
@@ -37,9 +37,9 @@
 		position: absolute;
 		inset: 0;
 		background-image:
-			linear-gradient(var(--border-color) 1px, transparent 1px),
-			linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
-		background-size: 20px 20px;
+			linear-gradient(var(--border-color) 0.0625rem, transparent 0.0625rem),
+			linear-gradient(90deg, var(--border-color) 0.0625rem, transparent 0.0625rem);
+		background-size: 1.25rem 1.25rem;
 		opacity: 0.25;
 		pointer-events: none;
 	}
@@ -90,8 +90,8 @@
 		justify-content: center;
 		gap: 0.45rem;
 		padding: 0.75rem 1.5rem;
-		border-radius: 999px;
-		border: 1px solid var(--border-color);
+		border-radius: 62.4375rem;
+		border: 0.0625rem solid var(--border-color);
 		background: var(--accent-primary);
 		color: var(--text-primary);
 		font-weight: 800;
@@ -101,8 +101,8 @@
 		position: relative;
 		overflow: hidden;
 		box-shadow:
-			0 4px 12px rgba(0, 0, 0, 0.15),
-			0 0 0 1px var(--border-color);
+			0 0.25rem 0.75rem rgba(0, 0, 0, 0.15),
+			0 0 0 0.0625rem var(--border-color);
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		cursor: pointer;
 	}
@@ -127,11 +127,11 @@
 	}
 
 	.ad-cta:hover {
-		transform: translateY(-2px) scale(1.02);
+		transform: translateY(-0.125rem) scale(1.02);
 		box-shadow:
-			0 12px 32px rgba(0, 0, 0, 0.25),
-			0 0 0 1px var(--accent-primary),
-			0 0 20px rgba(var(--accent-primary-rgb, 255, 100, 150), 0.3);
+			0 0.75rem 2rem rgba(0, 0, 0, 0.25),
+			0 0 0 0.0625rem var(--accent-primary),
+			0 0 1.25rem rgba(var(--accent-primary-rgb, 255, 100, 150), 0.3);
 		border-color: var(--accent-primary);
 	}
 

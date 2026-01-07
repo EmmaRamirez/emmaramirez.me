@@ -58,33 +58,33 @@
 
 <style>
 	.vintage-ad {
-		min-height: 260px;
+		min-height: 16.25rem;
 	}
 
 	.ad-frame {
 		background: var(--surface, var(--sandy-tan-200));
-		border: 2px solid var(--border-color);
-		border-radius: 6px;
-		padding: 3px;
+		border: 0.125rem solid var(--border-color);
+		border-radius: 0.375rem;
+		padding: 0.1875rem;
 		height: 100%;
 		box-shadow: 
-			inset 0 0 0 1px var(--transit-yellow-600),
-			3px 3px 0 rgba(0,0,0,0.1);
+			inset 0 0 0 0.0625rem var(--transit-yellow-600),
+			0.1875rem 0.1875rem 0 rgba(0,0,0,0.1);
 		position: relative;
 	}
 
 	.ad-frame::before {
 		content: '';
 		position: absolute;
-		inset: 6px;
-		border: 1px dashed var(--border-color);
+		inset: 0.375rem;
+		border: 0.0625rem dashed var(--border-color);
 		opacity: 0.25;
 		pointer-events: none;
 	}
 
 	.ad-content {
 		background: var(--card-bg, var(--sandy-tan-300));
-		padding: 14px 12px;
+		padding: 0.875rem 0.75rem;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
@@ -94,40 +94,40 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 8px;
-		margin-bottom: 6px;
+		gap: 0.5rem;
+		margin-bottom: 0.375rem;
 	}
 
 	.banner-wing {
-		font-size: 7px;
+		font-size: 0.4375rem;
 		color: var(--transit-yellow-800);
-		letter-spacing: 2px;
+		letter-spacing: 0.125rem;
 	}
 
 	.banner-text {
-		font-size: 9px;
+		font-size: 0.5625rem;
 		font-weight: 600;
-		letter-spacing: 2px;
+		letter-spacing: 0.125rem;
 		text-transform: uppercase;
 		color: var(--text-muted);
 	}
 
 	.headline-section {
 		text-align: center;
-		margin-bottom: 10px;
+		margin-bottom: 0.625rem;
 	}
 
 	.pre-headline {
-		font-size: 10px;
+		font-size: 0.625rem;
 		font-style: italic;
 		color: var(--text-secondary);
-		margin-bottom: 2px;
+		margin-bottom: 0.125rem;
 	}
 
 	.main-headline {
-		font-size: 20px;
+		font-size: 1.25rem;
 		font-weight: 700;
-		letter-spacing: 3px;
+		letter-spacing: 0.1875rem;
 		text-transform: uppercase;
 		color: var(--text-primary);
 		margin: 0;
@@ -136,26 +136,26 @@
 
 	.headline-underline {
 		width: 70%;
-		height: 2px;
+		height: 0.125rem;
 		background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-		margin: 6px auto 0;
+		margin: 0.375rem auto 0;
 	}
 
 	.languages-list {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
+		gap: 0.3125rem;
 	}
 
 	.language-row {
 		display: flex;
 		align-items: center;
-		gap: 8px;
-		padding: 5px 6px;
+		gap: 0.5rem;
+		padding: 0.3125rem 0.375rem;
 		background: color-mix(in srgb, var(--surface) 60%, transparent);
-		border: 1px solid color-mix(in srgb, var(--border-color) 30%, transparent);
-		border-radius: 4px;
+		border: 0.0625rem solid color-mix(in srgb, var(--border-color) 30%, transparent);
+		border-radius: 0.25rem;
 		transition: all 0.15s ease;
 	}
 
@@ -165,45 +165,45 @@
 	}
 
 	.rank-badge {
-		font-size: 10px;
+		font-size: 0.625rem;
 		font-weight: 600;
 		color: var(--text-muted);
-		min-width: 20px;
+		min-width: 1.25rem;
 	}
 
 	.language-info {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 3px;
+		gap: 0.1875rem;
 	}
 
 	.language-name {
 		font-weight: 600;
-		font-size: 12px;
+		font-size: 0.75rem;
 		color: var(--text-primary);
-		letter-spacing: 0.3px;
+		letter-spacing: 0.01875rem;
 	}
 
 	.progress-bar {
-		height: 4px;
+		height: 0.25rem;
 		background: color-mix(in srgb, var(--border-color) 30%, transparent);
-		border-radius: 2px;
+		border-radius: 0.125rem;
 		overflow: hidden;
 	}
 
 	.progress-fill {
 		height: 100%;
 		background: var(--lang-color);
-		border-radius: 2px;
+		border-radius: 0.125rem;
 		transition: width 0.4s ease;
 	}
 
 	.percentage-badge {
-		font-size: 11px;
+		font-size: 0.6875rem;
 		font-weight: 700;
 		color: var(--text-secondary);
-		min-width: 32px;
+		min-width: 2rem;
 		text-align: right;
 		font-variant-numeric: tabular-nums;
 	}
@@ -212,18 +212,18 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 8px;
-		margin-top: 10px;
+		gap: 0.5rem;
+		margin-top: 0.625rem;
 	}
 
 	.divider-dot {
-		font-size: 5px;
+		font-size: 0.3125rem;
 		color: var(--transit-yellow-700);
 	}
 
 	.divider-line {
-		width: 40px;
-		height: 1px;
+		width: 2.5rem;
+		height: 0.0625rem;
 		background: var(--border-color);
 		opacity: 0.3;
 	}

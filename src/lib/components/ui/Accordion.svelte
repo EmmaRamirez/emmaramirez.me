@@ -104,7 +104,7 @@
 		}
 		to {
 			opacity: 1;
-			max-height: 500px;
+			max-height: 31.25rem;
 		}
 	}
 

@@ -12,3 +12,13 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model DebugSettings {
+  id                 String   @id @default(cuid())
+  key                String   @unique
+  headerBlendMode    String
+  showSectionsEnabled Boolean
+  hero3dParams       Json
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}

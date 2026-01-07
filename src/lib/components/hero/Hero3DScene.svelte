@@ -26,6 +26,14 @@
 		edgeSoftness?: number;
 		saturationBoost?: number;
 		contrastBoost?: number;
+		// Water effect parameters
+		rippleSpeed?: number;
+		rippleFrequency?: number;
+		rippleAmplitude?: number;
+		causticScale?: number;
+		causticSpeed?: number;
+		causticIntensity?: number;
+		waterDistortion?: number;
 	}
 
 	let { 
@@ -45,7 +53,15 @@
 		contourInfluence = 0.6,
 		edgeSoftness = 0.06,
 		saturationBoost = 1.15,
-		contrastBoost = 1.05
+		contrastBoost = 1.05,
+		// Water effect defaults
+		rippleSpeed = 0.8,
+		rippleFrequency = 12.0,
+		rippleAmplitude = 0.015,
+		causticScale = 8.0,
+		causticSpeed = 0.4,
+		causticIntensity = 0.12,
+		waterDistortion = 0.0008
 	}: Props = $props();
 
 	const { renderer } = useThrelte();
@@ -87,7 +103,15 @@
 		contourInfluence: 0.6,
 		edgeSoftness: 0.06,
 		saturationBoost: 1.15,
-		contrastBoost: 1.05
+		contrastBoost: 1.05,
+		// Water effect refs
+		rippleSpeed: 0.8,
+		rippleFrequency: 12.0,
+		rippleAmplitude: 0.015,
+		causticScale: 8.0,
+		causticSpeed: 0.4,
+		causticIntensity: 0.12,
+		waterDistortion: 0.008
 	};
 
 	$effect(() => {
@@ -111,6 +135,14 @@
 		refs.edgeSoftness = edgeSoftness;
 		refs.saturationBoost = saturationBoost;
 		refs.contrastBoost = contrastBoost;
+		// Water effects
+		refs.rippleSpeed = rippleSpeed;
+		refs.rippleFrequency = rippleFrequency;
+		refs.rippleAmplitude = rippleAmplitude;
+		refs.causticScale = causticScale;
+		refs.causticSpeed = causticSpeed;
+		refs.causticIntensity = causticIntensity;
+		refs.waterDistortion = waterDistortion;
 	});
 
 	useTask((delta) => {
@@ -140,13 +172,21 @@
 			shaderMaterialRef.uniforms.uEdgeSoftness.value = refs.edgeSoftness;
 			shaderMaterialRef.uniforms.uSaturationBoost.value = refs.saturationBoost;
 			shaderMaterialRef.uniforms.uContrastBoost.value = refs.contrastBoost;
+			// Water effects
+			shaderMaterialRef.uniforms.uRippleSpeed.value = refs.rippleSpeed;
+			shaderMaterialRef.uniforms.uRippleFrequency.value = refs.rippleFrequency;
+			shaderMaterialRef.uniforms.uRippleAmplitude.value = refs.rippleAmplitude;
+			shaderMaterialRef.uniforms.uCausticScale.value = refs.causticScale;
+			shaderMaterialRef.uniforms.uCausticSpeed.value = refs.causticSpeed;
+			shaderMaterialRef.uniforms.uCausticIntensity.value = refs.causticIntensity;
+			shaderMaterialRef.uniforms.uWaterDistortion.value = refs.waterDistortion;
 		}
 	});
 
 	// Image aspect ratio (me.jpeg is 3024x4032 - portrait)
 	const imageAspect = 3024 / 4032; // ~0.75 (portrait)
 	
-	// Container dimensions: 55% of hero width (which varies), 320px height
+	// Container dimensions: 55% of hero width (which varies), 20rem height
 	// We'll use a reasonable estimate and the shader will handle the UV mapping
 	// The key is that the plane fills the OrthographicCamera frustum exactly
 	const containerAspect = 1.8; // Approximate, the ortho camera will fill the canvas
@@ -201,7 +241,15 @@
 				uContrastBoost: { value: contrastBoost },
 				// UV scale/offset for "cover" behavior
 				uVScale: { value: vScale },
-				uVOffset: { value: vOffset }
+				uVOffset: { value: vOffset },
+				// Water effect uniforms
+				uRippleSpeed: { value: rippleSpeed },
+				uRippleFrequency: { value: rippleFrequency },
+				uRippleAmplitude: { value: rippleAmplitude },
+				uCausticScale: { value: causticScale },
+				uCausticSpeed: { value: causticSpeed },
+				uCausticIntensity: { value: causticIntensity },
+				uWaterDistortion: { value: waterDistortion }
 			},
 			vertexShader,
 			fragmentShader,
@@ -278,6 +326,14 @@
 		uniform float uEdgeSoftness;
 		uniform float uSaturationBoost;
 		uniform float uContrastBoost;
+		// Water effect uniforms
+		uniform float uRippleSpeed;
+		uniform float uRippleFrequency;
+		uniform float uRippleAmplitude;
+		uniform float uCausticScale;
+		uniform float uCausticSpeed;
+		uniform float uCausticIntensity;
+		uniform float uWaterDistortion;
 		
 		varying vec2 vUv;
 		varying vec2 vRawUv;
@@ -316,20 +372,30 @@
 		}
 		
 		void main() {
-			// Sample both textures using scaled UVs
-			vec4 color1 = texture2D(uTexture1, vUv);
-			vec4 color2 = texture2D(uTexture2, vUv);
+			// ===== UNDERWATER UV DISTORTION =====
+			// Create flowing water distortion before sampling textures
+			vec2 waterOffset = vec2(
+				snoise(vUv * 3.0 + vec2(uTime * 0.2, 0.0)),
+				snoise(vUv * 3.0 + vec2(100.0, uTime * 0.15))
+			) * uWaterDistortion * uProgress;
+			
+			// Apply distortion to UVs
+			vec2 distortedUv = vUv + waterOffset;
+			
+			// Sample both textures using distorted UVs
+			vec4 color1 = texture2D(uTexture1, distortedUv);
+			vec4 color2 = texture2D(uTexture2, distortedUv);
 			
 			// Sample depth at this fragment (closer objects = higher value = lighter in depth map)
-			float depth = texture2D(uDepth1, vUv).r;
+			float depth = texture2D(uDepth1, distortedUv).r;
 			
 			// Calculate depth gradient for edge warping
 			// Sample neighboring depth values to get the surface normal direction
 			float texelSize = 0.005;
-			float depthLeft = texture2D(uDepth1, vUv - vec2(texelSize, 0.0)).r;
-			float depthRight = texture2D(uDepth1, vUv + vec2(texelSize, 0.0)).r;
-			float depthUp = texture2D(uDepth1, vUv + vec2(0.0, texelSize)).r;
-			float depthDown = texture2D(uDepth1, vUv - vec2(0.0, texelSize)).r;
+			float depthLeft = texture2D(uDepth1, distortedUv - vec2(texelSize, 0.0)).r;
+			float depthRight = texture2D(uDepth1, distortedUv + vec2(texelSize, 0.0)).r;
+			float depthUp = texture2D(uDepth1, distortedUv + vec2(0.0, texelSize)).r;
+			float depthDown = texture2D(uDepth1, distortedUv - vec2(0.0, texelSize)).r;
 			
 			// Depth gradient (surface normal in screen space)
 			vec2 depthGradient = vec2(depthRight - depthLeft, depthUp - depthDown);
@@ -374,35 +440,62 @@
 			float dist = length(splatCoords);
 			float angle = atan(splatCoords.y, splatCoords.x);
 			
-			// ===== SMOOTH ORGANIC BLOB SHAPE =====
+			// ===== RIPPLE WAVES =====
+			// Concentric waves emanating outward from mouse position
+			float ripplePhase = baseDist * uRippleFrequency - uTime * uRippleSpeed;
+			float ripple = sin(ripplePhase) * uRippleAmplitude * uProgress;
+			// Secondary ripple for more complex water surface
+			float ripple2 = sin(ripplePhase * 1.7 + 1.0) * uRippleAmplitude * 0.5 * uProgress;
+			float totalRipple = ripple + ripple2;
 			
-			// Very smooth, low-frequency noise for soft edges
+			// ===== FLUID EDGE - ENHANCED WATERY BLOB SHAPE =====
+			
+			// Multiple layers of flowing noise for liquid edge
 			float blob = 0.0;
 			
-			// Primary shape - very smooth sine wave
-			blob += sin(angle * 1.0 + uTime * 0.15) * uBlobAmplitude;
-			blob += sin(angle * 2.0 - uTime * 0.1 + depth * 1.5) * (uBlobAmplitude * 0.67);
+			// Primary flowing wave - slow undulation
+			blob += sin(angle * 1.0 + uTime * 0.25) * uBlobAmplitude;
+			blob += sin(angle * 2.0 - uTime * 0.18 + depth * 1.5) * (uBlobAmplitude * 0.67);
 			
-			// Gentle organic variation - single low frequency noise
-			blob += snoise(vec2(angle * 0.8 + uTime * 0.1, dist * 1.5)) * uNoiseAmplitude;
+			// Layered noise for fluid turbulence
+			blob += snoise(vec2(angle * 0.8 + uTime * 0.15, dist * 1.5)) * uNoiseAmplitude;
+			blob += snoise(vec2(angle * 1.5 - uTime * 0.2, dist * 2.5 + uTime * 0.1)) * uNoiseAmplitude * 0.6;
+			blob += snoise(vec2(angle * 2.5 + uTime * 0.3, dist * 4.0)) * uNoiseAmplitude * 0.3;
 			
 			// Depth-aware contouring - blob edge follows 3D form
 			float contourInfluenceVal = gradientStrength * uContourInfluence;
-			blob += contourInfluenceVal * sin(angle * 1.5 + depth * 3.0 + uTime * 0.2);
+			blob += contourInfluenceVal * sin(angle * 1.5 + depth * 3.0 + uTime * 0.25);
 			
-			// Blob-distorted distance
-			float blobDist = dist + blob * uProgress;
+			// Add ripple influence to blob edge for watery feel
+			blob += totalRipple * 0.5;
 			
-			// Create blob mask - very soft edge for smooth look
+			// Blob-distorted distance with ripple influence
+			float blobDist = dist + blob * uProgress + totalRipple;
+			
+			// Create blob mask - soft edge with ripple modulation
 			float revealSize = uRevealRadius * uProgress;
-			float mask = smoothstep(revealSize + uEdgeSoftness, revealSize - (uEdgeSoftness * 0.83), blobDist);
+			float edgeSoftnessModulated = uEdgeSoftness + abs(totalRipple) * 2.0;
+			float mask = smoothstep(revealSize + edgeSoftnessModulated, revealSize - (edgeSoftnessModulated * 0.83), blobDist);
 			
 			// Mix textures with depth-warped blob mask
 			vec4 finalColor = mix(color1, color2, mask);
 			
+			// ===== CAUSTIC LIGHT PATTERNS =====
+			// Shimmering light like sunlight through water
+			float caustic1 = snoise(distortedUv * uCausticScale + vec2(uTime * uCausticSpeed, 0.0));
+			float caustic2 = snoise(distortedUv * uCausticScale * 1.3 + vec2(0.0, uTime * uCausticSpeed * 0.8));
+			float caustic3 = snoise(distortedUv * uCausticScale * 0.7 - vec2(uTime * uCausticSpeed * 0.5, uTime * uCausticSpeed * 0.3));
+			
+			// Combine caustics with sharp bright spots
+			float causticPattern = caustic1 * caustic2 + caustic2 * caustic3;
+			causticPattern = pow(abs(causticPattern), 1.5) * uCausticIntensity;
+			
+			// Apply caustics mainly to revealed area (robot texture)
+			vec3 rgb = finalColor.rgb;
+			rgb += causticPattern * mask * uProgress * vec3(0.9, 0.95, 1.0);
+			
 			// Color correction for accurate reproduction
 			// Boost saturation to match source vibrancy
-			vec3 rgb = finalColor.rgb;
 			float luminance = dot(rgb, vec3(0.299, 0.587, 0.114));
 			rgb = mix(vec3(luminance), rgb, uSaturationBoost);
 			

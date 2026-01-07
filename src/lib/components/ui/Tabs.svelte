@@ -70,7 +70,7 @@
 				aria-controls="tabpanel-{tab.id}"
 				tabindex={activeTab === tab.id ? 0 : -1}
 				disabled={tab.disabled}
-				class="px-4 py-2.5 text-sm font-medium transition-colors relative -mb-[2px]
+				class="px-4 py-2.5 text-sm font-medium transition-colors relative -mb-[0.125rem]
 					{activeTab === tab.id 
 						? 'text-[var(--caroline-blue-700)] border-b-2 border-[var(--caroline-blue-700)] bg-[var(--sandy-tan-200)]' 
 						: 'text-[var(--liver-brown-600)] hover:text-[var(--liver-brown-800)] hover:bg-[var(--sandy-tan-400)] border-b-2 border-transparent'}

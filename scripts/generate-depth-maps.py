@@ -25,13 +25,10 @@ except ImportError as e:
 
 
 def generate_depth_maps():
-    """Generate depth maps for hero images."""
-    # Get the project root (parent of scripts directory)
     script_dir = Path(__file__).parent
     project_root = script_dir.parent
     hero_dir = project_root / "src" / "lib" / "images" / "photos" / "hero"
 
-    # Images to process
     images = [
         ("me.jpeg", "me-depth.png"),
         ("me-robot.png", "me-robot-depth.png"),
@@ -40,8 +37,6 @@ def generate_depth_maps():
     print("Initializing Depth Anything V2 model...")
     print("(This may take a moment on first run as the model downloads)")
     
-    # Initialize the depth estimation pipeline
-    # Using the Small model for faster inference - can use Base or Large for higher quality
     pipe = pipeline(
         task="depth-estimation",
         model="depth-anything/Depth-Anything-V2-Small-hf"
@@ -56,19 +51,14 @@ def generate_depth_maps():
             continue
 
         print(f"Processing {input_name}...")
-        
-        # Load the image
+
         image = Image.open(input_path)
-        
-        # Generate depth map
         result = pipe(image)
         depth_image = result["depth"]
-        
-        # Convert to grayscale if not already
+
         if depth_image.mode != "L":
             depth_image = depth_image.convert("L")
-        
-        # Save the depth map
+
         depth_image.save(output_path)
         print(f"  -> Saved {output_name}")
 

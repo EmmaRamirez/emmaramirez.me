@@ -116,7 +116,7 @@
 	@keyframes toast-in {
 		from {
 			opacity: 0;
-			transform: translateY(10px);
+			transform: translateY(0.625rem);
 		}
 		to {
 			opacity: 1;

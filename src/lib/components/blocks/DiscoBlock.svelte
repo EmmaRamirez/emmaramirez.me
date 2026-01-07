@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { ImageBlock } from '$lib/components/blocks';
+	import { discoParams } from '$lib/registry/discoParams';
 
 	interface DiscoBlockProps {
 		image: string;
@@ -55,17 +56,17 @@
 	let nextBallId = $state(1);
 	let fadeOut = $state(0);
 
-	const SAMPLE_HISTORY_SIZE = 12;
+	const SAMPLE_HISTORY_SIZE = discoParams.sampleHistorySize;
 	let cursorHistory: CursorSample[] = $state([]);
 	let volatility = $state(0);
 	let targetVolatility = $state(0);
 
-	const MIN_BEAMS = 60;
-	const MAX_BEAMS = 800;
-	const CLICK_BEAM_COUNT = 420;
-	const CLICK_BASE_VOLATILITY = 0.7;
-	const VOLATILITY_SMOOTHING = 0.15;
-	const VOLATILITY_DECAY = 0.92;
+	const MIN_BEAMS = discoParams.minBeams;
+	const MAX_BEAMS = discoParams.maxBeams;
+	const CLICK_BEAM_COUNT = discoParams.clickBeamCount;
+	const CLICK_BASE_VOLATILITY = discoParams.clickBaseVolatility;
+	const VOLATILITY_SMOOTHING = discoParams.volatilitySmoothing;
+	const VOLATILITY_DECAY = discoParams.volatilityDecay;
 
 	function shouldAnimate() {
 		return isHovering || discoBalls.length > 0 || fadeOut > 0.01 || volatility > 0.01;
@@ -316,8 +317,8 @@
 
 		canvas.width = bounds.width * dpr;
 		canvas.height = bounds.height * dpr;
-		canvas.style.width = `${bounds.width}px`;
-		canvas.style.height = `${bounds.height}px`;
+		canvas.style.width = `${bounds.width / 16}rem`;
+		canvas.style.height = `${bounds.height / 16}rem`;
 
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		ctx.scale(dpr, dpr);
@@ -428,7 +429,7 @@
 	{#if isHovering}
 		<div
 			class="disco-cursor pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full z-30"
-			style={`left:${cursorX}px;top:${cursorY}px;`}
+			style={`left:${cursorX / 16}rem;top:${cursorY / 16}rem;`}
 		></div>
 	{/if}
 </div>
@@ -447,22 +448,22 @@
 	}
 
 	.disco-cursor {
-		width: 40px;
-		height: 40px;
-		box-shadow: 0 0 25px rgba(255, 255, 255, 0.9);
+		width: 2.5rem;
+		height: 2.5rem;
+		box-shadow: 0 0 1.5625rem rgba(255, 255, 255, 0.9);
 
 		background:
 			/* highlight */ radial-gradient(circle at 30% 20%, #ffffff 0, #ffffff 25%, rgba(255, 255, 255, 0) 45%),
 			/* bottom shadow */ radial-gradient(circle at 50% 80%, rgba(0, 0, 0, 0.5) 0, rgba(0, 0, 0, 0) 60%),
-			/* vertical tiles */ linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
-			/* horizontal tiles */ linear-gradient(180deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+			/* vertical tiles */ linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0.0625rem, transparent 0.0625rem),
+			/* horizontal tiles */ linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0.0625rem, transparent 0.0625rem),
 			/* base sphere */ radial-gradient(circle, #d7e0ff 0, #8f96ff 40%, #3c3f7a 70%, #0a0b1d 100%);
 
 		background-size:
 			100% 100%,
 			100% 100%,
-			6px 6px,
-			6px 6px,
+			0.375rem 0.375rem,
+			0.375rem 0.375rem,
 			100% 100%;
 
 		background-repeat:
@@ -475,4 +476,3 @@
 		animation: disco-glint 1.8s ease-in-out infinite;
 	}
 </style>
-

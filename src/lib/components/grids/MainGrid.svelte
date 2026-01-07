@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import {
+		ApiExplorerBlock,
+		ArticleCard,
 		DiscoBlock,
 		HomeBlock,
+		LocationBlock,
 		PokemonBlock,
 		ProjectBlock,
 		TopLanguages,
@@ -25,10 +28,13 @@
 		articlePanelOpen: boolean;
 		projectPanelOpen: boolean;
 		designSystemOpen: boolean;
+		apiExplorerOpen: boolean;
 		onArticleClick: (articleId: string) => void;
 		onProjectClick: (projectId: ProjectId) => void;
 		onDesignSystemClick?: () => void;
 		onDesignSystemClose?: () => void;
+		onApiExplorerOpen?: () => void;
+		onApiExplorerClose?: () => void;
 	}
 
 	let {
@@ -39,10 +45,13 @@
 		articlePanelOpen,
 		projectPanelOpen,
 		designSystemOpen,
+		apiExplorerOpen,
 		onArticleClick,
 		onProjectClick,
 		onDesignSystemClick,
-		onDesignSystemClose
+		onDesignSystemClose,
+		onApiExplorerOpen,
+		onApiExplorerClose
 	}: Props = $props();
 
 	const orderedItems = $derived(gridLayoutStore.reorderItems(items));
@@ -55,6 +64,11 @@
 		const key = getItemKey(item);
 		const layout = gridLayoutStore.getLayout(key);
 		if (!layout) return '';
+		
+		// API Explorer expands to 2x2 when open
+		if (item.kind === 'api-explorer' && apiExplorerOpen) {
+			return 'md:col-span-2 row-span-2';
+		}
 		
 		const colClasses = {
 			1: '',
@@ -70,14 +84,6 @@
 		return `${colClasses[layout.colSpan]} ${rowClasses[layout.rowSpan]}`.trim();
 	}
 
-	function formatDate(dateStr: string | undefined) {
-		if (!dateStr) return '';
-		return new Date(dateStr).toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		});
-	}
 </script>
 
 <section aria-label="Essays, projects, and experiments" class="space-y-4">
@@ -90,27 +96,15 @@
 					{#if item.kind === 'hero'}
 						<Hero />
 					{:else if item.kind === 'article'}
-						<button
-							type="button"
-							onclick={() => onArticleClick(item.article.id)}
-							class="article-card style-none flex h-full w-full flex-col gap-2 rounded-lg p-4 text-left transition-all duration-200 hover:bg-(--surface-hover) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--text-primary) focus-visible:ring-offset-2"
-							class:article-card-active={selectedArticleId === item.article.id && articlePanelOpen}
-						>
-							<span class="text-xs font-semibold uppercase tracking-[0.18em] text-(--text-secondary)">
-								Article
-							</span>
-							<span class="text-lg leading-snug font-semibold text-(--text-primary)">
-								{item.article.title}
-							</span>
-							{#if item.article.date}
-								<time class="text-sm text-(--text-secondary)" datetime={item.article.date}>
-									{formatDate(item.article.date)}
-								</time>
-							{/if}
-							<p class="line-clamp-4 text-base leading-relaxed text-(--text-muted)">
-								{item.article.content}
-							</p>
-						</button>
+						<ArticleCard
+							variant="main"
+							title={item.article.title}
+							content={item.article.content}
+							date={item.article.date}
+							tags={item.article.tags}
+							active={selectedArticleId === item.article.id && articlePanelOpen}
+							onselect={() => onArticleClick(item.article.id)}
+						/>
 					{:else if item.kind === 'project'}
 						<button
 							type="button"
@@ -119,10 +113,12 @@
 							class:project-card-active={selectedProjectId === item.project.id && projectPanelOpen}
 						>
 							<ProjectBlock
+								id={item.project.id}
 								title={item.project.title}
 								pill={item.project.pill}
 								class={item.project.class}
 								contentClassName={item.project.contentClassName}
+								imageClassName={item.project.imageClassName}
 							>
 								{#snippet description()}
 									{item.project.description}
@@ -156,6 +152,15 @@
 						{/if}
 					{:else if item.kind === 'top-languages'}
 						<TopLanguages class="h-full w-full" />
+					{:else if item.kind === 'location'}
+						<LocationBlock class="h-full w-full" />
+					{:else if item.kind === 'api-explorer'}
+						<ApiExplorerBlock 
+							open={apiExplorerOpen} 
+							onopen={onApiExplorerOpen}
+							onclose={onApiExplorerClose}
+							class="h-full w-full" 
+						/>
 					{/if}
 				</div>
 			</li>
@@ -171,24 +176,6 @@
 	.grid-item-content {
 		height: 100%;
 		width: 100%;
-	}
-
-	.article-card {
-		cursor: pointer;
-		border: 1px solid var(--border-color);
-		background: var(--surface);
-		transition: border-color 0.2s ease, box-shadow 0.2s ease;
-	}
-
-	.article-card:hover {
-		border-color: var(--text-muted);
-		box-shadow: 0 0 0 1px var(--text-muted);
-	}
-
-	.article-card-active {
-		background: var(--surface-hover);
-		border-color: var(--text-muted);
-		box-shadow: 0 0 0 1px var(--text-muted);
 	}
 
 	.project-card {

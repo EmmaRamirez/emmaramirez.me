@@ -42,7 +42,7 @@ Content stays readable. Images break free. Simple, elegant, bulletproof.
 ```css
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(18.75rem, 1fr));
   gap: 1.5rem;
 }
 ```
@@ -59,7 +59,7 @@ No media queries. Cards flow naturally. The browser figures it out.
     "sidebar main"
     "footer footer";
   grid-template-rows: auto 1fr auto;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: 15.625rem 1fr;
 }
 ```
 

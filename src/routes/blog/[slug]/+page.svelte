@@ -50,7 +50,7 @@
 </svelte:head>
 
 <div
-	class="fixed top-0 left-0 h-[3px] bg-(--text-primary) z-50 transition-all duration-75"
+	class="fixed top-0 left-0 h-[0.1875rem] bg-(--text-primary) z-50 transition-all duration-75"
 	style="width: {scrollProgress}%"
 ></div>
 
@@ -115,7 +115,7 @@
 							{#each data.tags as tag}
 								<a
 									href={`/blog?tag=${tag}`}
-									class="style-none text-[11px] uppercase tracking-[0.2em] text-(--text-muted) hover:text-(--text-primary) transition-colors font-sans"
+									class="style-none text-[0.6875rem] uppercase tracking-[0.2em] text-(--text-muted) hover:text-(--text-primary) transition-colors font-sans"
 								>
 									{tag}
 								</a>
@@ -240,7 +240,7 @@
 	.prose-custom :global(blockquote) {
 		margin: 2.5rem 0;
 		padding: 1.5rem 2rem;
-		border-left: 3px solid var(--text-primary);
+		border-left: 0.1875rem solid var(--text-primary);
 		background: var(--page-bg-subtle);
 		font-style: italic;
 		font-size: 1.25rem;
@@ -265,8 +265,8 @@
 	.prose-custom :global(a) {
 		color: var(--text-primary);
 		text-decoration: underline;
-		text-decoration-thickness: 1px;
-		text-underline-offset: 3px;
+		text-decoration-thickness: 0.0625rem;
+		text-underline-offset: 0.1875rem;
 		transition: text-decoration-color 0.2s ease;
 	}
 
@@ -325,7 +325,7 @@
 	.prose-custom :global(hr) {
 		margin: 3rem 0;
 		border: none;
-		border-top: 1px solid var(--border-color);
+		border-top: 0.0625rem solid var(--border-color);
 	}
 </style>
 

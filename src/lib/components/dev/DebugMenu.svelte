@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { Modal, Select, Switch, Slider } from '$lib/components/ui';
+	import { discoParams } from '$lib/registry/discoParams';
 	import { showSections } from '$lib/stores';
 	import { hero3dParams } from '$lib/stores/hero3dParams.svelte';
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		open: boolean;
@@ -59,6 +62,116 @@
 	let saturationBoost = $state(hero3dParams.saturationBoost);
 	let contrastBoost = $state(hero3dParams.contrastBoost);
 
+	const discoParamEntries: Array<{ label: string; value: number }> = [
+		{ label: 'Sample history size', value: discoParams.sampleHistorySize },
+		{ label: 'Min beams', value: discoParams.minBeams },
+		{ label: 'Max beams', value: discoParams.maxBeams },
+		{ label: 'Click beam count', value: discoParams.clickBeamCount },
+		{ label: 'Click base volatility', value: discoParams.clickBaseVolatility },
+		{ label: 'Volatility smoothing', value: discoParams.volatilitySmoothing },
+		{ label: 'Volatility decay', value: discoParams.volatilityDecay }
+	];
+
+	let hasLoadedSettings = $state(false);
+	let saveTimeout: ReturnType<typeof setTimeout> | null = null;
+
+	function getSettingsPayload() {
+		return {
+			headerBlendMode,
+			showSectionsEnabled,
+			hero3dParams: {
+				depthScale,
+				revealRadius,
+				parallaxXY,
+				parallaxZ,
+				splatStretch,
+				splatCompress,
+				depthBulge,
+				contourOffset,
+				blobAmplitude,
+				noiseAmplitude,
+				contourInfluence,
+				edgeSoftness,
+				saturationBoost,
+				contrastBoost
+			}
+		};
+	}
+
+	async function saveSettings() {
+		if (!browser) return;
+		saveTimeout = null;
+
+		await fetch('/api/debug-settings', {
+			method: 'PUT',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify(getSettingsPayload())
+		});
+	}
+
+	function scheduleSave() {
+		if (!browser || !hasLoadedSettings) return;
+		if (saveTimeout) clearTimeout(saveTimeout);
+		saveTimeout = setTimeout(saveSettings, 500);
+	}
+
+	onMount(async () => {
+		if (!browser) return;
+		const response = await fetch('/api/debug-settings');
+		if (!response.ok) {
+			hasLoadedSettings = true;
+			return;
+		}
+
+		const { settings } = (await response.json()) as {
+			settings: {
+				headerBlendMode: string;
+				showSectionsEnabled: boolean;
+				hero3dParams: {
+					depthScale: number;
+					revealRadius: number;
+					parallaxXY: number;
+					parallaxZ: number;
+					splatStretch: number;
+					splatCompress: number;
+					depthBulge: number;
+					contourOffset: number;
+					blobAmplitude: number;
+					noiseAmplitude: number;
+					contourInfluence: number;
+					edgeSoftness: number;
+					saturationBoost: number;
+					contrastBoost: number;
+				};
+			} | null;
+		};
+
+		if (settings) {
+			headerBlendMode = settings.headerBlendMode ?? headerBlendMode;
+			setShowSectionsEnabled(Boolean(settings.showSectionsEnabled));
+
+			const hero = settings.hero3dParams;
+			if (hero) {
+				depthScale = hero.depthScale ?? depthScale;
+				revealRadius = hero.revealRadius ?? revealRadius;
+				parallaxXY = hero.parallaxXY ?? parallaxXY;
+				parallaxZ = hero.parallaxZ ?? parallaxZ;
+				splatStretch = hero.splatStretch ?? splatStretch;
+				splatCompress = hero.splatCompress ?? splatCompress;
+				depthBulge = hero.depthBulge ?? depthBulge;
+				contourOffset = hero.contourOffset ?? contourOffset;
+				blobAmplitude = hero.blobAmplitude ?? blobAmplitude;
+				noiseAmplitude = hero.noiseAmplitude ?? noiseAmplitude;
+				contourInfluence = hero.contourInfluence ?? contourInfluence;
+				edgeSoftness = hero.edgeSoftness ?? edgeSoftness;
+				saturationBoost = hero.saturationBoost ?? saturationBoost;
+				contrastBoost = hero.contrastBoost ?? contrastBoost;
+			}
+		}
+
+		hasLoadedSettings = true;
+	});
+
 	$effect(() => { hero3dParams.depthScale = depthScale; });
 	$effect(() => { hero3dParams.revealRadius = revealRadius; });
 	$effect(() => { hero3dParams.parallaxXY = parallaxXY; });
@@ -73,6 +186,27 @@
 	$effect(() => { hero3dParams.edgeSoftness = edgeSoftness; });
 	$effect(() => { hero3dParams.saturationBoost = saturationBoost; });
 	$effect(() => { hero3dParams.contrastBoost = contrastBoost; });
+
+	$effect(() => {
+		headerBlendMode;
+		showSectionsEnabled;
+		depthScale;
+		revealRadius;
+		parallaxXY;
+		parallaxZ;
+		splatStretch;
+		splatCompress;
+		depthBulge;
+		contourOffset;
+		blobAmplitude;
+		noiseAmplitude;
+		contourInfluence;
+		edgeSoftness;
+		saturationBoost;
+		contrastBoost;
+
+		scheduleSave();
+	});
 </script>
 
 <Modal
@@ -174,7 +308,24 @@
 			</div>
 		</div>
 
+		<div class="space-y-3 rounded-lg border border-(--border-color) bg-(--surface) p-3 sm:p-4">
+			<div class="flex items-start justify-between gap-3">
+				<div>
+					<p class="text-sm font-semibold text-(--text-primary)">🪩 Disco Block Numbers</p>
+					<p class="text-xs text-(--text-secondary)">Core constants from the disco effect</p>
+				</div>
+			</div>
+
+			<div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-(--text-secondary)">
+				{#each discoParamEntries as entry}
+					<div class="flex items-center justify-between gap-2 rounded bg-(--page-bg) px-2 py-1">
+						<span class="text-[0.7rem] uppercase tracking-[0.18em] text-(--text-muted)">{entry.label}</span>
+						<span class="font-mono text-(--text-primary)">{entry.value}</span>
+					</div>
+				{/each}
+			</div>
+		</div>
+
 		<p class="text-xs text-(--liver-brown-600) italic">Press D to toggle this menu</p>
 	</div>
 </Modal>
-

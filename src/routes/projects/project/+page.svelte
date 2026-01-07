@@ -65,7 +65,7 @@
 </svelte:head>
 
 <div 
-	class="fixed top-0 left-0 h-[3px] bg-(--text-primary) z-50 transition-all duration-75"
+	class="fixed top-0 left-0 h-[0.1875rem] bg-(--text-primary) z-50 transition-all duration-75"
 	style="width: {scrollProgress}%"
 ></div>
 
@@ -256,8 +256,8 @@
 		color: var(--text-muted);
 		padding: 0.3rem 0.875rem;
 		background: var(--page-bg-subtle);
-		border-radius: 100px;
-		border: 1px solid var(--border-color);
+		border-radius: 6.25rem;
+		border: 0.0625rem solid var(--border-color);
 	}
 
 	.status-badge {
@@ -265,7 +265,7 @@
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		padding: 0.25rem 0.625rem;
-		border-radius: 4px;
+		border-radius: 0.25rem;
 		font-weight: 600;
 	}
 
@@ -295,8 +295,8 @@
 		font-family: 'JetBrains Mono', 'Fira Code', monospace;
 		padding: 0.3rem 0.75rem;
 		background: var(--page-bg-subtle);
-		border: 1px solid var(--border-color);
-		border-radius: 4px;
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.25rem;
 		color: var(--text-secondary);
 	}
 
@@ -305,8 +305,8 @@
 		font-family: 'JetBrains Mono', 'Fira Code', monospace;
 		padding: 0.4rem 0.875rem;
 		background: var(--page-bg-subtle);
-		border: 1px solid var(--border-color);
-		border-radius: 6px;
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.375rem;
 		color: var(--text-secondary);
 		transition: all 0.15s ease;
 	}
@@ -324,8 +324,8 @@
 		font-weight: 500;
 		color: var(--text-secondary);
 		background: var(--page-bg-subtle);
-		border: 1px solid var(--border-color);
-		border-radius: 8px;
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.5rem;
 		text-decoration: none;
 		transition: all 0.15s ease;
 	}

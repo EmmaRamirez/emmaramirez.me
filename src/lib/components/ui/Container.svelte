@@ -24,10 +24,10 @@
 	}: ContainerProps = $props();
 
 	const sizeClasses: Record<ContainerSize, string> = {
-		sm: 'max-w-screen-sm',   // 640px
-		md: 'max-w-screen-md',   // 768px
-		lg: 'max-w-screen-lg',   // 1024px
-		xl: 'max-w-screen-xl',   // 1280px
+		sm: 'max-w-screen-sm',   // 40rem
+		md: 'max-w-screen-md',   // 48rem
+		lg: 'max-w-screen-lg',   // 64rem
+		xl: 'max-w-screen-xl',   // 80rem
 		full: 'max-w-full'
 	};
 

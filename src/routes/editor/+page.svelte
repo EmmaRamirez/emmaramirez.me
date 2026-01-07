@@ -128,16 +128,16 @@
 	.section-tab.active {
 		color: var(--text-primary);
 		background: var(--background);
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
 	}
 
 	.coming-soon {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		min-height: 400px;
+		min-height: 25rem;
 		border-radius: 1rem;
-		border: 2px dashed var(--border-color);
+		border: 0.125rem dashed var(--border-color);
 		color: var(--text-muted);
 	}
 </style>

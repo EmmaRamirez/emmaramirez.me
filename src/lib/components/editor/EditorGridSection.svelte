@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { dev } from '$app/environment';
+	import { dev, browser } from '$app/environment';
 	import { dndzone, type DndEvent } from 'svelte-dnd-action';
 	import type { GridItem } from '$lib/types/homepage';
 	import type { Article } from '$lib/articles';
@@ -10,18 +10,25 @@
 		type ProjectRegistryEntry,
 		type DiscoRegistryEntry
 	} from '$lib/registry/homepage';
+	import { discoParams } from '$lib/registry/discoParams';
 	import { gridLayoutStore, getItemKey } from '$lib/stores/gridLayoutStore.svelte';
+	import { showSections } from '$lib/stores';
+	import { hero3dParams } from '$lib/stores/hero3dParams.svelte';
 	import { pokemonTeam } from '$lib/website.config';
 	import { onMount } from 'svelte';
 	
-	import DiscoBlock from '../DiscoBlock.svelte';
-	import HomeBlock from '../HomeBlock.svelte';
-	import PokemonBlock from '../PokemonBlock.svelte';
-	import ProjectBlock from '../ProjectBlock.svelte';
-	import TopLanguages from '../TopLanguages.svelte';
-	import DesignSystemAd from '../DesignSystemAd.svelte';
-	import CityCard from '../CityCard.svelte';
-	import Hero from '../Hero.svelte';
+	import { 
+		DiscoBlock, 
+		HomeBlock, 
+		LocationBlock,
+		PokemonBlock, 
+		ProjectBlock, 
+		TopLanguages, 
+		DesignSystemAd, 
+		CityCard 
+	} from '$lib/components/blocks';
+	import { Hero } from '$lib/components/hero';
+	import { Select, Switch } from '$lib/components/ui';
 
 	const homepageArticles: Article[] = defaultArticles.slice(0, 5);
 	const homepageProjects: ProjectRegistryEntry[] = Object.values(projectRegistry)
@@ -34,6 +41,7 @@
 		{ kind: 'hero' as const },
 		{ kind: 'disco' as const },
 		{ kind: 'home' as const },
+		{ kind: 'location' as const },
 		{ kind: 'pokemon' as const },
 		{ kind: 'top-languages' as const },
 		{ kind: 'city' as const },
@@ -50,11 +58,23 @@
 	let dndItems = $state<DndItem[]>([]);
 	let selectedItem = $state<GridItem | null>(null);
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
+	let headerBlendMode = $state('difference');
+	let showSectionsEnabled = $state(false);
+	let hasLoadedSettings = $state(false);
+	let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	onMount(() => {
 		gridLayoutStore.initialize(gridItems);
 		gridLayoutStore.editMode = true; // Always in edit mode in the editor
 		updateDndItems();
+
+		const unsubscribe = showSections.subscribe((value) => {
+			showSectionsEnabled = value;
+		});
+
+		return () => {
+			unsubscribe();
+		};
 	});
 
 	function updateDndItems() {
@@ -116,6 +136,8 @@
 				return 'Disco Block';
 			case 'home':
 				return 'Home Block';
+			case 'location':
+				return 'Location Block';
 			case 'pokemon':
 				return 'Pokemon Block';
 			case 'top-languages':
@@ -141,6 +163,8 @@
 				return '🪩';
 			case 'home':
 				return '🏠';
+			case 'location':
+				return '📍';
 			case 'pokemon':
 				return '⚡';
 			case 'top-languages':
@@ -166,6 +190,8 @@
 				return 'var(--color-pink-500, #ec4899)';
 			case 'home':
 				return 'var(--color-emerald-500, #10b981)';
+			case 'location':
+				return 'var(--color-teal-500, #14b8a6)';
 			case 'pokemon':
 				return 'var(--color-yellow-500, #eab308)';
 			case 'top-languages':
@@ -203,6 +229,144 @@
 			selectedItem = null;
 		}
 	}
+
+	function setShowSectionsEnabled(value: boolean) {
+		showSectionsEnabled = value;
+		showSections.set(value);
+	}
+
+	const blendModeOptions = [
+		{ value: 'normal', label: 'Normal' },
+		{ value: 'multiply', label: 'Multiply' },
+		{ value: 'screen', label: 'Screen' },
+		{ value: 'overlay', label: 'Overlay' },
+		{ value: 'darken', label: 'Darken' },
+		{ value: 'lighten', label: 'Lighten' },
+		{ value: 'color-dodge', label: 'Color Dodge' },
+		{ value: 'color-burn', label: 'Color Burn' },
+		{ value: 'hard-light', label: 'Hard Light' },
+		{ value: 'soft-light', label: 'Soft Light' },
+		{ value: 'difference', label: 'Difference' },
+		{ value: 'exclusion', label: 'Exclusion' },
+		{ value: 'hue', label: 'Hue' },
+		{ value: 'saturation', label: 'Saturation' },
+		{ value: 'color', label: 'Color' },
+		{ value: 'luminosity', label: 'Luminosity' }
+	];
+
+	const discoParamEntries: Array<{ label: string; value: number }> = [
+		{ label: 'Sample history size', value: discoParams.sampleHistorySize },
+		{ label: 'Min beams', value: discoParams.minBeams },
+		{ label: 'Max beams', value: discoParams.maxBeams },
+		{ label: 'Click beam count', value: discoParams.clickBeamCount },
+		{ label: 'Click base volatility', value: discoParams.clickBaseVolatility },
+		{ label: 'Volatility smoothing', value: discoParams.volatilitySmoothing },
+		{ label: 'Volatility decay', value: discoParams.volatilityDecay }
+	];
+
+	function getSettingsPayload() {
+		return {
+			headerBlendMode,
+			showSectionsEnabled,
+			hero3dParams: {
+				depthScale: hero3dParams.depthScale,
+				revealRadius: hero3dParams.revealRadius,
+				parallaxXY: hero3dParams.parallaxXY,
+				parallaxZ: hero3dParams.parallaxZ,
+				splatStretch: hero3dParams.splatStretch,
+				splatCompress: hero3dParams.splatCompress,
+				depthBulge: hero3dParams.depthBulge,
+				contourOffset: hero3dParams.contourOffset,
+				blobAmplitude: hero3dParams.blobAmplitude,
+				noiseAmplitude: hero3dParams.noiseAmplitude,
+				contourInfluence: hero3dParams.contourInfluence,
+				edgeSoftness: hero3dParams.edgeSoftness,
+				saturationBoost: hero3dParams.saturationBoost,
+				contrastBoost: hero3dParams.contrastBoost
+			}
+		};
+	}
+
+	async function saveSettings() {
+		if (!browser) return;
+		saveTimeout = null;
+
+		await fetch('/api/debug-settings', {
+			method: 'PUT',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify(getSettingsPayload())
+		});
+	}
+
+	function scheduleSave() {
+		if (!browser || !hasLoadedSettings) return;
+		if (saveTimeout) clearTimeout(saveTimeout);
+		saveTimeout = setTimeout(saveSettings, 500);
+	}
+
+	onMount(async () => {
+		if (!browser) return;
+		const response = await fetch('/api/debug-settings');
+		if (!response.ok) {
+			hasLoadedSettings = true;
+			return;
+		}
+
+		const { settings } = (await response.json()) as {
+			settings: {
+				headerBlendMode: string;
+				showSectionsEnabled: boolean;
+				hero3dParams: {
+					depthScale: number;
+					revealRadius: number;
+					parallaxXY: number;
+					parallaxZ: number;
+					splatStretch: number;
+					splatCompress: number;
+					depthBulge: number;
+					contourOffset: number;
+					blobAmplitude: number;
+					noiseAmplitude: number;
+					contourInfluence: number;
+					edgeSoftness: number;
+					saturationBoost: number;
+					contrastBoost: number;
+				};
+			} | null;
+		};
+
+		if (settings) {
+			headerBlendMode = settings.headerBlendMode ?? headerBlendMode;
+			setShowSectionsEnabled(Boolean(settings.showSectionsEnabled));
+
+			const hero = settings.hero3dParams;
+			if (hero) {
+				hero3dParams.depthScale = hero.depthScale ?? hero3dParams.depthScale;
+				hero3dParams.revealRadius = hero.revealRadius ?? hero3dParams.revealRadius;
+				hero3dParams.parallaxXY = hero.parallaxXY ?? hero3dParams.parallaxXY;
+				hero3dParams.parallaxZ = hero.parallaxZ ?? hero3dParams.parallaxZ;
+				hero3dParams.splatStretch = hero.splatStretch ?? hero3dParams.splatStretch;
+				hero3dParams.splatCompress = hero.splatCompress ?? hero3dParams.splatCompress;
+				hero3dParams.depthBulge = hero.depthBulge ?? hero3dParams.depthBulge;
+				hero3dParams.contourOffset = hero.contourOffset ?? hero3dParams.contourOffset;
+				hero3dParams.blobAmplitude = hero.blobAmplitude ?? hero3dParams.blobAmplitude;
+				hero3dParams.noiseAmplitude = hero.noiseAmplitude ?? hero3dParams.noiseAmplitude;
+				hero3dParams.contourInfluence = hero.contourInfluence ?? hero3dParams.contourInfluence;
+				hero3dParams.edgeSoftness = hero.edgeSoftness ?? hero3dParams.edgeSoftness;
+				hero3dParams.saturationBoost = hero.saturationBoost ?? hero3dParams.saturationBoost;
+				hero3dParams.contrastBoost = hero.contrastBoost ?? hero3dParams.contrastBoost;
+			}
+		}
+
+		hasLoadedSettings = true;
+	});
+
+	const persistSettings = $derived.by(() => {
+		headerBlendMode;
+		showSectionsEnabled;
+		scheduleSave();
+		return null;
+	});
 
 	const flipDurationMs = 200;
 </script>
@@ -254,6 +418,7 @@
 	<div class="grid-editor-layout">
 		<!-- Live Grid Preview -->
 		<div class="live-grid-container">
+			<div class="live-grid-glow" aria-hidden="true"></div>
 			<div class="live-grid-header">
 				<h3>Live Preview</h3>
 				<span class="item-count">{dndItems.length} items</span>
@@ -327,10 +492,12 @@
 								</div>
 							{:else if item.kind === 'project'}
 								<ProjectBlock
+									id={item.project.id}
 									title={item.project.title}
 									pill={item.project.pill}
 									class={item.project.class}
 									contentClassName={item.project.contentClassName}
+									imageClassName={item.project.imageClassName}
 								>
 									{#snippet description()}
 										{item.project.description}
@@ -345,6 +512,8 @@
 								/>
 							{:else if item.kind === 'home'}
 								<HomeBlock class="h-full w-full" />
+							{:else if item.kind === 'location'}
+								<LocationBlock class="h-full w-full" />
 							{:else if item.kind === 'city'}
 								<CityCard
 									src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1800&q=80"
@@ -366,72 +535,117 @@
 			</ul>
 		</div>
 
-		<div class="details-panel">
-			{#if selectedItem}
-				<div class="details-header">
-					<span class="details-icon" style="background: {getItemColor(selectedItem)}">
-						{getItemIcon(selectedItem)}
-					</span>
-					<div>
-						<h3 class="details-title">{getItemLabel(selectedItem)}</h3>
-						<span class="details-kind">{selectedItem.kind}</span>
+		<div class="side-panel">
+			<div class="details-panel">
+				{#if selectedItem}
+					<div class="details-header">
+						<span class="details-icon" style="background: {getItemColor(selectedItem)}">
+							{getItemIcon(selectedItem)}
+						</span>
+						<div>
+							<h3 class="details-title">{getItemLabel(selectedItem)}</h3>
+							<span class="details-kind">{selectedItem.kind}</span>
+						</div>
 					</div>
+
+					<div class="details-content">
+						{#if selectedItem.kind === 'article'}
+							<dl class="details-list">
+								<dt>ID</dt>
+								<dd><code>{selectedItem.article.id}</code></dd>
+								<dt>Date</dt>
+								<dd>{selectedItem.article.date || 'N/A'}</dd>
+								<dt>Grid Span</dt>
+								<dd>
+									{gridLayoutStore.getLayout(getItemKey(selectedItem))?.colSpan ?? 1} col × {gridLayoutStore.getLayout(getItemKey(selectedItem))?.rowSpan ?? 1} row
+								</dd>
+								<dt>Preview</dt>
+								<dd class="preview-text">{selectedItem.article.content.slice(0, 150)}...</dd>
+							</dl>
+						{:else if selectedItem.kind === 'project'}
+							<dl class="details-list">
+								<dt>ID</dt>
+								<dd><code>{selectedItem.project.id}</code></dd>
+								<dt>Pill</dt>
+								<dd><span class="pill">{selectedItem.project.pill}</span></dd>
+								<dt>Year</dt>
+								<dd>{selectedItem.project.year || 'N/A'}</dd>
+								<dt>Status</dt>
+								<dd>
+									<span class="status-badge" data-status={selectedItem.project.status}>
+										{selectedItem.project.status || 'N/A'}
+									</span>
+								</dd>
+								<dt>Grid Span</dt>
+								<dd>
+									{gridLayoutStore.getLayout(getItemKey(selectedItem))?.colSpan ?? 1} col × {gridLayoutStore.getLayout(getItemKey(selectedItem))?.rowSpan ?? 1} row
+								</dd>
+								<dt>Description</dt>
+								<dd class="preview-text">{selectedItem.project.description}</dd>
+							</dl>
+						{:else}
+							<dl class="details-list">
+								<dt>Type</dt>
+								<dd><code>{selectedItem.kind}</code></dd>
+								<dt>Grid Span</dt>
+								<dd>
+									{gridLayoutStore.getLayout(getItemKey(selectedItem))?.colSpan ?? 1} col × {gridLayoutStore.getLayout(getItemKey(selectedItem))?.rowSpan ?? 1} row
+								</dd>
+							</dl>
+						{/if}
+					</div>
+				{:else}
+					<div class="details-empty">
+						<svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+							<path d="M15 15l6 6m-11-4a7 7 0 110-14 7 7 0 010 14z" />
+						</svg>
+						<p>Click an item in the grid to view its details</p>
+					</div>
+				{/if}
+			</div>
+
+			<div class="settings-panel">
+				<div class="settings-card">
+					<div class="settings-card__header">
+						<div>
+							<p class="settings-title">Header Settings</p>
+							<p class="settings-subtitle">Match the homepage controls</p>
+						</div>
+						<span class="settings-pill">Live</span>
+					</div>
+
+					<Select
+						label="Header Blend Mode"
+						bind:value={headerBlendMode}
+						options={blendModeOptions}
+					/>
+
+					<Switch
+						label="Show Essays & Projects"
+						description="Toggle visibility of Essays and Projects sections"
+						checked={showSectionsEnabled}
+						on:click={() => setShowSectionsEnabled(!showSectionsEnabled)}
+					/>
 				</div>
 
-				<div class="details-content">
-					{#if selectedItem.kind === 'article'}
-						<dl class="details-list">
-							<dt>ID</dt>
-							<dd><code>{selectedItem.article.id}</code></dd>
-							<dt>Date</dt>
-							<dd>{selectedItem.article.date || 'N/A'}</dd>
-							<dt>Grid Span</dt>
-							<dd>
-								{gridLayoutStore.getLayout(getItemKey(selectedItem))?.colSpan ?? 1} col × {gridLayoutStore.getLayout(getItemKey(selectedItem))?.rowSpan ?? 1} row
-							</dd>
-							<dt>Preview</dt>
-							<dd class="preview-text">{selectedItem.article.content.slice(0, 150)}...</dd>
-						</dl>
-					{:else if selectedItem.kind === 'project'}
-						<dl class="details-list">
-							<dt>ID</dt>
-							<dd><code>{selectedItem.project.id}</code></dd>
-							<dt>Pill</dt>
-							<dd><span class="pill">{selectedItem.project.pill}</span></dd>
-							<dt>Year</dt>
-							<dd>{selectedItem.project.year || 'N/A'}</dd>
-							<dt>Status</dt>
-							<dd>
-								<span class="status-badge" data-status={selectedItem.project.status}>
-									{selectedItem.project.status || 'N/A'}
-								</span>
-							</dd>
-							<dt>Grid Span</dt>
-							<dd>
-								{gridLayoutStore.getLayout(getItemKey(selectedItem))?.colSpan ?? 1} col × {gridLayoutStore.getLayout(getItemKey(selectedItem))?.rowSpan ?? 1} row
-							</dd>
-							<dt>Description</dt>
-							<dd class="preview-text">{selectedItem.project.description}</dd>
-						</dl>
-					{:else}
-						<dl class="details-list">
-							<dt>Type</dt>
-							<dd><code>{selectedItem.kind}</code></dd>
-							<dt>Grid Span</dt>
-							<dd>
-								{gridLayoutStore.getLayout(getItemKey(selectedItem))?.colSpan ?? 1} col × {gridLayoutStore.getLayout(getItemKey(selectedItem))?.rowSpan ?? 1} row
-							</dd>
-						</dl>
-					{/if}
+				<div class="settings-card settings-card--disco">
+					<div class="settings-card__header">
+						<div>
+							<p class="settings-title">Disco Vibes</p>
+							<p class="settings-subtitle">Live block tuning values</p>
+						</div>
+						<span class="settings-pill settings-pill--disco">Pulse</span>
+					</div>
+					<div class="disco-grid">
+						{#each discoParamEntries as entry (entry.label)}
+							<div class="disco-item">
+								<span class="disco-label">{entry.label}</span>
+								<span class="disco-value">{entry.value}</span>
+							</div>
+						{/each}
+					</div>
 				</div>
-			{:else}
-				<div class="details-empty">
-					<svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-						<path d="M15 15l6 6m-11-4a7 7 0 110-14 7 7 0 010 14z" />
-					</svg>
-					<p>Click an item in the grid to view its details</p>
-				</div>
-			{/if}
+			</div>
 		</div>
 	</div>
 
@@ -514,7 +728,7 @@
 
 	.save-btn:hover:not(:disabled) {
 		opacity: 0.9;
-		transform: translateY(-1px);
+		transform: translateY(-0.0625rem);
 	}
 
 	.save-btn:disabled {
@@ -533,7 +747,7 @@
 	.reset-btn {
 		background: var(--surface);
 		color: var(--text-secondary);
-		border: 1px solid var(--border-color);
+		border: 0.0625rem solid var(--border-color);
 	}
 
 	.reset-btn:hover {
@@ -543,11 +757,11 @@
 
 	.grid-editor-layout {
 		display: grid;
-		grid-template-columns: 1fr 320px;
+		grid-template-columns: 1fr 20rem;
 		gap: 1.5rem;
 	}
 
-	@media (max-width: 900px) {
+	@media (max-width: 56.25rem) {
 		.grid-editor-layout {
 			grid-template-columns: 1fr;
 		}
@@ -567,10 +781,30 @@
 	}
 
 	.live-grid-container {
+		position: relative;
+		overflow: hidden;
 		background: var(--surface);
-		border: 1px solid var(--border-color);
+		border: 0.0625rem solid var(--border-color);
 		border-radius: 1rem;
 		padding: 1.25rem;
+	}
+
+	.live-grid-container > * {
+		position: relative;
+		z-index: 1;
+	}
+
+	.live-grid-glow {
+		position: absolute;
+		inset: -35% -20%;
+		background:
+			radial-gradient(circle at 15% 20%, rgba(90, 150, 255, 0.35), transparent 45%),
+			radial-gradient(circle at 80% 25%, rgba(70, 120, 255, 0.3), transparent 50%),
+			radial-gradient(circle at 50% 80%, rgba(120, 200, 255, 0.2), transparent 55%),
+			linear-gradient(135deg, rgba(25, 50, 110, 0.25), transparent 60%);
+		opacity: 0.6;
+		mix-blend-mode: screen;
+		pointer-events: none;
 	}
 
 	.live-grid-header {
@@ -622,8 +856,8 @@
 	.grid-item.edit-mode::before {
 		content: '';
 		position: absolute;
-		inset: -2px;
-		border: 2px dashed var(--text-muted);
+		inset: -0.125rem;
+		border: 0.125rem dashed var(--text-muted);
 		border-radius: 0.625rem;
 		opacity: 0.5;
 		pointer-events: none;
@@ -633,7 +867,7 @@
 	.grid-item-content {
 		height: 100%;
 		width: 100%;
-		min-height: 120px;
+		min-height: 7.5rem;
 		background: transparent;
 		border: none;
 		padding: 0;
@@ -664,12 +898,12 @@
 		font-weight: 600;
 		cursor: pointer;
 		transition: all 0.15s ease;
-		box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+		box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.15);
 	}
 
 	.resize-handle:hover {
 		transform: scale(1.05);
-		box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+		box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.2);
 	}
 
 	.resize-label {
@@ -683,16 +917,22 @@
 		padding: 1rem;
 		height: 100%;
 		background: var(--background);
-		border: 1px solid var(--border-color);
+		border: 0.0625rem solid var(--border-color);
 		border-radius: 0.5rem;
+	}
+
+	.side-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 	}
 
 	.details-panel {
 		background: var(--surface);
-		border: 1px solid var(--border-color);
+		border: 0.0625rem solid var(--border-color);
 		border-radius: 1rem;
 		padding: 1.25rem;
-		min-height: 300px;
+		min-height: 18.75rem;
 	}
 
 	.details-header {
@@ -701,7 +941,7 @@
 		gap: 0.75rem;
 		margin-bottom: 1.25rem;
 		padding-bottom: 1rem;
-		border-bottom: 1px solid var(--border-color);
+		border-bottom: 0.0625rem solid var(--border-color);
 	}
 
 	.details-icon {
@@ -793,13 +1033,99 @@
 		color: #f59e0b;
 	}
 
+	.settings-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.settings-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 1rem;
+		border-radius: 0.875rem;
+		border: 0.0625rem solid var(--border-color);
+		background: var(--surface);
+	}
+
+	.settings-card--disco {
+		background: radial-gradient(circle at top, rgba(84, 139, 255, 0.12), transparent 55%),
+			var(--surface);
+		border-color: color-mix(in srgb, var(--border-color) 60%, rgba(84, 139, 255, 0.2));
+	}
+
+	.settings-card__header {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.75rem;
+		align-items: flex-start;
+	}
+
+	.settings-title {
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--text-primary);
+		margin: 0 0 0.25rem 0;
+	}
+
+	.settings-subtitle {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		margin: 0;
+	}
+
+	.settings-pill {
+		font-size: 0.6rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		font-weight: 700;
+		color: var(--text-secondary);
+		background: var(--surface-hover);
+		padding: 0.25rem 0.5rem;
+		border-radius: 999px;
+	}
+
+	.settings-pill--disco {
+		background: rgba(90, 150, 255, 0.2);
+		color: rgba(90, 150, 255, 0.85);
+	}
+
+	.disco-grid {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.disco-item {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.5rem;
+		padding: 0.45rem 0.6rem;
+		border-radius: 0.5rem;
+		background: rgba(15, 25, 55, 0.2);
+		border: 1px solid rgba(90, 150, 255, 0.15);
+	}
+
+	.disco-label {
+		font-size: 0.65rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.6);
+	}
+
+	.disco-value {
+		font-family: 'SFMono-Regular', 'Menlo', monospace;
+		font-size: 0.75rem;
+		color: rgba(255, 255, 255, 0.85);
+	}
+
 	.details-empty {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		height: 100%;
-		min-height: 200px;
+		min-height: 12.5rem;
 		color: var(--text-muted);
 		text-align: center;
 		gap: 1rem;
@@ -813,12 +1139,12 @@
 
 	.details-empty p {
 		margin: 0;
-		max-width: 200px;
+		max-width: 12.5rem;
 	}
 
 	.legend {
 		background: var(--surface);
-		border: 1px solid var(--border-color);
+		border: 0.0625rem solid var(--border-color);
 		border-radius: 0.75rem;
 		padding: 1rem 1.25rem;
 	}

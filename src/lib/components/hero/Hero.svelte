@@ -92,7 +92,7 @@
 <style>
 	.hero-header {
 		border-radius: 2rem;
-		height: 320px;
+		height: 20rem;
 		background: #5ba4d4;
 		cursor: crosshair;
 	}
@@ -143,9 +143,9 @@
 		padding: 2rem;
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 48rem) {
 		.hero-header {
-			height: 400px;
+			height: 25rem;
 		}
 
 		.hero-3d-wrapper,

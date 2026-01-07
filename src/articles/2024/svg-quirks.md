@@ -23,7 +23,7 @@ The viewBox defines the coordinate system. The width and height define the displ
 
 CSS has `box-sizing: border-box`. SVG has... nothing equivalent.
 
-Strokes center on the path by default. A 2px stroke on a 100x100 square actually renders at 101x101 if you're not careful.
+Strokes center on the path by default. A 0.125rem stroke on a 100x100 square actually renders at 101x101 if you're not careful.
 
 Solutions:
 - Inset your paths by half the stroke width

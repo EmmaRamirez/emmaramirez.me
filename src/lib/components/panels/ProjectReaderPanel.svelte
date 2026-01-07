@@ -86,6 +86,14 @@
 <svelte:window onkeydown={handleKeydown} />
 
 {#if open && project}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div 
+		class="panel-backdrop"
+		in:fade={{ duration: 200 }}
+		out:fade={{ duration: 150 }}
+		onclick={() => onclose?.()}
+		onkeydown={(e) => e.key === 'Escape' && onclose?.()}
+	></div>
 	<aside
 		class="project-reader-panel"
 		in:fly={{ x: -100, duration: 300, opacity: 1 }}
@@ -249,18 +257,26 @@
 {/if}
 
 <style>
+	.panel-backdrop {
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 59;
+		backdrop-filter: blur(2px);
+	}
+
 	.project-reader-panel {
 		position: fixed;
 		top: 0;
 		left: 0;
 		bottom: 0;
-		width: min(1100px, 80vw);
+		width: min(68.75rem, 80vw);
 		background: var(--page-bg);
-		border-right: 1px solid var(--border-color);
+		border-right: 0.0625rem solid var(--border-color);
 		z-index: 60;
 		display: flex;
 		flex-direction: column;
-		box-shadow: 8px 0 32px -8px rgba(0, 0, 0, 0.15);
+		box-shadow: 0.5rem 0 2rem -0.5rem rgba(0, 0, 0, 0.15);
 	}
 
 	.panel-header {
@@ -268,7 +284,7 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 0.75rem 1.25rem;
-		border-bottom: 1px solid var(--border-color);
+		border-bottom: 0.0625rem solid var(--border-color);
 		background: var(--page-bg-subtle);
 	}
 
@@ -286,7 +302,7 @@
 		border: none;
 		padding: 0.25rem 0.5rem;
 		margin: -0.25rem -0.5rem;
-		border-radius: 6px;
+		border-radius: 0.375rem;
 		cursor: pointer;
 		transition: background 0.15s ease;
 	}
@@ -300,8 +316,8 @@
 	}
 
 	.hotkey-divider {
-		width: 1px;
-		height: 16px;
+		width: 0.0625rem;
+		height: 1rem;
 		background: var(--border-color);
 	}
 
@@ -316,10 +332,10 @@
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		background: var(--page-bg);
-		border: 1px solid var(--border-color);
-		border-radius: 4px;
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.25rem;
 		color: var(--text-secondary);
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+		box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.08);
 	}
 
 	.key-label {
@@ -332,7 +348,7 @@
 		align-items: center;
 		justify-content: center;
 		padding: 0.5rem;
-		border-radius: 6px;
+		border-radius: 0.375rem;
 		background: transparent;
 		border: none;
 		color: var(--text-muted);
@@ -372,8 +388,8 @@
 		color: var(--text-muted);
 		padding: 0.25rem 0.75rem;
 		background: var(--page-bg-subtle);
-		border-radius: 100px;
-		border: 1px solid var(--border-color);
+		border-radius: 6.25rem;
+		border: 0.0625rem solid var(--border-color);
 	}
 
 	.status-badge {
@@ -381,7 +397,7 @@
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
+		border-radius: 0.25rem;
 		font-weight: 600;
 	}
 
@@ -434,8 +450,8 @@
 		font-family: 'JetBrains Mono', 'Fira Code', monospace;
 		padding: 0.25rem 0.6rem;
 		background: var(--page-bg-subtle);
-		border: 1px solid var(--border-color);
-		border-radius: 4px;
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.25rem;
 		color: var(--text-secondary);
 	}
 
@@ -454,8 +470,8 @@
 		font-weight: 500;
 		color: var(--text-secondary);
 		background: var(--page-bg-subtle);
-		border: 1px solid var(--border-color);
-		border-radius: 6px;
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.375rem;
 		text-decoration: none;
 		transition: all 0.15s ease;
 	}
@@ -470,7 +486,7 @@
 		font-size: 1.125rem;
 		line-height: 1.8;
 		color: var(--text-secondary);
-		border-top: 1px solid var(--border-color);
+		border-top: 0.0625rem solid var(--border-color);
 		padding-top: 2rem;
 		max-width: 65ch;
 	}
@@ -493,7 +509,7 @@
 	.project-nav {
 		margin-top: 2.5rem;
 		padding-top: 1.5rem;
-		border-top: 1px solid var(--border-color);
+		border-top: 0.0625rem solid var(--border-color);
 	}
 
 	.nav-grid {
@@ -518,7 +534,7 @@
 		border: none;
 		padding: 0.5rem;
 		margin: -0.5rem;
-		border-radius: 8px;
+		border-radius: 0.5rem;
 		cursor: pointer;
 		text-align: inherit;
 		transition: background 0.15s ease;
@@ -550,7 +566,7 @@
 	.full-project-link {
 		margin-top: 2rem;
 		padding-top: 1.5rem;
-		border-top: 1px solid var(--border-color);
+		border-top: 0.0625rem solid var(--border-color);
 	}
 
 	.read-full-link {
@@ -562,8 +578,8 @@
 		font-weight: 500;
 		color: var(--text-primary);
 		background: var(--page-bg-subtle);
-		border: 1px solid var(--border-color);
-		border-radius: 8px;
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.5rem;
 		transition: all 0.15s ease;
 		text-decoration: none;
 	}
@@ -574,13 +590,13 @@
 		border-color: var(--text-primary);
 	}
 
-	@media (max-width: 1024px) {
+	@media (max-width: 64rem) {
 		.project-reader-panel {
-			width: min(720px, 85vw);
+			width: min(45rem, 85vw);
 		}
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 48rem) {
 		.project-reader-panel {
 			width: 100vw;
 		}

@@ -72,7 +72,7 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		title: 'nuzlocke-generator',
 		pill: 'nuzlocke templating engine',
 		image: profileImage,
-		description: 'highly collaborative,customizable image generator for Pokémon Nuzlocke challenges. built with React and Elixir. has over 10k users and vibrant community.',
+		description: 'highly collaborative, customizable image generator for Pokémon Nuzlocke challenges. built with React and Elixir. has over 10k users and vibrant community.',
 		content: `The Nuzlocke Generator started as a weekend project born from my own frustration with tracking Pokémon runs. Nuzlocke challenges add permadeath and catch limits to the games, and keeping track of everything on paper felt wrong for 2024.
 
 The tool lets you design custom layouts for your team, encounters, and graveyard. Drag-and-drop reordering, automatic type matchup hints, and a clean export for sharing on social media.
@@ -89,7 +89,7 @@ The trickiest part was making it feel fast. React's reconciliation kept causing 
 		status: 'active',
 		class: 'h-full',
 		contentClassName: 'md:flex-row md:items-center',
-		imageClassName: 'md:translate-x-0 md:ml-4'
+		imageClassName: ''
 	},
 	fakemon: {
 		kind: 'project',

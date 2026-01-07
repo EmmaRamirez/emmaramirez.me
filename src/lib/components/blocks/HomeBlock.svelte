@@ -48,7 +48,7 @@
 		height: 100%;
 	}
 
-	@media (min-width: 768px) {
+	@media (min-width: 48rem) {
 		:global(.md\:row-span-2).home-block {
 			aspect-ratio: unset;
 			height: 100%;

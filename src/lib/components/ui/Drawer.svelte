@@ -16,7 +16,7 @@
 		open = false, 
 		onclose, 
 		position = 'right',
-		width = '400px',
+		width = '25rem',
 		class: className,
 		header,
 		children 

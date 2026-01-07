@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Drawer } from '$lib/components/ui';
+	import { formatShortDateAbsolute } from '$lib/utils';
 
 	interface Article {
 		id: string;
@@ -147,17 +148,9 @@
 
 	const articles = $derived(mockArticlesByTag[tag.toLowerCase()] || []);
 
-	function formatDate(dateStr: string | undefined): string {
-		if (!dateStr) return '';
-		return new Date(dateStr).toLocaleDateString('en-US', { 
-			year: 'numeric', 
-			month: 'short', 
-			day: 'numeric' 
-		});
-	}
 </script>
 
-<Drawer {open} {onclose} width="420px">
+<Drawer {open} {onclose} width="26.25rem">
 	{#snippet header()}
 		<div>
 			<span class="text-xs uppercase tracking-wider text-[var(--liver-brown-500)] font-mono">Articles tagged</span>
@@ -186,7 +179,7 @@
 						<div class="flex gap-1 flex-wrap">
 							{#each article.tags || [] as articleTag (articleTag)}
 								<span 
-									class="text-[10px] px-2 py-0.5 rounded-full font-mono uppercase tracking-wider {articleTag.toLowerCase() === tag.toLowerCase() ? 'bg-[var(--liver-brown-500)] text-[var(--sandy-tan-100)]' : 'bg-[var(--sandy-tan-400)] text-[var(--liver-brown-600)]'}"
+									class="text-[0.625rem] px-2 py-0.5 rounded-full font-mono uppercase tracking-wider {articleTag.toLowerCase() === tag.toLowerCase() ? 'bg-[var(--liver-brown-500)] text-[var(--sandy-tan-100)]' : 'bg-[var(--sandy-tan-400)] text-[var(--liver-brown-600)]'}"
 								>
 									{articleTag}
 								</span>
@@ -194,7 +187,7 @@
 						</div>
 						{#if article.date}
 							<time class="text-xs text-[var(--liver-brown-500)] font-mono whitespace-nowrap">
-								{formatDate(article.date)}
+								{formatShortDateAbsolute(article.date)}
 							</time>
 						{/if}
 					</div>
@@ -213,4 +206,3 @@
 		overflow: hidden;
 	}
 </style>
-
