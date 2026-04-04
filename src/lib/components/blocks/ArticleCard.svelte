@@ -47,7 +47,7 @@
 		}
 	};
 
-	const styles = variants[variant];
+	const styles = $derived(variants[variant]);
 
 	// Estimate read time if not provided
 	const estimatedReadTime = $derived(
@@ -79,7 +79,7 @@
 	{/if}
 	<p class={styles.content}>{content}</p>
 	
-	<!-- Extra info shown in tall containers -->
+	<!-- Extra info shown in roomier card layouts -->
 	<div class="article-card__footer">
 		<div class="article-card__divider"></div>
 		<div class="article-card__meta">
@@ -107,7 +107,8 @@
 		background: var(--surface);
 		border-radius: 0.75rem;
 		transition: border-color 0.2s ease, box-shadow 0.2s ease;
-		container-type: size;
+		/* Avoid size containment here: these cards live in an auto-sized grid. */
+		container-type: inline-size;
 		container-name: article;
 	}
 
@@ -130,7 +131,7 @@
 		width: 100%;
 	}
 
-	/* Read time - hidden by default, shown in tall containers */
+	/* Read time - hidden by default, shown in roomier containers */
 	.article-read-time {
 		display: none;
 		opacity: 0.7;
@@ -194,31 +195,26 @@
 		overflow: hidden;
 	}
 
-	/* ========================================
-	   CONTAINER QUERIES - Tall card styling
-	   ======================================== */
-	
-	/* When container height > 280px (roughly 1.5 rows) */
-	@container article (min-height: 280px) {
+	/* Wider cards can reveal a little more metadata safely. */
+	@container article (min-width: 18rem) {
 		.article-read-time {
 			display: inline;
 		}
 
 		:global(.article-content) {
-			-webkit-line-clamp: 6;
-			line-clamp: 6;
+			-webkit-line-clamp: 5;
+			line-clamp: 5;
 		}
 	}
 
-	/* When container height > 380px (roughly 2 rows) */
-	@container article (min-height: 380px) {
+	@container article (min-width: 26rem) {
 		.article-card__footer {
 			display: block;
 		}
 
 		:global(.article-content) {
-			-webkit-line-clamp: 8;
-			line-clamp: 8;
+			-webkit-line-clamp: 6;
+			line-clamp: 6;
 		}
 
 		:global(.article-title) {
@@ -226,11 +222,10 @@
 		}
 	}
 
-	/* When container height > 480px (extra tall) */
-	@container article (min-height: 480px) {
+	@container article (min-width: 36rem) {
 		:global(.article-content) {
-			-webkit-line-clamp: 12;
-			line-clamp: 12;
+			-webkit-line-clamp: 8;
+			line-clamp: 8;
 		}
 
 		:global(.article-title) {
