@@ -18,12 +18,12 @@ let resizeObserver: ResizeObserver | null = null;
 	const locations = {
 		home: {
 			name: 'Washington',
-			coordinates: [-120.7401, 47.7511] as [number, number],
+			coordinates: [-120.5, 47.4] as [number, number],
 			label: 'Home'
 		},
 		work: {
 			name: 'Colorado',
-			coordinates: [-105.7821, 39.5501] as [number, number],
+			coordinates: [-105.55, 39.0] as [number, number],
 			label: 'Work'
 		}
 	};
@@ -32,46 +32,12 @@ let resizeObserver: ResizeObserver | null = null;
 	const centerLng = (locations.home.coordinates[0] + locations.work.coordinates[0]) / 2;
 	const centerLat = (locations.home.coordinates[1] + locations.work.coordinates[1]) / 2;
 
-	const stateSourceId = 'state-boundaries';
-	const stateSourceLayer = 'boundaries_adm1';
+	const stateSourceId = 'us-states';
 
 	const stateLayers = [
-		{ id: 'home', code: 'US-WA', color: '#10b981' },
-		{ id: 'work', code: 'US-CO', color: '#f59e0b' }
+		{ id: 'home', stateName: 'Washington', color: '#10b981', label: 'Home' },
+		{ id: 'work', stateName: 'Colorado', color: '#f59e0b', label: 'Work' }
 	];
-
-	function createMarkerElement(type: 'home' | 'work'): HTMLDivElement {
-		const el = document.createElement('div');
-		el.className = `location-marker location-marker-${type}`;
-		
-		const icon = type === 'home' 
-			? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-				<polyline points="9 22 9 12 15 12 15 22"/>
-			</svg>`
-			: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<rect width="16" height="20" x="4" y="2" rx="2" ry="2"/>
-				<path d="M9 22v-4h6v4"/>
-				<path d="M8 6h.01"/>
-				<path d="M16 6h.01"/>
-				<path d="M12 6h.01"/>
-				<path d="M12 10h.01"/>
-				<path d="M12 14h.01"/>
-				<path d="M16 10h.01"/>
-				<path d="M16 14h.01"/>
-				<path d="M8 10h.01"/>
-				<path d="M8 14h.01"/>
-			</svg>`;
-
-		el.innerHTML = `
-			<div class="marker-pin">
-				<div class="marker-icon">${icon}</div>
-			</div>
-			<span class="marker-label">${locations[type].label}</span>
-		`;
-		
-		return el;
-	}
 
 	function mapContainerAttachment(node: HTMLDivElement) {
 		mapContainer = node;
@@ -121,14 +87,15 @@ let resizeObserver: ResizeObserver | null = null;
 					map?.setLayoutProperty(layer.id, 'visibility', 'none');
 				});
 
+			// Use public US states GeoJSON
 			if (!map?.getSource(stateSourceId)) {
 				map?.addSource(stateSourceId, {
-					type: 'vector',
-					url: 'mapbox://mapbox.boundaries-adm1-v4'
+					type: 'geojson',
+					data: 'https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json'
 				});
 			}
 
-			stateLayers.forEach(({ id, code, color }) => {
+			stateLayers.forEach(({ id, stateName, color }) => {
 				const fillId = `state-fill-${id}`;
 				const outlineId = `state-outline-${id}`;
 
@@ -137,11 +104,10 @@ let resizeObserver: ResizeObserver | null = null;
 						id: fillId,
 						type: 'fill',
 						source: stateSourceId,
-						'source-layer': stateSourceLayer,
-						filter: ['==', ['get', 'iso_3166_2'], code],
+						filter: ['==', ['get', 'name'], stateName],
 						paint: {
 							'fill-color': color,
-							'fill-opacity': 0.32
+							'fill-opacity': 0.55
 						}
 					});
 				}
@@ -151,58 +117,29 @@ let resizeObserver: ResizeObserver | null = null;
 						id: outlineId,
 						type: 'line',
 						source: stateSourceId,
-						'source-layer': stateSourceLayer,
-						filter: ['==', ['get', 'iso_3166_2'], code],
+						filter: ['==', ['get', 'name'], stateName],
 						paint: {
 							'line-color': color,
-							'line-width': 1.15,
-							'line-opacity': 0.7
+							'line-width': 2,
+							'line-opacity': 0.9
 						}
 					});
 				}
 			});
 
-			if (!map?.getLayer('state-labels-custom')) {
-				map?.addLayer({
-					id: 'state-labels-custom',
-					type: 'symbol',
-					source: stateSourceId,
-					'source-layer': stateSourceLayer,
-					filter: ['match', ['get', 'iso_3166_2'], ['US-WA', 'US-CO'], true, false],
-					layout: {
-						'text-field': [
-							'match',
-							['get', 'iso_3166_2'],
-							'US-WA',
-							locations.home.label,
-							'US-CO',
-							locations.work.label,
-							''
-						],
-						'text-font': ['Inter Bold', 'Arial Unicode MS Bold'],
-						'text-size': 13,
-						'text-letter-spacing': 0.2,
-						'text-transform': 'uppercase',
-						'text-justify': 'center',
-						'text-allow-overlap': true
-					},
-					paint: {
-						'text-color': '#f9fafb',
-						'text-halo-color': '#0b1120',
-						'text-halo-width': 1.5
-					}
-				});
-			}
+			// Add text labels as HTML markers at state centers
+			const createLabelElement = (label: string): HTMLDivElement => {
+				const el = document.createElement('div');
+				el.className = 'state-label';
+				el.textContent = label;
+				return el;
+			};
 
-			// Add home marker (Washington)
-			const homeMarker = createMarkerElement('home');
-			new mapboxgl.Marker({ element: homeMarker, anchor: 'bottom' })
+			new mapboxgl.Marker({ element: createLabelElement(locations.home.label), anchor: 'center' })
 				.setLngLat(locations.home.coordinates)
 				.addTo(map!);
 
-			// Add work marker (Colorado)
-			const workMarker = createMarkerElement('work');
-			new mapboxgl.Marker({ element: workMarker, anchor: 'bottom' })
+			new mapboxgl.Marker({ element: createLabelElement(locations.work.label), anchor: 'center' })
 				.setLngLat(locations.work.coordinates)
 				.addTo(map!);
 		});
@@ -284,60 +221,17 @@ let resizeObserver: ResizeObserver | null = null;
 		box-shadow: 0 0 8px #f59e0b80;
 	}
 
-	/* Marker styling */
-	:global(.location-marker) {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.25rem;
-		cursor: default;
-	}
-
-	:global(.marker-pin) {
-		width: 2.25rem;
-		height: 2.25rem;
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-		transition: transform 0.2s ease;
-	}
-
-	:global(.location-marker:hover .marker-pin) {
-		transform: scale(1.1);
-	}
-
-	:global(.location-marker-home .marker-pin) {
-		background: linear-gradient(135deg, #10b981, #059669);
-	}
-
-	:global(.location-marker-work .marker-pin) {
-		background: linear-gradient(135deg, #f59e0b, #d97706);
-	}
-
-	:global(.marker-icon) {
-		width: 1.1rem;
-		height: 1.1rem;
-		color: white;
-	}
-
-	:global(.marker-icon svg) {
-		width: 100%;
-		height: 100%;
-	}
-
-	:global(.marker-label) {
-		font-size: 0.65rem;
-		font-weight: 600;
+	/* State label styling */
+	:global(.state-label) {
+		font-size: 0.8rem;
+		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		color: white;
-		text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-		background: rgba(0, 0, 0, 0.4);
-		padding: 0.15rem 0.4rem;
-		border-radius: 0.25rem;
-		backdrop-filter: blur(4px);
+		letter-spacing: 0.15em;
+		color: #ffffff;
+		text-shadow: 
+			0 1px 3px rgba(0, 0, 0, 0.8),
+			0 0 8px rgba(0, 0, 0, 0.5);
+		pointer-events: none;
 	}
 
 	/* Hide Mapbox attribution/controls for cleaner look */

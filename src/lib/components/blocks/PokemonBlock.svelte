@@ -29,12 +29,12 @@
 		return `pokemon-popover-${id}`;
 	}
 
-	function registerPopover(node: HTMLDivElement, id: number) {
-		popoverRefs[id] = node;
-		return {
-			destroy() {
+	function registerPopover(id: number) {
+		return (node: HTMLDivElement) => {
+			popoverRefs[id] = node;
+			return () => {
 				popoverRefs[id] = null;
-			}
+			};
 		};
 	}
 
@@ -112,7 +112,7 @@
 	<div class="absolute inset-0 pokemon-bg"></div>
 
 
-	<div class="relative z-10 flex h-full flex-col justify-between p-5">
+	<div class="pokemon-content relative z-10 flex h-full flex-col justify-between p-5">
 		<div class="pokemon-team-grid">
 			{#each team as pokemon (pokemon.id)}
 				<button
@@ -151,7 +151,7 @@
 					aria-label={`${pokemon.name} Pokédex info`}
 					style={`position-anchor: ${getAnchorName(pokemon.id)};`}
 					class="pokemon-popover"
-					use:registerPopover={pokemon.id}
+					{@attach registerPopover(pokemon.id)}
 					onmouseenter={cancelHide}
 					onmouseleave={() => scheduleHide(pokemon.id)}
 				>
@@ -218,14 +218,27 @@
 		background: var(--card-bg);
 		container-type: size;
 		container-name: pokemon-block;
+		--pokemon-grid-columns: 3;
+		--pokemon-grid-gap: 1rem;
+		--pokemon-card-padding: 0.75rem;
+		--pokemon-card-radius: 0.75rem;
+		--pokemon-card-max-width: 7.5rem;
+		--pokemon-sprite-size: 6rem;
+	}
+
+	.pokemon-content {
+		gap: 1rem;
 	}
 
 	.pokemon-team-grid {
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 1rem;
+		grid-template-columns: repeat(var(--pokemon-grid-columns), minmax(0, 1fr));
+		gap: var(--pokemon-grid-gap);
 		align-items: center;
 		justify-items: center;
+		align-content: center;
+		flex: 1 1 auto;
+		min-height: 0;
 	}
 
 	.pokemon-bg {
@@ -233,8 +246,8 @@
 	}
 
 	.pokemon-sprite {
-		height: 96px;
-		width: 96px;
+		height: var(--pokemon-sprite-size);
+		width: var(--pokemon-sprite-size);
 		max-width: 100%;
 		object-fit: contain;
 		image-rendering: pixelated;
@@ -247,15 +260,16 @@
 		justify-content: center;
 		gap: 0.4rem;
 		width: 100%;
-		max-width: 120px;
+		max-width: var(--pokemon-card-max-width);
 		aspect-ratio: 1 / 1;
-		padding: 12px;
+		padding: var(--pokemon-card-padding);
 		background: rgba(255, 255, 255, 0.06);
 		border: 0.0625rem solid rgba(255, 255, 255, 0.08);
-		border-radius: 0.75rem;
+		border-radius: var(--pokemon-card-radius);
 		cursor: pointer;
 		appearance: none;
 		transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+		min-width: 0;
 	}
 
 	.pokemon-sprite.selected {
@@ -387,6 +401,34 @@
 	@container pokemon-block (min-height: 31.25rem) {
 		.pokemon-inline {
 			display: block;
+		}
+	}
+
+	@container pokemon-block (max-height: 18rem) {
+		.pokemon-block {
+			--pokemon-grid-gap: 0.75rem;
+			--pokemon-card-padding: 0.5rem;
+			--pokemon-card-max-width: 6rem;
+			--pokemon-sprite-size: 4.25rem;
+		}
+
+		.pokemon-content {
+			padding: 1rem;
+		}
+	}
+
+	@container pokemon-block (max-height: 11rem) {
+		.pokemon-block {
+			--pokemon-grid-columns: 6;
+			--pokemon-grid-gap: 0.4rem;
+			--pokemon-card-padding: 0.35rem;
+			--pokemon-card-radius: 0.5rem;
+			--pokemon-card-max-width: none;
+			--pokemon-sprite-size: 2.75rem;
+		}
+
+		.pokemon-content {
+			padding: 0.75rem;
 		}
 	}
 </style>

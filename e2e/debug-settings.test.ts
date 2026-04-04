@@ -14,6 +14,7 @@ test.describe('Debug Settings API', () => {
 			expect(data.settings).toHaveProperty('headerBlendMode');
 			expect(data.settings).toHaveProperty('showSectionsEnabled');
 			expect(data.settings).toHaveProperty('hero3dParams');
+			expect(data.settings).toHaveProperty('discoParams');
 		}
 	});
 
@@ -36,6 +37,15 @@ test.describe('Debug Settings API', () => {
 				edgeSoftness: 0.05,
 				saturationBoost: 1.1,
 				contrastBoost: 1.0
+			},
+			discoParams: {
+				sampleHistorySize: 16,
+				minBeams: 80,
+				maxBeams: 900,
+				clickBeamCount: 500,
+				clickBaseVolatility: 0.75,
+				volatilitySmoothing: 0.18,
+				volatilityDecay: 0.9
 			}
 		};
 
@@ -50,6 +60,8 @@ test.describe('Debug Settings API', () => {
 		expect(putData.settings).toHaveProperty('showSectionsEnabled', true);
 		expect(putData.settings.hero3dParams).toHaveProperty('depthScale', 0.15);
 		expect(putData.settings.hero3dParams).toHaveProperty('revealRadius', 0.4);
+		expect(putData.settings.discoParams).toHaveProperty('sampleHistorySize', 16);
+		expect(putData.settings.discoParams).toHaveProperty('maxBeams', 900);
 
 		// Verify the settings were actually saved by fetching them again
 		const getResponse = await request.get('/api/debug-settings');
@@ -57,6 +69,7 @@ test.describe('Debug Settings API', () => {
 
 		expect(getData.settings.headerBlendMode).toBe('multiply');
 		expect(getData.settings.hero3dParams.depthScale).toBe(0.15);
+		expect(getData.settings.discoParams.sampleHistorySize).toBe(16);
 	});
 
 	test('PUT /api/debug-settings returns 400 for invalid payload', async ({ request }) => {
@@ -124,6 +137,15 @@ test.describe('Debug Menu UI', () => {
 				edgeSoftness: 0.08,
 				saturationBoost: 1.2,
 				contrastBoost: 1.1
+			},
+			discoParams: {
+				sampleHistorySize: 14,
+				minBeams: 70,
+				maxBeams: 860,
+				clickBeamCount: 480,
+				clickBaseVolatility: 0.72,
+				volatilitySmoothing: 0.16,
+				volatilityDecay: 0.91
 			}
 		};
 
@@ -194,6 +216,15 @@ test.describe('Debug Menu UI', () => {
 				edgeSoftness: 0.07,
 				saturationBoost: 1.18,
 				contrastBoost: 1.08
+			},
+			discoParams: {
+				sampleHistorySize: 18,
+				minBeams: 90,
+				maxBeams: 980,
+				clickBeamCount: 560,
+				clickBaseVolatility: 0.78,
+				volatilitySmoothing: 0.19,
+				volatilityDecay: 0.89
 			}
 		};
 

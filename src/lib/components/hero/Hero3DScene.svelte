@@ -2,6 +2,7 @@
 	import { T, useTask, useThrelte } from '@threlte/core';
 	import { useTexture } from '@threlte/extras';
 	import * as THREE from 'three';
+import { defaultHero3DParams } from '$lib/stores/hero3dParams.svelte';
 
 	import meImage from '$lib/images/photos/hero/me.jpeg';
 	import meRobotImage from '$lib/images/photos/hero/me-robot.png';
@@ -34,34 +35,56 @@
 		causticSpeed?: number;
 		causticIntensity?: number;
 		waterDistortion?: number;
+	mouseDamping?: number;
+	revealDamping?: number;
+	mouseRangeX?: number;
+	mouseRangeY?: number;
+	depthFocusNear?: number;
+	depthFocusFar?: number;
+	depthMixLow?: number;
+	parallaxXGain?: number;
+	parallaxYGain?: number;
+	rippleEdgeInfluence?: number;
+	edgeRippleStrength?: number;
 	}
 
 	let { 
 		mouseX = 0.5, 
 		mouseY = 0.5, 
 		isHovering = false,
-		depthScale = 0.12,
-		revealRadius = 0.3,
-		parallaxXY = 0.12,
-		parallaxZ = 0.3,
-		splatStretch = 2.5,
-		splatCompress = 0.6,
-		depthBulge = 0.35,
-		contourOffset = 0.5,
-		blobAmplitude = 0.03,
-		noiseAmplitude = 0.04,
-		contourInfluence = 0.6,
-		edgeSoftness = 0.06,
-		saturationBoost = 1.15,
-		contrastBoost = 1.05,
+		depthScale = defaultHero3DParams.depthScale,
+		revealRadius = defaultHero3DParams.revealRadius,
+		parallaxXY = defaultHero3DParams.parallaxXY,
+		parallaxZ = defaultHero3DParams.parallaxZ,
+		splatStretch = defaultHero3DParams.splatStretch,
+		splatCompress = defaultHero3DParams.splatCompress,
+		depthBulge = defaultHero3DParams.depthBulge,
+		contourOffset = defaultHero3DParams.contourOffset,
+		blobAmplitude = defaultHero3DParams.blobAmplitude,
+		noiseAmplitude = defaultHero3DParams.noiseAmplitude,
+		contourInfluence = defaultHero3DParams.contourInfluence,
+		edgeSoftness = defaultHero3DParams.edgeSoftness,
+		saturationBoost = defaultHero3DParams.saturationBoost,
+		contrastBoost = defaultHero3DParams.contrastBoost,
 		// Water effect defaults
-		rippleSpeed = 0.8,
-		rippleFrequency = 12.0,
-		rippleAmplitude = 0.015,
-		causticScale = 8.0,
-		causticSpeed = 0.4,
-		causticIntensity = 0.12,
-		waterDistortion = 0.0008
+		rippleSpeed = defaultHero3DParams.rippleSpeed,
+		rippleFrequency = defaultHero3DParams.rippleFrequency,
+		rippleAmplitude = defaultHero3DParams.rippleAmplitude,
+		causticScale = defaultHero3DParams.causticScale,
+		causticSpeed = defaultHero3DParams.causticSpeed,
+		causticIntensity = defaultHero3DParams.causticIntensity,
+		waterDistortion = defaultHero3DParams.waterDistortion,
+		mouseDamping = defaultHero3DParams.mouseDamping,
+		revealDamping = defaultHero3DParams.revealDamping,
+		mouseRangeX = defaultHero3DParams.mouseRangeX,
+		mouseRangeY = defaultHero3DParams.mouseRangeY,
+		depthFocusNear = defaultHero3DParams.depthFocusNear,
+		depthFocusFar = defaultHero3DParams.depthFocusFar,
+		depthMixLow = defaultHero3DParams.depthMixLow,
+		parallaxXGain = defaultHero3DParams.parallaxXGain,
+		parallaxYGain = defaultHero3DParams.parallaxYGain,
+		rippleEdgeInfluence = defaultHero3DParams.rippleEdgeInfluence,
+		edgeRippleStrength = defaultHero3DParams.edgeRippleStrength
 	}: Props = $props();
 
 	const { renderer } = useThrelte();
@@ -75,7 +98,7 @@
 		}
 	});
 
-	const texturePromise = useTexture({
+	const textures = useTexture({
 		textureMe: meImage,
 		textureRobot: meRobotImage,
 		depthMe: meDepthImage,
@@ -90,28 +113,39 @@
 		currentMouse: { x: 0.5, y: 0.5 },
 		revealProgress: 0,
 		isHovering: false,
-		depthScale: 0.12,
-		revealRadius: 0.3,
-		parallaxXY: 0.12,
-		parallaxZ: 0.3,
-		splatStretch: 2.5,
-		splatCompress: 0.6,
-		depthBulge: 0.35,
-		contourOffset: 0.5,
-		blobAmplitude: 0.03,
-		noiseAmplitude: 0.04,
-		contourInfluence: 0.6,
-		edgeSoftness: 0.06,
-		saturationBoost: 1.15,
-		contrastBoost: 1.05,
+		depthScale: defaultHero3DParams.depthScale,
+		revealRadius: defaultHero3DParams.revealRadius,
+		parallaxXY: defaultHero3DParams.parallaxXY,
+		parallaxZ: defaultHero3DParams.parallaxZ,
+		splatStretch: defaultHero3DParams.splatStretch,
+		splatCompress: defaultHero3DParams.splatCompress,
+		depthBulge: defaultHero3DParams.depthBulge,
+		contourOffset: defaultHero3DParams.contourOffset,
+		blobAmplitude: defaultHero3DParams.blobAmplitude,
+		noiseAmplitude: defaultHero3DParams.noiseAmplitude,
+		contourInfluence: defaultHero3DParams.contourInfluence,
+		edgeSoftness: defaultHero3DParams.edgeSoftness,
+		saturationBoost: defaultHero3DParams.saturationBoost,
+		contrastBoost: defaultHero3DParams.contrastBoost,
 		// Water effect refs
-		rippleSpeed: 0.8,
-		rippleFrequency: 12.0,
-		rippleAmplitude: 0.015,
-		causticScale: 8.0,
-		causticSpeed: 0.4,
-		causticIntensity: 0.12,
-		waterDistortion: 0.008
+		rippleSpeed: defaultHero3DParams.rippleSpeed,
+		rippleFrequency: defaultHero3DParams.rippleFrequency,
+		rippleAmplitude: defaultHero3DParams.rippleAmplitude,
+		causticScale: defaultHero3DParams.causticScale,
+		causticSpeed: defaultHero3DParams.causticSpeed,
+		causticIntensity: defaultHero3DParams.causticIntensity,
+		waterDistortion: defaultHero3DParams.waterDistortion,
+		mouseDamping: defaultHero3DParams.mouseDamping,
+		revealDamping: defaultHero3DParams.revealDamping,
+		mouseRangeX: defaultHero3DParams.mouseRangeX,
+		mouseRangeY: defaultHero3DParams.mouseRangeY,
+		depthFocusNear: defaultHero3DParams.depthFocusNear,
+		depthFocusFar: defaultHero3DParams.depthFocusFar,
+		depthMixLow: defaultHero3DParams.depthMixLow,
+		parallaxXGain: defaultHero3DParams.parallaxXGain,
+		parallaxYGain: defaultHero3DParams.parallaxYGain,
+		rippleEdgeInfluence: defaultHero3DParams.rippleEdgeInfluence,
+		edgeRippleStrength: defaultHero3DParams.edgeRippleStrength
 	};
 
 	$effect(() => {
@@ -143,16 +177,29 @@
 		refs.causticSpeed = causticSpeed;
 		refs.causticIntensity = causticIntensity;
 		refs.waterDistortion = waterDistortion;
+		refs.mouseDamping = mouseDamping;
+		refs.revealDamping = revealDamping;
+		refs.mouseRangeX = mouseRangeX;
+		refs.mouseRangeY = mouseRangeY;
+		refs.depthFocusNear = depthFocusNear;
+		refs.depthFocusFar = depthFocusFar;
+		refs.depthMixLow = depthMixLow;
+		refs.parallaxXGain = parallaxXGain;
+		refs.parallaxYGain = parallaxYGain;
+		refs.rippleEdgeInfluence = rippleEdgeInfluence;
+		refs.edgeRippleStrength = edgeRippleStrength;
 	});
 
 	useTask((delta) => {
 		refs.time += delta;
+		const mouseDampingFactor = 1 - Math.exp(-delta * refs.mouseDamping);
+		const revealDampingFactor = 1 - Math.exp(-delta * refs.revealDamping);
 
-		refs.currentMouse.x += (refs.targetMouse.x - refs.currentMouse.x) * 0.08;
-		refs.currentMouse.y += (refs.targetMouse.y - refs.currentMouse.y) * 0.08;
+		refs.currentMouse.x += (refs.targetMouse.x - refs.currentMouse.x) * mouseDampingFactor;
+		refs.currentMouse.y += (refs.targetMouse.y - refs.currentMouse.y) * mouseDampingFactor;
 
 		const targetProgress = refs.isHovering ? 1 : 0;
-		refs.revealProgress += (targetProgress - refs.revealProgress) * 0.05;
+		refs.revealProgress += (targetProgress - refs.revealProgress) * revealDampingFactor;
 
 		if (shaderMaterialRef) {
 			shaderMaterialRef.uniforms.uTime.value = refs.time;
@@ -180,6 +227,18 @@
 			shaderMaterialRef.uniforms.uCausticSpeed.value = refs.causticSpeed;
 			shaderMaterialRef.uniforms.uCausticIntensity.value = refs.causticIntensity;
 			shaderMaterialRef.uniforms.uWaterDistortion.value = refs.waterDistortion;
+			shaderMaterialRef.uniforms.uMouseRange.value.set(refs.mouseRangeX, refs.mouseRangeY);
+			shaderMaterialRef.uniforms.uDepthFocusRange.value.set(
+				refs.depthFocusNear,
+				refs.depthFocusFar
+			);
+			shaderMaterialRef.uniforms.uDepthMixLow.value = refs.depthMixLow;
+			shaderMaterialRef.uniforms.uParallaxAxisGain.value.set(
+				refs.parallaxXGain,
+				refs.parallaxYGain
+			);
+			shaderMaterialRef.uniforms.uRippleEdgeInfluence.value = refs.rippleEdgeInfluence;
+			shaderMaterialRef.uniforms.uEdgeRippleStrength.value = refs.edgeRippleStrength;
 		}
 	});
 
@@ -249,7 +308,13 @@
 				uCausticScale: { value: causticScale },
 				uCausticSpeed: { value: causticSpeed },
 				uCausticIntensity: { value: causticIntensity },
-				uWaterDistortion: { value: waterDistortion }
+				uWaterDistortion: { value: waterDistortion },
+				uMouseRange: { value: new THREE.Vector2(mouseRangeX, mouseRangeY) },
+				uDepthFocusRange: { value: new THREE.Vector2(depthFocusNear, depthFocusFar) },
+				uDepthMixLow: { value: depthMixLow },
+				uParallaxAxisGain: { value: new THREE.Vector2(parallaxXGain, parallaxYGain) },
+				uRippleEdgeInfluence: { value: rippleEdgeInfluence },
+				uEdgeRippleStrength: { value: edgeRippleStrength }
 			},
 			vertexShader,
 			fragmentShader,
@@ -272,6 +337,10 @@
 		uniform float uParallaxZ;
 		uniform float uVScale;
 		uniform float uVOffset;
+		uniform vec2 uMouseRange;
+		uniform vec2 uDepthFocusRange;
+		uniform float uDepthMixLow;
+		uniform vec2 uParallaxAxisGain;
 		
 		varying vec2 vUv;
 		varying vec2 vRawUv;
@@ -293,15 +362,16 @@
 			float depth = mix(depth1, depth2, uProgress * 0.3);
 			vDepth = depth;
 			
-			// Calculate displacement based on mouse position
-			vec2 mouseOffset = (uMouse - 0.5) * 2.0;
+			// Bias the interaction toward lateral motion so the head feels like it turns
+			vec2 mouseOffset = (uMouse - 0.5) * uMouseRange;
 			
-			// Parallax effect - closer objects (lighter depth) move more
-			float parallaxStrength = depth * uDepthScale;
+			// Lean on the closer depth values so the face turns more than the background
+			float depthFocus = smoothstep(uDepthFocusRange.x, uDepthFocusRange.y, depth);
+			float parallaxStrength = mix(depth * uDepthMixLow, depth, depthFocus) * uDepthScale;
 			vec3 displaced = position;
-			displaced.x += mouseOffset.x * parallaxStrength * uParallaxXY;
-			displaced.y += mouseOffset.y * parallaxStrength * uParallaxXY;
-			displaced.z += depth * uDepthScale * uParallaxZ;
+			displaced.x += mouseOffset.x * parallaxStrength * uParallaxXY * uParallaxAxisGain.x;
+			displaced.y += mouseOffset.y * parallaxStrength * uParallaxXY * uParallaxAxisGain.y;
+			displaced.z += depthFocus * depth * uDepthScale * uParallaxZ;
 			
 			gl_Position = projectionMatrix * modelViewMatrix * vec4(displaced, 1.0);
 		}
@@ -334,6 +404,8 @@
 		uniform float uCausticSpeed;
 		uniform float uCausticIntensity;
 		uniform float uWaterDistortion;
+		uniform float uRippleEdgeInfluence;
+		uniform float uEdgeRippleStrength;
 		
 		varying vec2 vUv;
 		varying vec2 vRawUv;
@@ -345,30 +417,46 @@
 		vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
 		
 		float snoise(vec2 v) {
-			const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+			// Standard 2D simplex-noise constants for skewing the grid and
+			// mapping hashed lattice values into pseudo-random gradients.
+			const vec4 simplexConstants = vec4(0.211324865405187, 0.366025403784439,
 				-0.577350269189626, 0.024390243902439);
-			vec2 i  = floor(v + dot(v, C.yy));
-			vec2 x0 = v -   i + dot(i, C.xx);
-			vec2 i1;
-			i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-			vec4 x12 = x0.xyxy + C.xxzz;
-			x12.xy -= i1;
-			i = mod289(i);
-			vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0))
-				+ i.x + vec3(0.0, i1.x, 1.0));
-			vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
-				dot(x12.zw,x12.zw)), 0.0);
-			m = m*m;
-			m = m*m;
-			vec3 x = 2.0 * fract(p * C.www) - 1.0;
-			vec3 h = abs(x) - 0.5;
-			vec3 ox = floor(x + 0.5);
-			vec3 a0 = x - ox;
-			m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
-			vec3 g;
-			g.x  = a0.x  * x0.x  + h.x  * x0.y;
-			g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-			return 130.0 * dot(m, g);
+			vec2 simplexCell = floor(v + dot(v, simplexConstants.yy));
+			vec2 corner0Offset = v - simplexCell + dot(simplexCell, simplexConstants.xx);
+			
+			// Choose which neighboring corner comes second inside this simplex triangle.
+			vec2 cornerStep = (corner0Offset.x > corner0Offset.y)
+				? vec2(1.0, 0.0)
+				: vec2(0.0, 1.0);
+			vec4 cornerOffsets = corner0Offset.xyxy + simplexConstants.xxzz;
+			cornerOffsets.xy -= cornerStep;
+			
+			// Hash the three corners so each one gets a stable gradient direction.
+			simplexCell = mod289(simplexCell);
+			vec3 gradientHash = permute(permute(simplexCell.y + vec3(0.0, cornerStep.y, 1.0))
+				+ simplexCell.x + vec3(0.0, cornerStep.x, 1.0));
+			
+			// Weight each corner contribution based on its distance from the sample point.
+			vec3 cornerFalloff = max(0.5 - vec3(
+				dot(corner0Offset, corner0Offset),
+				dot(cornerOffsets.xy, cornerOffsets.xy),
+				dot(cornerOffsets.zw, cornerOffsets.zw)
+			), 0.0);
+			cornerFalloff = cornerFalloff * cornerFalloff;
+			cornerFalloff = cornerFalloff * cornerFalloff;
+			
+			vec3 gradientX = 2.0 * fract(gradientHash * simplexConstants.www) - 1.0;
+			vec3 gradientY = abs(gradientX) - 0.5;
+			vec3 gradientSnap = floor(gradientX + 0.5);
+			vec3 gradientBase = gradientX - gradientSnap;
+			cornerFalloff *= 1.79284291400159
+				- 0.85373472095314 * (gradientBase * gradientBase + gradientY * gradientY);
+			
+			vec3 cornerContribution;
+			cornerContribution.x = gradientBase.x * corner0Offset.x + gradientY.x * corner0Offset.y;
+			cornerContribution.yz =
+				gradientBase.yz * cornerOffsets.xz + gradientY.yz * cornerOffsets.yw;
+			return 130.0 * dot(cornerFalloff, cornerContribution);
 		}
 		
 		void main() {
@@ -467,15 +555,15 @@
 			blob += contourInfluenceVal * sin(angle * 1.5 + depth * 3.0 + uTime * 0.25);
 			
 			// Add ripple influence to blob edge for watery feel
-			blob += totalRipple * 0.5;
+			blob += totalRipple * uRippleEdgeInfluence;
 			
 			// Blob-distorted distance with ripple influence
 			float blobDist = dist + blob * uProgress + totalRipple;
 			
 			// Create blob mask - soft edge with ripple modulation
 			float revealSize = uRevealRadius * uProgress;
-			float edgeSoftnessModulated = uEdgeSoftness + abs(totalRipple) * 2.0;
-			float mask = smoothstep(revealSize + edgeSoftnessModulated, revealSize - (edgeSoftnessModulated * 0.83), blobDist);
+			float edgeSoftnessModulated = uEdgeSoftness + abs(totalRipple) * uEdgeRippleStrength;
+			float mask = smoothstep(revealSize + edgeSoftnessModulated, revealSize - edgeSoftnessModulated, blobDist);
 			
 			// Mix textures with depth-warped blob mask
 			vec4 finalColor = mix(color1, color2, mask);
@@ -520,19 +608,14 @@
 
 <T.AmbientLight intensity={1} />
 
-{#await texturePromise}
+{#if $textures}
+	<T.Mesh position={[0, 0, 0]}>
+		<T.PlaneGeometry args={[4.5, 2.3, 128, 128]} />
+		<T is={createShaderMaterial($textures)} />
+	</T.Mesh>
+{:else}
 	<T.Mesh position={[0, 0, 0]}>
 		<T.PlaneGeometry args={[4.5, 2.3, 1, 1]} />
 		<T.MeshBasicMaterial color="#5ba4d4" side={THREE.DoubleSide} />
 	</T.Mesh>
-{:then textures}
-	<T.Mesh position={[0, 0, 0]}>
-		<T.PlaneGeometry args={[4.5, 2.3, 128, 128]} />
-		<T is={createShaderMaterial(textures)} />
-	</T.Mesh>
-{:catch}
-	<T.Mesh position={[0, 0, 0]}>
-		<T.PlaneGeometry args={[4.5, 2.3, 1, 1]} />
-		<T.MeshBasicMaterial color="#ff0000" side={THREE.DoubleSide} />
-	</T.Mesh>
-{/await}
+{/if}

@@ -10,7 +10,7 @@
 		type ProjectRegistryEntry,
 		type DiscoRegistryEntry
 	} from '$lib/registry/homepage';
-	import { discoParams } from '$lib/registry/discoParams';
+	import { discoParams, type DiscoParams } from '$lib/stores/discoParams.svelte';
 	import { gridLayoutStore, getItemKey } from '$lib/stores/gridLayoutStore.svelte';
 	import { showSections } from '$lib/stores';
 	import { hero3dParams } from '$lib/stores/hero3dParams.svelte';
@@ -254,7 +254,7 @@
 		{ value: 'luminosity', label: 'Luminosity' }
 	];
 
-	const discoParamEntries: Array<{ label: string; value: number }> = [
+	const discoParamEntries = $derived.by(() => [
 		{ label: 'Sample history size', value: discoParams.sampleHistorySize },
 		{ label: 'Min beams', value: discoParams.minBeams },
 		{ label: 'Max beams', value: discoParams.maxBeams },
@@ -262,7 +262,7 @@
 		{ label: 'Click base volatility', value: discoParams.clickBaseVolatility },
 		{ label: 'Volatility smoothing', value: discoParams.volatilitySmoothing },
 		{ label: 'Volatility decay', value: discoParams.volatilityDecay }
-	];
+	]);
 
 	function getSettingsPayload() {
 		return {
@@ -282,7 +282,34 @@
 				contourInfluence: hero3dParams.contourInfluence,
 				edgeSoftness: hero3dParams.edgeSoftness,
 				saturationBoost: hero3dParams.saturationBoost,
-				contrastBoost: hero3dParams.contrastBoost
+				contrastBoost: hero3dParams.contrastBoost,
+				rippleSpeed: hero3dParams.rippleSpeed,
+				rippleFrequency: hero3dParams.rippleFrequency,
+				rippleAmplitude: hero3dParams.rippleAmplitude,
+				causticScale: hero3dParams.causticScale,
+				causticSpeed: hero3dParams.causticSpeed,
+				causticIntensity: hero3dParams.causticIntensity,
+				waterDistortion: hero3dParams.waterDistortion,
+				mouseDamping: hero3dParams.mouseDamping,
+				revealDamping: hero3dParams.revealDamping,
+				mouseRangeX: hero3dParams.mouseRangeX,
+				mouseRangeY: hero3dParams.mouseRangeY,
+				depthFocusNear: hero3dParams.depthFocusNear,
+				depthFocusFar: hero3dParams.depthFocusFar,
+				depthMixLow: hero3dParams.depthMixLow,
+				parallaxXGain: hero3dParams.parallaxXGain,
+				parallaxYGain: hero3dParams.parallaxYGain,
+				rippleEdgeInfluence: hero3dParams.rippleEdgeInfluence,
+				edgeRippleStrength: hero3dParams.edgeRippleStrength
+			},
+			discoParams: {
+				sampleHistorySize: discoParams.sampleHistorySize,
+				minBeams: discoParams.minBeams,
+				maxBeams: discoParams.maxBeams,
+				clickBeamCount: discoParams.clickBeamCount,
+				clickBaseVolatility: discoParams.clickBaseVolatility,
+				volatilitySmoothing: discoParams.volatilitySmoothing,
+				volatilityDecay: discoParams.volatilityDecay
 			}
 		};
 	}
@@ -331,7 +358,26 @@
 					edgeSoftness: number;
 					saturationBoost: number;
 					contrastBoost: number;
+					rippleSpeed: number;
+					rippleFrequency: number;
+					rippleAmplitude: number;
+					causticScale: number;
+					causticSpeed: number;
+					causticIntensity: number;
+					waterDistortion: number;
+					mouseDamping: number;
+					revealDamping: number;
+					mouseRangeX: number;
+					mouseRangeY: number;
+					depthFocusNear: number;
+					depthFocusFar: number;
+					depthMixLow: number;
+					parallaxXGain: number;
+					parallaxYGain: number;
+					rippleEdgeInfluence: number;
+					edgeRippleStrength: number;
 				};
+				discoParams?: DiscoParams;
 			} | null;
 		};
 
@@ -355,17 +401,54 @@
 				hero3dParams.edgeSoftness = hero.edgeSoftness ?? hero3dParams.edgeSoftness;
 				hero3dParams.saturationBoost = hero.saturationBoost ?? hero3dParams.saturationBoost;
 				hero3dParams.contrastBoost = hero.contrastBoost ?? hero3dParams.contrastBoost;
+				hero3dParams.rippleSpeed = hero.rippleSpeed ?? hero3dParams.rippleSpeed;
+				hero3dParams.rippleFrequency = hero.rippleFrequency ?? hero3dParams.rippleFrequency;
+				hero3dParams.rippleAmplitude = hero.rippleAmplitude ?? hero3dParams.rippleAmplitude;
+				hero3dParams.causticScale = hero.causticScale ?? hero3dParams.causticScale;
+				hero3dParams.causticSpeed = hero.causticSpeed ?? hero3dParams.causticSpeed;
+				hero3dParams.causticIntensity =
+					hero.causticIntensity ?? hero3dParams.causticIntensity;
+				hero3dParams.waterDistortion =
+					hero.waterDistortion ?? hero3dParams.waterDistortion;
+				hero3dParams.mouseDamping = hero.mouseDamping ?? hero3dParams.mouseDamping;
+				hero3dParams.revealDamping = hero.revealDamping ?? hero3dParams.revealDamping;
+				hero3dParams.mouseRangeX = hero.mouseRangeX ?? hero3dParams.mouseRangeX;
+				hero3dParams.mouseRangeY = hero.mouseRangeY ?? hero3dParams.mouseRangeY;
+				hero3dParams.depthFocusNear =
+					hero.depthFocusNear ?? hero3dParams.depthFocusNear;
+				hero3dParams.depthFocusFar = hero.depthFocusFar ?? hero3dParams.depthFocusFar;
+				hero3dParams.depthMixLow = hero.depthMixLow ?? hero3dParams.depthMixLow;
+				hero3dParams.parallaxXGain =
+					hero.parallaxXGain ?? hero3dParams.parallaxXGain;
+				hero3dParams.parallaxYGain =
+					hero.parallaxYGain ?? hero3dParams.parallaxYGain;
+				hero3dParams.rippleEdgeInfluence =
+					hero.rippleEdgeInfluence ?? hero3dParams.rippleEdgeInfluence;
+				hero3dParams.edgeRippleStrength =
+					hero.edgeRippleStrength ?? hero3dParams.edgeRippleStrength;
+			}
+
+			const disco = settings.discoParams;
+			if (disco) {
+				discoParams.sampleHistorySize = disco.sampleHistorySize ?? discoParams.sampleHistorySize;
+				discoParams.minBeams = disco.minBeams ?? discoParams.minBeams;
+				discoParams.maxBeams = disco.maxBeams ?? discoParams.maxBeams;
+				discoParams.clickBeamCount = disco.clickBeamCount ?? discoParams.clickBeamCount;
+				discoParams.clickBaseVolatility =
+					disco.clickBaseVolatility ?? discoParams.clickBaseVolatility;
+				discoParams.volatilitySmoothing =
+					disco.volatilitySmoothing ?? discoParams.volatilitySmoothing;
+				discoParams.volatilityDecay = disco.volatilityDecay ?? discoParams.volatilityDecay;
 			}
 		}
 
 		hasLoadedSettings = true;
 	});
 
-	const persistSettings = $derived.by(() => {
-		headerBlendMode;
-		showSectionsEnabled;
+	$effect(() => {
+		void headerBlendMode;
+		void showSectionsEnabled;
 		scheduleSave();
-		return null;
 	});
 
 	const flipDurationMs = 200;

@@ -28,14 +28,14 @@
 		{
 			path: '/api/debug-settings',
 			method: 'GET',
-			description: 'Fetch current debug settings including hero 3D parameters',
+			description: 'Fetch current debug settings including hero and disco parameters',
 			response: '{ settings: DebugSettings | null }'
 		},
 		{
 			path: '/api/debug-settings',
 			method: 'PUT',
 			description: 'Update debug settings with new values',
-			body: '{ headerBlendMode, showSectionsEnabled, hero3dParams }',
+			body: '{ headerBlendMode, showSectionsEnabled, hero3dParams, discoParams }',
 			response: '{ settings: DebugSettings }'
 		}
 	];
@@ -45,7 +45,8 @@
 			key: 'string',
 			headerBlendMode: 'string',
 			showSectionsEnabled: 'boolean',
-			hero3dParams: 'Hero3DParams'
+			hero3dParams: 'Hero3DParams',
+			discoParams: 'DiscoParams'
 		},
 		Hero3DParams: {
 			depthScale: 'number',
@@ -62,6 +63,15 @@
 			edgeSoftness: 'number',
 			saturationBoost: 'number',
 			contrastBoost: 'number'
+		},
+		DiscoParams: {
+			sampleHistorySize: 'number',
+			minBeams: 'number',
+			maxBeams: 'number',
+			clickBeamCount: 'number',
+			clickBaseVolatility: 'number',
+			volatilitySmoothing: 'number',
+			volatilityDecay: 'number'
 		}
 	};
 

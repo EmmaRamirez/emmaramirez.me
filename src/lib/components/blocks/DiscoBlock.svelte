@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { ImageBlock } from '$lib/components/blocks';
-	import { discoParams } from '$lib/registry/discoParams';
+	import { discoParams } from '$lib/stores/discoParams.svelte';
 
 	interface DiscoBlockProps {
 		image: string;
@@ -56,17 +56,9 @@
 	let nextBallId = $state(1);
 	let fadeOut = $state(0);
 
-	const SAMPLE_HISTORY_SIZE = discoParams.sampleHistorySize;
 	let cursorHistory: CursorSample[] = $state([]);
 	let volatility = $state(0);
 	let targetVolatility = $state(0);
-
-	const MIN_BEAMS = discoParams.minBeams;
-	const MAX_BEAMS = discoParams.maxBeams;
-	const CLICK_BEAM_COUNT = discoParams.clickBeamCount;
-	const CLICK_BASE_VOLATILITY = discoParams.clickBaseVolatility;
-	const VOLATILITY_SMOOTHING = discoParams.volatilitySmoothing;
-	const VOLATILITY_DECAY = discoParams.volatilityDecay;
 
 	function shouldAnimate() {
 		return isHovering || discoBalls.length > 0 || fadeOut > 0.01 || volatility > 0.01;
@@ -127,8 +119,8 @@
 
 		cursorHistory.push({ x, y, time: now });
 
-		if (cursorHistory.length > SAMPLE_HISTORY_SIZE) {
-			cursorHistory = cursorHistory.slice(-SAMPLE_HISTORY_SIZE);
+		if (cursorHistory.length > discoParams.sampleHistorySize) {
+			cursorHistory = cursorHistory.slice(-discoParams.sampleHistorySize);
 		}
 
 		targetVolatility = calculateVolatility();
@@ -136,15 +128,17 @@
 
 	function updateVolatility() {
 		if (targetVolatility > volatility) {
-			volatility += (targetVolatility - volatility) * VOLATILITY_SMOOTHING;
+			volatility += (targetVolatility - volatility) * discoParams.volatilitySmoothing;
 		} else {
-			volatility *= VOLATILITY_DECAY;
+			volatility *= discoParams.volatilityDecay;
 			if (volatility < 0.01) volatility = 0;
 		}
 	}
 
 	function getVisibleBeamCount(currentVolatility: number = volatility): number {
-		return Math.floor(MIN_BEAMS + (MAX_BEAMS - MIN_BEAMS) * currentVolatility);
+		const minBeams = Math.min(discoParams.minBeams, discoParams.maxBeams);
+		const maxBeams = Math.max(discoParams.minBeams, discoParams.maxBeams);
+		return Math.floor(minBeams + (maxBeams - minBeams) * currentVolatility);
 	}
 
 	function getBeamReach(): number {
@@ -152,7 +146,7 @@
 		return Math.max(320, baseReach);
 	}
 
-	function generateBeams(count: number = 200, reach: number = 400): LightBeam[] {
+	function generateBeams(count: number = discoParams.maxBeams, reach: number = 400): LightBeam[] {
 		const beams: LightBeam[] = [];
 
 		const rings = 10;
@@ -220,7 +214,7 @@
 
 			const pulseIntensity = 0.3 + currentVolatility * 0.3;
 			const angleBrightness = Math.sin(rotatedAngle * 3 + time) * pulseIntensity + (1 - pulseIntensity / 2);
-		const finalBrightness = beam.brightness * angleBrightness * visibility * fadeFactor;
+			const finalBrightness = beam.brightness * angleBrightness * visibility * fadeFactor;
 
 			const hue = 45 + beam.hue * (1 + currentVolatility);
 			const saturation = 15 + Math.abs(beam.hue) * 0.5 + currentVolatility * 20;
@@ -280,7 +274,7 @@
 		if (!isHovering) {
 			isHovering = true;
 			const beamReach = getBeamReach();
-			lightBeams = generateBeams(MAX_BEAMS, beamReach);
+			lightBeams = generateBeams(discoParams.maxBeams, beamReach);
 			cursorHistory = [];
 			volatility = 0;
 			targetVolatility = 0;
@@ -324,14 +318,14 @@
 		ctx.scale(dpr, dpr);
 
 		if (isHovering) {
-			lightBeams = generateBeams(MAX_BEAMS, getBeamReach());
+			lightBeams = generateBeams(discoParams.maxBeams, getBeamReach());
 		}
 
 		if (discoBalls.length) {
 			const reach = getBeamReach();
 			discoBalls = discoBalls.map((ball) => ({
 				...ball,
-				beams: generateBeams(CLICK_BEAM_COUNT, reach),
+				beams: generateBeams(discoParams.clickBeamCount, reach),
 			}));
 		}
 
@@ -390,8 +384,8 @@
 		const y = event.clientY - bounds.top;
 
 		const beamReach = getBeamReach();
-		const beams = generateBeams(CLICK_BEAM_COUNT, beamReach);
-		const ballVolatility = Math.max(volatility, CLICK_BASE_VOLATILITY);
+		const beams = generateBeams(discoParams.clickBeamCount, beamReach);
+		const ballVolatility = Math.max(volatility, discoParams.clickBaseVolatility);
 
 		discoBalls = [
 			...discoBalls,
