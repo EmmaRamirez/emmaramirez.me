@@ -40,7 +40,13 @@
 					class:active={activeSection === 'grid'}
 					onclick={() => (activeSection = 'grid')}
 				>
-					<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<svg
+						class="h-4 w-4"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
 						<rect x="3" y="3" width="7" height="7" rx="1" />
 						<rect x="14" y="3" width="7" height="7" rx="1" />
 						<rect x="3" y="14" width="7" height="7" rx="1" />
@@ -55,7 +61,13 @@
 					onclick={() => (activeSection = 'hero')}
 					disabled
 				>
-					<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<svg
+						class="h-4 w-4"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
 						<rect x="2" y="4" width="20" height="16" rx="2" />
 						<path d="M2 8h20" />
 					</svg>
@@ -69,9 +81,17 @@
 					onclick={() => (activeSection = 'settings')}
 					disabled
 				>
-					<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<svg
+						class="h-4 w-4"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
 						<circle cx="12" cy="12" r="3" />
-						<path d="M12 1v4m0 14v4M4.22 4.22l2.83 2.83m9.9 9.9l2.83 2.83M1 12h4m14 0h4M4.22 19.78l2.83-2.83m9.9-9.9l2.83-2.83" />
+						<path
+							d="M12 1v4m0 14v4M4.22 4.22l2.83 2.83m9.9 9.9l2.83 2.83M1 12h4m14 0h4M4.22 19.78l2.83-2.83m9.9-9.9l2.83-2.83"
+						/>
 					</svg>
 					Settings
 					<span class="ml-1 text-xs opacity-50">(soon)</span>
@@ -141,4 +161,3 @@
 		color: var(--text-muted);
 	}
 </style>
-

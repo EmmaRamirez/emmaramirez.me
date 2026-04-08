@@ -40,42 +40,22 @@ function normalizeHero3DParams(value: unknown): Hero3DParamsPayload {
 		contourOffset: readNumber(record, 'contourOffset', defaultHero3DParams.contourOffset),
 		blobAmplitude: readNumber(record, 'blobAmplitude', defaultHero3DParams.blobAmplitude),
 		noiseAmplitude: readNumber(record, 'noiseAmplitude', defaultHero3DParams.noiseAmplitude),
-		contourInfluence: readNumber(
-			record,
-			'contourInfluence',
-			defaultHero3DParams.contourInfluence
-		),
+		contourInfluence: readNumber(record, 'contourInfluence', defaultHero3DParams.contourInfluence),
 		edgeSoftness: readNumber(record, 'edgeSoftness', defaultHero3DParams.edgeSoftness),
-		saturationBoost: readNumber(
-			record,
-			'saturationBoost',
-			defaultHero3DParams.saturationBoost
-		),
+		saturationBoost: readNumber(record, 'saturationBoost', defaultHero3DParams.saturationBoost),
 		contrastBoost: readNumber(record, 'contrastBoost', defaultHero3DParams.contrastBoost),
 		rippleSpeed: readNumber(record, 'rippleSpeed', defaultHero3DParams.rippleSpeed),
 		rippleFrequency: readNumber(record, 'rippleFrequency', defaultHero3DParams.rippleFrequency),
 		rippleAmplitude: readNumber(record, 'rippleAmplitude', defaultHero3DParams.rippleAmplitude),
 		causticScale: readNumber(record, 'causticScale', defaultHero3DParams.causticScale),
 		causticSpeed: readNumber(record, 'causticSpeed', defaultHero3DParams.causticSpeed),
-		causticIntensity: readNumber(
-			record,
-			'causticIntensity',
-			defaultHero3DParams.causticIntensity
-		),
-		waterDistortion: readNumber(
-			record,
-			'waterDistortion',
-			defaultHero3DParams.waterDistortion
-		),
+		causticIntensity: readNumber(record, 'causticIntensity', defaultHero3DParams.causticIntensity),
+		waterDistortion: readNumber(record, 'waterDistortion', defaultHero3DParams.waterDistortion),
 		mouseDamping: readNumber(record, 'mouseDamping', defaultHero3DParams.mouseDamping),
 		revealDamping: readNumber(record, 'revealDamping', defaultHero3DParams.revealDamping),
 		mouseRangeX: readNumber(record, 'mouseRangeX', defaultHero3DParams.mouseRangeX),
 		mouseRangeY: readNumber(record, 'mouseRangeY', defaultHero3DParams.mouseRangeY),
-		depthFocusNear: readNumber(
-			record,
-			'depthFocusNear',
-			defaultHero3DParams.depthFocusNear
-		),
+		depthFocusNear: readNumber(record, 'depthFocusNear', defaultHero3DParams.depthFocusNear),
 		depthFocusFar: readNumber(record, 'depthFocusFar', defaultHero3DParams.depthFocusFar),
 		depthMixLow: readNumber(record, 'depthMixLow', defaultHero3DParams.depthMixLow),
 		parallaxXGain: readNumber(record, 'parallaxXGain', defaultHero3DParams.parallaxXGain),
@@ -124,9 +104,7 @@ function getStoredDiscoParams(value: unknown) {
 	return value[DISCO_PARAMS_KEY];
 }
 
-function serializeSettings(
-	settings: Awaited<ReturnType<typeof prisma.debugSettings.findUnique>>
-) {
+function serializeSettings(settings: Awaited<ReturnType<typeof prisma.debugSettings.findUnique>>) {
 	if (!settings) return null;
 
 	return {

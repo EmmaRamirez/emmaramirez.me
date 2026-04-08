@@ -10,7 +10,7 @@
 	import { page } from '$app/state';
 
 	import { dev } from '$app/environment';
-	
+
 	let { children } = $props();
 
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
@@ -24,9 +24,11 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 	<script>
-		(function() {
+		(function () {
 			const stored = localStorage.getItem('theme');
-			const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+			const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches
+				? 'dark'
+				: 'light';
 			const theme = stored || preferred;
 			if (theme === 'dark') {
 				document.documentElement.classList.add('dark');

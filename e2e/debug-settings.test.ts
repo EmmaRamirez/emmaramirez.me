@@ -255,4 +255,3 @@ test.describe('Debug Menu UI', () => {
 		await expect(blendModeSelectAfterReload).toHaveValue('overlay');
 	});
 });
-
