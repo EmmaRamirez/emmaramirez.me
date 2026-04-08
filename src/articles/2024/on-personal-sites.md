@@ -1,8 +1,8 @@
 ---
-title: "On Personal Sites"
+title: 'On Personal Sites'
 date: 2024-11-15
 tags: [web, personal]
-description: "Personal websites are an act of rebellion against the homogenization of the web. They are messy, idiosyncratic, and deeply human."
+description: 'Personal websites are an act of rebellion against the homogenization of the web. They are messy, idiosyncratic, and deeply human.'
 ---
 
 Personal websites are an act of rebellion against the homogenization of the web. They are messy, idiosyncratic, and deeply human. In an era of social media profiles that all look the same, a personal site is a statement of individuality.
@@ -22,4 +22,3 @@ The process itself becomes the point. Each decision—from typography to color t
 ## A Call to Action
 
 If you don't have a personal site, build one. If you do, tend to it. Make it weird. Make it yours. The web is better when it's full of strange, beautiful, personal corners rather than endless copies of the same templates.
-

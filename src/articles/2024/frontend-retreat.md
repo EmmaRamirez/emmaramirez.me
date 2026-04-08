@@ -1,8 +1,8 @@
 ---
-title: "Notes from a Frontend Retreat"
+title: 'Notes from a Frontend Retreat'
 date: 2024-09-05
 tags: [frontend, process]
-description: "Three days without Wi-Fi forced me to diagram every component by hand. It was surprisingly clarifying."
+description: 'Three days without Wi-Fi forced me to diagram every component by hand. It was surprisingly clarifying.'
 ---
 
 Three days without Wi-Fi forced me to diagram every component by hand. It was surprisingly clarifying.
@@ -30,4 +30,3 @@ When we returned to our keyboards, implementation went faster than expected. The
 ## A New Practice
 
 Now I start complex features with paper. Not always for three days, but always for at least an hour. The habit stuck because it works.
-

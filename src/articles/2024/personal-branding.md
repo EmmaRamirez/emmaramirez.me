@@ -1,8 +1,8 @@
 ---
-title: "Personal Branding Without Cringe"
+title: 'Personal Branding Without Cringe'
 date: 2024-05-24
 tags: [career, writing]
-description: "How to show your work online without feeling like a billboard."
+description: 'How to show your work online without feeling like a billboard.'
 ---
 
 How to show your work online without feeling like a billboard.
@@ -24,6 +24,7 @@ When you write about a problem you actually struggled with, the authenticity sho
 You don't need a massive following. You need to be known by the right people—the ones who might hire you, collaborate with you, or learn from you.
 
 That might be:
+
 - A well-maintained GitHub profile
 - Occasional blog posts about your craft
 - Thoughtful contributions in niche communities
@@ -46,4 +47,3 @@ The goal isn't content creation. It's leaving useful artifacts of your journey t
 Own your space online. A personal site that you control beats any platform. Platforms change. Your domain stays.
 
 Keep it simple. Keep it honest. Let your work speak.
-

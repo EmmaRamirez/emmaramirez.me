@@ -17,5 +17,3 @@ to compose pages, sections, and content groupings.
 - [ ] **Stepper / Wizard**
 
 See the overview in `docs/components.md` for the full categorized list.
-
-

@@ -1,8 +1,8 @@
 ---
-title: "Learning in Public"
+title: 'Learning in Public'
 date: 2024-04-02
 tags: [learning, community]
-description: "Shipping drafts, sharing mistakes, and the upside of leaving footprints."
+description: 'Shipping drafts, sharing mistakes, and the upside of leaving footprints.'
 ---
 
 Shipping drafts, sharing mistakes, and the upside of leaving footprints.
@@ -55,4 +55,3 @@ The medium matters less than the practice.
 Learning in public isn't about building an audience. It's about building a habit of reflection and sharing that makes you a better learner.
 
 The audience, if it comes, is a side effect.
-

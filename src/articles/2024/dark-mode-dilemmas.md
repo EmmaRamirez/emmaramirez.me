@@ -1,8 +1,8 @@
 ---
-title: "Dark Mode Dilemmas"
+title: 'Dark Mode Dilemmas'
 date: 2024-08-01
 tags: [design, accessibility]
-description: "Color tokens, contrast pitfalls, and why your shadows feel wrong at midnight."
+description: 'Color tokens, contrast pitfalls, and why your shadows feel wrong at midnight.'
 ---
 
 Color tokens, contrast pitfalls, and why your shadows feel wrong at midnight.
@@ -26,10 +26,10 @@ Here's where many dark modes fall apart. Shadows that look subtle against white 
 The solution: use elevation through brightness rather than shadow. Surfaces that are "higher" are slightly lighter. It's how light actually works.
 
 ```css
-:root[data-theme="dark"] {
-  --surface-base: hsl(220 15% 12%);
-  --surface-raised: hsl(220 15% 16%);
-  --surface-overlay: hsl(220 15% 20%);
+:root[data-theme='dark'] {
+	--surface-base: hsl(220 15% 12%);
+	--surface-raised: hsl(220 15% 16%);
+	--surface-overlay: hsl(220 15% 20%);
 }
 ```
 
@@ -44,4 +44,3 @@ Your warning yellow might need to become softer. Your success green might need m
 Remember that people switch modes for different reasons. Eye strain. Aesthetic preference. Battery life. OLED benefits. Low-light environments.
 
 Each context has different needs. The best dark modes account for this by testing in actual conditions, not just in design tools.
-

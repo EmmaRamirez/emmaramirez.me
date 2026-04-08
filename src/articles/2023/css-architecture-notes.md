@@ -1,8 +1,8 @@
 ---
-title: "CSS Architecture Notes"
+title: 'CSS Architecture Notes'
 date: 2023-12-19
 tags: [css, architecture]
-description: "Layered styles, tokens, and when to reach for utilities over components."
+description: 'Layered styles, tokens, and when to reach for utilities over components.'
 ---
 
 Layered styles, tokens, and when to reach for utilities over components. These are notes I've accumulated over years of building and maintaining CSS at scale.
@@ -22,6 +22,7 @@ Each layer has its place. Problems arise when layers bleed into each other.
 ## When Utilities Win
 
 Utility classes shine when you need:
+
 - Quick iterations without touching CSS files
 - Consistent spacing and sizing from tokens
 - Responsive adjustments at multiple breakpoints
@@ -32,6 +33,7 @@ They struggle when patterns repeat. If you're copying the same twelve utility cl
 ## When Components Win
 
 Component classes make sense when:
+
 - The same visual pattern appears in multiple places
 - The styling has semantic meaning tied to functionality
 - You want to abstract away implementation details
@@ -43,11 +45,10 @@ Everything should flow from design tokens. When a designer says "make that blue,
 
 ```css
 :root {
-  --color-primary: oklch(60% 0.15 250);
-  --color-surface: oklch(98% 0.01 250);
-  --spacing-md: 1rem;
+	--color-primary: oklch(60% 0.15 250);
+	--color-surface: oklch(98% 0.01 250);
+	--spacing-md: 1rem;
 }
 ```
 
 Tokens aren't just variables—they're contracts between design and development. Break them thoughtfully.
-

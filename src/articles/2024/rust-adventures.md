@@ -1,8 +1,8 @@
 ---
-title: "Adventures in Rust"
+title: 'Adventures in Rust'
 date: 2024-10-28
 tags: [rust, programming]
-description: "Learning Rust has been a journey of both frustration and enlightenment. The borrow checker, once an adversary, has become a trusted companion."
+description: 'Learning Rust has been a journey of both frustration and enlightenment. The borrow checker, once an adversary, has become a trusted companion.'
 ---
 
 Learning Rust has been a journey of both frustration and enlightenment. The borrow checker, once an adversary, has become a trusted companion that catches my mistakes before they become runtime nightmares.
@@ -32,4 +32,3 @@ The ecosystem has matured beautifully. Cargo is a joy to use, and the community 
 ## Looking Forward
 
 Rust has changed how I think about software reliability. Even when I'm writing in other languages, the lessons stay with me. That's the mark of a truly influential tool.
-

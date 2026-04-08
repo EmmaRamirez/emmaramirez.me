@@ -1,8 +1,8 @@
 ---
-title: "Hegel & Web Design"
+title: 'Hegel & Web Design'
 date: 2024-12-01
 tags: [philosophy, design]
-description: "As much as web design is a visual medium both restrained and bolstered by technological innovations, I find that it cycles in the same way art movements do."
+description: 'As much as web design is a visual medium both restrained and bolstered by technological innovations, I find that it cycles in the same way art movements do.'
 ---
 
 As much as web design is a visual medium both restrained and bolstered by technological innovations, I find that it cycles in the same way art movements do. German philosopher Friedrich Hegel split up history into three moments: the thesis, the antithesis, and the synthesis.
@@ -22,4 +22,3 @@ Today, we find ourselves in a synthesis phase. We have the technology to create 
 As we move forward, new technologies will emerge, new constraints will form, and new possibilities will unfold. The key is to remain adaptable, to understand that each moment in design history builds upon those that came before.
 
 Perhaps the greatest skill a designer can develop is not mastery of tools, but understanding of context. Knowing when to push boundaries and when to honor conventions is what separates craft from mere execution.
-

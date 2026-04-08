@@ -13,5 +13,3 @@ drawers, and menus, with notes on focus management and keyboard interaction.
 - [ ] **Toast / Snackbar**
 
 Refer back to `docs/components.md` for how these fit into the wider library.
-
-

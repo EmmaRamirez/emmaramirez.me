@@ -1,8 +1,8 @@
 ---
-title: "Writing Better Commit Messages"
+title: 'Writing Better Commit Messages'
 date: 2024-06-10
 tags: [workflow, git]
-description: "Small, narrative commits save future you. A quick rubric I follow for clarity."
+description: 'Small, narrative commits save future you. A quick rubric I follow for clarity.'
 ---
 
 Small, narrative commits save future you. A quick rubric I follow for clarity.
@@ -55,6 +55,7 @@ Future you understands the intent, not just the mechanics.
 Each commit should do one thing. If you're writing "and" in your message, consider splitting.
 
 Benefits:
+
 - Easier to revert
 - Clearer history
 - Simpler code review
@@ -73,4 +74,3 @@ Benefits:
 Types I use: `feat`, `fix`, `refactor`, `docs`, `style`, `test`, `chore`.
 
 Simple system. Consistent history. Future you says thanks.
-

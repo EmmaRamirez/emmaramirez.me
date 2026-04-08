@@ -1,8 +1,8 @@
 ---
-title: "Refactoring CSS with Intent"
+title: 'Refactoring CSS with Intent'
 date: 2023-10-10
 tags: [css, refactoring]
-description: "How I chip away at legacy styles without pausing feature work."
+description: 'How I chip away at legacy styles without pausing feature work.'
 ---
 
 How I chip away at legacy styles without pausing feature work.
@@ -20,6 +20,7 @@ Instead of a rewrite, I chip away:
 ### 1. Opportunistic Refactoring
 
 When touching a file for features, improve it slightly:
+
 - Remove dead declarations
 - Consolidate duplicates
 - Add missing custom properties
@@ -53,6 +54,7 @@ Negotiate 10-20% of each sprint for technical health. Use some of it for CSS.
 ## Measuring Progress
 
 Track:
+
 - Lines of CSS (should decrease or stabilize)
 - Number of !important declarations
 - Custom property usage
@@ -65,4 +67,3 @@ Visibility motivates.
 You'll never be "done." Legacy accumulates constantly. The goal is sustainable maintenance, not perfection.
 
 Refactor with intent. Ship with confidence.
-

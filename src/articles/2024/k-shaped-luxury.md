@@ -1,8 +1,8 @@
 ---
-title: "The K-Shaped Economics of Luxury Goods"
+title: 'The K-Shaped Economics of Luxury Goods'
 date: 2024-10-20
 tags: [economics, culture]
-description: "Only broke people buy Gucci is a common refrain. But is it true? The reality reveals a sharp, K-shaped divergence in how different income cohorts interact with luxury goods."
+description: 'Only broke people buy Gucci is a common refrain. But is it true? The reality reveals a sharp, K-shaped divergence in how different income cohorts interact with luxury goods.'
 ---
 
 "Only broke people buy Gucci" is a common refrain you'll hear when people talking about the price of luxury fashion goods. It's a refrain that you hear from both middle class people shocked at the exaggerated swagger of someone with a mysterious amount of designer clothes, and you'll likely here it as well from wealthy people, especially those whose connection to their money comes from work. I've been wondering if this is true at all.
@@ -25,5 +25,4 @@ Between these two groups is the collapsing middle: professionals with strong inc
 
 Luxury brands understand this divergence better than their critics do. Over the past decade, pricing strategies have intentionally pushed entry-level luxury upward, extracting more from aspirational buyers while using scarcity, private access, and ultra-high-end lines to deepen relationships with the wealthy.
 
-The uncomfortable truth is that luxury consumption is not a reliable proxy for wealth. It is a proxy for *how* someone experiences the economy. In a K-shaped world, the same handbag can signify financial strain or financial indifference. The logo does not tell you which side of the curve someone is on.
-
+The uncomfortable truth is that luxury consumption is not a reliable proxy for wealth. It is a proxy for _how_ someone experiences the economy. In a K-shaped world, the same handbag can signify financial strain or financial indifference. The logo does not tell you which side of the curve someone is on.

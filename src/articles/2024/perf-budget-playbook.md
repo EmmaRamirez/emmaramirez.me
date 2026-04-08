@@ -1,8 +1,8 @@
 ---
-title: "Performance Budget Playbook"
+title: 'Performance Budget Playbook'
 date: 2024-07-14
 tags: [performance, web]
-description: "How I set, track, and defend performance budgets when timelines get tight."
+description: 'How I set, track, and defend performance budgets when timelines get tight.'
 ---
 
 How I set, track, and defend performance budgets when timelines get tight.
@@ -36,7 +36,7 @@ Budgets only work if violations are visible:
 ```javascript
 // In your CI pipeline
 if (bundleSize > BUDGET) {
-  throw new Error(`Bundle exceeded budget by ${delta}KB`);
+	throw new Error(`Bundle exceeded budget by ${delta}KB`);
 }
 ```
 
@@ -62,4 +62,3 @@ When budgets slip (and they will):
 4. **Question assumptions** — Does that animation need a library?
 
 Performance is a practice, not a project.
-

@@ -1,8 +1,8 @@
 ---
-title: "A Weekend Accessibility Audit"
+title: 'A Weekend Accessibility Audit'
 date: 2024-05-05
 tags: [accessibility, audit]
-description: "I spent 48 hours with a screen reader and came back with a checklist."
+description: 'I spent 48 hours with a screen reader and came back with a checklist.'
 ---
 
 I spent 48 hours with a screen reader and came back with a checklist.
@@ -44,4 +44,3 @@ After fixing the obvious issues, I documented patterns to check for:
 Accessibility isn't a checkbox. It's a practice. Now every PR includes manual keyboard testing. Every new component gets screen reader verification.
 
 The weekend changed how I build, permanently.
-

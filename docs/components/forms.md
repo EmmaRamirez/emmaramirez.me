@@ -19,5 +19,3 @@ their props, accessibility considerations, and usage patterns.
 - [ ] **Inline validation messages**
 
 See the high-level inventory in `docs/components.md` for a categorized list.
-
-

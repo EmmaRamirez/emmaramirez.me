@@ -266,5 +266,3 @@ These components already exist and can be extended or documented further:
 - `Toast` → `$lib/components/ui/Toast.svelte`
 - `Tooltip` → `$lib/components/ui/Tooltip.svelte`
 - `Typography` → `$lib/components/ui/Typography.svelte`
-
-

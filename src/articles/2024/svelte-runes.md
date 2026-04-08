@@ -1,8 +1,8 @@
 ---
-title: "Svelte 5 Runes"
+title: 'Svelte 5 Runes'
 date: 2024-10-10
 tags: [svelte, javascript]
-description: "Runes represent a fundamental shift in how Svelte handles reactivity. Moving from implicit to explicit reactivity opens new possibilities."
+description: 'Runes represent a fundamental shift in how Svelte handles reactivity. Moving from implicit to explicit reactivity opens new possibilities.'
 ---
 
 Runes represent a fundamental shift in how Svelte handles reactivity. Moving from implicit to explicit reactivity might seem like a step backward, but it opens up new possibilities for composition and clarity.
@@ -30,11 +30,13 @@ The real power shows in extraction. Want to share reactive logic between compone
 
 ```javascript
 function useCounter(initial = 0) {
-  let count = $state(initial);
-  return {
-    get count() { return count; },
-    increment: () => count++
-  };
+	let count = $state(initial);
+	return {
+		get count() {
+			return count;
+		},
+		increment: () => count++
+	};
 }
 ```
 
@@ -45,4 +47,3 @@ This function works anywhere. No special APIs. No framework coupling.
 Yes, there's more syntax. Yes, the compiler is still doing work under the hood. But the explicitness pays dividends in large codebases where tracking data flow matters.
 
 Svelte 5 feels like a framework that's grown up without losing its soul.
-

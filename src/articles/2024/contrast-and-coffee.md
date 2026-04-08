@@ -1,8 +1,8 @@
 ---
-title: "Contrast and Coffee"
+title: 'Contrast and Coffee'
 date: 2024-02-28
 tags: [design, color]
-description: "An early-morning ritual for testing palettes against real content."
+description: 'An early-morning ritual for testing palettes against real content.'
 ---
 
 An early-morning ritual for testing palettes against real content.
@@ -41,4 +41,3 @@ The goal isn't formal testing. It's living with the design for a few minutes bef
 Coffee. Content. Colors. Fifteen minutes of actual looking before the meetings start.
 
 Most days, nothing changes. But the days when something does? Those are the days that matter.
-

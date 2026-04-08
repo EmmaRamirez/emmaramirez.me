@@ -1,8 +1,8 @@
 ---
-title: "Designing Component APIs"
+title: 'Designing Component APIs'
 date: 2024-01-22
 tags: [components, api-design]
-description: "Prop naming, sensible defaults, and the power of good slots."
+description: 'Prop naming, sensible defaults, and the power of good slots.'
 ---
 
 Prop naming, sensible defaults, and the power of good slots.
@@ -42,8 +42,8 @@ Slots (or children in React) are escape hatches that keep APIs simple.
 Instead of:
 
 ```svelte
-<Card 
-  title="Hello" 
+<Card
+  title="Hello"
   subtitle="World"
   headerAction={<Button>Edit</Button>}
   footer={<Link>Read more</Link>}
@@ -54,14 +54,14 @@ Consider:
 
 ```svelte
 <Card>
-  <Card.Header>
-    <h2>Hello</h2>
-    <Button>Edit</Button>
-  </Card.Header>
-  <p>Content here</p>
-  <Card.Footer>
-    <Link>Read more</Link>
-  </Card.Footer>
+	<Card.Header>
+		<h2>Hello</h2>
+		<Button>Edit</Button>
+	</Card.Header>
+	<p>Content here</p>
+	<Card.Footer>
+		<Link>Read more</Link>
+	</Card.Footer>
 </Card>
 ```
 
@@ -76,4 +76,3 @@ If your component needs extensive documentation to use, the API might be wrong. 
 APIs are promises. Breaking changes break trust.
 
 Add props, don't remove them. Deprecate gracefully. Provide migration paths. Version when you must.
-

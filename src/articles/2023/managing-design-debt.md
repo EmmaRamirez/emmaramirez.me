@@ -1,8 +1,8 @@
 ---
-title: "Managing Design Debt"
+title: 'Managing Design Debt'
 date: 2023-12-01
 tags: [design, process]
-description: "Tracking messy corners, prioritizing fixes, and communicating tradeoffs."
+description: 'Tracking messy corners, prioritizing fixes, and communicating tradeoffs.'
 ---
 
 Tracking messy corners, prioritizing fixes, and communicating tradeoffs.
@@ -23,6 +23,7 @@ Left unaddressed, design debt compounds just like the technical kind.
 Start with visibility. You can't manage what you can't see.
 
 I maintain a simple spreadsheet:
+
 - **What**: The specific inconsistency
 - **Where**: Pages or components affected
 - **Impact**: User experience or maintenance burden
@@ -47,6 +48,7 @@ High impact + high frequency = fix now. Low impact + low frequency = document an
 Design debt often gets invisible to stakeholders. Product sees "it works." Engineering sees "it shipped."
 
 Make the tradeoffs explicit:
+
 - "We shipped this with a known accessibility gap affecting X users"
 - "This pattern diverges from our system, creating Y maintenance burden"
 
@@ -55,10 +57,10 @@ Document decisions and their consequences.
 ## Prevention
 
 The best debt is the debt you don't take on:
+
 - Design reviews before development
 - Accessibility checks in QA
 - Component audits quarterly
 - Time allocated for polish
 
 Debt is sometimes necessary. But it should be intentional, not accidental.
-

@@ -1,8 +1,8 @@
 ---
-title: "Microcopy Matters"
+title: 'Microcopy Matters'
 date: 2024-04-18
 tags: [ux, writing]
-description: "Tiny strings guide user confidence. Examples of supportive, precise language."
+description: 'Tiny strings guide user confidence. Examples of supportive, precise language.'
 ---
 
 Tiny strings guide user confidence. Examples of supportive, precise language.
@@ -59,4 +59,3 @@ Tell users what the system is doing. It builds confidence that something is actu
 Good microcopy takes time. It requires understanding user context, testing actual comprehension, and iterating on feedback.
 
 But the payoff is trust. And trust compounds.
-

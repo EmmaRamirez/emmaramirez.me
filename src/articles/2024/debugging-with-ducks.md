@@ -1,8 +1,8 @@
 ---
-title: "Rubber Ducks and Real Bugs"
+title: 'Rubber Ducks and Real Bugs'
 date: 2024-01-06
 tags: [debugging, habits]
-description: "My favorite questions to ask the duck before opening DevTools."
+description: 'My favorite questions to ask the duck before opening DevTools.'
 ---
 
 My favorite questions to ask the duck before opening DevTools.
@@ -52,4 +52,3 @@ If you've been stuck for more than 30 minutes:
 - Sleep on it
 
 Fresh perspective beats exhausted persistence.
-

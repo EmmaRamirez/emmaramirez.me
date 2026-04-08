@@ -1,8 +1,8 @@
 ---
-title: "Rest and Creativity"
+title: 'Rest and Creativity'
 date: 2024-02-10
 tags: [creativity, wellness]
-description: "Why stepping away from the screen often solves the layout faster."
+description: 'Why stepping away from the screen often solves the layout faster.'
 ---
 
 Why stepping away from the screen often solves the layout faster.
@@ -47,4 +47,3 @@ But rest is productive. It's part of the work, not a break from it.
 End work at the hard part. Leave a problem unsolved before stepping away. Let your subconscious have something to work on overnight.
 
 Then trust the process. The solution will come.
-
