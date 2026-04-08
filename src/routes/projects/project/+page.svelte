@@ -2,8 +2,8 @@
 	import { headerColor, title } from '$lib/stores';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
-	import { getProject, projectIds, type ProjectId } from '$lib/registry/homepage';
-	import { readingTimeMinutesFromText, sequentialNeighborsInIds } from '$lib/reading';
+	import { getProject, getProjectNeighbors, type ProjectId } from '$lib/registry/homepage';
+	import { readingTimeMinutesFromText } from '$lib/reading';
 	import { dev } from '$app/environment';
 	import { fade, fly } from 'svelte/transition';
 	import { page } from '$app/stores';
@@ -12,13 +12,9 @@
 	const projectId = $derived(($page.url.searchParams.get('id') ?? 'nuzlocke') as ProjectId);
 	const project = $derived(getProject(projectId) ?? getProject('nuzlocke'));
 
-	const projectSeq = $derived(sequentialNeighborsInIds(projectIds, projectId));
-	const prevProject = $derived(
-		projectSeq.prevId ? (getProject(projectSeq.prevId) ?? null) : null
-	);
-	const nextProject = $derived(
-		projectSeq.nextId ? (getProject(projectSeq.nextId) ?? null) : null
-	);
+	const projectNeighbors = $derived(getProjectNeighbors(projectId));
+	const prevProject = $derived(projectNeighbors.prevProject);
+	const nextProject = $derived(projectNeighbors.nextProject);
 
 	$effect(() => {
 		title.set(`projects/${project.title}`);
@@ -76,7 +72,7 @@
 </svelte:head>
 
 <div
-	class="fixed top-0 left-0 z-50 h-[0.1875rem] bg-(--text-primary) transition-all duration-75"
+	class="fixed top-0 left-0 z-50 h-0.75 bg-(--text-primary) transition-all duration-75"
 	style="width: {scrollProgress}%"
 ></div>
 
@@ -269,7 +265,7 @@
 			<div class="grid grid-cols-2 gap-8">
 				<div>
 					{#if prevProject}
-						<a href={resolve(`/projects/project?id=${prevProject.id}`)} class="style-none group block">
+						<a href={`/projects/project?id=${prevProject.id}`} class="style-none group block">
 							<span
 								class="mb-1 block font-sans text-xs tracking-wider text-(--text-muted) uppercase"
 							>
@@ -285,7 +281,7 @@
 				</div>
 				<div class="text-right">
 					{#if nextProject}
-						<a href={resolve(`/projects/project?id=${nextProject.id}`)} class="style-none group block">
+						<a href={`/projects/project?id=${nextProject.id}`} class="style-none group block">
 							<span
 								class="mb-1 block font-sans text-xs tracking-wider text-(--text-muted) uppercase"
 							>

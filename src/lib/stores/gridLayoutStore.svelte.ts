@@ -19,9 +19,32 @@ interface SavedLayout {
 }
 
 function getItemKey(item: GridItem): string {
-	if (item.kind === 'article') return `article-${item.article.id}`;
+	if (item.kind === 'article') return `article-${item.article.slug}`;
 	if (item.kind === 'project') return `project-${item.project.id}`;
 	return item.kind;
+}
+
+export function getGridItemSpanClasses(
+	layout: Pick<GridItemLayout, 'colSpan' | 'rowSpan'> | undefined,
+	options?: { colSpan?: 1 | 2 | 3; rowSpan?: 1 | 2 }
+): string {
+	const colSpan = options?.colSpan ?? layout?.colSpan;
+	const rowSpan = options?.rowSpan ?? layout?.rowSpan;
+
+	if (!colSpan || !rowSpan) return '';
+
+	const colClasses = {
+		1: '',
+		2: 'md:col-span-2',
+		3: 'md:col-span-2 lg:col-span-3'
+	};
+
+	const rowClasses = {
+		1: '',
+		2: 'row-span-2'
+	};
+
+	return `${colClasses[colSpan]} ${rowClasses[rowSpan]}`.trim();
 }
 
 function getDefaultLayout(item: GridItem): GridItemLayout {

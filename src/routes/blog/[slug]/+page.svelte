@@ -2,18 +2,16 @@
 	import { headerColor, title } from '$lib/stores';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
-	import { getArticleBySlug, getArticles } from '$lib/articles';
+	import { getArticleBySlug, getArticleNeighbors } from '$lib/articles';
 	import { dev } from '$app/environment';
 	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import { orderedListNeighbors, readingTimeMinutesFromText } from '$lib/reading';
 	import { formatRelativeDate } from '$lib/utils';
 
-	let { data } = $props();
+	let { data }: import('./$types').PageProps = $props();
 
 	const article = $derived(getArticleBySlug(data.slug)!);
-	const articles = getArticles();
-	const essayNeighbors = $derived(orderedListNeighbors(articles, data.slug, (a) => a.slug));
+	const essayNeighbors = $derived(getArticleNeighbors(data.slug));
 	const prevArticle = $derived(essayNeighbors.prev);
 	const nextArticle = $derived(essayNeighbors.next);
 
@@ -42,7 +40,7 @@
 		return formatRelativeDate(dateStr);
 	}
 
-	const readingTime = $derived(readingTimeMinutesFromText(data.description));
+	const readingTime = $derived(data.readingTimeMinutes);
 </script>
 
 <svelte:head>
@@ -51,7 +49,7 @@
 </svelte:head>
 
 <div
-	class="fixed top-0 left-0 z-50 h-[0.1875rem] bg-(--text-primary) transition-all duration-75"
+	class="fixed top-0 left-0 z-50 h-0.75 bg-(--text-primary) transition-all duration-75"
 	style="width: {scrollProgress}%"
 ></div>
 

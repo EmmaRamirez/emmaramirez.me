@@ -14,7 +14,8 @@ export const load: PageServerLoad = async ({ params }) => {
 		title: article.frontmatter.title,
 		date: article.frontmatter.date,
 		tags: article.frontmatter.tags ?? [],
-		description: article.frontmatter.description
+		description: article.frontmatter.description,
+		readingTimeMinutes: article.readingTimeMinutes
 	};
 };
 

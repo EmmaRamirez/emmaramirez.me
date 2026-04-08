@@ -1,29 +1,21 @@
 <script lang="ts">
-	import { getProject, projectIds, type ProjectId } from '$lib/registry/homepage';
-	import { readingTimeMinutesFromText, sequentialNeighborsInIds } from '$lib/reading';
+	import { getProject, getProjectNeighbors, type ProjectId } from '$lib/registry/homepage';
 	import { fly, fade } from 'svelte/transition';
 
 	interface ProjectReaderPanelProps {
 		open?: boolean;
 		projectId?: ProjectId | null;
 		onclose?: () => void;
+		onnavigate?: (projectId: ProjectId) => void;
 	}
 
-	let { open = false, projectId = null, onclose }: ProjectReaderPanelProps = $props();
+	let { open = false, projectId = null, onclose, onnavigate }: ProjectReaderPanelProps = $props();
 
 	const project = $derived(projectId ? (getProject(projectId) ?? null) : null);
 
-	const projectSeq = $derived(sequentialNeighborsInIds(projectIds, projectId));
-	const prevProject = $derived(
-		projectSeq.prevId ? (getProject(projectSeq.prevId) ?? null) : null
-	);
-	const nextProject = $derived(
-		projectSeq.nextId ? (getProject(projectSeq.nextId) ?? null) : null
-	);
-
-	const readingTime = $derived(
-		project?.content ? readingTimeMinutesFromText(project.content) : 0
-	);
+	const projectNeighbors = $derived(getProjectNeighbors(projectId));
+	const prevProject = $derived(projectNeighbors.prevProject);
+	const nextProject = $derived(projectNeighbors.nextProject);
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (!open) return;
@@ -55,17 +47,12 @@
 		) {
 			event.preventDefault();
 			if ((event.key === 'k' || event.key === 'K') && prevProject) {
-				navigateToProject(prevProject.id);
+				onnavigate?.(prevProject.id);
 			}
 			if ((event.key === 'j' || event.key === 'J') && nextProject) {
-				navigateToProject(nextProject.id);
+				onnavigate?.(nextProject.id);
 			}
 		}
-	}
-
-	function navigateToProject(id: ProjectId) {
-		const customEvent = new CustomEvent('navigateproject', { detail: { id } });
-		document.dispatchEvent(customEvent);
 	}
 
 	function getStatusLabel(status: string | undefined): string {
@@ -132,7 +119,7 @@
 					{#if prevProject}
 						<button
 							class="hotkey-indicator"
-							onclick={() => navigateToProject(prevProject.id)}
+							onclick={() => onnavigate?.(prevProject.id)}
 							aria-label="Previous project"
 						>
 							<kbd class="key-badge">K</kbd>
@@ -142,7 +129,7 @@
 					{#if nextProject}
 						<button
 							class="hotkey-indicator"
-							onclick={() => navigateToProject(nextProject.id)}
+							onclick={() => onnavigate?.(nextProject.id)}
 							aria-label="Next project"
 						>
 							<kbd class="key-badge">J</kbd>
@@ -278,7 +265,7 @@
 					<div class="nav-grid">
 						<div class="nav-prev">
 							{#if prevProject}
-								<button class="nav-link" onclick={() => navigateToProject(prevProject.id)}>
+								<button class="nav-link" onclick={() => onnavigate?.(prevProject.id)}>
 									<span class="nav-direction">← Previous</span>
 									<span class="nav-title">{prevProject.title}</span>
 								</button>
@@ -288,7 +275,7 @@
 							{#if nextProject}
 								<button
 									class="nav-link nav-link-next"
-									onclick={() => navigateToProject(nextProject.id)}
+									onclick={() => onnavigate?.(nextProject.id)}
 								>
 									<span class="nav-direction">Next →</span>
 									<span class="nav-title">{nextProject.title}</span>

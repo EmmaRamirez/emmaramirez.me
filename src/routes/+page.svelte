@@ -13,13 +13,11 @@
 		closeProjectReader,
 		getArticleOpen,
 		getProjectOpen,
-		getSelectedArticleId,
+		getSelectedArticleSlug,
 		getSelectedProjectId,
-		getAnyPanelOpen,
-		setSelectedArticleId,
-		setSelectedProjectId
+		getAnyPanelOpen
 	} from '$lib/stores/readerPanelStore.svelte';
-	import { getDisco, type ProjectId } from '$lib/registry/homepage';
+	import { getDisco } from '$lib/registry/homepage';
 	import { buildHomepageGridItems } from '$lib/registry/gridItems';
 	import { onMount } from 'svelte';
 
@@ -61,31 +59,14 @@
 
 	const articleReaderPanelOpen = $derived(getArticleOpen());
 	const projectReaderPanelOpen = $derived(getProjectOpen());
-	const selectedArticleId = $derived(getSelectedArticleId());
+	const selectedArticleSlug = $derived(getSelectedArticleSlug());
 	const selectedProjectId = $derived(getSelectedProjectId());
 	const anyPanelOpen = $derived(getAnyPanelOpen());
 
 	onMount(() => {
-		const unsubscribeShowSections = showSections.subscribe((value) => {
+		return showSections.subscribe((value) => {
 			showSectionsEnabled = value;
 		});
-
-		const handleNavigateArticle = (event: CustomEvent<{ id: string }>) => {
-			setSelectedArticleId(event.detail.id);
-		};
-
-		const handleNavigateProject = (event: CustomEvent<{ id: ProjectId }>) => {
-			setSelectedProjectId(event.detail.id);
-		};
-
-		document.addEventListener('navigatearticle', handleNavigateArticle as EventListener);
-		document.addEventListener('navigateproject', handleNavigateProject as EventListener);
-
-		return () => {
-			unsubscribeShowSections();
-			document.removeEventListener('navigatearticle', handleNavigateArticle as EventListener);
-			document.removeEventListener('navigateproject', handleNavigateProject as EventListener);
-		};
 	});
 </script>
 
@@ -167,14 +148,16 @@
 
 	<ArticleReaderPanel
 		open={articleReaderPanelOpen}
-		articleId={selectedArticleId}
+		articleSlug={selectedArticleSlug}
 		onclose={closeArticleReader}
+		onnavigate={openArticleReader}
 	/>
 
 	<ProjectReaderPanel
 		open={projectReaderPanelOpen}
 		projectId={selectedProjectId}
 		onclose={closeProjectReader}
+		onnavigate={openProjectReader}
 	/>
 
 	<DebugMenu open={debugMenuOpen} onclose={() => (debugMenuOpen = false)} bind:headerBlendMode />

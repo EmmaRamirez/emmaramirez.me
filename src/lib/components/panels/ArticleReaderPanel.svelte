@@ -1,32 +1,26 @@
 <script lang="ts">
-	import { getArticles, type ArticleFull } from '$lib/articles';
-	import { orderedListNeighbors, readingTimeMinutesFromText } from '$lib/reading';
+	import { getArticleBySlug, getArticleNeighbors, type ArticleFull } from '$lib/articles';
 	import { formatLongDate } from '$lib/utils';
 	import { fly, fade } from 'svelte/transition';
 
 	interface ArticleReaderPanelProps {
 		open?: boolean;
-		articleId?: string | null;
+		articleSlug?: string | null;
 		onclose?: () => void;
+		onnavigate?: (articleSlug: string) => void;
 	}
 
-	let { open = false, articleId = null, onclose }: ArticleReaderPanelProps = $props();
-
-	const allArticles = getArticles();
+	let { open = false, articleSlug = null, onclose, onnavigate }: ArticleReaderPanelProps = $props();
 
 	const article = $derived<ArticleFull | null>(
-		articleId ? (allArticles.find((a) => a.slug === articleId) ?? null) : null
+		articleSlug ? (getArticleBySlug(articleSlug) ?? null) : null
 	);
 
-	const articleNeighbors = $derived(
-		orderedListNeighbors(allArticles, articleId, (a) => a.slug)
-	);
+	const articleNeighbors = $derived(getArticleNeighbors(articleSlug));
 	const prevArticle = $derived(articleNeighbors.prev);
 	const nextArticle = $derived(articleNeighbors.next);
 
-	const readingTime = $derived(
-		article ? readingTimeMinutesFromText(article.frontmatter.description) : 0
-	);
+	const readingTime = $derived(article?.readingTimeMinutes ?? 0);
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (!open) return;
@@ -58,17 +52,12 @@
 		) {
 			event.preventDefault();
 			if ((event.key === 'k' || event.key === 'K') && prevArticle) {
-				navigateToArticle(prevArticle.slug);
+				onnavigate?.(prevArticle.slug);
 			}
 			if ((event.key === 'j' || event.key === 'J') && nextArticle) {
-				navigateToArticle(nextArticle.slug);
+				onnavigate?.(nextArticle.slug);
 			}
 		}
-	}
-
-	function navigateToArticle(id: string) {
-		const customEvent = new CustomEvent('navigatearticle', { detail: { id } });
-		document.dispatchEvent(customEvent);
 	}
 </script>
 
@@ -110,7 +99,7 @@
 					{#if prevArticle}
 						<button
 							class="hotkey-indicator"
-							onclick={() => navigateToArticle(prevArticle.slug)}
+							onclick={() => onnavigate?.(prevArticle.slug)}
 							aria-label="Previous article"
 						>
 							<kbd class="key-badge">K</kbd>
@@ -120,7 +109,7 @@
 					{#if nextArticle}
 						<button
 							class="hotkey-indicator"
-							onclick={() => navigateToArticle(nextArticle.slug)}
+							onclick={() => onnavigate?.(nextArticle.slug)}
 							aria-label="Next article"
 						>
 							<kbd class="key-badge">J</kbd>
@@ -185,7 +174,7 @@
 					<div class="nav-grid">
 						<div class="nav-prev">
 							{#if prevArticle}
-								<button class="nav-link" onclick={() => navigateToArticle(prevArticle.slug)}>
+								<button class="nav-link" onclick={() => onnavigate?.(prevArticle.slug)}>
 									<span class="nav-direction">← Previous</span>
 									<span class="nav-title">{prevArticle.frontmatter.title}</span>
 								</button>
@@ -195,7 +184,7 @@
 							{#if nextArticle}
 								<button
 									class="nav-link nav-link-next"
-									onclick={() => navigateToArticle(nextArticle.slug)}
+									onclick={() => onnavigate?.(nextArticle.slug)}
 								>
 									<span class="nav-direction">Next →</span>
 									<span class="nav-title">{nextArticle.frontmatter.title}</span>

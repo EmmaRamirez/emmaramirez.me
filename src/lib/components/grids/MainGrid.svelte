@@ -2,26 +2,30 @@
 	import { dev } from '$app/environment';
 	import {
 		ApiExplorerBlock,
-		ArticleCard,
 		DiscoBlock,
 		HomeBlock,
 		LocationBlock,
 		PokemonBlock,
-		ProjectBlock,
 		TopLanguages,
 		DesignSystemAd,
 		DesignSystemBrowser,
 		CityCard
 	} from '$lib/components/blocks';
 	import { Hero } from '$lib/components/hero';
+	import GridArticleTile from './GridArticleTile.svelte';
+	import GridProjectTile from './GridProjectTile.svelte';
 	import type { GridItem } from '$lib/types/homepage';
 	import type { DiscoRegistryEntry, ProjectId } from '$lib/registry/homepage';
 	import { pokemonTeam } from '$lib/website.config';
-	import { gridLayoutStore, getItemKey } from '$lib/stores/gridLayoutStore.svelte';
+	import {
+		gridLayoutStore,
+		getGridItemSpanClasses,
+		getItemKey
+	} from '$lib/stores/gridLayoutStore.svelte';
 	import {
 		getArticleOpen,
 		getProjectOpen,
-		getSelectedArticleId,
+		getSelectedArticleSlug,
 		getSelectedProjectId
 	} from '$lib/stores/readerPanelStore.svelte';
 	import { onMount } from 'svelte';
@@ -31,7 +35,7 @@
 		disco: DiscoRegistryEntry;
 		designSystemOpen: boolean;
 		apiExplorerOpen: boolean;
-		onArticleClick: (articleId: string) => void;
+		onArticleClick: (articleSlug: string) => void;
 		onProjectClick: (projectId: ProjectId) => void;
 		onDesignSystemClick?: () => void;
 		onDesignSystemClose?: () => void;
@@ -52,7 +56,7 @@
 		onApiExplorerClose
 	}: Props = $props();
 
-	const selectedArticleId = $derived(getSelectedArticleId());
+	const selectedArticleSlug = $derived(getSelectedArticleSlug());
 	const selectedProjectId = $derived(getSelectedProjectId());
 	const articlePanelOpen = $derived(getArticleOpen());
 	const projectPanelOpen = $derived(getProjectOpen());
@@ -66,25 +70,13 @@
 	function getColSpanClass(item: GridItem): string {
 		const key = getItemKey(item);
 		const layout = gridLayoutStore.getLayout(key);
-		if (!layout) return '';
 
 		// API Explorer expands to 2x2 when open
 		if (item.kind === 'api-explorer' && apiExplorerOpen) {
-			return 'md:col-span-2 row-span-2';
+			return getGridItemSpanClasses(layout, { colSpan: 2, rowSpan: 2 });
 		}
 
-		const colClasses = {
-			1: '',
-			2: 'md:col-span-2',
-			3: 'md:col-span-2 lg:col-span-3'
-		};
-
-		const rowClasses = {
-			1: '',
-			2: 'row-span-2'
-		};
-
-		return `${colClasses[layout.colSpan]} ${rowClasses[layout.rowSpan]}`.trim();
+		return getGridItemSpanClasses(layout);
 	}
 </script>
 
@@ -96,35 +88,18 @@
 					{#if item.kind === 'hero'}
 						<Hero />
 					{:else if item.kind === 'article'}
-						<ArticleCard
+						<GridArticleTile
+							article={item.article}
 							variant="main"
-							title={item.article.title}
-							content={item.article.content}
-							date={item.article.date}
-							tags={item.article.tags}
-							active={selectedArticleId === item.article.id && articlePanelOpen}
-							onselect={() => onArticleClick(item.article.id)}
+							active={selectedArticleSlug === item.article.slug && articlePanelOpen}
+							onselect={() => onArticleClick(item.article.slug)}
 						/>
 					{:else if item.kind === 'project'}
-						<button
-							type="button"
-							onclick={() => onProjectClick(item.project.id)}
-							class="project-card style-none block h-full text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-(--text-primary) focus-visible:ring-offset-2"
-							class:project-card-active={selectedProjectId === item.project.id && projectPanelOpen}
-						>
-							<ProjectBlock
-								id={item.project.id}
-								title={item.project.title}
-								pill={item.project.pill}
-								class={item.project.class}
-								contentClassName={item.project.contentClassName}
-								imageClassName={item.project.imageClassName}
-							>
-								{#snippet description()}
-									{item.project.description}
-								{/snippet}
-							</ProjectBlock>
-						</button>
+						<GridProjectTile
+							project={item.project}
+							active={selectedProjectId === item.project.id && projectPanelOpen}
+							onselect={() => onProjectClick(item.project.id)}
+						/>
 					{:else if item.kind === 'disco'}
 						<DiscoBlock
 							image={disco.image}
@@ -175,19 +150,5 @@
 	.grid-item-content {
 		height: 100%;
 		width: 100%;
-	}
-
-	.project-card {
-		cursor: pointer;
-		border-radius: 0.5rem;
-	}
-
-	.project-card:hover :global(.project-block-content) {
-		background: var(--surface-hover);
-	}
-
-	.project-card-active :global(.project-block-content) {
-		background: var(--surface-hover);
-		border-color: var(--text-muted);
 	}
 </style>

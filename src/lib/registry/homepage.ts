@@ -1,5 +1,6 @@
 import type { Article } from '$lib/articles';
 import { defaultArticles } from '$lib/articles';
+import { sequentialNeighborsInIds } from '$lib/reading';
 import houstonImage from '$lib/images/photos/houston.jpeg';
 import profileImage from '$lib/images/profile.png';
 import githubImage from '$lib/images/github.svg';
@@ -348,10 +349,10 @@ export const projectIds: ProjectId[] = [
 
 export const articleRegistry: Record<string, ArticleRegistryEntry> = Object.fromEntries(
 	defaultArticles.map((article) => [
-		article.id,
+		article.slug,
 		{
 			kind: 'article',
-			articleId: article.id
+			articleId: article.slug
 		}
 	])
 ) as Record<string, ArticleRegistryEntry>;
@@ -374,8 +375,17 @@ export function getProject(id: ProjectId): ProjectRegistryEntry {
 	return projectRegistry[id];
 }
 
+export function getProjectNeighbors(projectId: ProjectId | null | undefined) {
+	const projectSeq = sequentialNeighborsInIds(projectIds, projectId);
+	return {
+		index: projectSeq.index,
+		prevProject: projectSeq.prevId ? (getProject(projectSeq.prevId) ?? null) : null,
+		nextProject: projectSeq.nextId ? (getProject(projectSeq.nextId) ?? null) : null
+	};
+}
+
 export function getArticle(id: string): Article | undefined {
-	return defaultArticles.find((article) => article.id === id);
+	return defaultArticles.find((article) => article.slug === id);
 }
 
 export function getDisco(): DiscoRegistryEntry {
@@ -410,7 +420,7 @@ export function seededShuffle<T>(items: T[], seed: number): T[] {
 }
 
 export function itemKey(item: Item): string {
-	if (item.kind === 'article') return `article-${item.article.id}`;
+	if (item.kind === 'article') return `article-${item.article.slug}`;
 	if (item.kind === 'project') return `project-${item.id}`;
 	return 'disco';
 }

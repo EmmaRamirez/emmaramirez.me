@@ -870,20 +870,27 @@
 	.article-row::before {
 		content: '';
 		position: absolute;
-		left: -1rem;
-		width: 0.1875rem;
-		height: 0;
+		top: 0.55rem;
+		bottom: 0.55rem;
+		left: -0.875rem;
+		width: 0.125rem;
+		border-radius: 999px;
 		background: var(--text-primary);
 		opacity: 0;
-		transition: all 0.2s ease;
+		transform: scaleY(0.35);
+		transform-origin: center;
+		transition:
+			opacity 0.2s ease,
+			transform 0.2s ease;
 	}
 
 	.article-row {
 		position: relative;
 	}
 
-	.article-row:hover::before {
-		height: 100%;
+	.article-row:hover::before,
+	.article-row:focus-visible::before {
 		opacity: 1;
+		transform: scaleY(1);
 	}
 </style>

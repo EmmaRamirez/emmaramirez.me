@@ -9,7 +9,7 @@ import type { ProjectId } from '$lib/registry/homepage';
 
 let articleOpen = $state(false);
 let projectOpen = $state(false);
-let selectedArticleId = $state<string | null>(null);
+let selectedArticleSlug = $state<string | null>(null);
 let selectedProjectId = $state<ProjectId | null>(null);
 
 let articleCleanupTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -29,14 +29,14 @@ function clearProjectCleanup() {
 	}
 }
 
-export function openArticleReader(articleId: string) {
+export function openArticleReader(articleSlug: string) {
 	clearArticleCleanup();
 
 	if (projectOpen) {
 		closeProjectReader();
 	}
 
-	selectedArticleId = articleId;
+	selectedArticleSlug = articleSlug;
 	articleOpen = true;
 }
 
@@ -45,7 +45,7 @@ export function closeArticleReader() {
 
 	articleCleanupTimeout = setTimeout(() => {
 		if (!articleOpen) {
-			selectedArticleId = null;
+			selectedArticleSlug = null;
 		}
 	}, 300);
 }
@@ -71,8 +71,8 @@ export function closeProjectReader() {
 	}, 300);
 }
 
-export function setSelectedArticleId(id: string | null) {
-	selectedArticleId = id;
+export function setSelectedArticleSlug(slug: string | null) {
+	selectedArticleSlug = slug;
 }
 
 export function setSelectedProjectId(id: ProjectId | null) {
@@ -87,8 +87,8 @@ export function getProjectOpen() {
 	return projectOpen;
 }
 
-export function getSelectedArticleId() {
-	return selectedArticleId;
+export function getSelectedArticleSlug() {
+	return selectedArticleSlug;
 }
 
 export function getSelectedProjectId() {

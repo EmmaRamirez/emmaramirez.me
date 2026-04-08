@@ -16,6 +16,7 @@ function createMockArticle(id: string): GridItem {
 		kind: 'article',
 		article: {
 			id,
+			slug: id,
 			title: `Article ${id}`,
 			content: 'Test content',
 			date: '2024-01-01'
@@ -27,10 +28,12 @@ function createMockProject(id: import('$lib/registry/homepage').ProjectId): Grid
 	return {
 		kind: 'project',
 		project: {
+			kind: 'project',
 			id,
 			title: `Project ${id}`,
 			description: 'Test description',
 			pill: 'test',
+			image: 'test.png',
 			class: ''
 		}
 	};

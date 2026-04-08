@@ -1,4 +1,5 @@
 import type { SvelteComponent } from 'svelte';
+import { orderedListNeighbors, readingTimeMinutesFromText } from '$lib/reading';
 import { buildTagClustersFromTagged, buildTagGraphFromTagged } from '$lib/tagGraphCore';
 import type { TagCluster, TagGraph } from '$lib/tagGraphCore';
 
@@ -16,15 +17,23 @@ export interface ArticleFull {
 	slug: string;
 	frontmatter: ArticleFrontmatter;
 	component: typeof SvelteComponent;
+	source: string;
+	textContent: string;
+	excerpt: string;
+	readingTimeMinutes: number;
 }
 
 export interface Article {
 	id: string;
+	slug: string;
 	title: string;
 	content: string;
 	date?: string;
 	tags?: string[];
+	readingTimeMinutes?: number;
 }
+
+export type ArticleCardData = Article;
 
 export interface ArticleMeta {
 	slug: string;
@@ -41,6 +50,11 @@ type ArticleModule = {
 
 const articleModules = import.meta.glob<ArticleModule>('/src/articles/**/*.{md,mdx,mdsvex}', {
 	eager: true
+});
+const articleSources = import.meta.glob<string>('/src/articles/**/*.{md,mdx,mdsvex}', {
+	eager: true,
+	query: '?raw',
+	import: 'default'
 });
 
 function extractSlugFromPath(path: string): string {
@@ -66,8 +80,9 @@ function parseArticles(): ArticleFull[] {
 	for (const [path, module] of Object.entries(articleModules)) {
 		const slug = extractSlugFromPath(path);
 		const frontmatter = module.metadata;
+		const source = articleSources[path];
 
-		if (!frontmatter) {
+		if (!frontmatter || !source) {
 			continue;
 		}
 
@@ -75,10 +90,17 @@ function parseArticles(): ArticleFull[] {
 			continue;
 		}
 
+		const textContent = extractReadableText(source);
+		const excerpt = extractExcerpt(source, frontmatter.description) ?? frontmatter.description;
+
 		articles.push({
 			slug,
 			frontmatter,
-			component: module.default
+			component: module.default,
+			source,
+			textContent,
+			excerpt,
+			readingTimeMinutes: readingTimeMinutesFromText(textContent)
 		});
 	}
 
@@ -95,13 +117,27 @@ function parseArticles(): ArticleFull[] {
 
 const allArticles = parseArticles();
 
-export const defaultArticles = allArticles.map((article) => ({
-	id: article.slug,
-	title: article.frontmatter.title,
-	date: article.frontmatter.date,
-	content: article.frontmatter.description,
-	tags: article.frontmatter.tags ?? []
-}));
+function toArticleCardData(article: ArticleFull): ArticleCardData {
+	return {
+		id: article.slug,
+		slug: article.slug,
+		title: article.frontmatter.title,
+		date: article.frontmatter.date,
+		content: article.excerpt,
+		tags: article.frontmatter.tags ?? [],
+		readingTimeMinutes: article.readingTimeMinutes
+	};
+}
+
+export const defaultArticles = allArticles.map(toArticleCardData);
+
+export function getArticleCards(): ArticleCardData[] {
+	return defaultArticles;
+}
+
+export function getArticleCardBySlug(slug: string): ArticleCardData | undefined {
+	return defaultArticles.find((article) => article.slug === slug);
+}
 
 /**
  * Get all published articles sorted by date (newest first)
@@ -123,11 +159,66 @@ export function getArticleMetas(): ArticleMeta[] {
 	}));
 }
 
+function stripFrontmatter(source: string): string {
+	const normalized = source.replace(/\r\n/g, '\n');
+	if (!normalized.startsWith('---\n')) return normalized;
+
+	const frontmatterEnd = normalized.indexOf('\n---\n', 4);
+	return frontmatterEnd === -1 ? normalized : normalized.slice(frontmatterEnd + 5);
+}
+
+function stripNonEssayBlocks(source: string): string {
+	return stripFrontmatter(source)
+		.replace(/<script[\s\S]*?<\/script>/gi, '\n')
+		.replace(/<style[\s\S]*?<\/style>/gi, '\n')
+		.replace(/```[\s\S]*?```/g, '\n');
+}
+
+function normalizeMarkdownText(value: string): string {
+	return value
+		.replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1')
+		.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+		.replace(/`([^`]+)`/g, '$1')
+		.replace(/^#{1,6}\s+/gm, '')
+		.replace(/^>\s?/gm, '')
+		.replace(/^[-*+]\s+/gm, '')
+		.replace(/^\d+\.\s+/gm, '')
+		.replace(/<[^>]+>/g, ' ')
+		.replace(/\{[^{}]*\}/g, ' ')
+		.replace(/[*_~]/g, '')
+		.replace(/\s+/g, ' ')
+		.trim();
+}
+
+function extractExcerpt(source: string, fallback: string): string | null {
+	const blocks = stripNonEssayBlocks(source)
+		.split(/\n\s*\n+/)
+		.map((block) => normalizeMarkdownText(block))
+		.filter(Boolean);
+
+	for (const block of blocks) {
+		if (block.length < 40) continue;
+		if (!/\s/.test(block)) continue;
+		if (block === fallback) continue;
+		return block;
+	}
+
+	return null;
+}
+
+function extractReadableText(source: string): string {
+	return normalizeMarkdownText(stripNonEssayBlocks(source));
+}
+
 /**
  * Get a single article by its slug
  */
 export function getArticleBySlug(slug: string): ArticleFull | undefined {
 	return allArticles.find((article) => article.slug === slug);
+}
+
+export function getArticleNeighbors(slug: string | null | undefined) {
+	return orderedListNeighbors(allArticles, slug, (article) => article.slug);
 }
 
 /**
