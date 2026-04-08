@@ -2,6 +2,11 @@
 	import { fade, fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { Tabs, Badge, Button, Divider } from '$lib/components/ui';
+	import ComponentLibraryPreview from './ComponentLibraryPreview.svelte';
+	import {
+		componentLibraryCategories,
+		getComponentLibraryItemById
+	} from '$lib/registry/componentLibrary';
 
 	interface Props {
 		open?: boolean;
@@ -12,6 +17,11 @@
 	let { open = false, inline = false, onclose }: Props = $props();
 
 	let activeTab = $state('overview');
+	let selectedComponentId = $state<string | null>(null);
+
+	const selectedComponent = $derived(
+		selectedComponentId ? getComponentLibraryItemById(selectedComponentId) : null
+	);
 
 	const tabs = [
 		{ id: 'overview', label: 'Overview' },
@@ -62,70 +72,29 @@
 		]
 	};
 
-	const componentCategories = [
-		{
-			name: 'Foundations',
-			components: ['Typography', 'Icon']
-		},
-		{
-			name: 'Layout',
-			components: ['Container', 'Section', 'PageShell', 'Grid', 'Stack', 'Flex', 'Divider', 'Card']
-		},
-		{
-			name: 'Inputs & Controls',
-			components: [
-				'Button',
-				'ButtonGroup',
-				'IconButton',
-				'LinkButton',
-				'Input',
-				'Textarea',
-				'Select',
-				'Combobox',
-				'Checkbox',
-				'Radio',
-				'Switch',
-				'Slider',
-				'DatePicker',
-				'FileInput',
-				'SearchField'
-			]
-		},
-		{
-			name: 'Data Display',
-			components: [
-				'Avatar',
-				'Badge',
-				'Tag',
-				'Tooltip',
-				'Table',
-				'DescriptionList',
-				'List',
-				'Statistic',
-				'ProgressBar',
-				'Spinner'
-			]
-		},
-		{
-			name: 'Feedback',
-			components: ['Alert', 'Toast', 'InlineValidation', 'EmptyState']
-		},
-		{
-			name: 'Navigation',
-			components: ['Navbar', 'Sidebar', 'Tabs', 'Breadcrumbs', 'Pagination', 'Stepper']
-		},
-		{
-			name: 'Overlays',
-			components: ['Modal', 'Drawer', 'Popover', 'DropdownMenu']
-		},
-		{
-			name: 'Interactive',
-			components: ['Accordion', 'Collapse', 'Carousel', 'CommandPalette']
-		}
-	];
+	function openComponentDetails(componentId: string) {
+		selectedComponentId = componentId;
+	}
+
+	function closeComponentDetails() {
+		selectedComponentId = null;
+	}
+
+	function getStatusVariant(hasDetailedDocs: boolean): 'success' | 'default' {
+		return hasDetailedDocs ? 'success' : 'default';
+	}
 
 	function handleKeydown(event: KeyboardEvent) {
+		if (!open) {
+			return;
+		}
+
 		if (event.key === 'Escape') {
+			if (activeTab === 'components' && selectedComponentId) {
+				closeComponentDetails();
+				return;
+			}
+
 			onclose?.();
 		}
 	}
@@ -248,11 +217,11 @@
 								are named entities that store visual design attributes.
 							</p>
 
-							{#each Object.entries(colorPalettes) as [paletteName, colors]}
+							{#each Object.entries(colorPalettes) as [paletteName, colors] (paletteName)}
 								<div class="token-section">
 									<h3 class="token-section__title">{paletteName}</h3>
 									<div class="color-grid">
-										{#each colors as color}
+										{#each colors as color (color.name)}
 											<div class="color-swatch">
 												<div
 													class="color-swatch__preview"
@@ -310,20 +279,132 @@
 						</div>
 					{:else if tab === 'components'}
 						<div class="design-browser__content" in:fade={{ duration: 200, delay: 50 }}>
-							<p class="mb-6 text-(--text-muted)">
-								Browse the complete component library. Each component is designed for accessibility,
-								dark mode support, and consistent styling.
-							</p>
+							<div class="component-browser-intro">
+								<p class="text-(--text-muted)">
+									Browse the component library, open a live preview, and review usage notes without
+									leaving the explorer.
+								</p>
+								<Badge variant="primary" size="sm" pill>
+									Foundations + Layout documented first
+								</Badge>
+							</div>
 
-							{#each componentCategories as category}
+							{#if selectedComponent}
+								<section
+									class="component-detail"
+									aria-labelledby="component-detail-title"
+									aria-live="polite"
+								>
+									<div class="component-detail__header">
+										<div class="component-detail__heading">
+											<div class="component-detail__badges">
+												<Badge variant="primary" size="sm" pill>
+													{selectedComponent.categoryName}
+												</Badge>
+												<Badge
+													variant={getStatusVariant(selectedComponent.hasDetailedDocs)}
+													size="sm"
+													pill
+												>
+													{selectedComponent.statusLabel}
+												</Badge>
+											</div>
+											<h3 id="component-detail-title">{selectedComponent.name}</h3>
+											<p>{selectedComponent.summary}</p>
+										</div>
+
+										<Button variant="outline" size="sm" onclick={closeComponentDetails}>
+											Close details
+										</Button>
+									</div>
+
+									<div class="component-detail__grid">
+										<div class="component-detail__panel">
+											<span class="component-detail__label">Live preview</span>
+											<ComponentLibraryPreview
+												componentId={selectedComponent.previewId ?? selectedComponent.id}
+											/>
+										</div>
+
+										<div class="component-detail__panel component-detail__panel--docs">
+											<div class="component-detail__section">
+												<h4>What it does</h4>
+												<p>{selectedComponent.description}</p>
+											</div>
+
+											<div class="component-detail__section">
+												<h4>Use it when</h4>
+												<ul class="component-detail__list">
+													{#each selectedComponent.whenToUse as note (note)}
+														<li>{note}</li>
+													{/each}
+												</ul>
+											</div>
+
+											<div class="component-detail__section">
+												<h4>Accessibility</h4>
+												<ul class="component-detail__list">
+													{#each selectedComponent.accessibility as note (note)}
+														<li>{note}</li>
+													{/each}
+												</ul>
+											</div>
+
+											{#if selectedComponent.props.length > 0}
+												<div class="component-detail__section">
+													<h4>Key props</h4>
+													<div class="component-props">
+														{#each selectedComponent.props as prop (prop.name)}
+															<div class="component-prop">
+																<div class="component-prop__topline">
+																	<code>{prop.name}</code>
+																	<span>{prop.type}</span>
+																</div>
+																<p>{prop.description}</p>
+																{#if prop.defaultValue}
+																	<small>Default: {prop.defaultValue}</small>
+																{/if}
+															</div>
+														{/each}
+													</div>
+												</div>
+											{:else}
+												<div class="component-detail__section">
+													<h4>Documentation status</h4>
+													<p>
+														Richer prop notes and more tailored examples are still being added for
+														this category.
+													</p>
+												</div>
+											{/if}
+
+											<div class="component-detail__section">
+												<h4>Implementation</h4>
+												<code class="component-detail__path">{selectedComponent.sourcePath}</code>
+											</div>
+										</div>
+									</div>
+								</section>
+							{/if}
+
+							{#each componentLibraryCategories as category (category.id)}
 								<div class="component-category">
 									<h3 class="component-category__title">{category.name}</h3>
 									<div class="component-list">
-										{#each category.components as component}
-											<div class="component-item">
-												<span class="component-item__name">{component}</span>
-												<Badge variant="success" size="sm" pill>Ready</Badge>
-											</div>
+										{#each category.components as component (component.id)}
+											<button
+												type="button"
+												class="component-item"
+												class:component-item--selected={selectedComponentId === component.id}
+												aria-label={`View ${component.name} details`}
+												aria-pressed={selectedComponentId === component.id}
+												onclick={() => openComponentDetails(component.id)}
+											>
+												<span class="component-item__name">{component.name}</span>
+												<Badge variant={getStatusVariant(component.hasDetailedDocs)} size="sm" pill>
+													{component.statusLabel}
+												</Badge>
+											</button>
 										{/each}
 									</div>
 								</div>
@@ -438,10 +519,6 @@
 		border-radius: 0.75rem;
 	}
 
-	.overview-card--wide {
-		grid-column: span 2;
-	}
-
 	.overview-card h3 {
 		font-size: 0.875rem;
 		font-weight: 600;
@@ -454,30 +531,6 @@
 	.overview-card p {
 		color: var(--text-primary);
 		line-height: 1.6;
-	}
-
-	.stats-row {
-		display: flex;
-		gap: 2rem;
-		margin-top: 0.5rem;
-	}
-
-	.stat {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.stat__value {
-		font-size: 2rem;
-		font-weight: 800;
-		color: var(--caroline-blue-700);
-		line-height: 1;
-	}
-
-	.stat__label {
-		font-size: 0.8rem;
-		color: var(--text-muted);
-		margin-top: 0.25rem;
 	}
 
 	.component-preview-grid {
@@ -610,6 +663,152 @@
 		margin-bottom: 1.5rem;
 	}
 
+	.component-browser-intro {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.component-detail {
+		display: grid;
+		gap: 1rem;
+		margin-bottom: 1.5rem;
+		padding: 1rem;
+		background: var(--card-bg);
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.875rem;
+		box-shadow: 0 0.75rem 1.75rem -1.4rem rgba(0, 0, 0, 0.45);
+	}
+
+	.component-detail__header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.component-detail__heading {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.component-detail__heading h3 {
+		font-size: 1.4rem;
+		font-weight: 800;
+		color: var(--text-primary);
+		line-height: 1.1;
+	}
+
+	.component-detail__heading p {
+		color: var(--text-muted);
+		line-height: 1.6;
+	}
+
+	.component-detail__badges {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.component-detail__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+		gap: 1rem;
+		align-items: start;
+	}
+
+	.component-detail__panel {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.component-detail__panel--docs {
+		padding: 1rem;
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.75rem;
+		background: color-mix(in srgb, var(--page-bg-subtle) 70%, white);
+	}
+
+	.component-detail__label {
+		font-size: 0.75rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--text-muted);
+	}
+
+	.component-detail__section {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.component-detail__section h4 {
+		font-size: 0.8rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--text-muted);
+	}
+
+	.component-detail__section p {
+		color: var(--text-primary);
+		line-height: 1.6;
+	}
+
+	.component-detail__list {
+		margin: 0;
+		padding-left: 1rem;
+		display: grid;
+		gap: 0.35rem;
+		color: var(--text-primary);
+	}
+
+	.component-props {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.component-prop {
+		display: grid;
+		gap: 0.25rem;
+		padding: 0.75rem;
+		background: var(--card-bg);
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.625rem;
+	}
+
+	.component-prop__topline {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.component-prop__topline code {
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: var(--text-primary);
+	}
+
+	.component-prop__topline span,
+	.component-prop small {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+	}
+
+	.component-detail__path {
+		display: inline-flex;
+		width: fit-content;
+		padding: 0.5rem 0.625rem;
+		border-radius: 0.5rem;
+		border: 0.0625rem solid var(--border-color);
+		background: var(--card-bg);
+		font-size: 0.75rem;
+		color: var(--text-primary);
+	}
+
 	.component-category__title {
 		font-size: 1rem;
 		font-weight: 700;
@@ -634,11 +833,25 @@
 		border: 0.0625rem solid var(--border-color);
 		border-radius: 0.5rem;
 		transition: all 0.15s ease;
+		width: 100%;
+		text-align: left;
+		cursor: pointer;
 	}
 
 	.component-item:hover {
 		border-color: var(--caroline-blue-600);
 		background: var(--surface-hover);
+	}
+
+	.component-item:focus-visible {
+		outline: 0.125rem solid var(--caroline-blue-700);
+		outline-offset: 0.125rem;
+	}
+
+	.component-item--selected {
+		border-color: var(--caroline-blue-600);
+		background: color-mix(in srgb, var(--caroline-blue-100) 45%, var(--card-bg));
+		box-shadow: 0 0 0 0.0625rem var(--caroline-blue-600);
 	}
 
 	.component-item__name {
@@ -657,16 +870,16 @@
 			grid-template-columns: 1fr;
 		}
 
-		.overview-card--wide {
-			grid-column: span 1;
-		}
-
-		.stats-row {
-			flex-wrap: wrap;
-			gap: 1rem;
-		}
-
 		.component-preview-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.component-browser-intro,
+		.component-detail__header {
+			flex-direction: column;
+		}
+
+		.component-detail__grid {
 			grid-template-columns: 1fr;
 		}
 	}

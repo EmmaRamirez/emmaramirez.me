@@ -61,6 +61,7 @@
 	const articles = getArticleMetas();
 	const allTags = getAllTags();
 	const tagGraph = getTagGraph();
+	let manualSelectedArticleSlug = $state<string | null>(null);
 
 	const articlesByYear = $derived.by(() => {
 		const grouped: Record<string, ArticleMeta[]> = {};
@@ -110,6 +111,20 @@
 		return Object.entries(filtered).sort((a, b) => b[0].localeCompare(a[0]));
 	});
 
+	const filteredArticles = $derived.by(() =>
+		filteredArticlesByYear.flatMap(([, yearArticles]) => yearArticles)
+	);
+	const selectedArticleSlug = $derived.by(() => {
+		const availableSlugs = filteredArticles.map((article) => article.slug);
+		if (availableSlugs.length === 0) return null;
+
+		if (manualSelectedArticleSlug && availableSlugs.includes(manualSelectedArticleSlug)) {
+			return manualSelectedArticleSlug;
+		}
+
+		return availableSlugs[0] ?? null;
+	});
+
 	function formatDate(dateStr: string | undefined) {
 		return formatShortDate(dateStr);
 	}
@@ -120,6 +135,58 @@
 
 	function selectTag(tag: string | null) {
 		selectedTag = tag;
+	}
+
+	function isEditableTarget(target: EventTarget | null) {
+		return (
+			target instanceof HTMLElement &&
+			(target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+		);
+	}
+
+	function isInteractiveTarget(target: EventTarget | null) {
+		return (
+			target instanceof HTMLElement &&
+			Boolean(target.closest('a, button, input, textarea, select, summary, [contenteditable="true"]'))
+		);
+	}
+
+	function getArticleRow(slug: string) {
+		const escapedValue = typeof CSS !== 'undefined' ? CSS.escape(slug) : slug;
+		const selector = `[data-article-nav="true"][data-article-slug="${escapedValue}"]`;
+		const articleRow = document.querySelector(selector);
+		return articleRow instanceof HTMLElement ? articleRow : null;
+	}
+
+	function focusArticleRow(slug: string) {
+		const articleRow = getArticleRow(slug);
+		if (!articleRow) return;
+
+		articleRow.focus({ preventScroll: true });
+		articleRow.scrollIntoView({
+			block: 'nearest',
+			inline: 'nearest',
+			behavior: 'smooth'
+		});
+	}
+
+	function selectNextArticle() {
+		if (filteredArticles.length === 0) return null;
+
+		if (!selectedArticleSlug) {
+			manualSelectedArticleSlug = filteredArticles[0]?.slug ?? null;
+			return selectedArticleSlug;
+		}
+
+		const currentIndex = filteredArticles.findIndex((article) => article.slug === selectedArticleSlug);
+		const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % filteredArticles.length;
+		manualSelectedArticleSlug = filteredArticles[nextIndex]?.slug ?? null;
+		return selectedArticleSlug;
+	}
+
+	function openSelectedArticle() {
+		if (!selectedArticleSlug) return;
+		window.location.href = resolve('/blog/[slug]', { slug: selectedArticleSlug });
 	}
 
 	function toggleTagSelection(tag: string) {
@@ -253,6 +320,49 @@
 
 		await tick();
 		focusTagButton(details.scope, nextValue);
+	}
+
+	async function handleWebModeKeydown(event: KeyboardEvent) {
+		if (tagView !== 'web') return;
+		if (event.metaKey || event.ctrlKey || event.altKey) return;
+		if (isEditableTarget(event.target)) return;
+
+		if (event.key === 'Escape') {
+			event.preventDefault();
+			tagView = 'flat';
+			return;
+		}
+
+		const key = event.key.toLowerCase();
+
+		if (key === 'j' || key === 'k') {
+			const currentValue = selectedTag ?? allTagValue;
+			const direction = key === 'j' ? 'previous' : 'next';
+			const nextValue = getDirectionalTagValue('web', currentValue, direction);
+			if (!nextValue) return;
+
+			event.preventDefault();
+			selectTag(nextValue === allTagValue ? null : nextValue);
+
+			await tick();
+			focusTagButton('web', nextValue);
+			return;
+		}
+
+		if (key === 'l') {
+			event.preventDefault();
+			const nextArticleSlug = selectNextArticle();
+			if (!nextArticleSlug) return;
+
+			await tick();
+			focusArticleRow(nextArticleSlug);
+			return;
+		}
+
+		if (event.key === 'Enter' && !isInteractiveTarget(event.target)) {
+			event.preventDefault();
+			openSelectedArticle();
+		}
 	}
 
 	function clampPosition(value: number, min: number, max: number) {
@@ -432,7 +542,10 @@
 			simulation.stop();
 		};
 	});
+
 </script>
+
+<svelte:window onkeydown={handleWebModeKeydown} />
 
 <svelte:head>
 	<title>Blog — Emma Ramirez</title>
@@ -548,6 +661,13 @@
 				</div>
 			{:else}
 				<div class="tag-web" role="group" aria-label="Web tag navigation">
+					<div class="web-mode-controls" aria-label="Web mode keyboard shortcuts">
+						<span class="web-mode-control"><kbd>Esc</kbd> quit</span>
+						<span class="web-mode-control"><kbd>J</kbd> prev tag</span>
+						<span class="web-mode-control"><kbd>K</kbd> next tag</span>
+						<span class="web-mode-control"><kbd>L</kbd> select next article</span>
+						<span class="web-mode-control"><kbd>Enter</kbd> read article</span>
+					</div>
 					<div class="mb-4 flex flex-wrap gap-2">
 						<button
 							type="button"
@@ -557,7 +677,6 @@
 							data-tag-nav="true"
 							data-tag-scope="web"
 							data-tag-value={allTagValue}
-							onkeydown={handleTagKeydown}
 							onclick={clearTagSelection}
 						>
 							All
@@ -612,7 +731,6 @@
 									data-tag-nav="true"
 									data-tag-scope="web"
 									data-tag-value={node.id}
-									onkeydown={handleTagKeydown}
 									onclick={() => toggleTagSelection(node.id)}
 								>
 									{node.label}
@@ -640,7 +758,13 @@
 							<li>
 								<a
 									href={resolve('/blog/[slug]', { slug: article.slug })}
-									class="article-row style-none group border-opacity-30 hover:border-opacity-100 flex items-baseline justify-between gap-4 border-b border-(--border-color) py-3 transition-all"
+									class={[
+										'article-row style-none group border-opacity-30 hover:border-opacity-100 flex items-baseline justify-between gap-4 border-b border-(--border-color) py-3 transition-all',
+										{ active: tagView === 'web' && selectedArticleSlug === article.slug }
+									]}
+									data-article-nav="true"
+									data-article-slug={article.slug}
+									aria-current={tagView === 'web' && selectedArticleSlug === article.slug ? 'true' : undefined}
 								>
 									<div class="min-w-0 flex-1">
 										<span
@@ -746,6 +870,38 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
+	}
+
+	.web-mode-controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.web-mode-control {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.4rem 0.72rem;
+		border: 0.0625rem solid color-mix(in srgb, var(--border-color) 88%, transparent);
+		border-radius: 624.9375rem;
+		background: color-mix(in srgb, var(--page-bg-subtle) 78%, transparent);
+		color: var(--text-secondary);
+		font-size: 0.7rem;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.web-mode-control kbd {
+		padding: 0.18rem 0.42rem;
+		border: 0.0625rem solid color-mix(in srgb, var(--text-muted) 70%, transparent);
+		border-radius: 0.45rem;
+		background: color-mix(in srgb, var(--page-bg) 86%, white 14%);
+		color: var(--text-primary);
+		font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+		font-size: 0.72rem;
+		line-height: 1;
+		text-transform: none;
 	}
 
 	.tag-graph-shell {
@@ -886,6 +1042,15 @@
 
 	.article-row {
 		position: relative;
+	}
+
+	.article-row.active::before {
+		opacity: 1;
+		transform: scaleY(1);
+	}
+
+	.article-row.active .article-title {
+		color: var(--link-hover);
 	}
 
 	.article-row:hover::before,
