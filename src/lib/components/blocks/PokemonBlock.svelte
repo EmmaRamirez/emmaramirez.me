@@ -98,19 +98,20 @@
 	}
 
 	const selectedPokemon = $derived(
-		lastSelectedPokemonId ? team.find((pokemon) => pokemon.id === lastSelectedPokemonId) ?? null : null
+		lastSelectedPokemonId
+			? (team.find((pokemon) => pokemon.id === lastSelectedPokemonId) ?? null)
+			: null
 	);
 
 	const selectedDetails = $derived(
-		lastSelectedPokemonId ? detailsCache[lastSelectedPokemonId] ?? null : null
+		lastSelectedPokemonId ? (detailsCache[lastSelectedPokemonId] ?? null) : null
 	);
 </script>
 
 <div
 	class="pokemon-block relative overflow-hidden rounded-lg border border-(--border-color) {className}"
 >
-	<div class="absolute inset-0 pokemon-bg"></div>
-
+	<div class="pokemon-bg absolute inset-0"></div>
 
 	<div class="pokemon-content relative z-10 flex h-full flex-col justify-between p-5">
 		<div class="pokemon-team-grid">
@@ -268,7 +269,10 @@
 		border-radius: var(--pokemon-card-radius);
 		cursor: pointer;
 		appearance: none;
-		transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+		transition:
+			transform 120ms ease,
+			box-shadow 120ms ease,
+			background-color 120ms ease;
 		min-width: 0;
 	}
 

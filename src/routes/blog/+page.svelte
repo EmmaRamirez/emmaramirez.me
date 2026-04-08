@@ -23,19 +23,21 @@
 		forceX,
 		forceY
 	} from 'd3-force';
+	import { tick } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { formatShortDate } from '$lib/utils';
 
-	type SimulationNode = TagGraphNode & SimulationNodeDatum & {
-		x: number;
-		y: number;
-	};
+	type SimulationNode = TagGraphNode &
+		SimulationNodeDatum & {
+			x: number;
+			y: number;
+		};
 
 	type SimulationLink = TagGraphLink &
 		SimulationLinkDatum<SimulationNode> & {
-		source: string | SimulationNode;
-		target: string | SimulationNode;
-	};
+			source: string | SimulationNode;
+			target: string | SimulationNode;
+		};
 
 	type RenderedGraphNode = TagGraphNode & {
 		x: number;
@@ -48,6 +50,10 @@
 		x2: number;
 		y2: number;
 	};
+
+	type TagNavigationScope = 'flat' | 'web';
+
+	const allTagValue = '__all__';
 
 	title.set('blog');
 	headerColor.set('var(--page-bg-subtle)');
@@ -112,8 +118,128 @@
 		selectedTag = null;
 	}
 
+	function selectTag(tag: string | null) {
+		selectedTag = tag;
+	}
+
 	function toggleTagSelection(tag: string) {
 		selectedTag = selectedTag === tag ? null : tag;
+	}
+
+	function getFlatTagNavigationValues() {
+		const buttons = document.querySelectorAll<HTMLElement>(
+			'[data-tag-nav="true"][data-tag-scope="flat"]'
+		);
+		const values = [...buttons]
+			.map((button) => button.dataset.tagValue)
+			.filter((value): value is string => Boolean(value));
+
+		return values.length > 0 ? values : [allTagValue, ...allTags];
+	}
+
+	function getTopmostWebTagValue() {
+		return [...graphLayout.nodes]
+			.sort((left, right) => left.y - right.y || left.x - right.x)[0]?.id;
+	}
+
+	function getDirectionalWebTagValue(
+		currentValue: string,
+		direction: 'previous' | 'next'
+	): string | null {
+		const isMovingNext = direction === 'next';
+
+		if (currentValue === allTagValue) {
+			return isMovingNext ? (getTopmostWebTagValue() ?? null) : null;
+		}
+
+		const currentNode = graphLayout.nodes.find((node) => node.id === currentValue);
+		if (!currentNode) return null;
+
+		const candidates = graphLayout.nodes
+			.filter((node) => {
+				if (node.id === currentNode.id) return false;
+				return isMovingNext ? node.y > currentNode.y + 1 : node.y < currentNode.y - 1;
+			})
+			.map((node) => {
+				const deltaY = Math.abs(node.y - currentNode.y);
+				const deltaX = Math.abs(node.x - currentNode.x);
+
+				return {
+					id: node.id,
+					y: node.y,
+					x: node.x,
+					score: deltaY * 3 + deltaX
+				};
+			})
+			.sort((left, right) => {
+				if (left.score !== right.score) return left.score - right.score;
+				if (left.y !== right.y) return left.y - right.y;
+				return left.x - right.x;
+			});
+
+		if (candidates.length > 0) {
+			return candidates[0]?.id ?? null;
+		}
+
+		return isMovingNext ? null : allTagValue;
+	}
+
+	function getTagButtonDetails(target: EventTarget | null) {
+		if (!(target instanceof HTMLElement)) return null;
+		const button = target.closest('[data-tag-nav="true"]');
+		if (!(button instanceof HTMLElement)) return null;
+
+		const scope = button.dataset.tagScope;
+		if (scope !== 'flat' && scope !== 'web') return null;
+
+		return {
+			button,
+			scope,
+			value: button.dataset.tagValue ?? allTagValue
+		} satisfies { button: HTMLElement; scope: TagNavigationScope; value: string };
+	}
+
+	function focusTagButton(scope: TagNavigationScope, value: string) {
+		const escapedValue = typeof CSS !== 'undefined' ? CSS.escape(value) : value;
+		const selector = `[data-tag-nav="true"][data-tag-scope="${scope}"][data-tag-value="${escapedValue}"]`;
+		const button = document.querySelector(selector);
+		if (button instanceof HTMLElement) {
+			button.focus();
+		}
+	}
+
+	async function handleTagKeydown(event: KeyboardEvent) {
+		if (event.metaKey || event.ctrlKey || event.altKey) return;
+
+		const key = event.key.toLowerCase();
+		if (key !== 'j' && key !== 'k') return;
+
+		const details = getTagButtonDetails(event.target);
+		if (!details) return;
+
+		const nextValue =
+			details.scope === 'flat'
+				? (() => {
+						const values = getFlatTagNavigationValues();
+						const currentIndex = values.indexOf(details.value);
+						if (currentIndex === -1) return null;
+
+						const nextIndex =
+							key === 'j'
+								? Math.min(currentIndex + 1, values.length - 1)
+								: Math.max(currentIndex - 1, 0);
+
+						return nextIndex === currentIndex ? null : (values[nextIndex] ?? null);
+					})()
+				: getDirectionalWebTagValue(details.value, key === 'j' ? 'next' : 'previous');
+		if (!nextValue) return;
+
+		event.preventDefault();
+
+		selectTag(nextValue === allTagValue ? null : nextValue);
+
+		await tick();
+		focusTagButton(details.scope, nextValue);
 	}
 
 	function clampPosition(value: number, min: number, max: number) {
@@ -170,7 +296,7 @@
 		const clusterTargets = getClusterTargets(width, height);
 		const clusterOffsets: Record<number, number> = {};
 
-		return tagGraph.nodes.map((node) => {
+		return tagGraph.nodes.map((node: TagGraphNode) => {
 			const target = clusterTargets[node.cluster] ?? { x: width / 2, y: height / 2 };
 			const clusterIndex = clusterOffsets[node.cluster] ?? 0;
 			clusterOffsets[node.cluster] = clusterIndex + 1;
@@ -192,7 +318,12 @@
 		return typeof nodeRef === 'string' ? nodesById.get(nodeRef)! : nodeRef;
 	}
 
-	function updateGraphLayout(nodes: SimulationNode[], links: SimulationLink[], width: number, height: number) {
+	function updateGraphLayout(
+		nodes: SimulationNode[],
+		links: SimulationLink[],
+		width: number,
+		height: number
+	) {
 		const nodesById = new Map(nodes.map((node) => [node.id, node]));
 
 		graphLayout = {
@@ -225,7 +356,7 @@
 		const height = graphHeight;
 		const clusterTargets = getClusterTargets(width, height);
 		const nodes = createInitialNodes(width, height);
-		const links: SimulationLink[] = tagGraph.links.map((link) => ({ ...link }));
+		const links: SimulationLink[] = tagGraph.links.map((link: TagGraphLink) => ({ ...link }));
 
 		const simulation = forceSimulation(nodes)
 			.force(
@@ -237,30 +368,54 @@
 			)
 			.force(
 				'charge',
-				forceManyBody<SimulationNode>().strength((node: SimulationNode) => -(node.radius * 5.5 + 56))
+				forceManyBody<SimulationNode>().strength(
+					(node: SimulationNode) => -(node.radius * 5.5 + 56)
+				)
 			)
 			.force(
 				'collide',
-				forceCollide<SimulationNode>().radius((node: SimulationNode) => node.radius + 8).iterations(2)
+				forceCollide<SimulationNode>()
+					.radius((node: SimulationNode) => node.radius + 8)
+					.iterations(2)
 			)
 			.force('center', forceCenter(width / 2, height / 2))
 			.force(
 				'cluster-x',
-				forceX<SimulationNode>().x((node) => clusterTargets[node.cluster]?.x ?? width / 2).strength(0.24)
+				forceX<SimulationNode>()
+					.x((node) => clusterTargets[node.cluster]?.x ?? width / 2)
+					.strength(0.24)
 			)
 			.force(
 				'cluster-y',
-				forceY<SimulationNode>().y((node) => clusterTargets[node.cluster]?.y ?? height / 2).strength(0.24)
+				forceY<SimulationNode>()
+					.y((node) => clusterTargets[node.cluster]?.y ?? height / 2)
+					.strength(0.24)
 			)
 			.alpha(1);
 
-		simulation.on('tick', () => {
+		let rafId = 0;
+		let graphTickScheduled = false;
+
+		function scheduleGraphLayoutSync() {
+			if (graphTickScheduled) return;
+			graphTickScheduled = true;
+			rafId = requestAnimationFrame(() => {
+				graphTickScheduled = false;
+				updateGraphLayout(nodes, links, width, height);
+			});
+		}
+
+		simulation.on('tick', scheduleGraphLayoutSync);
+		simulation.on('end', () => {
+			cancelAnimationFrame(rafId);
+			graphTickScheduled = false;
 			updateGraphLayout(nodes, links, width, height);
 		});
 
 		updateGraphLayout(nodes, links, width, height);
 
 		return () => {
+			cancelAnimationFrame(rafId);
 			simulation.stop();
 		};
 	});
@@ -274,7 +429,7 @@
 	/>
 </svelte:head>
 
-<section class="relative w-full min-h-screen">
+<section class="relative min-h-screen w-full">
 	<Header sticky>
 		<HeaderLogo>EMZINNIA</HeaderLogo>
 		<HeaderNav>
@@ -306,23 +461,25 @@
 
 	<div class="blog-container mx-auto max-w-2xl px-6 py-16">
 		<header class="mb-16" in:fade={{ duration: 400 }}>
-			<div class="flex items-center gap-3 mb-4">
-				<span class="inline-block w-8 h-0.25 bg-(--text-muted)"></span>
-				<span class="text-xs uppercase tracking-[0.3em] text-(--text-muted) font-sans"
-					>Writing</span
+			<div class="mb-4 flex items-center gap-3">
+				<span class="inline-block h-0.25 w-8 bg-(--text-muted)"></span>
+				<span class="font-sans text-xs tracking-[0.3em] text-(--text-muted) uppercase">Writing</span
 				>
 			</div>
-			<h1 class="text-4xl md:text-5xl font-serif leading-tight text-(--text-primary) mb-4">
+			<h1 class="mb-4 font-serif text-4xl leading-tight text-(--text-primary) md:text-5xl">
 				Essays & Notes
 			</h1>
-			<p class="text-lg text-(--text-secondary) leading-relaxed max-w-xl">
+			<p class="max-w-xl text-lg leading-relaxed text-(--text-secondary)">
 				Thoughts on design, development, and the quiet craft of building things that work.
 			</p>
 		</header>
 
-		<nav class="mb-12 pb-6 border-b border-(--border-color)" in:fade={{ duration: 400, delay: 100 }}>
+		<nav
+			class="mb-12 border-b border-(--border-color) pb-6"
+			in:fade={{ duration: 400, delay: 100 }}
+		>
 			<div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-				<p class="text-xs uppercase tracking-[0.2em] text-(--text-muted) font-sans">
+				<p class="font-sans text-xs tracking-[0.2em] text-(--text-muted) uppercase">
 					Browse by tag
 				</p>
 				<div class="view-toggle" role="group" aria-label="Tag view mode">
@@ -346,11 +503,16 @@
 			</div>
 
 			{#if tagView === 'flat'}
-				<div class="flex flex-wrap gap-2">
+				<div class="flex flex-wrap gap-2" role="group" aria-label="Flat tag navigation">
 					<button
 						type="button"
 						class={['tag-pill', { active: selectedTag === null }]}
 						aria-pressed={selectedTag === null}
+						aria-keyshortcuts="J K"
+						data-tag-nav="true"
+						data-tag-scope="flat"
+						data-tag-value={allTagValue}
+						onkeydown={handleTagKeydown}
 						onclick={clearTagSelection}
 					>
 						All
@@ -360,6 +522,11 @@
 							type="button"
 							class={['tag-pill', { active: selectedTag === tag }]}
 							aria-pressed={selectedTag === tag}
+							aria-keyshortcuts="J K"
+							data-tag-nav="true"
+							data-tag-scope="flat"
+							data-tag-value={tag}
+							onkeydown={handleTagKeydown}
 							onclick={() => toggleTagSelection(tag)}
 						>
 							{tag}
@@ -367,12 +534,17 @@
 					{/each}
 				</div>
 			{:else}
-				<div class="tag-web">
+				<div class="tag-web" role="group" aria-label="Web tag navigation">
 					<div class="mb-4 flex flex-wrap gap-2">
 						<button
 							type="button"
 							class={['tag-pill', { active: selectedTag === null }]}
 							aria-pressed={selectedTag === null}
+							aria-keyshortcuts="J K"
+							data-tag-nav="true"
+							data-tag-scope="web"
+							data-tag-value={allTagValue}
+							onkeydown={handleTagKeydown}
 							onclick={clearTagSelection}
 						>
 							All
@@ -423,6 +595,11 @@
 									]}
 									style={`left: ${node.x}px; top: ${node.y}px; min-width: ${Math.max(node.radius * 1.45, 64)}px;`}
 									aria-pressed={selectedTag === node.id}
+									aria-keyshortcuts="J K"
+									data-tag-nav="true"
+									data-tag-scope="web"
+									data-tag-value={node.id}
+									onkeydown={handleTagKeydown}
 									onclick={() => toggleTagSelection(node.id)}
 								>
 									{node.label}
@@ -436,10 +613,13 @@
 
 		<div class="space-y-12">
 			{#each filteredArticlesByYear as [year, yearArticles], yearIndex (year)}
-				<section class="year-section" in:fly={{ y: 20, duration: 400, delay: 150 + yearIndex * 50 }}>
-					<div class="flex items-center gap-4 mb-6">
-						<h2 class="text-sm font-mono text-(--text-muted) tabular-nums">{year}</h2>
-						<span class="flex-1 h-0.25 bg-(--border-color) opacity-50"></span>
+				<section
+					class="year-section"
+					in:fly={{ y: 20, duration: 400, delay: 150 + yearIndex * 50 }}
+				>
+					<div class="mb-6 flex items-center gap-4">
+						<h2 class="font-mono text-sm text-(--text-muted) tabular-nums">{year}</h2>
+						<span class="h-0.25 flex-1 bg-(--border-color) opacity-50"></span>
 					</div>
 
 					<ul class="space-y-1">
@@ -447,19 +627,19 @@
 							<li>
 								<a
 									href={resolve('/blog/[slug]', { slug: article.slug })}
-									class="article-row style-none group flex items-baseline justify-between gap-4 py-3 border-b border-(--border-color) border-opacity-30 hover:border-opacity-100 transition-all"
+									class="article-row style-none group border-opacity-30 hover:border-opacity-100 flex items-baseline justify-between gap-4 border-b border-(--border-color) py-3 transition-all"
 								>
-									<div class="flex-1 min-w-0">
+									<div class="min-w-0 flex-1">
 										<span
-											class="article-title text-base text-(--text-primary) group-hover:text-(--link-hover) transition-colors"
+											class="article-title text-base text-(--text-primary) transition-colors group-hover:text-(--link-hover)"
 										>
 											{article.title}
 										</span>
 										{#if article.tags && article.tags.length > 0}
-											<span class="hidden sm:inline-flex gap-1.5 ml-3">
+											<span class="ml-3 hidden gap-1.5 sm:inline-flex">
 												{#each article.tags.slice(0, 2) as tag (tag)}
 													<span
-														class="text-[0.625rem] uppercase tracking-wider text-(--text-muted) font-sans"
+														class="font-sans text-[0.625rem] tracking-wider text-(--text-muted) uppercase"
 													>
 														{tag}
 													</span>
@@ -468,7 +648,7 @@
 										{/if}
 									</div>
 									<time
-										class="text-sm font-mono text-(--text-muted) tabular-nums whitespace-nowrap"
+										class="font-mono text-sm whitespace-nowrap text-(--text-muted) tabular-nums"
 									>
 										{formatDate(article.date)}
 									</time>
@@ -480,7 +660,7 @@
 			{/each}
 		</div>
 
-		<footer class="mt-20 pt-8 border-t border-(--border-color) text-center">
+		<footer class="mt-20 border-t border-(--border-color) pt-8 text-center">
 			<p class="text-sm text-(--text-muted) italic">
 				{articles.length} essays and counting
 			</p>
@@ -538,6 +718,11 @@
 		border-color: var(--text-muted);
 	}
 
+	.tag-pill:focus-visible {
+		outline: 0.125rem solid color-mix(in srgb, var(--link-hover) 60%, var(--text-primary) 40%);
+		outline-offset: 0.125rem;
+	}
+
 	.tag-pill.active {
 		background: var(--text-primary);
 		color: var(--page-bg);
@@ -555,7 +740,11 @@
 		border: 0.0625rem solid color-mix(in srgb, var(--border-color) 85%, transparent);
 		border-radius: 1.75rem;
 		background:
-			radial-gradient(circle at top, color-mix(in srgb, var(--page-bg-subtle) 88%, white 12%), transparent 55%),
+			radial-gradient(
+				circle at top,
+				color-mix(in srgb, var(--page-bg-subtle) 88%, white 12%),
+				transparent 55%
+			),
 			linear-gradient(180deg, color-mix(in srgb, var(--page-bg-subtle) 95%, white 5%), transparent);
 	}
 
@@ -564,7 +753,11 @@
 		overflow: hidden;
 		border-radius: 1.25rem;
 		background:
-			radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--page-bg-subtle) 92%, white 8%), transparent 45%),
+			radial-gradient(
+				circle at 50% 0%,
+				color-mix(in srgb, var(--page-bg-subtle) 92%, white 8%),
+				transparent 45%
+			),
 			color-mix(in srgb, var(--page-bg) 82%, var(--page-bg-subtle) 18%);
 	}
 
@@ -579,7 +772,9 @@
 	.tag-edge {
 		stroke: color-mix(in srgb, var(--border-color) 80%, transparent);
 		opacity: 0.38;
-		transition: opacity 0.2s ease, stroke 0.2s ease;
+		transition:
+			opacity 0.2s ease,
+			stroke 0.2s ease;
 	}
 
 	.tag-edge.active {
@@ -613,6 +808,11 @@
 		transform: translate(-50%, -50%) scale(1.03);
 		border-color: color-mix(in srgb, var(--text-muted) 72%, white 28%);
 		color: var(--text-primary);
+	}
+
+	.tag-node:focus-visible {
+		outline: 0.125rem solid color-mix(in srgb, var(--link-hover) 60%, var(--text-primary) 40%);
+		outline-offset: 0.125rem;
 	}
 
 	.tag-node.related {

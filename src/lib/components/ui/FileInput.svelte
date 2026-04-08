@@ -53,7 +53,7 @@
 		e.preventDefault();
 		dragOver = false;
 		if (disabled) return;
-		
+
 		if (e.dataTransfer?.files) {
 			files = e.dataTransfer.files;
 			onchange?.(files);
@@ -83,7 +83,11 @@
 	}
 
 	const fileNames = $derived(
-		files ? Array.from(files).map(f => f.name).join(', ') : ''
+		files
+			? Array.from(files)
+					.map((f) => f.name)
+					.join(', ')
+			: ''
 	);
 </script>
 
@@ -95,7 +99,13 @@
 	{/if}
 
 	<div
-		class="relative border-2 border-dashed rounded-lg transition-colors duration-200 {error ? 'border-red-500' : dragOver ? 'border-[var(--caroline-blue-500)] bg-[var(--caroline-blue-100)]' : 'border-[var(--liver-brown-500)] bg-[var(--eggshell-white-500)]'} {disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-[var(--caroline-blue-500)]'}"
+		class="relative rounded-lg border-2 border-dashed transition-colors duration-200 {error
+			? 'border-red-500'
+			: dragOver
+				? 'border-[var(--caroline-blue-500)] bg-[var(--caroline-blue-100)]'
+				: 'border-[var(--liver-brown-500)] bg-[var(--eggshell-white-500)]'} {disabled
+			? 'cursor-not-allowed opacity-50'
+			: 'cursor-pointer hover:border-[var(--caroline-blue-500)]'}"
 		role="button"
 		tabindex={disabled ? -1 : 0}
 		ondrop={handleDrop}
@@ -115,26 +125,35 @@
 			onchange={handleChange}
 		/>
 
-		<div class="flex flex-col items-center justify-center py-8 px-4 text-center">
-			<svg class="mb-3 text-[var(--liver-brown-500)]" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+		<div class="flex flex-col items-center justify-center px-4 py-8 text-center">
+			<svg
+				class="mb-3 text-[var(--liver-brown-500)]"
+				xmlns="http://www.w3.org/2000/svg"
+				width="40"
+				height="40"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.5"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
 				<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
 				<polyline points="17 8 12 3 7 8"></polyline>
 				<line x1="12" y1="3" x2="12" y2="15"></line>
 			</svg>
-			
+
 			{#if fileNames}
 				<p class="text-sm font-medium text-[var(--liver-brown-800)]">
 					{fileNames}
 				</p>
-				<p class="text-xs text-[var(--liver-brown-600)] mt-1">
-					Click or drag to replace
-				</p>
+				<p class="mt-1 text-xs text-[var(--liver-brown-600)]">Click or drag to replace</p>
 			{:else}
 				<p class="text-sm font-medium text-[var(--liver-brown-800)]">
 					<span class="text-[var(--caroline-blue-700)] underline">Click to upload</span> or drag and drop
 				</p>
 				{#if hint}
-					<p class="text-xs text-[var(--liver-brown-600)] mt-1">
+					<p class="mt-1 text-xs text-[var(--liver-brown-600)]">
 						{hint}
 					</p>
 				{/if}
@@ -146,4 +165,3 @@
 		<p class="text-sm text-red-600" role="alert">{error}</p>
 	{/if}
 </div>
-

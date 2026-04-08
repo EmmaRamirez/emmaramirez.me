@@ -25,4 +25,3 @@ export const entries: EntryGenerator = () => {
 };
 
 export const prerender = true;
-

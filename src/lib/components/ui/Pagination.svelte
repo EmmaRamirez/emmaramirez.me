@@ -53,10 +53,13 @@
 		return range;
 	});
 
-	const buttonBaseClass = "inline-flex items-center justify-center w-9 h-9 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-offset-1";
-	const activeClass = "bg-[var(--caroline-blue-700)] text-white border-2 border-[var(--liver-brown-500)]";
-	const inactiveClass = "text-[var(--liver-brown-700)] hover:bg-[var(--sandy-tan-400)] border-2 border-transparent";
-	const disabledClass = "opacity-50 cursor-not-allowed";
+	const buttonBaseClass =
+		'inline-flex items-center justify-center w-9 h-9 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-offset-1';
+	const activeClass =
+		'bg-[var(--caroline-blue-700)] text-white border-2 border-[var(--liver-brown-500)]';
+	const inactiveClass =
+		'text-[var(--liver-brown-700)] hover:bg-[var(--sandy-tan-400)] border-2 border-transparent';
+	const disabledClass = 'opacity-50 cursor-not-allowed';
 </script>
 
 <nav aria-label="Pagination" class="flex items-center gap-1 {className}">
@@ -67,14 +70,24 @@
 		onclick={() => goToPage(currentPage - 1)}
 		aria-label="Previous page"
 	>
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			<path d="m15 18-6-6 6-6"/>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		>
+			<path d="m15 18-6-6 6-6" />
 		</svg>
 	</button>
 
 	{#each pages as page, i (i)}
 		{#if page === 'ellipsis'}
-			<span class="w-9 h-9 flex items-center justify-center text-[var(--liver-brown-500)]">
+			<span class="flex h-9 w-9 items-center justify-center text-[var(--liver-brown-500)]">
 				...
 			</span>
 		{:else}
@@ -96,9 +109,18 @@
 		onclick={() => goToPage(currentPage + 1)}
 		aria-label="Next page"
 	>
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			<path d="m9 18 6-6-6-6"/>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		>
+			<path d="m9 18 6-6-6-6" />
 		</svg>
 	</button>
 </nav>
-

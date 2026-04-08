@@ -1,5 +1,8 @@
 <script lang="ts">
-	interface RadioProps extends Omit<svelteHTML.HTMLAttributes<HTMLInputElement>, 'type' | 'checked' | 'value'> {
+	interface RadioProps extends Omit<
+		svelteHTML.HTMLAttributes<HTMLInputElement>,
+		'type' | 'checked' | 'value'
+	> {
 		/** Custom class names */
 		class?: string;
 		/** Label text */
@@ -38,22 +41,22 @@
 			id={inputId}
 			{name}
 			{value}
-			class="peer h-5 w-5 shrink-0 cursor-pointer appearance-none rounded-full border-2 border-[var(--liver-brown-500)] bg-[var(--eggshell-white-500)] transition-colors duration-200 checked:border-[var(--caroline-blue-700)] focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+			class="peer h-5 w-5 shrink-0 cursor-pointer appearance-none rounded-full border-2 border-[var(--liver-brown-500)] bg-[var(--eggshell-white-500)] transition-colors duration-200 checked:border-[var(--caroline-blue-700)] focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 			bind:group
 			aria-describedby={description ? `${inputId}-description` : undefined}
 			{...inputProps}
 		/>
-		<div 
-			class="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--caroline-blue-700)] opacity-0 peer-checked:opacity-100 transition-opacity duration-200 pointer-events-none"
+		<div
+			class="pointer-events-none absolute top-1/2 left-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--caroline-blue-700)] opacity-0 transition-opacity duration-200 peer-checked:opacity-100"
 		></div>
 	</div>
-	
+
 	{#if label || description}
 		<div class="flex flex-col gap-0.5">
 			{#if label}
-				<label 
-					for={inputId} 
-					class="text-sm font-medium text-[var(--liver-brown-800)] cursor-pointer select-none"
+				<label
+					for={inputId}
+					class="cursor-pointer text-sm font-medium text-[var(--liver-brown-800)] select-none"
 				>
 					{label}
 				</label>
@@ -66,4 +69,3 @@
 		</div>
 	{/if}
 </div>
-

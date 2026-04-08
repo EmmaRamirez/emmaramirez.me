@@ -17,7 +17,7 @@
 		<p class="ad-body w-full">
 			This site is built with its own internal design system. Check it out!
 		</p>
-		<button type="button" class="ad-cta" onclick={onclick}>
+		<button type="button" class="ad-cta" {onclick}>
 			<span class="ad-cta__glare" aria-hidden="true"></span>
 			<span class="ad-cta__text">Explore</span>
 		</button>
@@ -51,8 +51,12 @@
 	.design-system-ad__grain {
 		position: absolute;
 		inset: 0;
-		background: 
-			linear-gradient(135deg, transparent 0%, var(--accent-primary) 50%, transparent 100%);
+		background: linear-gradient(
+			135deg,
+			transparent 0%,
+			var(--accent-primary) 50%,
+			transparent 100%
+		);
 		opacity: 0.05;
 		pointer-events: none;
 	}

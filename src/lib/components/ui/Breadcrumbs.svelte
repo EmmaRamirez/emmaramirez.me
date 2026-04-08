@@ -13,11 +13,7 @@
 		separator?: string;
 	}
 
-	let {
-		class: className = '',
-		items,
-		separator = '/'
-	}: BreadcrumbsProps = $props();
+	let { class: className = '', items, separator = '/' }: BreadcrumbsProps = $props();
 </script>
 
 <nav aria-label="Breadcrumb" class={className}>
@@ -31,16 +27,13 @@
 				{/if}
 
 				{#if i === items.length - 1}
-					<span 
-						class="font-medium text-[var(--liver-brown-800)]"
-						aria-current="page"
-					>
+					<span class="font-medium text-[var(--liver-brown-800)]" aria-current="page">
 						{item.label}
 					</span>
 				{:else if item.href}
-					<a 
+					<a
 						href={item.href}
-						class="text-[var(--caroline-blue-700)] hover:text-[var(--caroline-blue-900)] hover:underline transition-colors"
+						class="text-[var(--caroline-blue-700)] transition-colors hover:text-[var(--caroline-blue-900)] hover:underline"
 					>
 						{item.label}
 					</a>
@@ -53,4 +46,3 @@
 		{/each}
 	</ol>
 </nav>
-

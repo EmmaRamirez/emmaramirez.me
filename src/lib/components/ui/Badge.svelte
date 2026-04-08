@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
 	type BadgeSize = 'sm' | 'md' | 'lg';
@@ -27,7 +27,7 @@
 		children
 	}: BadgeProps = $props();
 
-	const baseClasses = "inline-flex items-center font-medium";
+	const baseClasses = 'inline-flex items-center font-medium';
 
 	const sizeClasses: Record<BadgeSize, string> = {
 		sm: 'px-1.5 py-0.5 text-xs',
@@ -36,10 +36,14 @@
 	};
 
 	const variantClasses: Record<BadgeVariant, string> = {
-		default: 'bg-[var(--sandy-tan-500)] text-[var(--liver-brown-800)] border border-[var(--liver-brown-500)]',
-		primary: 'bg-[var(--caroline-blue-200)] text-[var(--caroline-blue-900)] border border-[var(--caroline-blue-600)]',
-		success: 'bg-[var(--lawn-green-500)]/20 text-[var(--lawn-green-800)] border border-[var(--lawn-green-600)]',
-		warning: 'bg-[var(--transit-yellow-200)] text-[var(--liver-brown-800)] border border-[var(--transit-yellow-600)]',
+		default:
+			'bg-[var(--sandy-tan-500)] text-[var(--liver-brown-800)] border border-[var(--liver-brown-500)]',
+		primary:
+			'bg-[var(--caroline-blue-200)] text-[var(--caroline-blue-900)] border border-[var(--caroline-blue-600)]',
+		success:
+			'bg-[var(--lawn-green-500)]/20 text-[var(--lawn-green-800)] border border-[var(--lawn-green-600)]',
+		warning:
+			'bg-[var(--transit-yellow-200)] text-[var(--liver-brown-800)] border border-[var(--transit-yellow-600)]',
 		error: 'bg-red-100 text-red-800 border border-red-400',
 		info: 'bg-blue-100 text-blue-800 border border-blue-400'
 	};

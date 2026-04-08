@@ -41,14 +41,10 @@
 	let inputRef: HTMLInputElement | undefined = $state();
 
 	const filteredOptions = $derived(
-		options.filter(opt => 
-			opt.label.toLowerCase().includes(query.toLowerCase())
-		)
+		options.filter((opt) => opt.label.toLowerCase().includes(query.toLowerCase()))
 	);
 
-	const selectedLabel = $derived(
-		options.find(opt => opt.value === value)?.label ?? ''
-	);
+	const selectedLabel = $derived(options.find((opt) => opt.value === value)?.label ?? '');
 
 	function selectOption(option: ComboboxOption) {
 		if (option.disabled) return;
@@ -104,10 +100,7 @@
 
 <div class="relative {className}">
 	{#if label}
-		<label 
-			for={generatedId}
-			class="block text-sm font-medium text-[var(--liver-brown-700)] mb-1.5"
-		>
+		<label for={generatedId} class="mb-1.5 block text-sm font-medium text-[var(--liver-brown-700)]">
 			{label}
 		</label>
 	{/if}
@@ -122,9 +115,13 @@
 			aria-autocomplete="list"
 			aria-expanded={isOpen}
 			aria-controls="{generatedId}-listbox"
-			aria-activedescendant={highlightedIndex >= 0 ? `${generatedId}-option-${highlightedIndex}` : undefined}
-			class="w-full px-3 py-2 pr-10 rounded-lg border-2 bg-[var(--eggshell-white-500)] text-[var(--liver-brown-800)] placeholder:text-[var(--liver-brown-500)] focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors duration-200
-				{error ? 'border-red-500 focus:ring-red-400' : 'border-[var(--liver-brown-500)] focus:ring-[var(--caroline-blue-500)] focus:border-[var(--caroline-blue-600)]'}"
+			aria-activedescendant={highlightedIndex >= 0
+				? `${generatedId}-option-${highlightedIndex}`
+				: undefined}
+			class="w-full rounded-lg border-2 bg-[var(--eggshell-white-500)] px-3 py-2 pr-10 text-[var(--liver-brown-800)] transition-colors duration-200 placeholder:text-[var(--liver-brown-500)] focus:ring-2 focus:ring-offset-1 focus:outline-none
+				{error
+				? 'border-red-500 focus:ring-red-400'
+				: 'border-[var(--liver-brown-500)] focus:border-[var(--caroline-blue-600)] focus:ring-[var(--caroline-blue-500)]'}"
 			{placeholder}
 			bind:value={query}
 			onfocus={handleInputFocus}
@@ -135,13 +132,27 @@
 
 		<button
 			type="button"
-			class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--liver-brown-500)] hover:text-[var(--liver-brown-700)]"
-			onclick={() => { isOpen = !isOpen; inputRef?.focus(); }}
+			class="absolute top-1/2 right-2 -translate-y-1/2 p-1 text-[var(--liver-brown-500)] hover:text-[var(--liver-brown-700)]"
+			onclick={() => {
+				isOpen = !isOpen;
+				inputRef?.focus();
+			}}
 			tabindex="-1"
 			aria-label="Toggle options"
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform {isOpen ? 'rotate-180' : ''}">
-				<path d="m6 9 6 6 6-6"/>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="16"
+				height="16"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="transition-transform {isOpen ? 'rotate-180' : ''}"
+			>
+				<path d="m6 9 6 6 6-6" />
 			</svg>
 		</button>
 	</div>
@@ -150,17 +161,17 @@
 		<ul
 			id="{generatedId}-listbox"
 			role="listbox"
-			class="absolute z-50 mt-1 w-full max-h-60 overflow-auto rounded-lg border-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-200)] shadow-lg"
+			class="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg border-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-200)] shadow-lg"
 		>
 			{#each filteredOptions as option, i (option.value)}
 				<li
 					id="{generatedId}-option-{i}"
 					role="option"
 					aria-selected={value === option.value}
-					class="px-3 py-2 cursor-pointer transition-colors
+					class="cursor-pointer px-3 py-2 transition-colors
 						{value === option.value ? 'bg-[var(--caroline-blue-100)] text-[var(--caroline-blue-800)]' : ''}
 						{highlightedIndex === i ? 'bg-[var(--sandy-tan-400)]' : ''}
-					{option.disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[var(--sandy-tan-400)]'}"
+					{option.disabled ? 'cursor-not-allowed opacity-50' : 'hover:bg-[var(--sandy-tan-400)]'}"
 					onclick={() => selectOption(option)}
 					onkeydown={(event) => {
 						if (event.key === 'Enter' || event.key === ' ') {
@@ -168,14 +179,16 @@
 							selectOption(option);
 						}
 					}}
-					onmouseenter={() => highlightedIndex = i}
+					onmouseenter={() => (highlightedIndex = i)}
 				>
 					{option.label}
 				</li>
 			{/each}
 		</ul>
 	{:else if isOpen && query && filteredOptions.length === 0}
-		<div class="absolute z-50 mt-1 w-full rounded-lg border-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-200)] shadow-lg px-3 py-2 text-[var(--liver-brown-600)]">
+		<div
+			class="absolute z-50 mt-1 w-full rounded-lg border-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-200)] px-3 py-2 text-[var(--liver-brown-600)] shadow-lg"
+		>
 			No results found
 		</div>
 	{/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type PopoverPosition = 'top' | 'bottom' | 'left' | 'right';
 
@@ -59,12 +59,17 @@
 
 <svelte:window onclick={handleClickOutside} onkeydown={handleKeydown} />
 
-<div class="relative inline-flex popover-container {className}">
-	<div 
+<div class="popover-container relative inline-flex {className}">
+	<div
 		role="button"
 		tabindex="0"
 		onclick={toggle}
-		onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
+		onkeydown={(e) => {
+			if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				toggle();
+			}
+		}}
 		aria-expanded={open}
 		aria-haspopup="true"
 	>
@@ -73,7 +78,9 @@
 
 	{#if open}
 		<div
-			class="absolute z-50 min-w-48 bg-[var(--sandy-tan-200)] border-2 border-[var(--liver-brown-500)] rounded-lg shadow-xl {positionClasses[position]}"
+			class="absolute z-50 min-w-48 rounded-lg border-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-200)] shadow-xl {positionClasses[
+				position
+			]}"
 			role="dialog"
 		>
 			<div class="p-3">
@@ -82,4 +89,3 @@
 		</div>
 	{/if}
 </div>
-

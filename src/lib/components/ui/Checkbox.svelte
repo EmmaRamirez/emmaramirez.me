@@ -1,5 +1,8 @@
 <script lang="ts">
-	interface CheckboxProps extends Omit<svelteHTML.HTMLAttributes<HTMLInputElement>, 'type' | 'checked'> {
+	interface CheckboxProps extends Omit<
+		svelteHTML.HTMLAttributes<HTMLInputElement>,
+		'type' | 'checked'
+	> {
 		/** Custom class names */
 		class?: string;
 		/** Label text */
@@ -36,46 +39,46 @@
 		<input
 			type="checkbox"
 			id={inputId}
-			class="peer h-5 w-5 shrink-0 cursor-pointer appearance-none rounded border-2 border-[var(--liver-brown-500)] bg-[var(--eggshell-white-500)] transition-colors duration-200 checked:bg-[var(--caroline-blue-700)] checked:border-[var(--caroline-blue-700)] focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+			class="peer h-5 w-5 shrink-0 cursor-pointer appearance-none rounded border-2 border-[var(--liver-brown-500)] bg-[var(--eggshell-white-500)] transition-colors duration-200 checked:border-[var(--caroline-blue-700)] checked:bg-[var(--caroline-blue-700)] focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 			bind:checked
 			{indeterminate}
 			aria-invalid={error ? 'true' : undefined}
 			aria-describedby={description ? `${inputId}-description` : undefined}
 			{...inputProps}
 		/>
-		<svg 
-			class="absolute left-0.5 top-0.5 h-4 w-4 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity duration-200"
-			xmlns="http://www.w3.org/2000/svg" 
-			viewBox="0 0 24 24" 
-			fill="none" 
-			stroke="currentColor" 
-			stroke-width="3" 
-			stroke-linecap="round" 
+		<svg
+			class="pointer-events-none absolute top-0.5 left-0.5 h-4 w-4 text-white opacity-0 transition-opacity duration-200 peer-checked:opacity-100"
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="3"
+			stroke-linecap="round"
 			stroke-linejoin="round"
 		>
-			<path d="M20 6 9 17l-5-5"/>
+			<path d="M20 6 9 17l-5-5" />
 		</svg>
 		{#if indeterminate}
-			<svg 
-				class="absolute left-0.5 top-0.5 h-4 w-4 text-white pointer-events-none"
-				xmlns="http://www.w3.org/2000/svg" 
-				viewBox="0 0 24 24" 
-				fill="none" 
-				stroke="currentColor" 
-				stroke-width="3" 
+			<svg
+				class="pointer-events-none absolute top-0.5 left-0.5 h-4 w-4 text-white"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="3"
 				stroke-linecap="round"
 			>
-				<path d="M5 12h14"/>
+				<path d="M5 12h14" />
 			</svg>
 		{/if}
 	</div>
-	
+
 	{#if label || description}
 		<div class="flex flex-col gap-0.5">
 			{#if label}
-				<label 
-					for={inputId} 
-					class="text-sm font-medium text-[var(--liver-brown-800)] cursor-pointer select-none"
+				<label
+					for={inputId}
+					class="cursor-pointer text-sm font-medium text-[var(--liver-brown-800)] select-none"
 				>
 					{label}
 				</label>
@@ -93,4 +96,3 @@
 		</div>
 	{/if}
 </div>
-

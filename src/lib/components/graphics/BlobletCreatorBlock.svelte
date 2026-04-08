@@ -80,12 +80,12 @@
 				/>
 			{:else}
 				<div
-					class="m-4 flex flex-col h-80 items-center justify-center rounded-lg border-2 border-[var(--liver-brown-500)] p-4 text-center"
+					class="m-4 flex h-80 flex-col items-center justify-center rounded-lg border-2 border-[var(--liver-brown-500)] p-4 text-center"
 				>
 					<svg width="100" height="100" viewBox="0 0 100 100">
 						<path
 							d="M40,85 C60,90 75,80 85,65 C95,50 90,35 85,25 C80,15 65,10 50,15 C35,20 25,15 15,30 C5,45 10,60 20,75 C30,90 20,80 40,85"
-							fill="#FFE4B5" 
+							fill="#FFE4B5"
 							stroke="#000"
 							stroke-width="2"
 						/>
@@ -105,7 +105,7 @@
 						/>
 					</svg>
 					your bloblet went up to the great bloblet farm in the sky.
-                    <span class="p-2 text-[var(--liver-brown-600)]">Visit the Farm</span>
+					<span class="p-2 text-[var(--liver-brown-600)]">Visit the Farm</span>
 				</div>
 			{/if}
 			<Button class="w-48  uppercase" onclick={handlePublish}

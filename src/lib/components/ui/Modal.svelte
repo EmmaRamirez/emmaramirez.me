@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
@@ -58,18 +58,22 @@
 
 {#if open}
 	<div
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+		class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
 		onclick={handleBackdropClick}
 		role="presentation"
 	>
 		<div
-			class="w-full {sizeClasses[size]} bg-[var(--sandy-tan-200)] border-2 border-[var(--liver-brown-500)] rounded-xl shadow-2xl flex flex-col max-h-[90vh] animate-modal-in {className}"
+			class="w-full {sizeClasses[
+				size
+			]} animate-modal-in flex max-h-[90vh] flex-col rounded-xl border-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-200)] shadow-2xl {className}"
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby={title ? 'modal-title' : undefined}
 		>
 			{#if header || title}
-				<div class="flex items-center justify-between px-6 py-4 border-b-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)] rounded-t-xl">
+				<div
+					class="flex items-center justify-between rounded-t-xl border-b-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)] px-6 py-4"
+				>
 					{#if header}
 						{@render header()}
 					{:else if title}
@@ -79,11 +83,21 @@
 					{/if}
 					<button
 						type="button"
-						class="p-2 -mr-2 rounded-full hover:bg-[var(--liver-brown-500)]/20 transition-colors text-[var(--liver-brown-700)]"
+						class="-mr-2 rounded-full p-2 text-[var(--liver-brown-700)] transition-colors hover:bg-[var(--liver-brown-500)]/20"
 						onclick={() => onclose?.()}
 						aria-label="Close modal"
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
 							<line x1="18" y1="6" x2="6" y2="18"></line>
 							<line x1="6" y1="6" x2="18" y2="18"></line>
 						</svg>
@@ -96,7 +110,9 @@
 			</div>
 
 			{#if footer}
-				<div class="flex items-center justify-end gap-3 px-6 py-4 border-t-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)] rounded-b-xl">
+				<div
+					class="flex items-center justify-end gap-3 rounded-b-xl border-t-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)] px-6 py-4"
+				>
 					{@render footer()}
 				</div>
 			{/if}
@@ -120,4 +136,3 @@
 		animation: modal-in 0.2s ease-out;
 	}
 </style>
-

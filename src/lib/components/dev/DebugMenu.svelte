@@ -209,45 +209,55 @@
 		return unsubscribe;
 	});
 
-	$effect(() => { hero3dParams.depthScale = depthScale; });
-	$effect(() => { hero3dParams.revealRadius = revealRadius; });
-	$effect(() => { hero3dParams.parallaxXY = parallaxXY; });
-	$effect(() => { hero3dParams.parallaxZ = parallaxZ; });
-	$effect(() => { hero3dParams.splatStretch = splatStretch; });
-	$effect(() => { hero3dParams.splatCompress = splatCompress; });
-	$effect(() => { hero3dParams.depthBulge = depthBulge; });
-	$effect(() => { hero3dParams.contourOffset = contourOffset; });
-	$effect(() => { hero3dParams.blobAmplitude = blobAmplitude; });
-	$effect(() => { hero3dParams.noiseAmplitude = noiseAmplitude; });
-	$effect(() => { hero3dParams.contourInfluence = contourInfluence; });
-	$effect(() => { hero3dParams.edgeSoftness = edgeSoftness; });
-	$effect(() => { hero3dParams.saturationBoost = saturationBoost; });
-	$effect(() => { hero3dParams.contrastBoost = contrastBoost; });
-	$effect(() => { hero3dParams.rippleSpeed = rippleSpeed; });
-	$effect(() => { hero3dParams.rippleFrequency = rippleFrequency; });
-	$effect(() => { hero3dParams.rippleAmplitude = rippleAmplitude; });
-	$effect(() => { hero3dParams.causticScale = causticScale; });
-	$effect(() => { hero3dParams.causticSpeed = causticSpeed; });
-	$effect(() => { hero3dParams.causticIntensity = causticIntensity; });
-	$effect(() => { hero3dParams.waterDistortion = waterDistortion; });
-	$effect(() => { hero3dParams.mouseDamping = mouseDamping; });
-	$effect(() => { hero3dParams.revealDamping = revealDamping; });
-	$effect(() => { hero3dParams.mouseRangeX = mouseRangeX; });
-	$effect(() => { hero3dParams.mouseRangeY = mouseRangeY; });
-	$effect(() => { hero3dParams.depthFocusNear = depthFocusNear; });
-	$effect(() => { hero3dParams.depthFocusFar = depthFocusFar; });
-	$effect(() => { hero3dParams.depthMixLow = depthMixLow; });
-	$effect(() => { hero3dParams.parallaxXGain = parallaxXGain; });
-	$effect(() => { hero3dParams.parallaxYGain = parallaxYGain; });
-	$effect(() => { hero3dParams.rippleEdgeInfluence = rippleEdgeInfluence; });
-	$effect(() => { hero3dParams.edgeRippleStrength = edgeRippleStrength; });
-	$effect(() => { discoParams.sampleHistorySize = sampleHistorySize; });
-	$effect(() => { discoParams.minBeams = minBeams; });
-	$effect(() => { discoParams.maxBeams = maxBeams; });
-	$effect(() => { discoParams.clickBeamCount = clickBeamCount; });
-	$effect(() => { discoParams.clickBaseVolatility = clickBaseVolatility; });
-	$effect(() => { discoParams.volatilitySmoothing = volatilitySmoothing; });
-	$effect(() => { discoParams.volatilityDecay = volatilityDecay; });
+	/** Batch writes so dependents (hero, disco blocks) invalidate once per tick. */
+	$effect(() => {
+		Object.assign(hero3dParams, {
+			depthScale,
+			revealRadius,
+			parallaxXY,
+			parallaxZ,
+			splatStretch,
+			splatCompress,
+			depthBulge,
+			contourOffset,
+			blobAmplitude,
+			noiseAmplitude,
+			contourInfluence,
+			edgeSoftness,
+			saturationBoost,
+			contrastBoost,
+			rippleSpeed,
+			rippleFrequency,
+			rippleAmplitude,
+			causticScale,
+			causticSpeed,
+			causticIntensity,
+			waterDistortion,
+			mouseDamping,
+			revealDamping,
+			mouseRangeX,
+			mouseRangeY,
+			depthFocusNear,
+			depthFocusFar,
+			depthMixLow,
+			parallaxXGain,
+			parallaxYGain,
+			rippleEdgeInfluence,
+			edgeRippleStrength
+		});
+	});
+
+	$effect(() => {
+		Object.assign(discoParams, {
+			sampleHistorySize,
+			minBeams,
+			maxBeams,
+			clickBeamCount,
+			clickBaseVolatility,
+			volatilitySmoothing,
+			volatilityDecay
+		});
+	});
 
 	$effect(() => {
 		if (!browser || !hasLoadedSettings) return;
@@ -267,13 +277,8 @@
 	});
 </script>
 
-<Modal
-	{open}
-	{onclose}
-	title="🔧 Super Secret Debug Menu"
-	size="lg"
->
-	<div class="space-y-5 max-h-[70vh] overflow-y-auto pr-2">
+<Modal {open} {onclose} title="🔧 Super Secret Debug Menu" size="lg">
+	<div class="max-h-[70vh] space-y-5 overflow-y-auto pr-2">
 		<Select
 			label="Header Image Blend Mode"
 			bind:value={headerBlendMode}
@@ -286,7 +291,9 @@
 					<p class="text-sm font-semibold text-(--text-primary)">Feature Flags</p>
 					<p class="text-xs text-(--text-secondary)">Experimental toggles for the homepage</p>
 				</div>
-				<span class="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-(--text-secondary)">
+				<span
+					class="text-[0.65rem] font-semibold tracking-[0.2em] text-(--text-secondary) uppercase"
+				>
 					Dev
 				</span>
 			</div>
@@ -305,135 +312,211 @@
 					<p class="text-xs text-(--text-secondary)">Fine-tune the 3D effect shader</p>
 				</div>
 			</div>
-			
+
 			<div class="grid grid-cols-2 gap-x-4 gap-y-3">
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Depth Scale: {depthScale.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Depth Scale: {depthScale.toFixed(2)}</span
+					>
 					<Slider bind:value={depthScale} min={0} max={0.5} step={0.01} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Reveal Radius: {revealRadius.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Reveal Radius: {revealRadius.toFixed(2)}</span
+					>
 					<Slider bind:value={revealRadius} min={0.1} max={1} step={0.01} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Parallax XY: {parallaxXY.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Parallax XY: {parallaxXY.toFixed(2)}</span
+					>
 					<Slider bind:value={parallaxXY} min={0} max={0.5} step={0.01} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Parallax Z: {parallaxZ.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Parallax Z: {parallaxZ.toFixed(2)}</span
+					>
 					<Slider bind:value={parallaxZ} min={0} max={1} step={0.01} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Splat Stretch: {splatStretch.toFixed(1)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Splat Stretch: {splatStretch.toFixed(1)}</span
+					>
 					<Slider bind:value={splatStretch} min={0} max={5} step={0.1} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Splat Compress: {splatCompress.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Splat Compress: {splatCompress.toFixed(2)}</span
+					>
 					<Slider bind:value={splatCompress} min={0} max={2} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Depth Bulge: {depthBulge.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Depth Bulge: {depthBulge.toFixed(2)}</span
+					>
 					<Slider bind:value={depthBulge} min={0} max={1} step={0.01} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Contour Offset: {contourOffset.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Contour Offset: {contourOffset.toFixed(2)}</span
+					>
 					<Slider bind:value={contourOffset} min={0} max={2} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Blob Amplitude: {blobAmplitude.toFixed(3)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Blob Amplitude: {blobAmplitude.toFixed(3)}</span
+					>
 					<Slider bind:value={blobAmplitude} min={0} max={0.15} step={0.005} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Noise Amplitude: {noiseAmplitude.toFixed(3)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Noise Amplitude: {noiseAmplitude.toFixed(3)}</span
+					>
 					<Slider bind:value={noiseAmplitude} min={0} max={0.2} step={0.005} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Contour Influence: {contourInfluence.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Contour Influence: {contourInfluence.toFixed(2)}</span
+					>
 					<Slider bind:value={contourInfluence} min={0} max={2} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Edge Softness: {edgeSoftness.toFixed(3)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Edge Softness: {edgeSoftness.toFixed(3)}</span
+					>
 					<Slider bind:value={edgeSoftness} min={0.01} max={0.2} step={0.005} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Saturation: {saturationBoost.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Saturation: {saturationBoost.toFixed(2)}</span
+					>
 					<Slider bind:value={saturationBoost} min={0.5} max={2} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Contrast: {contrastBoost.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Contrast: {contrastBoost.toFixed(2)}</span
+					>
 					<Slider bind:value={contrastBoost} min={0.5} max={2} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Mouse Damping: {mouseDamping.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Mouse Damping: {mouseDamping.toFixed(2)}</span
+					>
 					<Slider bind:value={mouseDamping} min={0.5} max={8} step={0.1} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Reveal Damping: {revealDamping.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Reveal Damping: {revealDamping.toFixed(2)}</span
+					>
 					<Slider bind:value={revealDamping} min={0.5} max={8} step={0.1} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Mouse Range X: {mouseRangeX.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Mouse Range X: {mouseRangeX.toFixed(2)}</span
+					>
 					<Slider bind:value={mouseRangeX} min={0.5} max={4} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Mouse Range Y: {mouseRangeY.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Mouse Range Y: {mouseRangeY.toFixed(2)}</span
+					>
 					<Slider bind:value={mouseRangeY} min={0.5} max={4} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Depth Focus Near: {depthFocusNear.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Depth Focus Near: {depthFocusNear.toFixed(2)}</span
+					>
 					<Slider bind:value={depthFocusNear} min={0} max={1} step={0.01} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Depth Focus Far: {depthFocusFar.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Depth Focus Far: {depthFocusFar.toFixed(2)}</span
+					>
 					<Slider bind:value={depthFocusFar} min={0} max={1} step={0.01} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Depth Mix Low: {depthMixLow.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Depth Mix Low: {depthMixLow.toFixed(2)}</span
+					>
 					<Slider bind:value={depthMixLow} min={0} max={1} step={0.01} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Parallax X Gain: {parallaxXGain.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Parallax X Gain: {parallaxXGain.toFixed(2)}</span
+					>
 					<Slider bind:value={parallaxXGain} min={0} max={2.5} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Parallax Y Gain: {parallaxYGain.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Parallax Y Gain: {parallaxYGain.toFixed(2)}</span
+					>
 					<Slider bind:value={parallaxYGain} min={0} max={2.5} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Ripple Edge Influence: {rippleEdgeInfluence.toFixed(2)}</span>
-					<Slider bind:value={rippleEdgeInfluence} min={0} max={1.5} step={0.01} showValue={false} />
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Ripple Edge Influence: {rippleEdgeInfluence.toFixed(2)}</span
+					>
+					<Slider
+						bind:value={rippleEdgeInfluence}
+						min={0}
+						max={1.5}
+						step={0.01}
+						showValue={false}
+					/>
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Edge Ripple Strength: {edgeRippleStrength.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Edge Ripple Strength: {edgeRippleStrength.toFixed(2)}</span
+					>
 					<Slider bind:value={edgeRippleStrength} min={0} max={3} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Ripple Speed: {rippleSpeed.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Ripple Speed: {rippleSpeed.toFixed(2)}</span
+					>
 					<Slider bind:value={rippleSpeed} min={0} max={3} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Ripple Frequency: {rippleFrequency.toFixed(1)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Ripple Frequency: {rippleFrequency.toFixed(1)}</span
+					>
 					<Slider bind:value={rippleFrequency} min={0} max={24} step={0.5} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Ripple Amplitude: {rippleAmplitude.toFixed(3)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Ripple Amplitude: {rippleAmplitude.toFixed(3)}</span
+					>
 					<Slider bind:value={rippleAmplitude} min={0} max={0.05} step={0.001} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Caustic Scale: {causticScale.toFixed(1)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Caustic Scale: {causticScale.toFixed(1)}</span
+					>
 					<Slider bind:value={causticScale} min={0} max={20} step={0.5} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Caustic Speed: {causticSpeed.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Caustic Speed: {causticSpeed.toFixed(2)}</span
+					>
 					<Slider bind:value={causticSpeed} min={0} max={2} step={0.05} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Caustic Intensity: {causticIntensity.toFixed(2)}</span>
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Caustic Intensity: {causticIntensity.toFixed(2)}</span
+					>
 					<Slider bind:value={causticIntensity} min={0} max={0.5} step={0.01} showValue={false} />
 				</div>
 				<div>
-					<span class="text-xs font-medium text-(--text-secondary) block mb-1">Water Distortion: {waterDistortion.toFixed(5)}</span>
-					<Slider bind:value={waterDistortion} min={0} max={0.005} step={0.00005} showValue={false} />
+					<span class="mb-1 block text-xs font-medium text-(--text-secondary)"
+						>Water Distortion: {waterDistortion.toFixed(5)}</span
+					>
+					<Slider
+						bind:value={waterDistortion}
+						min={0}
+						max={0.005}
+						step={0.00005}
+						showValue={false}
+					/>
 				</div>
 			</div>
 		</div>
@@ -442,7 +525,9 @@
 			<div class="flex items-start justify-between gap-3">
 				<div>
 					<p class="text-sm font-semibold text-(--text-primary)">🪩 Disco Block Traits</p>
-					<p class="text-xs text-(--text-secondary)">Tune cursor history, beam density, and click bursts</p>
+					<p class="text-xs text-(--text-secondary)">
+						Tune cursor history, beam density, and click bursts
+					</p>
 				</div>
 			</div>
 
@@ -481,7 +566,13 @@
 					<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 						Volatility Smoothing: {volatilitySmoothing.toFixed(2)}
 					</span>
-					<Slider bind:value={volatilitySmoothing} min={0.01} max={0.5} step={0.01} showValue={false} />
+					<Slider
+						bind:value={volatilitySmoothing}
+						min={0.01}
+						max={0.5}
+						step={0.01}
+						showValue={false}
+					/>
 				</div>
 				<div>
 					<span class="mb-1 block text-xs font-medium text-(--text-secondary)">

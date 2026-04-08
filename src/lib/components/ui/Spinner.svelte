@@ -38,10 +38,6 @@
 	);
 </script>
 
-<div
-	class={combinedClasses}
-	role="status"
-	aria-label={ariaLabel}
->
+<div class={combinedClasses} role="status" aria-label={ariaLabel}>
 	<span class="sr-only">{ariaLabel}</span>
 </div>

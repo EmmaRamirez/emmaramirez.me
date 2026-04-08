@@ -167,7 +167,7 @@
 					brightness: 0.4 + Math.random() * 0.6,
 					hue: Math.random() * 80 - 40,
 					orbitRadius: 2 + Math.random() * 12,
-					phaseOffset: Math.random() * Math.PI * 2,
+					phaseOffset: Math.random() * Math.PI * 2
 				});
 			}
 		}
@@ -194,7 +194,8 @@
 
 			const volatilityBoost = 1 + currentVolatility * 2;
 			const wobbleX = Math.cos(time * 2 + beam.phaseOffset) * beam.orbitRadius * volatilityBoost;
-			const wobbleY = Math.sin(time * 3 + beam.phaseOffset) * beam.orbitRadius * 0.5 * volatilityBoost;
+			const wobbleY =
+				Math.sin(time * 3 + beam.phaseOffset) * beam.orbitRadius * 0.5 * volatilityBoost;
 
 			const x = originX + Math.cos(rotatedAngle) * beam.distance + wobbleX;
 			const y = originY + Math.sin(rotatedAngle) * beam.distance + wobbleY;
@@ -202,7 +203,12 @@
 			const snappedX = Math.floor(x / pixelSize) * pixelSize;
 			const snappedY = Math.floor(y / pixelSize) * pixelSize;
 
-			if (snappedX < -pixelSize || snappedX > canvasWidth + pixelSize || snappedY < -pixelSize || snappedY > canvasHeight + pixelSize) {
+			if (
+				snappedX < -pixelSize ||
+				snappedX > canvasWidth + pixelSize ||
+				snappedY < -pixelSize ||
+				snappedY > canvasHeight + pixelSize
+			) {
 				continue;
 			}
 
@@ -213,7 +219,8 @@
 			const visibility = baseFade + distanceFade * (1 - baseFade);
 
 			const pulseIntensity = 0.3 + currentVolatility * 0.3;
-			const angleBrightness = Math.sin(rotatedAngle * 3 + time) * pulseIntensity + (1 - pulseIntensity / 2);
+			const angleBrightness =
+				Math.sin(rotatedAngle * 3 + time) * pulseIntensity + (1 - pulseIntensity / 2);
 			const finalBrightness = beam.brightness * angleBrightness * visibility * fadeFactor;
 
 			const hue = 45 + beam.hue * (1 + currentVolatility);
@@ -325,7 +332,7 @@
 			const reach = getBeamReach();
 			discoBalls = discoBalls.map((ball) => ({
 				...ball,
-				beams: generateBeams(discoParams.clickBeamCount, reach),
+				beams: generateBeams(discoParams.clickBeamCount, reach)
 			}));
 		}
 
@@ -394,8 +401,8 @@
 				x,
 				y,
 				beams,
-				volatility: ballVolatility,
-			},
+				volatility: ballVolatility
+			}
 		];
 
 		ensureAnimation();
@@ -418,16 +425,18 @@
 	onclick={addDiscoBall}
 >
 	<ImageBlock {image} {alt} {caption} class={className} imageId="disco-image" />
-	<canvas class="absolute top-0 left-0 pointer-events-none w-full h-full z-20 rounded-lg" id="disco-canvas"></canvas>
+	<canvas
+		class="pointer-events-none absolute top-0 left-0 z-20 h-full w-full rounded-lg"
+		id="disco-canvas"
+	></canvas>
 
 	{#if isHovering}
 		<div
-			class="disco-cursor pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full z-30"
+			class="disco-cursor pointer-events-none absolute z-30 -translate-x-1/2 -translate-y-1/2 rounded-full"
 			style={`left:${cursorX / 16}rem;top:${cursorY / 16}rem;`}
 		></div>
 	{/if}
 </div>
-
 
 <style>
 	@keyframes disco-glint {
@@ -447,10 +456,14 @@
 		box-shadow: 0 0 1.5625rem rgba(255, 255, 255, 0.9);
 
 		background:
-			/* highlight */ radial-gradient(circle at 30% 20%, #ffffff 0, #ffffff 25%, rgba(255, 255, 255, 0) 45%),
-			/* bottom shadow */ radial-gradient(circle at 50% 80%, rgba(0, 0, 0, 0.5) 0, rgba(0, 0, 0, 0) 60%),
-			/* vertical tiles */ linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0.0625rem, transparent 0.0625rem),
-			/* horizontal tiles */ linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0.0625rem, transparent 0.0625rem),
+			/* highlight */
+			radial-gradient(circle at 30% 20%, #ffffff 0, #ffffff 25%, rgba(255, 255, 255, 0) 45%),
+			/* bottom shadow */
+			radial-gradient(circle at 50% 80%, rgba(0, 0, 0, 0.5) 0, rgba(0, 0, 0, 0) 60%),
+			/* vertical tiles */
+			linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0.0625rem, transparent 0.0625rem),
+			/* horizontal tiles */
+			linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0.0625rem, transparent 0.0625rem),
 			/* base sphere */ radial-gradient(circle, #d7e0ff 0, #8f96ff 40%, #3c3f7a 70%, #0a0b1d 100%);
 
 		background-size:
@@ -460,12 +473,7 @@
 			0.375rem 0.375rem,
 			100% 100%;
 
-		background-repeat:
-			no-repeat,
-			no-repeat,
-			repeat,
-			repeat,
-			no-repeat;
+		background-repeat: no-repeat, no-repeat, repeat, repeat, no-repeat;
 
 		animation: disco-glint 1.8s ease-in-out infinite;
 	}

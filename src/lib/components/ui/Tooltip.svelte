@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 
@@ -50,9 +50,11 @@
 
 	const arrowClasses: Record<TooltipPosition, string> = {
 		top: 'top-full left-1/2 -translate-x-1/2 border-t-[var(--liver-brown-800)] border-x-transparent border-b-transparent',
-		bottom: 'bottom-full left-1/2 -translate-x-1/2 border-b-[var(--liver-brown-800)] border-x-transparent border-t-transparent',
+		bottom:
+			'bottom-full left-1/2 -translate-x-1/2 border-b-[var(--liver-brown-800)] border-x-transparent border-t-transparent',
 		left: 'left-full top-1/2 -translate-y-1/2 border-l-[var(--liver-brown-800)] border-y-transparent border-r-transparent',
-		right: 'right-full top-1/2 -translate-y-1/2 border-r-[var(--liver-brown-800)] border-y-transparent border-l-transparent'
+		right:
+			'right-full top-1/2 -translate-y-1/2 border-r-[var(--liver-brown-800)] border-y-transparent border-l-transparent'
 	};
 </script>
 
@@ -71,13 +73,12 @@
 	{#if visible}
 		<div
 			role="tooltip"
-			class="absolute z-50 px-2 py-1 text-xs font-medium text-white bg-[var(--liver-brown-800)] rounded shadow-lg whitespace-nowrap pointer-events-none {positionClasses[position]}"
+			class="pointer-events-none absolute z-50 rounded bg-[var(--liver-brown-800)] px-2 py-1 text-xs font-medium whitespace-nowrap text-white shadow-lg {positionClasses[
+				position
+			]}"
 		>
 			{text}
-			<span 
-				class="absolute w-0 h-0 border-4 {arrowClasses[position]}"
-			></span>
+			<span class="absolute h-0 w-0 border-4 {arrowClasses[position]}"></span>
 		</div>
 	{/if}
 </div>
-

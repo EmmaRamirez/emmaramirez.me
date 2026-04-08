@@ -48,7 +48,7 @@
 
 <div class="w-full {className}">
 	{#if showLabel}
-		<div class="flex justify-between mb-1">
+		<div class="mb-1 flex justify-between">
 			<span class="text-sm font-medium text-[var(--liver-brown-700)]">
 				{ariaLabel ?? 'Progress'}
 			</span>
@@ -57,19 +57,18 @@
 			</span>
 		</div>
 	{/if}
-	
-	<div 
-		class="w-full rounded-full bg-[var(--sandy-tan-500)] overflow-hidden {sizeClasses[size]}"
+
+	<div
+		class="w-full overflow-hidden rounded-full bg-[var(--sandy-tan-500)] {sizeClasses[size]}"
 		role="progressbar"
 		aria-valuenow={value}
 		aria-valuemin={0}
 		aria-valuemax={max}
 		aria-label={ariaLabel}
 	>
-		<div 
+		<div
 			class="h-full rounded-full transition-all duration-300 ease-out {variantClasses[variant]}"
 			style="width: {percentage}%"
 		></div>
 	</div>
 </div>
-

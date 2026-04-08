@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getArticles, type ArticleFull } from '$lib/articles';
+	import { orderedListNeighbors, readingTimeMinutesFromText } from '$lib/reading';
 	import { formatLongDate } from '$lib/utils';
 	import { fly, fade } from 'svelte/transition';
 
@@ -14,53 +15,56 @@
 	const allArticles = getArticles();
 
 	const article = $derived<ArticleFull | null>(
-		articleId ? allArticles.find((a) => a.slug === articleId) ?? null : null
+		articleId ? (allArticles.find((a) => a.slug === articleId) ?? null) : null
 	);
 
-	const currentIndex = $derived(articleId ? allArticles.findIndex((a) => a.slug === articleId) : -1);
-	const prevArticle = $derived(currentIndex > 0 ? allArticles[currentIndex - 1] : null);
-	const nextArticle = $derived(
-		currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null
+	const articleNeighbors = $derived(
+		orderedListNeighbors(allArticles, articleId, (a) => a.slug)
 	);
+	const prevArticle = $derived(articleNeighbors.prev);
+	const nextArticle = $derived(articleNeighbors.next);
 
 	const readingTime = $derived(
-		article ? Math.max(1, Math.ceil(article.frontmatter.description.split(/\s+/).length / 200)) : 0
+		article ? readingTimeMinutesFromText(article.frontmatter.description) : 0
 	);
 
 	function handleKeydown(event: KeyboardEvent) {
-  if (!open) return;
+		if (!open) return;
 
-  const targetIsTextInput =
-    event.target instanceof HTMLElement &&
-    (event.target.tagName === 'INPUT' ||
-      event.target.tagName === 'TEXTAREA' ||
-      event.target.isContentEditable);
+		const targetIsTextInput =
+			event.target instanceof HTMLElement &&
+			(event.target.tagName === 'INPUT' ||
+				event.target.tagName === 'TEXTAREA' ||
+				event.target.isContentEditable);
 
-  if (event.key === 'Escape') {
-    event.preventDefault();
-    onclose?.();
-  }
+		if (event.key === 'Escape') {
+			event.preventDefault();
+			onclose?.();
+		}
 
-  if (event.key === 'r' || event.key === 'R') {
-    if (targetIsTextInput) {
-      return;
-    }
-    event.preventDefault();
-    if (article) {
-      window.location.href = `/blog/${article.slug}`;
-    }
-  }
+		if (event.key === 'r' || event.key === 'R') {
+			if (targetIsTextInput) {
+				return;
+			}
+			event.preventDefault();
+			if (article) {
+				window.location.href = `/blog/${article.slug}`;
+			}
+		}
 
-  if ((event.key === 'k' || event.key === 'K' || event.key === 'j' || event.key === 'J') && !targetIsTextInput) {
-    event.preventDefault();
-    if ((event.key === 'k' || event.key === 'K') && prevArticle) {
-      navigateToArticle(prevArticle.slug);
-    }
-    if ((event.key === 'j' || event.key === 'J') && nextArticle) {
-      navigateToArticle(nextArticle.slug);
-    }
-  }
-}
+		if (
+			(event.key === 'k' || event.key === 'K' || event.key === 'j' || event.key === 'J') &&
+			!targetIsTextInput
+		) {
+			event.preventDefault();
+			if ((event.key === 'k' || event.key === 'K') && prevArticle) {
+				navigateToArticle(prevArticle.slug);
+			}
+			if ((event.key === 'j' || event.key === 'J') && nextArticle) {
+				navigateToArticle(nextArticle.slug);
+			}
+		}
+	}
 
 	function navigateToArticle(id: string) {
 		const customEvent = new CustomEvent('navigatearticle', { detail: { id } });
@@ -73,7 +77,7 @@
 {#if open && article}
 	{@const ArticleComponent = article.component}
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div 
+	<div
 		class="panel-backdrop"
 		in:fade={{ duration: 200 }}
 		out:fade={{ duration: 150 }}
@@ -93,20 +97,32 @@
 					<span class="key-label">to close</span>
 				</button>
 				<div class="hotkey-divider"></div>
-				<button class="hotkey-indicator" onclick={() => article && (window.location.href = `/blog/${article.slug}`)} aria-label="Open read mode">
+				<button
+					class="hotkey-indicator"
+					onclick={() => article && (window.location.href = `/blog/${article.slug}`)}
+					aria-label="Open read mode"
+				>
 					<kbd class="key-badge">R</kbd>
 					<span class="key-label">read mode</span>
 				</button>
 				{#if prevArticle || nextArticle}
 					<div class="hotkey-divider"></div>
 					{#if prevArticle}
-						<button class="hotkey-indicator" onclick={() => navigateToArticle(prevArticle.slug)} aria-label="Previous article">
+						<button
+							class="hotkey-indicator"
+							onclick={() => navigateToArticle(prevArticle.slug)}
+							aria-label="Previous article"
+						>
 							<kbd class="key-badge">K</kbd>
 							<span class="key-label">previous</span>
 						</button>
 					{/if}
 					{#if nextArticle}
-						<button class="hotkey-indicator" onclick={() => navigateToArticle(nextArticle.slug)} aria-label="Next article">
+						<button
+							class="hotkey-indicator"
+							onclick={() => navigateToArticle(nextArticle.slug)}
+							aria-label="Next article"
+						>
 							<kbd class="key-badge">J</kbd>
 							<span class="key-label">next</span>
 						</button>
@@ -177,7 +193,10 @@
 						</div>
 						<div class="nav-next">
 							{#if nextArticle}
-								<button class="nav-link nav-link-next" onclick={() => navigateToArticle(nextArticle.slug)}>
+								<button
+									class="nav-link nav-link-next"
+									onclick={() => navigateToArticle(nextArticle.slug)}
+								>
 									<span class="nav-direction">Next →</span>
 									<span class="nav-title">{nextArticle.frontmatter.title}</span>
 								</button>
@@ -186,8 +205,7 @@
 					</div>
 				</nav>
 			{/if}
-
-			</article>
+		</article>
 	</aside>
 {/if}
 

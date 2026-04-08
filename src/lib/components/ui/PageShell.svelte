@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	interface PageShellProps {
 		/** Custom class names for the shell wrapper */
@@ -12,12 +12,7 @@
 		children?: Snippet;
 	}
 
-	let {
-		class: className = '',
-		header,
-		footer,
-		children
-	}: PageShellProps = $props();
+	let { class: className = '', header, footer, children }: PageShellProps = $props();
 
 	const shellClasses = $derived(`min-h-screen flex flex-col ${className}`.trim());
 </script>

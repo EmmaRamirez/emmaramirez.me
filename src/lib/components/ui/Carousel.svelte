@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	interface CarouselProps {
 		/** Custom class names */
@@ -79,8 +79,8 @@
 	role="region"
 	aria-roledescription="carousel"
 	aria-label="Image carousel"
-	onmouseenter={() => isPaused = true}
-	onmouseleave={() => isPaused = false}
+	onmouseenter={() => (isPaused = true)}
+	onmouseleave={() => (isPaused = false)}
 >
 	<div
 		class="flex transition-transform duration-500 ease-out"
@@ -104,34 +104,56 @@
 	{#if showArrows && slideCount > 1}
 		<button
 			type="button"
-			class="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[var(--sandy-tan-200)]/90 border-2 border-[var(--liver-brown-500)] text-[var(--liver-brown-700)] hover:bg-[var(--sandy-tan-300)] transition-colors shadow-lg"
+			class="absolute top-1/2 left-2 -translate-y-1/2 rounded-full border-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-200)]/90 p-2 text-[var(--liver-brown-700)] shadow-lg transition-colors hover:bg-[var(--sandy-tan-300)]"
 			onclick={prev}
 			aria-label="Previous slide"
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<path d="m15 18-6-6 6-6"/>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path d="m15 18-6-6 6-6" />
 			</svg>
 		</button>
 
 		<button
 			type="button"
-			class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[var(--sandy-tan-200)]/90 border-2 border-[var(--liver-brown-500)] text-[var(--liver-brown-700)] hover:bg-[var(--sandy-tan-300)] transition-colors shadow-lg"
+			class="absolute top-1/2 right-2 -translate-y-1/2 rounded-full border-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-200)]/90 p-2 text-[var(--liver-brown-700)] shadow-lg transition-colors hover:bg-[var(--sandy-tan-300)]"
 			onclick={next}
 			aria-label="Next slide"
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<path d="m9 18 6-6-6-6"/>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path d="m9 18 6-6-6-6" />
 			</svg>
 		</button>
 	{/if}
 
 	{#if showDots && slideCount > 1}
-		<div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+		<div class="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
 			{#each Array(slideCount) as _, i (i)}
 				<button
 					type="button"
-					class="w-2.5 h-2.5 rounded-full transition-colors
-						{i === currentSlide ? 'bg-[var(--caroline-blue-700)]' : 'bg-[var(--sandy-tan-200)]/70 hover:bg-[var(--sandy-tan-200)]'}"
+					class="h-2.5 w-2.5 rounded-full transition-colors
+						{i === currentSlide
+						? 'bg-[var(--caroline-blue-700)]'
+						: 'bg-[var(--sandy-tan-200)]/70 hover:bg-[var(--sandy-tan-200)]'}"
 					onclick={() => goToSlide(i)}
 					aria-label="Go to slide {i + 1}"
 					aria-current={i === currentSlide ? 'true' : undefined}
@@ -140,4 +162,3 @@
 		</div>
 	{/if}
 </div>
-

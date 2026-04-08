@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type GridCols = 1 | 2 | 3 | 4 | 5 | 6 | 12 | 'auto';
 	type GridGap = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -94,9 +94,7 @@
 			.join(' ')
 	);
 
-	const combinedClasses = $derived(
-		`grid ${responsiveCols} ${gapClasses[gap]} ${className}`.trim()
-	);
+	const combinedClasses = $derived(`grid ${responsiveCols} ${gapClasses[gap]} ${className}`.trim());
 </script>
 
 <div class={combinedClasses}>

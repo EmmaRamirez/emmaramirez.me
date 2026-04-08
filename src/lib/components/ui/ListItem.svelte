@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	interface ListItemProps {
 		/** Custom class names */
@@ -29,31 +29,28 @@
 	}: ListItemProps = $props();
 
 	const isInteractive = $derived(href || onclick);
-	const baseClasses = "flex items-center gap-3 px-4 py-3";
+	const baseClasses = 'flex items-center gap-3 px-4 py-3';
 	const interactiveClasses = $derived(
 		isInteractive
-			? "hover:bg-[var(--sandy-tan-400)] cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-inset"
-			: ""
+			? 'hover:bg-[var(--sandy-tan-400)] cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-inset'
+			: ''
 	);
 </script>
 
 {#if href}
 	<li>
-		<a 
-			{href}
-			class="{baseClasses} {interactiveClasses} {className} style-none no-underline"
-		>
+		<a {href} class="{baseClasses} {interactiveClasses} {className} style-none no-underline">
 			{#if leading}
 				<div class="shrink-0 text-[var(--liver-brown-600)]">
 					{@render leading()}
 				</div>
 			{/if}
-			<div class="flex-1 min-w-0">
-				<div class="text-[var(--liver-brown-800)] font-medium truncate">
+			<div class="min-w-0 flex-1">
+				<div class="truncate font-medium text-[var(--liver-brown-800)]">
 					{@render children?.()}
 				</div>
 				{#if description}
-					<p class="text-sm text-[var(--liver-brown-600)] truncate">{description}</p>
+					<p class="truncate text-sm text-[var(--liver-brown-600)]">{description}</p>
 				{/if}
 			</div>
 			{#if trailing}
@@ -75,12 +72,12 @@
 					{@render leading()}
 				</div>
 			{/if}
-			<div class="flex-1 min-w-0">
-				<div class="text-[var(--liver-brown-800)] font-medium truncate">
+			<div class="min-w-0 flex-1">
+				<div class="truncate font-medium text-[var(--liver-brown-800)]">
 					{@render children?.()}
 				</div>
 				{#if description}
-					<p class="text-sm text-[var(--liver-brown-600)] truncate">{description}</p>
+					<p class="truncate text-sm text-[var(--liver-brown-600)]">{description}</p>
 				{/if}
 			</div>
 			{#if trailing}
@@ -97,12 +94,12 @@
 				{@render leading()}
 			</div>
 		{/if}
-		<div class="flex-1 min-w-0">
-			<div class="text-[var(--liver-brown-800)] font-medium truncate">
+		<div class="min-w-0 flex-1">
+			<div class="truncate font-medium text-[var(--liver-brown-800)]">
 				{@render children?.()}
 			</div>
 			{#if description}
-				<p class="text-sm text-[var(--liver-brown-600)] truncate">{description}</p>
+				<p class="truncate text-sm text-[var(--liver-brown-600)]">{description}</p>
 			{/if}
 		</div>
 		{#if trailing}

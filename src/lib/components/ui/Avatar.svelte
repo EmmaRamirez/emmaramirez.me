@@ -44,7 +44,7 @@
 	const initials = $derived(
 		fallback
 			.split(' ')
-			.map(word => word[0])
+			.map((word) => word[0])
 			.join('')
 			.toUpperCase()
 			.slice(0, 2)
@@ -53,7 +53,7 @@
 	const showImage = $derived(src && !imageError);
 	const showFallback = $derived(!showImage);
 
-	const baseClasses = "inline-flex items-center justify-center overflow-hidden shrink-0";
+	const baseClasses = 'inline-flex items-center justify-center overflow-hidden shrink-0';
 	const combinedClasses = $derived(
 		`${baseClasses} ${sizeClasses[size].container} ${shapeClasses[shape]} ${className}`.trim()
 	);
@@ -61,15 +61,12 @@
 
 <span class={combinedClasses}>
 	{#if showImage}
-		<img
-			{src}
-			{alt}
-			class="h-full w-full object-cover"
-			onerror={() => imageError = true}
-		/>
+		<img {src} {alt} class="h-full w-full object-cover" onerror={() => (imageError = true)} />
 	{:else if showFallback}
-		<span 
-			class="flex h-full w-full items-center justify-center bg-[var(--caroline-blue-600)] text-white font-medium {sizeClasses[size].text}"
+		<span
+			class="flex h-full w-full items-center justify-center bg-[var(--caroline-blue-600)] font-medium text-white {sizeClasses[
+				size
+			].text}"
 			aria-label={alt || fallback}
 		>
 			{initials || '?'}

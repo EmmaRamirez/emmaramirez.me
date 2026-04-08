@@ -1,56 +1,51 @@
 <script lang="ts">
 	interface Props {
-		src: string;
-		alt: string;
-		location: string;
+		photo: string;
+		description: string;
 		class?: string;
 	}
 
-	let { src, alt, location, class: className = '' }: Props = $props();
+	let { photo, description, class: className = '' }: Props = $props();
 </script>
 
-<figure class="city-card relative flex h-full w-full items-center overflow-hidden rounded-xl border border-(--border-color) bg-(--surface) {className}">
-	<img
-		{src}
-		{alt}
-		loading="lazy"
-		class="city-image h-full w-full object-cover"
-	/>
-	<figcaption class="city-tag">
-		{location}
+<figure
+	class="photo-card relative flex h-full w-full items-center overflow-hidden rounded-xl border border-(--border-color) bg-(--surface) {className}"
+>
+	<img src={photo} alt={description} loading="lazy" class="photo-image h-full w-full object-cover" />
+	<figcaption class="photo-description">
+		{description}
 	</figcaption>
 </figure>
 
 <style>
-	.city-card {
+	.photo-card {
 		height: 16rem;
 		box-shadow:
 			0 1rem 2.375rem rgba(0, 0, 0, 0.16),
 			0 0.5rem 0.75rem rgba(0, 0, 0, 0.12);
 	}
 
-	.city-image {
+	.photo-image {
 		transition: transform 220ms ease;
 	}
 
-	.city-card:hover .city-image {
+	.photo-card:hover .photo-image {
 		transform: scale(1.03);
 	}
 
-	.city-tag {
+	.photo-description {
 		position: absolute;
 		bottom: 1rem;
 		left: 1rem;
+		right: 1rem;
 		padding: 0.35rem 0.9rem;
-		border-radius: 624.9375rem;
+		border-radius: 1rem;
 		background: color-mix(in srgb, var(--surface) 82%, transparent);
 		color: var(--text-primary);
-		text-transform: uppercase;
-		font-weight: 700;
-		letter-spacing: 0.16em;
-		font-size: 0.72rem;
+		font-weight: 600;
+		font-size: 0.85rem;
+		line-height: 1.4;
 		backdrop-filter: blur(0.375rem);
 		border: 0.0625rem solid var(--border-color);
 	}
 </style>
-

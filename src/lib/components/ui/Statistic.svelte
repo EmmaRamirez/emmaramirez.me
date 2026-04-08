@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type TrendDirection = 'up' | 'down' | 'neutral';
 	type StatisticSize = 'sm' | 'md' | 'lg';
@@ -67,14 +67,25 @@
 		{label}
 	</p>
 
-	<div class="flex items-baseline gap-2 mt-1">
-		<p class="font-bold text-[var(--liver-brown-900)] tracking-tight {sizeClasses[size].value}">
-			{#if prefix}<span class="text-[var(--liver-brown-600)]">{prefix}</span>{/if}{value}{#if suffix}<span class="text-[var(--liver-brown-600)]">{suffix}</span>{/if}
+	<div class="mt-1 flex items-baseline gap-2">
+		<p class="font-bold tracking-tight text-[var(--liver-brown-900)] {sizeClasses[size].value}">
+			{#if prefix}<span class="text-[var(--liver-brown-600)]">{prefix}</span
+				>{/if}{value}{#if suffix}<span class="text-[var(--liver-brown-600)]">{suffix}</span>{/if}
 		</p>
 
 		{#if trend && trendValue}
 			<div class="flex items-center gap-0.5 {trendColors[trend]} text-sm font-medium">
-				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
 					<path d={trendIcons[trend]}></path>
 				</svg>
 				<span>{trendValue}</span>
@@ -82,4 +93,3 @@
 		{/if}
 	</div>
 </div>
-

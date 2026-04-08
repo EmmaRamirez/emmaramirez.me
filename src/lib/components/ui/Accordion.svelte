@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type AccordionItem = {
 		id: string;
@@ -51,7 +51,9 @@
 	}
 </script>
 
-<div class="divide-y divide-[var(--liver-brown-500)] border-y border-[var(--liver-brown-500)] {className}">
+<div
+	class="divide-y divide-[var(--liver-brown-500)] border-y border-[var(--liver-brown-500)] {className}"
+>
 	{#each items as item (item.id)}
 		<div>
 			<h3>
@@ -61,23 +63,25 @@
 					aria-expanded={isOpen(item.id)}
 					aria-controls="accordion-panel-{item.id}"
 					disabled={item.disabled}
-					class="flex w-full items-center justify-between gap-4 py-4 px-1 text-left text-[var(--liver-brown-800)] font-medium transition-colors hover:text-[var(--liver-brown-900)] focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-inset rounded {item.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}"
+					class="flex w-full items-center justify-between gap-4 rounded px-1 py-4 text-left font-medium text-[var(--liver-brown-800)] transition-colors hover:text-[var(--liver-brown-900)] focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:outline-none focus:ring-inset {item.disabled
+						? 'cursor-not-allowed opacity-50'
+						: 'cursor-pointer'}"
 					onclick={() => !item.disabled && togglePanel(item.id)}
 				>
 					<span>{item.title}</span>
-					<svg 
+					<svg
 						class="shrink-0 transition-transform duration-200 {isOpen(item.id) ? 'rotate-180' : ''}"
-						xmlns="http://www.w3.org/2000/svg" 
-						width="20" 
-						height="20" 
-						viewBox="0 0 24 24" 
-						fill="none" 
-						stroke="currentColor" 
-						stroke-width="2" 
-						stroke-linecap="round" 
+						xmlns="http://www.w3.org/2000/svg"
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
 						stroke-linejoin="round"
 					>
-						<path d="m6 9 6 6 6-6"/>
+						<path d="m6 9 6 6 6-6" />
 					</svg>
 				</button>
 			</h3>
@@ -87,7 +91,7 @@
 					id="accordion-panel-{item.id}"
 					role="region"
 					aria-labelledby="accordion-header-{item.id}"
-					class="pb-4 px-1 text-[var(--liver-brown-700)] animate-accordion-open"
+					class="animate-accordion-open px-1 pb-4 text-[var(--liver-brown-700)]"
 				>
 					{item.content}
 				</div>

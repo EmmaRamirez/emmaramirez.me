@@ -6,15 +6,16 @@
 	import { dev } from '$app/environment';
 	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
+	import { orderedListNeighbors, readingTimeMinutesFromText } from '$lib/reading';
 	import { formatRelativeDate } from '$lib/utils';
 
 	let { data } = $props();
 
 	const article = $derived(getArticleBySlug(data.slug)!);
 	const articles = getArticles();
-	const currentIndex = $derived(articles.findIndex((a) => a.slug === data.slug));
-	const prevArticle = $derived(currentIndex > 0 ? articles[currentIndex - 1] : null);
-	const nextArticle = $derived(currentIndex < articles.length - 1 ? articles[currentIndex + 1] : null);
+	const essayNeighbors = $derived(orderedListNeighbors(articles, data.slug, (a) => a.slug));
+	const prevArticle = $derived(essayNeighbors.prev);
+	const nextArticle = $derived(essayNeighbors.next);
 
 	$effect(() => {
 		title.set(`blog/${data.title.toLowerCase()}`);
@@ -41,7 +42,7 @@
 		return formatRelativeDate(dateStr);
 	}
 
-	const readingTime = $derived(Math.max(1, Math.ceil(data.description.split(/\s+/).length / 200)));
+	const readingTime = $derived(readingTimeMinutesFromText(data.description));
 </script>
 
 <svelte:head>
@@ -50,11 +51,11 @@
 </svelte:head>
 
 <div
-	class="fixed top-0 left-0 h-[0.1875rem] bg-(--text-primary) z-50 transition-all duration-75"
+	class="fixed top-0 left-0 z-50 h-[0.1875rem] bg-(--text-primary) transition-all duration-75"
 	style="width: {scrollProgress}%"
 ></div>
 
-<section class="relative w-full min-h-screen">
+<section class="relative min-h-screen w-full">
 	<Header sticky>
 		<HeaderLogo>EMZINNIA</HeaderLogo>
 		<HeaderNav>
@@ -87,11 +88,11 @@
 	<article bind:this={articleElement} class="article-container mx-auto max-w-2xl px-6 py-16">
 		<a
 			href="/blog"
-			class="style-none inline-flex items-center gap-2 text-sm text-(--text-muted) hover:text-(--text-primary) transition-colors mb-12 group"
+			class="style-none group mb-12 inline-flex items-center gap-2 text-sm text-(--text-muted) transition-colors hover:text-(--text-primary)"
 			in:fade={{ duration: 300 }}
 		>
 			<svg
-				class="w-4 h-4 transition-transform group-hover:-translate-x-1"
+				class="h-4 w-4 transition-transform group-hover:-translate-x-1"
 				fill="none"
 				stroke="currentColor"
 				viewBox="0 0 24 24"
@@ -108,14 +109,14 @@
 
 		<header class="mb-12" in:fly={{ y: 20, duration: 400, delay: 100 }}>
 			<div class="mb-6 flex items-center gap-3">
-				<span class="block w-12 h-12 rounded-full bg-(--text-primary) opacity-5"></span>
+				<span class="block h-12 w-12 rounded-full bg-(--text-primary) opacity-5"></span>
 				<div class="flex flex-col gap-1">
 					{#if data.tags && data.tags.length > 0}
 						<div class="flex gap-2">
 							{#each data.tags as tag}
 								<a
 									href={`/blog?tag=${tag}`}
-									class="style-none text-[0.6875rem] uppercase tracking-[0.2em] text-(--text-muted) hover:text-(--text-primary) transition-colors font-sans"
+									class="style-none font-sans text-[0.6875rem] tracking-[0.2em] text-(--text-muted) uppercase transition-colors hover:text-(--text-primary)"
 								>
 									{tag}
 								</a>
@@ -126,18 +127,18 @@
 			</div>
 
 			<h1
-				class="text-3xl md:text-4xl lg:text-5xl font-serif leading-tight text-(--text-primary) mb-6"
+				class="mb-6 font-serif text-3xl leading-tight text-(--text-primary) md:text-4xl lg:text-5xl"
 			>
 				{data.title}
 			</h1>
 
-			<div class="flex items-center gap-4 text-sm text-(--text-muted) font-sans">
+			<div class="flex items-center gap-4 font-sans text-sm text-(--text-muted)">
 				{#if data.date}
 					<time datetime={data.date}>
 						{formatDate(data.date)}
 					</time>
 				{/if}
-				<span class="w-1 h-1 rounded-full bg-(--text-muted) opacity-50"></span>
+				<span class="h-1 w-1 rounded-full bg-(--text-muted) opacity-50"></span>
 				<span>{readingTime} min read</span>
 			</div>
 		</header>
@@ -148,14 +149,14 @@
 
 		{#if data.tags && data.tags.length > 0}
 			<footer
-				class="mt-16 pt-8 border-t border-(--border-color)"
+				class="mt-16 border-t border-(--border-color) pt-8"
 				in:fly={{ y: 20, duration: 400, delay: 300 }}
 			>
 				<div class="flex flex-wrap gap-2">
 					{#each data.tags as tag}
 						<a
 							href={`/blog?tag=${tag}`}
-							class="style-none px-3 py-1.5 text-xs font-sans uppercase tracking-wider border border-(--border-color) rounded-full text-(--text-secondary) hover:bg-(--text-primary) hover:text-(--page-bg) hover:border-(--text-primary) transition-all"
+							class="style-none rounded-full border border-(--border-color) px-3 py-1.5 font-sans text-xs tracking-wider text-(--text-secondary) uppercase transition-all hover:border-(--text-primary) hover:bg-(--text-primary) hover:text-(--page-bg)"
 						>
 							{tag}
 						</a>
@@ -165,7 +166,7 @@
 		{/if}
 
 		<nav
-			class="mt-12 pt-8 border-t border-(--border-color)"
+			class="mt-12 border-t border-(--border-color) pt-8"
 			in:fly={{ y: 20, duration: 400, delay: 350 }}
 		>
 			<div class="grid grid-cols-2 gap-8">
@@ -173,12 +174,12 @@
 					{#if prevArticle}
 						<a href={`/blog/${prevArticle.slug}`} class="style-none group block">
 							<span
-								class="text-xs uppercase tracking-wider text-(--text-muted) font-sans mb-1 block"
+								class="mb-1 block font-sans text-xs tracking-wider text-(--text-muted) uppercase"
 							>
 								← Previous
 							</span>
 							<span
-								class="text-base text-(--text-primary) group-hover:text-(--link-hover) transition-colors font-serif"
+								class="font-serif text-base text-(--text-primary) transition-colors group-hover:text-(--link-hover)"
 							>
 								{prevArticle.frontmatter.title}
 							</span>
@@ -189,12 +190,12 @@
 					{#if nextArticle}
 						<a href={`/blog/${nextArticle.slug}`} class="style-none group block">
 							<span
-								class="text-xs uppercase tracking-wider text-(--text-muted) font-sans mb-1 block"
+								class="mb-1 block font-sans text-xs tracking-wider text-(--text-muted) uppercase"
 							>
 								Next →
 							</span>
 							<span
-								class="text-base text-(--text-primary) group-hover:text-(--link-hover) transition-colors font-serif"
+								class="font-serif text-base text-(--text-primary) transition-colors group-hover:text-(--link-hover)"
 							>
 								{nextArticle.frontmatter.title}
 							</span>
@@ -328,4 +329,3 @@
 		border-top: 0.0625rem solid var(--border-color);
 	}
 </style>
-

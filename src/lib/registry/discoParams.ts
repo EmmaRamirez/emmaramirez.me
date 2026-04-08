@@ -17,5 +17,3 @@ export const defaultDiscoParams: DiscoParams = {
 	volatilitySmoothing: 0.15,
 	volatilityDecay: 0.92
 };
-
-export const discoParams = defaultDiscoParams;

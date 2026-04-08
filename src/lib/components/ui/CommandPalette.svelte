@@ -38,12 +38,12 @@
 	let inputRef: HTMLInputElement | undefined = $state();
 
 	const filteredCommands = $derived(
-		commands.filter(cmd => 
-			!cmd.disabled && (
-				cmd.label.toLowerCase().includes(query.toLowerCase()) ||
-				cmd.description?.toLowerCase().includes(query.toLowerCase()) ||
-				cmd.group?.toLowerCase().includes(query.toLowerCase())
-			)
+		commands.filter(
+			(cmd) =>
+				!cmd.disabled &&
+				(cmd.label.toLowerCase().includes(query.toLowerCase()) ||
+					cmd.description?.toLowerCase().includes(query.toLowerCase()) ||
+					cmd.group?.toLowerCase().includes(query.toLowerCase()))
 		)
 	);
 
@@ -113,15 +113,26 @@
 	></div>
 
 	<div
-		class="fixed left-1/2 top-[15%] z-50 w-full max-w-xl -translate-x-1/2 bg-[var(--sandy-tan-200)] border-2 border-[var(--liver-brown-500)] rounded-xl shadow-2xl overflow-hidden {className}"
+		class="fixed top-[15%] left-1/2 z-50 w-full max-w-xl -translate-x-1/2 overflow-hidden rounded-xl border-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-200)] shadow-2xl {className}"
 		role="dialog"
 		aria-modal="true"
 		aria-label="Command palette"
 	>
-		<div class="flex items-center gap-3 px-4 py-3 border-b-2 border-[var(--liver-brown-500)]">
-			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--liver-brown-500)]">
-				<circle cx="11" cy="11" r="8"/>
-				<path d="m21 21-4.3-4.3"/>
+		<div class="flex items-center gap-3 border-b-2 border-[var(--liver-brown-500)] px-4 py-3">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="text-[var(--liver-brown-500)]"
+			>
+				<circle cx="11" cy="11" r="8" />
+				<path d="m21 21-4.3-4.3" />
 			</svg>
 			<input
 				bind:this={inputRef}
@@ -131,43 +142,49 @@
 				bind:value={query}
 				onkeydown={handleKeydown}
 			/>
-			<kbd class="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-xs text-[var(--liver-brown-600)] bg-[var(--sandy-tan-400)] rounded">
+			<kbd
+				class="hidden items-center gap-1 rounded bg-[var(--sandy-tan-400)] px-2 py-1 text-xs text-[var(--liver-brown-600)] sm:inline-flex"
+			>
 				Esc
 			</kbd>
 		</div>
 
 		<div class="max-h-80 overflow-y-auto p-2">
 			{#if filteredCommands.length === 0}
-				<div class="px-4 py-8 text-center text-[var(--liver-brown-600)]">
-					No commands found
-				</div>
+				<div class="px-4 py-8 text-center text-[var(--liver-brown-600)]">No commands found</div>
 			{:else}
 				{#each Object.entries(groupedCommands) as [group, items] (group)}
 					<div class="mb-2">
-						<div class="px-2 py-1 text-xs font-semibold text-[var(--liver-brown-600)] uppercase tracking-wider">
+						<div
+							class="px-2 py-1 text-xs font-semibold tracking-wider text-[var(--liver-brown-600)] uppercase"
+						>
 							{group}
 						</div>
 						{#each items as command (command.id)}
-							{@const globalIndex = filteredCommands.findIndex(c => c.id === command.id)}
+							{@const globalIndex = filteredCommands.findIndex((c) => c.id === command.id)}
 							<button
 								type="button"
-								class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors
-									{globalIndex === highlightedIndex ? 'bg-[var(--sandy-tan-400)]' : 'hover:bg-[var(--sandy-tan-300)]'}"
+								class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors
+									{globalIndex === highlightedIndex
+									? 'bg-[var(--sandy-tan-400)]'
+									: 'hover:bg-[var(--sandy-tan-300)]'}"
 								onclick={() => selectCommand(command)}
-								onmouseenter={() => highlightedIndex = globalIndex}
+								onmouseenter={() => (highlightedIndex = globalIndex)}
 							>
-								<div class="flex-1 min-w-0">
-									<div class="font-medium text-[var(--liver-brown-800)] truncate">
+								<div class="min-w-0 flex-1">
+									<div class="truncate font-medium text-[var(--liver-brown-800)]">
 										{command.label}
 									</div>
 									{#if command.description}
-										<div class="text-sm text-[var(--liver-brown-600)] truncate">
+										<div class="truncate text-sm text-[var(--liver-brown-600)]">
 											{command.description}
 										</div>
 									{/if}
 								</div>
 								{#if command.shortcut}
-									<kbd class="shrink-0 px-2 py-1 text-xs text-[var(--liver-brown-600)] bg-[var(--sandy-tan-400)] rounded">
+									<kbd
+										class="shrink-0 rounded bg-[var(--sandy-tan-400)] px-2 py-1 text-xs text-[var(--liver-brown-600)]"
+									>
 										{command.shortcut}
 									</kbd>
 								{/if}
@@ -178,22 +195,23 @@
 			{/if}
 		</div>
 
-		<div class="flex items-center justify-between px-4 py-2 border-t-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)] text-xs text-[var(--liver-brown-600)]">
+		<div
+			class="flex items-center justify-between border-t-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)] px-4 py-2 text-xs text-[var(--liver-brown-600)]"
+		>
 			<div class="flex items-center gap-3">
 				<span class="flex items-center gap-1">
-					<kbd class="px-1.5 py-0.5 bg-[var(--sandy-tan-400)] rounded">↑↓</kbd>
+					<kbd class="rounded bg-[var(--sandy-tan-400)] px-1.5 py-0.5">↑↓</kbd>
 					to navigate
 				</span>
 				<span class="flex items-center gap-1">
-					<kbd class="px-1.5 py-0.5 bg-[var(--sandy-tan-400)] rounded">↵</kbd>
+					<kbd class="rounded bg-[var(--sandy-tan-400)] px-1.5 py-0.5">↵</kbd>
 					to select
 				</span>
 			</div>
 			<span class="flex items-center gap-1">
-				<kbd class="px-1.5 py-0.5 bg-[var(--sandy-tan-400)] rounded">⌘K</kbd>
+				<kbd class="rounded bg-[var(--sandy-tan-400)] px-1.5 py-0.5">⌘K</kbd>
 				to toggle
 			</span>
 		</div>
 	</div>
 {/if}
-

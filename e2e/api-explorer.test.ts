@@ -6,10 +6,10 @@ async function enableSections(page: typeof import('@playwright/test').Page.proto
 	await page.evaluate(() => {
 		localStorage.setItem('debug-show-sections', 'true');
 	});
-	
+
 	// Reload to apply the localStorage setting
 	await page.reload();
-	
+
 	// Wait for the page to be ready
 	await page.waitForLoadState('networkidle');
 }
@@ -19,11 +19,11 @@ test.describe('API Explorer Block', () => {
 		test('should display API Explorer ad block on homepage', async ({ page }) => {
 			await page.goto('/');
 			await enableSections(page);
-			
+
 			// Scroll to find the API Explorer block
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 			await page.waitForTimeout(500);
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await expect(apiExplorerAd).toBeVisible({ timeout: 10000 });
 		});
@@ -32,7 +32,7 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const openExplorerText = page.getByText('Open Explorer');
 			await expect(openExplorerText).toBeVisible({ timeout: 10000 });
 		});
@@ -41,7 +41,7 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const description = page.getByText("Discover and test the site's internal API endpoints.");
 			await expect(description).toBeVisible({ timeout: 10000 });
 		});
@@ -52,7 +52,7 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			// Find and click the API Explorer ad
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
@@ -66,7 +66,7 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
 
@@ -79,7 +79,7 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
 
@@ -93,10 +93,10 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
-			
+
 			await expect(page.getByText('Available API endpoints on this site.')).toBeVisible();
 		});
 
@@ -104,10 +104,10 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
-			
+
 			await expect(page.getByText('GET').first()).toBeVisible();
 			await expect(
 				page.getByText('Fetch current debug settings including hero 3D parameters')
@@ -118,10 +118,10 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
-			
+
 			await expect(page.getByText('PUT')).toBeVisible();
 			await expect(page.getByText('Update debug settings with new values')).toBeVisible();
 		});
@@ -132,10 +132,10 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
-			
+
 			// Click on the GET endpoint
 			const endpointButton = page
 				.locator('button')
@@ -151,10 +151,10 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
-			
+
 			// Click on the GET endpoint
 			const endpointButton = page
 				.locator('button')
@@ -170,10 +170,10 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
-			
+
 			// Click on the GET endpoint
 			const endpointButton = page
 				.locator('button')
@@ -192,10 +192,10 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
-			
+
 			// Switch to Try It tab directly
 			const tryItTab = page.getByRole('tab', { name: 'Try It' });
 			await tryItTab.click();
@@ -210,10 +210,10 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
-			
+
 			const schemasTab = page.getByRole('tab', { name: 'Schemas' });
 			await schemasTab.click();
 
@@ -224,10 +224,10 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
-			
+
 			const schemasTab = page.getByRole('tab', { name: 'Schemas' });
 			await schemasTab.click();
 
@@ -240,10 +240,10 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
-			
+
 			const schemasTab = page.getByRole('tab', { name: 'Schemas' });
 			await schemasTab.click();
 
@@ -258,7 +258,7 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			// Open the explorer
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
@@ -278,7 +278,7 @@ test.describe('API Explorer Block', () => {
 			await page.goto('/');
 			await enableSections(page);
 			await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-			
+
 			// Open the explorer
 			const apiExplorerAd = page.getByRole('button', { name: /API Explorer/i }).first();
 			await apiExplorerAd.click();
@@ -303,9 +303,12 @@ test.describe('Article Card Container Queries', () => {
 		});
 		await page.reload();
 		await page.waitForLoadState('networkidle');
-		
+
 		// Find an article card
-		const articleCard = page.locator('button').filter({ hasText: /^Article/ }).first();
+		const articleCard = page
+			.locator('button')
+			.filter({ hasText: /^Article/ })
+			.first();
 		await expect(articleCard).toBeVisible({ timeout: 10000 });
 	});
 
@@ -316,7 +319,7 @@ test.describe('Article Card Container Queries', () => {
 		});
 		await page.reload();
 		await page.waitForLoadState('networkidle');
-		
+
 		const articleCard = page.locator('.article-card').first();
 		await articleCard.waitFor({ state: 'visible', timeout: 10000 });
 

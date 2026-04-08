@@ -1,19 +1,16 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
-	import type { ClassValue } from "clsx";
-	import { resolve } from "$app/paths";
-	import { cn } from "$lib/utils";
-	import { onDestroy } from "svelte";
+	import type { Snippet } from 'svelte';
+	import type { ClassValue } from 'clsx';
+	import { resolve } from '$app/paths';
+	import { cn } from '$lib/utils';
+	import { onDestroy } from 'svelte';
 
 	interface HeaderLogoProps {
 		class?: ClassValue;
 		children?: Snippet;
 	}
 
-	let {
-		class: className,
-		children,
-	}: HeaderLogoProps = $props();
+	let { class: className, children }: HeaderLogoProps = $props();
 
 	const HOVER_EXIT_DELAY_MS = 160;
 
@@ -46,12 +43,12 @@
 </script>
 
 <a
-	href={resolve("/")}
+	href={resolve('/')}
 	class={cn(
-		"header-logo style-none flex items-center gap-3 font-semibold text-lg",
-		{ "is-hovered": isHovered },
-		"text-(--text-primary)",
-		"transition-colors duration-200",
+		'header-logo style-none flex items-center gap-3 text-lg font-semibold',
+		{ 'is-hovered': isHovered },
+		'text-(--text-primary)',
+		'transition-colors duration-200',
 		className
 	)}
 	onmouseenter={handleMouseEnter}

@@ -8,15 +8,15 @@
 		class?: string;
 		startColor?: string;
 		stopColor?: string;
-        basePoints?: Point[];
-        id: number;
-        svgProps?: {
-            width?: string;
-            height?: string;
-            viewBox?: string;
-        };
-        numPoints?: number;
-        radius?: number;
+		basePoints?: Point[];
+		id: number;
+		svgProps?: {
+			width?: string;
+			height?: string;
+			viewBox?: string;
+		};
+		numPoints?: number;
+		radius?: number;
 		baseNoiseStep?: number;
 		smileyFace?: boolean;
 		stroke?: string;
@@ -25,13 +25,13 @@
 
 	let {
 		class: className,
-        id,
-        basePoints,
+		id,
+		basePoints,
 		startColor = 'var(--startColor)',
 		stopColor = 'var(--stopColor)',
-        svgProps,
-        numPoints = 6,
-        radius = 75,
+		svgProps,
+		numPoints = 6,
+		radius = 75,
 		baseNoiseStep = 0.0005,
 		smileyFace = false,
 		stroke,
@@ -39,10 +39,10 @@
 	}: Bloblet3Props = $props();
 
 	let points = $state<Point[]>([]);
-	
+
 	let simplex = createNoise2D();
 	let noiseStep = 0.0001;
-    let animationId: number = $state(0);
+	let animationId: number = $state(0);
 	let path = $state('');
 	let blob = $state();
 	let pathEl = $state<SVGPathElement>();
@@ -55,9 +55,9 @@
 		return simplex(x, y);
 	}
 
-    function modifyPoints() {
-        let newPoints = [];
-        for (let i = 0; i < points.length; i++) {
+	function modifyPoints() {
+		let newPoints = [];
+		for (let i = 0; i < points.length; i++) {
 			const point = points[i];
 
 			const nX = noise(point.noiseOffsetX, point.noiseOffsetX);
@@ -71,13 +71,13 @@
 			point.noiseOffsetX += noiseStep;
 			point.noiseOffsetY += noiseStep;
 
-            newPoints.push(point);
+			newPoints.push(point);
 		}
 
-        return newPoints;
-    }
+		return newPoints;
+	}
 
-    function createPoints() {
+	function createPoints() {
 		const points = [];
 		const angleStep = (Math.PI * 2) / numPoints;
 
@@ -106,29 +106,22 @@
 	});
 
 	function animate() {
-		path = spline(modifyPoints(), 
-				1,
-                true
-			);
+		path = spline(modifyPoints(), 1, true);
 
-        pathEl?.setAttribute(
-			'd',
-            path
-        );
+		pathEl?.setAttribute('d', path);
 
-	
 		animationId = requestAnimationFrame(animate);
 	}
 
 	onMount(() => {
-        window.addEventListener('click', () => {
-            animate();
-        });
+		window.addEventListener('click', () => {
+			animate();
+		});
 	});
 
-    function stop() {
-        cancelAnimationFrame(animationId);
-    }
+	function stop() {
+		cancelAnimationFrame(animationId);
+	}
 </script>
 
 <svg viewBox="0 0 200 200" class={className} bind:this={blob} {...svgProps}>
@@ -139,15 +132,26 @@
 		</linearGradient>
 	</defs>
 
-	<path {stroke} stroke-width={strokeWidth} bind:this={pathEl} d={path} fill="url(#gradient-{id})" />
+	<path
+		{stroke}
+		stroke-width={strokeWidth}
+		bind:this={pathEl}
+		d={path}
+		fill="url(#gradient-{id})"
+	/>
 
 	{#if smileyFace}
-		<path id="smily-face" d="M 80 100 Q 100 120 120 100" stroke="black" stroke-width="2" fill="none" />
+		<path
+			id="smily-face"
+			d="M 80 100 Q 100 120 120 100"
+			stroke="black"
+			stroke-width="2"
+			fill="none"
+		/>
 		<circle id="left-eye" cx="85" cy="85" r="5" fill="black" />
 		<circle id="right-eye" cx="115" cy="85" r="5" fill="black" />
-	 {/if}
+	{/if}
 </svg>
-
 
 <style>
 	svg {

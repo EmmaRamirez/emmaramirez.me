@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { getProject, projectIds, type ProjectId, type ProjectRegistryEntry } from '$lib/registry/homepage';
+	import { getProject, projectIds, type ProjectId } from '$lib/registry/homepage';
+	import { readingTimeMinutesFromText, sequentialNeighborsInIds } from '$lib/reading';
 	import { fly, fade } from 'svelte/transition';
 
 	interface ProjectReaderPanelProps {
@@ -10,54 +11,57 @@
 
 	let { open = false, projectId = null, onclose }: ProjectReaderPanelProps = $props();
 
-	const project = $derived(
-		projectId ? getProject(projectId) ?? null : null
-	);
+	const project = $derived(projectId ? (getProject(projectId) ?? null) : null);
 
-	const currentIndex = $derived(projectId ? projectIds.findIndex((id) => id === projectId) : -1);
-	const prevProject = $derived(currentIndex > 0 ? getProject(projectIds[currentIndex - 1]) : null);
+	const projectSeq = $derived(sequentialNeighborsInIds(projectIds, projectId));
+	const prevProject = $derived(
+		projectSeq.prevId ? (getProject(projectSeq.prevId) ?? null) : null
+	);
 	const nextProject = $derived(
-		currentIndex < projectIds.length - 1 ? getProject(projectIds[currentIndex + 1]) : null
+		projectSeq.nextId ? (getProject(projectSeq.nextId) ?? null) : null
 	);
 
 	const readingTime = $derived(
-		project?.content ? Math.max(1, Math.ceil(project.content.split(/\s+/).length / 200)) : 0
+		project?.content ? readingTimeMinutesFromText(project.content) : 0
 	);
 
 	function handleKeydown(event: KeyboardEvent) {
-  if (!open) return;
+		if (!open) return;
 
-  const targetIsTextInput =
-    event.target instanceof HTMLElement &&
-    (event.target.tagName === 'INPUT' ||
-      event.target.tagName === 'TEXTAREA' ||
-      event.target.isContentEditable);
+		const targetIsTextInput =
+			event.target instanceof HTMLElement &&
+			(event.target.tagName === 'INPUT' ||
+				event.target.tagName === 'TEXTAREA' ||
+				event.target.isContentEditable);
 
-  if (event.key === 'Escape') {
-    event.preventDefault();
-    onclose?.();
-  }
+		if (event.key === 'Escape') {
+			event.preventDefault();
+			onclose?.();
+		}
 
-  if (event.key === 'r' || event.key === 'R') {
-    if (targetIsTextInput) {
-      return;
-    }
-    event.preventDefault();
-    if (project) {
-      window.location.href = `/projects/project?id=${project.id}`;
-    }
-  }
+		if (event.key === 'r' || event.key === 'R') {
+			if (targetIsTextInput) {
+				return;
+			}
+			event.preventDefault();
+			if (project) {
+				window.location.href = `/projects/project?id=${project.id}`;
+			}
+		}
 
-    if ((event.key === 'k' || event.key === 'K' || event.key === 'j' || event.key === 'J') && !targetIsTextInput) {
-      event.preventDefault();
-      if ((event.key === 'k' || event.key === 'K') && prevProject) {
-        navigateToProject(prevProject.id);
-      }
-      if ((event.key === 'j' || event.key === 'J') && nextProject) {
-        navigateToProject(nextProject.id);
-      }
-    }
-  }
+		if (
+			(event.key === 'k' || event.key === 'K' || event.key === 'j' || event.key === 'J') &&
+			!targetIsTextInput
+		) {
+			event.preventDefault();
+			if ((event.key === 'k' || event.key === 'K') && prevProject) {
+				navigateToProject(prevProject.id);
+			}
+			if ((event.key === 'j' || event.key === 'J') && nextProject) {
+				navigateToProject(nextProject.id);
+			}
+		}
+	}
 
 	function navigateToProject(id: ProjectId) {
 		const customEvent = new CustomEvent('navigateproject', { detail: { id } });
@@ -66,19 +70,27 @@
 
 	function getStatusLabel(status: string | undefined): string {
 		switch (status) {
-			case 'active': return 'Active';
-			case 'archived': return 'Archived';
-			case 'experiment': return 'Experiment';
-			default: return '';
+			case 'active':
+				return 'Active';
+			case 'archived':
+				return 'Archived';
+			case 'experiment':
+				return 'Experiment';
+			default:
+				return '';
 		}
 	}
 
 	function getStatusClass(status: string | undefined): string {
 		switch (status) {
-			case 'active': return 'status-active';
-			case 'archived': return 'status-archived';
-			case 'experiment': return 'status-experiment';
-			default: return '';
+			case 'active':
+				return 'status-active';
+			case 'archived':
+				return 'status-archived';
+			case 'experiment':
+				return 'status-experiment';
+			default:
+				return '';
 		}
 	}
 </script>
@@ -87,7 +99,7 @@
 
 {#if open && project}
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div 
+	<div
 		class="panel-backdrop"
 		in:fade={{ duration: 200 }}
 		out:fade={{ duration: 150 }}
@@ -107,20 +119,32 @@
 					<span class="key-label">to close</span>
 				</button>
 				<div class="hotkey-divider"></div>
-				<button class="hotkey-indicator" onclick={() => project && (window.location.href = `/projects/project?id=${project.id}`)} aria-label="Open read mode">
+				<button
+					class="hotkey-indicator"
+					onclick={() => project && (window.location.href = `/projects/project?id=${project.id}`)}
+					aria-label="Open read mode"
+				>
 					<kbd class="key-badge">R</kbd>
 					<span class="key-label">read mode</span>
 				</button>
 				{#if prevProject || nextProject}
 					<div class="hotkey-divider"></div>
 					{#if prevProject}
-						<button class="hotkey-indicator" onclick={() => navigateToProject(prevProject.id)} aria-label="Previous project">
+						<button
+							class="hotkey-indicator"
+							onclick={() => navigateToProject(prevProject.id)}
+							aria-label="Previous project"
+						>
 							<kbd class="key-badge">K</kbd>
 							<span class="key-label">previous</span>
 						</button>
 					{/if}
 					{#if nextProject}
-						<button class="hotkey-indicator" onclick={() => navigateToProject(nextProject.id)} aria-label="Next project">
+						<button
+							class="hotkey-indicator"
+							onclick={() => navigateToProject(nextProject.id)}
+							aria-label="Next project"
+						>
 							<kbd class="key-badge">J</kbd>
 							<span class="key-label">next</span>
 						</button>
@@ -173,16 +197,37 @@
 				{#if project.links}
 					<div class="project-links">
 						{#if project.links.github}
-							<a href={project.links.github} target="_blank" rel="noopener noreferrer" class="project-link">
+							<a
+								href={project.links.github}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="project-link"
+							>
 								<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-									<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+									<path
+										d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+									/>
 								</svg>
 								<span>GitHub</span>
 							</a>
 						{/if}
 						{#if project.links.demo}
-							<a href={project.links.demo} target="_blank" rel="noopener noreferrer" class="project-link">
-								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<a
+								href={project.links.demo}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="project-link"
+							>
+								<svg
+									width="16"
+									height="16"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
 									<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
 									<polyline points="15 3 21 3 21 9"></polyline>
 									<line x1="10" y1="14" x2="21" y2="3"></line>
@@ -191,11 +236,27 @@
 							</a>
 						{/if}
 						{#if project.links.website}
-							<a href={project.links.website} target="_blank" rel="noopener noreferrer" class="project-link">
-								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<a
+								href={project.links.website}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="project-link"
+							>
+								<svg
+									width="16"
+									height="16"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
 									<circle cx="12" cy="12" r="10"></circle>
 									<line x1="2" y1="12" x2="22" y2="12"></line>
-									<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+									<path
+										d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+									></path>
 								</svg>
 								<span>Website</span>
 							</a>
@@ -206,7 +267,7 @@
 
 			{#if project.content}
 				<div class="project-body" in:fade={{ duration: 200, delay: 150 }}>
-		{#each project.content.split('\n\n') as paragraph, i (i)}
+					{#each project.content.split('\n\n') as paragraph, i (i)}
 						<p class:first-paragraph={i === 0}>{paragraph}</p>
 					{/each}
 				</div>
@@ -225,7 +286,10 @@
 						</div>
 						<div class="nav-next">
 							{#if nextProject}
-								<button class="nav-link nav-link-next" onclick={() => navigateToProject(nextProject.id)}>
+								<button
+									class="nav-link nav-link-next"
+									onclick={() => navigateToProject(nextProject.id)}
+								>
 									<span class="nav-direction">Next →</span>
 									<span class="nav-title">{nextProject.title}</span>
 								</button>
@@ -235,9 +299,9 @@
 				</nav>
 			{/if}
 
-		<div class="full-project-link" in:fade={{ duration: 200, delay: 250 }}>
-			<a href={`/projects/project?id=${project.id}`} class="style-none read-full-link">
-				View full project
+			<div class="full-project-link" in:fade={{ duration: 200, delay: 250 }}>
+				<a href={`/projects/project?id=${project.id}`} class="style-none read-full-link">
+					View full project
 					<svg
 						width="16"
 						height="16"

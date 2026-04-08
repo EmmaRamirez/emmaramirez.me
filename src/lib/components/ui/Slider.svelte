@@ -30,10 +30,7 @@
 <div class="flex flex-col gap-1.5 {className}">
 	{#if label}
 		<div class="flex items-center justify-between">
-			<label 
-				for={inputId} 
-				class="text-sm font-medium text-[var(--liver-brown-700)]"
-			>
+			<label for={inputId} class="text-sm font-medium text-[var(--liver-brown-700)]">
 				{label}
 			</label>
 			{#if showValue}
@@ -43,12 +40,12 @@
 			{/if}
 		</div>
 	{/if}
-	
+
 	<div class="relative flex items-center">
 		<input
 			type="range"
 			id={inputId}
-			class="slider-input h-2 w-full cursor-pointer appearance-none rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+			class="slider-input h-2 w-full cursor-pointer appearance-none rounded-lg disabled:cursor-not-allowed disabled:opacity-50"
 			{min}
 			{max}
 			{step}
@@ -57,7 +54,7 @@
 			bind:value
 		/>
 	</div>
-	
+
 	{#if !label && showValue}
 		<div class="flex justify-end">
 			<span class="text-sm font-medium text-[var(--liver-brown-600)]">
@@ -87,7 +84,9 @@
 		border: 0.125rem solid var(--liver-brown-500);
 		border-radius: 50%;
 		cursor: pointer;
-		transition: transform 0.15s ease, background-color 0.15s ease;
+		transition:
+			transform 0.15s ease,
+			background-color 0.15s ease;
 	}
 
 	.slider-input::-webkit-slider-thumb:hover {
@@ -102,7 +101,9 @@
 		border: 0.125rem solid var(--liver-brown-500);
 		border-radius: 50%;
 		cursor: pointer;
-		transition: transform 0.15s ease, background-color 0.15s ease;
+		transition:
+			transform 0.15s ease,
+			background-color 0.15s ease;
 	}
 
 	.slider-input::-moz-range-thumb:hover {
@@ -122,4 +123,3 @@
 		box-shadow: 0 0 0 0.1875rem var(--caroline-blue-200);
 	}
 </style>
-

@@ -11,7 +11,9 @@
 	let isDark = $derived($theme === 'dark');
 </script>
 
-<div class="home-block relative overflow-hidden rounded-lg border border-(--border-color) {className}">
+<div
+	class="home-block relative overflow-hidden rounded-lg border border-(--border-color) {className}"
+>
 	<img
 		src={seattleDay}
 		alt="Seattle skyline during daytime"
@@ -19,7 +21,7 @@
 		class:visible={!isDark}
 		aria-hidden={isDark}
 	/>
-	
+
 	<img
 		src={seattleNight}
 		alt="Seattle skyline at night"
@@ -27,12 +29,14 @@
 		class:visible={isDark}
 		aria-hidden={!isDark}
 	/>
-	
-	<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10"></div>
-	
+
+	<div
+		class="absolute inset-0 z-10 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
+	></div>
+
 	<div class="absolute inset-0 z-20 flex items-end justify-between p-5">
-		<span class="text-xl font-serif text-white drop-shadow-lg">Home</span>
-		<span class="text-lg font-serif text-white/90 drop-shadow-lg">Seattle, WA</span>
+		<span class="font-serif text-xl text-white drop-shadow-lg">Home</span>
+		<span class="font-serif text-lg text-white/90 drop-shadow-lg">Seattle, WA</span>
 	</div>
 </div>
 
@@ -71,4 +75,3 @@
 		opacity: 1;
 	}
 </style>
-

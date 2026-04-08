@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type StackGap = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 	type StackAlign = 'start' | 'center' | 'end' | 'stretch';
@@ -14,12 +14,7 @@
 		children?: Snippet;
 	}
 
-	let {
-		class: className = '',
-		gap = 'md',
-		align = 'stretch',
-		children
-	}: StackProps = $props();
+	let { class: className = '', gap = 'md', align = 'stretch', children }: StackProps = $props();
 
 	const gapClasses: Record<StackGap, string> = {
 		none: 'gap-0',

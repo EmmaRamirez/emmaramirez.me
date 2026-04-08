@@ -43,9 +43,7 @@ describe('ApiExplorerBlock', () => {
 		it('should show close button when open', async () => {
 			render(ApiExplorerBlock, { props: { open: true } });
 
-			await expect
-				.element(page.getByRole('button', { name: /Close API explorer/i }))
-				.toBeVisible();
+			await expect.element(page.getByRole('button', { name: /Close API explorer/i })).toBeVisible();
 		});
 
 		it('should call onclose when close button is clicked', async () => {
@@ -69,9 +67,7 @@ describe('ApiExplorerBlock', () => {
 		it('should show Endpoints tab content by default', async () => {
 			render(ApiExplorerBlock, { props: { open: true } });
 
-			await expect
-				.element(page.getByText('Available API endpoints on this site.'))
-				.toBeVisible();
+			await expect.element(page.getByText('Available API endpoints on this site.')).toBeVisible();
 		});
 	});
 
@@ -140,9 +136,7 @@ describe('ApiExplorerBlock', () => {
 			const schemasTab = page.getByRole('tab', { name: 'Schemas' });
 			await schemasTab.click();
 
-			await expect
-				.element(page.getByRole('heading', { name: 'Hero3DParams' }))
-				.toBeVisible();
+			await expect.element(page.getByRole('heading', { name: 'Hero3DParams' })).toBeVisible();
 			await expect.element(page.getByText('depthScale')).toBeVisible();
 		});
 	});

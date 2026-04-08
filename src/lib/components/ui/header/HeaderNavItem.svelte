@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
-	import type { ClassValue } from "clsx";
-	import { cn } from "$lib/utils";
-	import { getContext, onMount } from "svelte";
+	import type { Snippet } from 'svelte';
+	import type { ClassValue } from 'clsx';
+	import { cn } from '$lib/utils';
+	import { getContext, onMount } from 'svelte';
 
 	interface HeaderNavItemProps {
 		class?: ClassValue;
@@ -11,15 +11,10 @@
 		children?: Snippet;
 	}
 
-	let {
-		class: className,
-		href,
-		active = false,
-		children,
-	}: HeaderNavItemProps = $props();
+	let { class: className, href, active = false, children }: HeaderNavItemProps = $props();
 
 	let itemRef: HTMLElement | undefined = $state();
-	
+
 	const navContext = getContext<{ updateIndicator: (el: HTMLElement) => void }>('header-nav');
 
 	$effect(() => {
@@ -43,14 +38,12 @@
 	bind:this={itemRef}
 	{href}
 	class={cn(
-		"style-none px-2 py-1.5 text-sm font-medium whitespace-nowrap md:px-4 md:py-2",
-		"transition-all duration-200",
-		active
-			? "text-(--text-primary)"
-			: "text-(--text-secondary) hover:text-(--text-primary)",
+		'style-none px-2 py-1.5 text-sm font-medium whitespace-nowrap md:px-4 md:py-2',
+		'transition-all duration-200',
+		active ? 'text-(--text-primary)' : 'text-(--text-secondary) hover:text-(--text-primary)',
 		className
 	)}
-	aria-current={active ? "page" : undefined}
+	aria-current={active ? 'page' : undefined}
 >
 	{#if children}
 		{@render children()}

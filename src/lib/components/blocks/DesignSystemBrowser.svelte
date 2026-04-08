@@ -54,7 +54,7 @@
 			{ name: '--transit-yellow-700', value: 'hsl(47, 100%, 68%)' },
 			{ name: '--transit-yellow-900', value: 'hsl(47, 100%, 58%)' }
 		],
-		'Accents': [
+		Accents: [
 			{ name: '--blush-pink-500', value: '#ED9CEF' },
 			{ name: '--light-rose-500', value: '#FFCBCB' },
 			{ name: '--magic-mint-500', value: '#B8FFE5' },
@@ -73,11 +73,38 @@
 		},
 		{
 			name: 'Inputs & Controls',
-			components: ['Button', 'ButtonGroup', 'IconButton', 'LinkButton', 'Input', 'Textarea', 'Select', 'Combobox', 'Checkbox', 'Radio', 'Switch', 'Slider', 'DatePicker', 'FileInput', 'SearchField']
+			components: [
+				'Button',
+				'ButtonGroup',
+				'IconButton',
+				'LinkButton',
+				'Input',
+				'Textarea',
+				'Select',
+				'Combobox',
+				'Checkbox',
+				'Radio',
+				'Switch',
+				'Slider',
+				'DatePicker',
+				'FileInput',
+				'SearchField'
+			]
 		},
 		{
 			name: 'Data Display',
-			components: ['Avatar', 'Badge', 'Tag', 'Tooltip', 'Table', 'DescriptionList', 'List', 'Statistic', 'ProgressBar', 'Spinner']
+			components: [
+				'Avatar',
+				'Badge',
+				'Tag',
+				'Tooltip',
+				'Table',
+				'DescriptionList',
+				'List',
+				'Statistic',
+				'ProgressBar',
+				'Spinner'
+			]
 		},
 		{
 			name: 'Feedback',
@@ -127,13 +154,26 @@
 		<header class="design-browser__header">
 			<div class="flex items-center gap-3">
 				<div class="design-browser__logo" aria-hidden="true">
-					<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<rect width="32" height="32" rx="6" fill="var(--caroline-blue-700)"/>
-						<path d="M8 10h16M8 16h16M8 22h10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+					<svg
+						width="32"
+						height="32"
+						viewBox="0 0 32 32"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<rect width="32" height="32" rx="6" fill="var(--caroline-blue-700)" />
+						<path
+							d="M8 10h16M8 16h16M8 22h10"
+							stroke="white"
+							stroke-width="2"
+							stroke-linecap="round"
+						/>
 					</svg>
 				</div>
 				<div>
-					<h1 id="design-browser-title" class="text-xl font-bold text-(--text-primary)">EMZINNIA Design System</h1>
+					<h1 id="design-browser-title" class="text-xl font-bold text-(--text-primary)">
+						EMZINNIA Design System
+					</h1>
 					<p class="text-sm text-(--text-muted)">Components, tokens, and patterns</p>
 				</div>
 			</div>
@@ -142,7 +182,17 @@
 				onclick={onclose}
 				aria-label="Close design system browser"
 			>
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
 					<line x1="18" y1="6" x2="6" y2="18"></line>
 					<line x1="6" y1="6" x2="18" y2="18"></line>
 				</svg>
@@ -157,25 +207,20 @@
 							<div class="overview-grid">
 								<div class="overview-card">
 									<h3>Principles</h3>
-                                    <p>
-                                        - personal
-                                        - fun
-                                        - clear
-                                    </p>
+									<p>- personal - fun - clear</p>
 								</div>
 								<div class="overview-card">
 									<h3>Philosophy</h3>
 									<p>
-										This design system embraces bold contrasts, warm sandy backgrounds, and vibrant 
+										This design system embraces bold contrasts, warm sandy backgrounds, and vibrant
 										caroline blue accents. Every component is built for accessibility first.
 									</p>
 								</div>
-								
 							</div>
 
 							<Divider class="my-8" />
 
-							<h3 class="text-lg font-semibold mb-4 text-(--text-primary)">Featured Components</h3>
+							<h3 class="mb-4 text-lg font-semibold text-(--text-primary)">Featured Components</h3>
 							<div class="component-preview-grid">
 								<div class="component-preview">
 									<span class="component-preview__label">Button</span>
@@ -198,8 +243,9 @@
 						</div>
 					{:else if tab === 'tokens'}
 						<div class="design-browser__content" in:fade={{ duration: 200, delay: 50 }}>
-							<p class="text-(--text-muted) mb-6">
-								Design tokens are the visual design atoms of the design system — specifically, they are named entities that store visual design attributes.
+							<p class="mb-6 text-(--text-muted)">
+								Design tokens are the visual design atoms of the design system — specifically, they
+								are named entities that store visual design attributes.
 							</p>
 
 							{#each Object.entries(colorPalettes) as [paletteName, colors]}
@@ -208,8 +254,8 @@
 									<div class="color-grid">
 										{#each colors as color}
 											<div class="color-swatch">
-												<div 
-													class="color-swatch__preview" 
+												<div
+													class="color-swatch__preview"
 													style="background-color: var({color.name})"
 												></div>
 												<div class="color-swatch__info">
@@ -228,22 +274,34 @@
 								<h3 class="token-section__title">Semantic Tokens</h3>
 								<div class="semantic-tokens">
 									<div class="semantic-token">
-										<div class="semantic-token__preview" style="background-color: var(--page-bg)"></div>
+										<div
+											class="semantic-token__preview"
+											style="background-color: var(--page-bg)"
+										></div>
 										<code>--page-bg</code>
 										<span>Page background</span>
 									</div>
 									<div class="semantic-token">
-										<div class="semantic-token__preview" style="background-color: var(--text-primary)"></div>
+										<div
+											class="semantic-token__preview"
+											style="background-color: var(--text-primary)"
+										></div>
 										<code>--text-primary</code>
 										<span>Primary text</span>
 									</div>
 									<div class="semantic-token">
-										<div class="semantic-token__preview" style="background-color: var(--text-muted)"></div>
+										<div
+											class="semantic-token__preview"
+											style="background-color: var(--text-muted)"
+										></div>
 										<code>--text-muted</code>
 										<span>Muted text</span>
 									</div>
 									<div class="semantic-token">
-										<div class="semantic-token__preview" style="background-color: var(--border-color)"></div>
+										<div
+											class="semantic-token__preview"
+											style="background-color: var(--border-color)"
+										></div>
 										<code>--border-color</code>
 										<span>Border color</span>
 									</div>
@@ -252,8 +310,8 @@
 						</div>
 					{:else if tab === 'components'}
 						<div class="design-browser__content" in:fade={{ duration: 200, delay: 50 }}>
-							<p class="text-(--text-muted) mb-6">
-								Browse the complete component library. Each component is designed for accessibility, 
+							<p class="mb-6 text-(--text-muted)">
+								Browse the complete component library. Each component is designed for accessibility,
 								dark mode support, and consistent styling.
 							</p>
 
@@ -297,7 +355,7 @@
 		background: var(--page-bg-subtle);
 		border: 0.125rem solid var(--border-color);
 		border-radius: 1rem;
-		box-shadow: 
+		box-shadow:
 			0 1.5625rem 3.125rem -0.75rem rgba(0, 0, 0, 0.4),
 			0 0 0 0.0625rem var(--border-color);
 		z-index: 101;
@@ -351,7 +409,7 @@
 		padding: 0 1.5rem 1.5rem;
 	}
 
-	.design-browser__tabs :global([role="tablist"]) {
+	.design-browser__tabs :global([role='tablist']) {
 		margin-top: 1rem;
 	}
 

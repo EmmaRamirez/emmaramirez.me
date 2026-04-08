@@ -72,7 +72,8 @@ export const projectRegistry: Record<ProjectId, ProjectRegistryEntry> = {
 		title: 'nuzlocke-generator',
 		pill: 'nuzlocke templating engine',
 		image: profileImage,
-		description: 'highly collaborative, customizable image generator for Pokémon Nuzlocke challenges. built with React and Elixir. has over 10k users and vibrant community.',
+		description:
+			'highly collaborative, customizable image generator for Pokémon Nuzlocke challenges. built with React and Elixir. has over 10k users and vibrant community.',
 		content: `The Nuzlocke Generator started as a weekend project born from my own frustration with tracking Pokémon runs. Nuzlocke challenges add permadeath and catch limits to the games, and keeping track of everything on paper felt wrong for 2024.
 
 The tool lets you design custom layouts for your team, encounters, and graveyard. Drag-and-drop reordering, automatic type matchup hints, and a clean export for sharing on social media.
@@ -97,7 +98,8 @@ The trickiest part was making it feel fast. React's reconciliation kept causing 
 		title: 'fakemon-generator',
 		pill: 'Creative coding',
 		image: profileImage,
-		description: 'A playful generator for imaginary Pokémon-style creatures, blending design systems, randomness, and cozy UI details.',
+		description:
+			'A playful generator for imaginary Pokémon-style creatures, blending design systems, randomness, and cozy UI details.',
 		content: `Fakemon Generator is what happens when you combine too much free time, a love for creature design, and a fascination with procedural generation.
 
 The generator creates unique monster concepts by mixing type combinations, body shapes, and design motifs. It doesn't draw them—that's still on the human—but it gives you a starting point that's more interesting than "fire lizard #47."
@@ -122,7 +124,8 @@ The UI leans cozy: soft colors, rounded corners, little animations when a new cr
 		title: 'emmaramirez.me',
 		pill: 'Design systems',
 		image: profileImage,
-		description: 'The hand-rolled design system and SvelteKit setup that powers this very site, experimenting with typography, tokens, and a slightly feral layout grid.',
+		description:
+			'The hand-rolled design system and SvelteKit setup that powers this very site, experimenting with typography, tokens, and a slightly feral layout grid.',
 		content: `You're looking at it. This site is my playground for testing ideas before they make it into "real" projects.
 
 The design system started as a port of my previous Tailwind setup, but I've been gradually replacing utility classes with CSS custom properties and semantic tokens. The goal is a system that's easy to theme and hard to break.
@@ -149,7 +152,8 @@ SvelteKit makes the whole thing feel snappy. Most interactions happen client-sid
 		title: 'disco-canvas',
 		pill: 'Playful interfaces',
 		image: houstonImage,
-		description: 'An interactive playground for gradients, blobs, and motion—built to feel like a disco floor you can doodle on.',
+		description:
+			'An interactive playground for gradients, blobs, and motion—built to feel like a disco floor you can doodle on.',
 		content: `Disco Canvas is what I reach for when I need to decompress from "serious" work. It's a browser-based canvas where you can paint with gradients, spawn wobbly blobs, and watch them bounce around like they're at a party.
 
 The physics are deliberately soft—collisions don't have harsh bounces, and objects slow down with gentle friction. I wanted the whole thing to feel like playing with soap bubbles.
@@ -193,7 +197,8 @@ There's no save feature, no export, no share button. It's ephemeral by design. Y
 		title: 'design-system-lab',
 		pill: 'Design systems',
 		image: githubImage,
-		description: 'A sandbox for tokens, components, and documentation that explores how far a Svelte-powered design system can be pushed before it begs for refactors.',
+		description:
+			'A sandbox for tokens, components, and documentation that explores how far a Svelte-powered design system can be pushed before it begs for refactors.',
 		content: `Design System Lab is where I test component APIs before committing to them in real projects. It's a Storybook-like environment built with SvelteKit, but tailored to how I actually work.
 
 Each component lives in isolation with a playground page that shows all its variants. The page is generated from a schema, so adding a new prop automatically updates the demo. No manual story maintenance.
@@ -219,7 +224,8 @@ Current experiments: a "recipe" system for composing components (like Chakra's p
 		title: 'commit-garden',
 		pill: 'Developer tooling',
 		image: githubImage,
-		description: 'A tiny dashboard that turns git history into a garden view, nudging you toward smaller, story-shaped commits instead of one giant "final-final" push.',
+		description:
+			'A tiny dashboard that turns git history into a garden view, nudging you toward smaller, story-shaped commits instead of one giant "final-final" push.',
 		content: `Commit Garden grew from my frustration with my own git habits. I'd work for hours, then dump everything into a single "WIP" commit. The history was useless for understanding what changed and why.
 
 The tool visualizes your commit history as a garden. Small, focused commits are flowers; large, unfocused ones are weeds. Over time, you can see whether you're cultivating a nice garden or letting it go wild.
@@ -243,7 +249,8 @@ The gamification is subtle—no achievements or leaderboards, just a slowly grow
 		title: 'palette-playground',
 		pill: 'Color & theming',
 		image: profileImage,
-		description: 'An interactive color lab for testing palettes against real content, dark mode, and accessibility constraints without leaving the browser.',
+		description:
+			'An interactive color lab for testing palettes against real content, dark mode, and accessibility constraints without leaving the browser.',
 		content: `Palette Playground is the tool I wished existed when I was designing color systems. Most palette generators give you pretty swatches that fall apart the moment you apply them to actual UI.
 
 This one works differently. You build your palette while looking at real components: cards, buttons, forms, text blocks. Change a color and watch how it ripples through the entire preview.
@@ -270,7 +277,8 @@ Export options include CSS custom properties, Tailwind config, and Figma-compati
 		title: 'a11y-audit-kit',
 		pill: 'Accessibility',
 		image: houstonImage,
-		description: 'A weekend-sized toolkit for running lightweight accessibility audits—checklists, notes, and quick wins bundled into a friendly interface.',
+		description:
+			'A weekend-sized toolkit for running lightweight accessibility audits—checklists, notes, and quick wins bundled into a friendly interface.',
 		content: `A11y Audit Kit started as a personal checklist that got out of hand. I wanted something between "run axe and call it a day" and "hire an expert for a full WCAG audit."
 
 The toolkit walks you through common accessibility issues: keyboard navigation, screen reader compatibility, color contrast, focus management, form labels. Each item has a quick test you can run and an explanation of why it matters.
@@ -297,7 +305,8 @@ I use this as a pre-launch checklist for every project now.`,
 		title: 'readme-studio',
 		pill: 'Writing & docs',
 		image: profileImage,
-		description: 'A structured editor for project READMEs that helps you go from blank page to clear, kind documentation without feeling like a corporate template.',
+		description:
+			'A structured editor for project READMEs that helps you go from blank page to clear, kind documentation without feeling like a corporate template.',
 		content: `README Studio exists because I kept writing the same mediocre README over and over. Copy the template, fill in the blanks, publish, forget.
 
 This tool is different. Instead of a template, it asks you questions: What problem does this solve? Who is it for? What's the first thing someone should try? Your answers become sections, and the editor helps you refine the language.

@@ -56,7 +56,9 @@
 
 	const imageSources = $derived.by(() =>
 		baseNames.length
-			? baseNames.flatMap((name) => IMAGE_EXTENSIONS.map((ext) => asset(`/projects/${name}.${ext}`)))
+			? baseNames.flatMap((name) =>
+					IMAGE_EXTENSIONS.map((ext) => asset(`/projects/${name}.${ext}`))
+				)
 			: []
 	);
 
@@ -82,14 +84,14 @@
 	});
 
 	const imageSrc = $derived(
-		currentSourceIndex === -1 || allSourcesFailed ? null : imageSources[currentSourceIndex] ?? null
+		currentSourceIndex === -1 || allSourcesFailed
+			? null
+			: (imageSources[currentSourceIndex] ?? null)
 	);
 
 	const hasImage = $derived(Boolean(imageSrc && loadedSrc === imageSrc));
 
-	const resolvedAlt = $derived(
-		imageAlt ?? (title ? `${title} preview` : 'Project preview')
-	);
+	const resolvedAlt = $derived(imageAlt ?? (title ? `${title} preview` : 'Project preview'));
 
 	function handleImageError() {
 		const nextIndex = (currentSourceIndex < 0 ? 0 : currentSourceIndex) + 1;
@@ -113,11 +115,11 @@
 	<div
 		class="project-block-content relative flex h-full flex-col gap-3 overflow-hidden rounded-lg border border-(--border-color) bg-(--card-bg) p-4"
 	>
-		<span class="text-xs font-semibold uppercase tracking-[0.18em] text-(--text-secondary)">
+		<span class="text-xs font-semibold tracking-[0.18em] text-(--text-secondary) uppercase">
 			Project
 		</span>
 		<div
-			class="project-block-header flex justify-between transition-colors duration-300 ease-in-out cursor-pointer"
+			class="project-block-header flex cursor-pointer justify-between transition-colors duration-300 ease-in-out"
 		>
 			<span class="font-mono text-sm text-(--text-secondary)">/{title}</span>
 		</div>
@@ -159,7 +161,9 @@
 		border-radius: 50%;
 		overflow: hidden;
 		background: var(--color-green-500);
-		transition: transform 0.2s ease, box-shadow 0.2s ease;
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
 		/* Inner border - solid green ring */
 		border: 0.375rem solid var(--color-green-500);
 		/* Concentric outer ring using box-shadow */

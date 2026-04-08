@@ -56,26 +56,37 @@
 		id={inputId}
 		aria-checked={checked}
 		aria-describedby={description ? `${inputId}-description` : undefined}
-		class="relative inline-flex shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-offset-2 {sizeClasses[size].track} {checked ? 'bg-[var(--caroline-blue-700)]' : 'bg-[var(--sandy-tan-600)]'} {disabled ? 'opacity-50 cursor-not-allowed' : ''}"
+		class="relative inline-flex shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-offset-2 focus:outline-none {sizeClasses[
+			size
+		].track} {checked ? 'bg-[var(--caroline-blue-700)]' : 'bg-[var(--sandy-tan-600)]'} {disabled
+			? 'cursor-not-allowed opacity-50'
+			: ''}"
 		{disabled}
 		onclick={toggle}
 		{...buttonProps}
 	>
 		<span class="sr-only">{label ?? 'Toggle'}</span>
 		<span
-			class="pointer-events-none inline-block rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out {sizeClasses[size].thumb} {checked ? sizeClasses[size].translate : 'translate-x-0'}"
+			class="pointer-events-none inline-block rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out {sizeClasses[
+				size
+			].thumb} {checked ? sizeClasses[size].translate : 'translate-x-0'}"
 		></span>
 	</button>
-	
+
 	{#if label || description}
 		<div class="flex flex-col gap-0.5">
 			{#if label}
-				<span 
-					class="text-sm font-medium text-[var(--liver-brown-800)] cursor-pointer select-none"
+				<span
+					class="cursor-pointer text-sm font-medium text-[var(--liver-brown-800)] select-none"
 					role="button"
 					tabindex="0"
 					onclick={toggle}
-					onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
+					onkeydown={(e) => {
+						if (e.key === 'Enter' || e.key === ' ') {
+							e.preventDefault();
+							toggle();
+						}
+					}}
 				>
 					{label}
 				</span>
@@ -88,4 +99,3 @@
 		</div>
 	{/if}
 </div>
-

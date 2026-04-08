@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type ContainerSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
@@ -24,10 +24,10 @@
 	}: ContainerProps = $props();
 
 	const sizeClasses: Record<ContainerSize, string> = {
-		sm: 'max-w-screen-sm',   // 40rem
-		md: 'max-w-screen-md',   // 48rem
-		lg: 'max-w-screen-lg',   // 64rem
-		xl: 'max-w-screen-xl',   // 80rem
+		sm: 'max-w-screen-sm', // 40rem
+		md: 'max-w-screen-md', // 48rem
+		lg: 'max-w-screen-lg', // 64rem
+		xl: 'max-w-screen-xl', // 80rem
 		full: 'max-w-full'
 	};
 

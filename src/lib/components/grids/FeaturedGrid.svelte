@@ -22,14 +22,11 @@
 		onArticleClick,
 		onProjectClick
 	}: Props = $props();
-
 </script>
 
 <section aria-label="Quick picks" class="space-y-3">
 	<ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-		{#each items as item (item.kind === 'article'
-			? `featured-article-${item.article.id}`
-			: `featured-project-${item.project.id}`)}
+		{#each items as item (item.kind === 'article' ? `featured-article-${item.article.id}` : `featured-project-${item.project.id}`)}
 			<li>
 				{#if item.kind === 'article'}
 					<ArticleCard

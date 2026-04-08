@@ -18,15 +18,17 @@
 	import type { DiscoRegistryEntry, ProjectId } from '$lib/registry/homepage';
 	import { pokemonTeam } from '$lib/website.config';
 	import { gridLayoutStore, getItemKey } from '$lib/stores/gridLayoutStore.svelte';
+	import {
+		getArticleOpen,
+		getProjectOpen,
+		getSelectedArticleId,
+		getSelectedProjectId
+	} from '$lib/stores/readerPanelStore.svelte';
 	import { onMount } from 'svelte';
 
 	interface Props {
 		items: GridItem[];
 		disco: DiscoRegistryEntry;
-		selectedArticleId: string | null;
-		selectedProjectId: ProjectId | null;
-		articlePanelOpen: boolean;
-		projectPanelOpen: boolean;
 		designSystemOpen: boolean;
 		apiExplorerOpen: boolean;
 		onArticleClick: (articleId: string) => void;
@@ -40,10 +42,6 @@
 	let {
 		items,
 		disco,
-		selectedArticleId,
-		selectedProjectId,
-		articlePanelOpen,
-		projectPanelOpen,
 		designSystemOpen,
 		apiExplorerOpen,
 		onArticleClick,
@@ -53,6 +51,11 @@
 		onApiExplorerOpen,
 		onApiExplorerClose
 	}: Props = $props();
+
+	const selectedArticleId = $derived(getSelectedArticleId());
+	const selectedProjectId = $derived(getSelectedProjectId());
+	const articlePanelOpen = $derived(getArticleOpen());
+	const projectPanelOpen = $derived(getProjectOpen());
 
 	const orderedItems = $derived(gridLayoutStore.reorderItems(items));
 
@@ -64,32 +67,29 @@
 		const key = getItemKey(item);
 		const layout = gridLayoutStore.getLayout(key);
 		if (!layout) return '';
-		
+
 		// API Explorer expands to 2x2 when open
 		if (item.kind === 'api-explorer' && apiExplorerOpen) {
 			return 'md:col-span-2 row-span-2';
 		}
-		
+
 		const colClasses = {
 			1: '',
 			2: 'md:col-span-2',
 			3: 'md:col-span-2 lg:col-span-3'
 		};
-		
+
 		const rowClasses = {
 			1: '',
 			2: 'row-span-2'
 		};
-		
+
 		return `${colClasses[layout.colSpan]} ${rowClasses[layout.rowSpan]}`.trim();
 	}
-
 </script>
 
 <section aria-label="Essays, projects, and experiments" class="space-y-4">
-	<ul
-		class="grid grid-flow-dense grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-	>
+	<ul class="grid grid-flow-dense grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each orderedItems as item (getItemKey(item))}
 			<li class="grid-item h-full {getColSpanClass(item)}">
 				<div class="grid-item-content">
@@ -136,9 +136,8 @@
 						<HomeBlock class="h-full w-full" />
 					{:else if item.kind === 'city'}
 						<CityCard
-							src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1800&q=80"
-							alt="Houston skyline at dusk"
-							location="Houston"
+							photo="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1800&q=80"
+							description="Houston skyline at dusk"
 						/>
 					{:else if item.kind === 'design-system'}
 						{#if designSystemOpen}
@@ -155,11 +154,11 @@
 					{:else if item.kind === 'location'}
 						<LocationBlock class="h-full w-full" />
 					{:else if item.kind === 'api-explorer'}
-						<ApiExplorerBlock 
-							open={apiExplorerOpen} 
+						<ApiExplorerBlock
+							open={apiExplorerOpen}
 							onopen={onApiExplorerOpen}
 							onclose={onApiExplorerClose}
-							class="h-full w-full" 
+							class="h-full w-full"
 						/>
 					{/if}
 				</div>

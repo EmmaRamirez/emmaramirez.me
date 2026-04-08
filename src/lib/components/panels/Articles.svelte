@@ -27,12 +27,12 @@
 	const displayArticles = $derived(articles.length > 0 ? articles : defaultArticles);
 </script>
 
-<div class={cn("articles-container", className)}>
+<div class={cn('articles-container', className)}>
 	<header class="articles-header mb-6">
-		<h2 class="text-3xl font-bold text-[var(--liver-brown-700)] font-serif tracking-tight">
+		<h2 class="font-serif text-3xl font-bold tracking-tight text-[var(--liver-brown-700)]">
 			Articles
 		</h2>
-		<p class="text-[var(--liver-brown-500)] mt-1 text-lg opacity-80">
+		<p class="mt-1 text-lg text-[var(--liver-brown-500)] opacity-80">
 			Thoughts, explorations, and musings
 		</p>
 	</header>
@@ -56,9 +56,9 @@
 	<TagDrawer open={drawerOpen} tag={selectedTag} onclose={closeDrawer} />
 
 	{#if displayArticles.length === 0}
-		<div class="empty-state text-center py-12 text-[var(--liver-brown-500)]">
+		<div class="empty-state py-12 text-center text-[var(--liver-brown-500)]">
 			<p class="text-xl">No articles yet.</p>
-			<p class="text-sm opacity-70 mt-2">Check back soon for new content.</p>
+			<p class="mt-2 text-sm opacity-70">Check back soon for new content.</p>
 		</div>
 	{/if}
 </div>
@@ -76,4 +76,3 @@
 		overflow: hidden;
 	}
 </style>
-

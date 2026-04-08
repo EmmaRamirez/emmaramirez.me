@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type MenuItem = {
 		id: string;
@@ -67,12 +67,17 @@
 
 <svelte:window onclick={handleClickOutside} onkeydown={handleKeydown} />
 
-<div class="relative inline-flex dropdown-container {className}">
-	<div 
+<div class="dropdown-container relative inline-flex {className}">
+	<div
 		role="button"
 		tabindex="0"
 		onclick={toggle}
-		onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
+		onkeydown={(e) => {
+			if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				toggle();
+			}
+		}}
 		aria-expanded={open}
 		aria-haspopup="menu"
 	>
@@ -81,19 +86,21 @@
 
 	{#if open}
 		<div
-			class="absolute top-full right-0 mt-1 z-50 min-w-48 bg-[var(--sandy-tan-200)] border-2 border-[var(--liver-brown-500)] rounded-lg shadow-xl overflow-hidden"
+			class="absolute top-full right-0 z-50 mt-1 min-w-48 overflow-hidden rounded-lg border-2 border-[var(--liver-brown-500)] bg-[var(--sandy-tan-200)] shadow-xl"
 			role="menu"
 		>
 			{#each items as item (item.id)}
 				{#if item.divider}
-					<hr class="border-t border-[var(--liver-brown-500)] my-1" />
+					<hr class="my-1 border-t border-[var(--liver-brown-500)]" />
 				{:else if item.href}
 					<a
 						href={item.href}
 						role="menuitem"
-						class="flex items-center gap-2 px-3 py-2 text-sm transition-colors style-none no-underline
-							{item.danger ? 'text-red-600 hover:bg-red-50' : 'text-[var(--liver-brown-800)] hover:bg-[var(--sandy-tan-400)]'}
-							{item.disabled ? 'opacity-50 pointer-events-none' : ''}"
+						class="style-none flex items-center gap-2 px-3 py-2 text-sm no-underline transition-colors
+							{item.danger
+							? 'text-red-600 hover:bg-red-50'
+							: 'text-[var(--liver-brown-800)] hover:bg-[var(--sandy-tan-400)]'}
+							{item.disabled ? 'pointer-events-none opacity-50' : ''}"
 					>
 						{item.label}
 					</a>
@@ -102,9 +109,11 @@
 						type="button"
 						role="menuitem"
 						disabled={item.disabled}
-						class="flex w-full items-center gap-2 px-3 py-2 text-sm text-left transition-colors
-							{item.danger ? 'text-red-600 hover:bg-red-50' : 'text-[var(--liver-brown-800)] hover:bg-[var(--sandy-tan-400)]'}
-							{item.disabled ? 'opacity-50 cursor-not-allowed' : ''}"
+						class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors
+							{item.danger
+							? 'text-red-600 hover:bg-red-50'
+							: 'text-[var(--liver-brown-800)] hover:bg-[var(--sandy-tan-400)]'}
+							{item.disabled ? 'cursor-not-allowed opacity-50' : ''}"
 						onclick={() => selectItem(item)}
 					>
 						{item.label}
@@ -114,4 +123,3 @@
 		</div>
 	{/if}
 </div>
-

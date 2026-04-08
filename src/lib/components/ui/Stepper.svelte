@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type Step = {
 		id: string;
@@ -53,20 +53,37 @@
 				<li class="flex-1 {i < steps.length - 1 ? 'pr-2 sm:pr-4' : ''}">
 					<button
 						type="button"
-						class="group flex flex-col items-center w-full {clickable ? 'cursor-pointer' : 'cursor-default'}"
+						class="group flex w-full flex-col items-center {clickable
+							? 'cursor-pointer'
+							: 'cursor-default'}"
 						disabled={!clickable}
 						onclick={() => handleStepClick(i)}
 						aria-current={getStepStatus(i) === 'current' ? 'step' : undefined}
 					>
-						<div class="flex items-center w-full">
-							<div class="flex items-center justify-center w-8 h-8 rounded-full shrink-0 transition-colors
+						<div class="flex w-full items-center">
+							<div
+								class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors
 								{getStepStatus(i) === 'complete' ? 'bg-[var(--caroline-blue-700)] text-white' : ''}
-								{getStepStatus(i) === 'current' ? 'border-2 border-[var(--caroline-blue-700)] bg-[var(--sandy-tan-200)] text-[var(--caroline-blue-700)]' : ''}
-								{getStepStatus(i) === 'upcoming' ? 'border-2 border-[var(--liver-brown-400)] bg-[var(--sandy-tan-200)] text-[var(--liver-brown-500)]' : ''}"
+								{getStepStatus(i) === 'current'
+									? 'border-2 border-[var(--caroline-blue-700)] bg-[var(--sandy-tan-200)] text-[var(--caroline-blue-700)]'
+									: ''}
+								{getStepStatus(i) === 'upcoming'
+									? 'border-2 border-[var(--liver-brown-400)] bg-[var(--sandy-tan-200)] text-[var(--liver-brown-500)]'
+									: ''}"
 							>
 								{#if getStepStatus(i) === 'complete'}
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-										<polyline points="20 6 9 17 4 12"/>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="16"
+										height="16"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="3"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									>
+										<polyline points="20 6 9 17 4 12" />
 									</svg>
 								{:else}
 									<span class="text-sm font-medium">{i + 1}</span>
@@ -74,19 +91,24 @@
 							</div>
 
 							{#if i < steps.length - 1}
-								<div class="flex-1 h-0.5 mx-2
+								<div
+									class="mx-2 h-0.5 flex-1
 									{getStepStatus(i) === 'complete' ? 'bg-[var(--caroline-blue-700)]' : 'bg-[var(--liver-brown-400)]'}"
 								></div>
 							{/if}
 						</div>
 
 						<div class="mt-2 text-center">
-							<span class="text-sm font-medium
-								{getStepStatus(i) === 'current' ? 'text-[var(--caroline-blue-700)]' : 'text-[var(--liver-brown-700)]'}">
+							<span
+								class="text-sm font-medium
+								{getStepStatus(i) === 'current'
+									? 'text-[var(--caroline-blue-700)]'
+									: 'text-[var(--liver-brown-700)]'}"
+							>
 								{step.label}
 							</span>
 							{#if step.description}
-								<p class="text-xs text-[var(--liver-brown-500)] mt-0.5 hidden sm:block">
+								<p class="mt-0.5 hidden text-xs text-[var(--liver-brown-500)] sm:block">
 									{step.description}
 								</p>
 							{/if}
@@ -100,26 +122,44 @@
 			{#each steps as step, i (step.id)}
 				<li class="relative {i < steps.length - 1 ? 'pb-8' : ''}">
 					{#if i < steps.length - 1}
-						<div class="absolute left-4 top-8 bottom-0 w-0.5 -ml-[0.0625rem]
+						<div
+							class="absolute top-8 bottom-0 left-4 -ml-[0.0625rem] w-0.5
 							{getStepStatus(i) === 'complete' ? 'bg-[var(--caroline-blue-700)]' : 'bg-[var(--liver-brown-400)]'}"
 						></div>
 					{/if}
 
 					<button
 						type="button"
-						class="group flex items-start gap-4 w-full text-left {clickable ? 'cursor-pointer' : 'cursor-default'}"
+						class="group flex w-full items-start gap-4 text-left {clickable
+							? 'cursor-pointer'
+							: 'cursor-default'}"
 						disabled={!clickable}
 						onclick={() => handleStepClick(i)}
 						aria-current={getStepStatus(i) === 'current' ? 'step' : undefined}
 					>
-						<div class="flex items-center justify-center w-8 h-8 rounded-full shrink-0 z-10 transition-colors
+						<div
+							class="z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors
 							{getStepStatus(i) === 'complete' ? 'bg-[var(--caroline-blue-700)] text-white' : ''}
-							{getStepStatus(i) === 'current' ? 'border-2 border-[var(--caroline-blue-700)] bg-[var(--sandy-tan-200)] text-[var(--caroline-blue-700)]' : ''}
-							{getStepStatus(i) === 'upcoming' ? 'border-2 border-[var(--liver-brown-400)] bg-[var(--sandy-tan-200)] text-[var(--liver-brown-500)]' : ''}"
+							{getStepStatus(i) === 'current'
+								? 'border-2 border-[var(--caroline-blue-700)] bg-[var(--sandy-tan-200)] text-[var(--caroline-blue-700)]'
+								: ''}
+							{getStepStatus(i) === 'upcoming'
+								? 'border-2 border-[var(--liver-brown-400)] bg-[var(--sandy-tan-200)] text-[var(--liver-brown-500)]'
+								: ''}"
 						>
 							{#if getStepStatus(i) === 'complete'}
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-									<polyline points="20 6 9 17 4 12"/>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="16"
+									height="16"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="3"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<polyline points="20 6 9 17 4 12" />
 								</svg>
 							{:else}
 								<span class="text-sm font-medium">{i + 1}</span>
@@ -127,12 +167,16 @@
 						</div>
 
 						<div class="pt-1">
-							<span class="text-sm font-medium
-								{getStepStatus(i) === 'current' ? 'text-[var(--caroline-blue-700)]' : 'text-[var(--liver-brown-700)]'}">
+							<span
+								class="text-sm font-medium
+								{getStepStatus(i) === 'current'
+									? 'text-[var(--caroline-blue-700)]'
+									: 'text-[var(--liver-brown-700)]'}"
+							>
 								{step.label}
 							</span>
 							{#if step.description}
-								<p class="text-xs text-[var(--liver-brown-500)] mt-0.5">
+								<p class="mt-0.5 text-xs text-[var(--liver-brown-500)]">
 									{step.description}
 								</p>
 							{/if}

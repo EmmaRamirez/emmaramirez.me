@@ -1,24 +1,40 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
-    interface ImageBlockProps extends svelteHTML.HTMLAttributes<HTMLImageElement> {
-        image: string;
-        alt: string;
-        caption?: string;
-        class: string;
-        imageId?: string;
-        children?: Snippet;
-    }
-    let { image, alt, caption, class: className, imageId = undefined, children, ...imageProps }: ImageBlockProps = $props();
+	interface ImageBlockProps extends svelteHTML.HTMLAttributes<HTMLImageElement> {
+		image: string;
+		alt: string;
+		caption?: string;
+		class: string;
+		imageId?: string;
+		children?: Snippet;
+	}
+	let {
+		image,
+		alt,
+		caption,
+		class: className,
+		imageId = undefined,
+		children,
+		...imageProps
+	}: ImageBlockProps = $props();
 </script>
 
-
 <div class="image-block sparkle relative {className}" {...imageProps}>
-	<figure class="relative w-full aspect-4/3">
-		<img id={imageId} src={image} {alt} class="absolute inset-0 rounded-lg h-full w-full object-cover" />
+	<figure class="relative aspect-4/3 w-full">
+		<img
+			id={imageId}
+			src={image}
+			{alt}
+			class="absolute inset-0 h-full w-full rounded-lg object-cover"
+		/>
 		{#if caption}
-            <figcaption class="absolute bottom-3 left-0 right-0 uppercase text-xl text-white text-center font-bold drop-shadow-lg z-10">{caption}</figcaption>
-        {/if}
+			<figcaption
+				class="absolute right-0 bottom-3 left-0 z-10 text-center text-xl font-bold text-white uppercase drop-shadow-lg"
+			>
+				{caption}
+			</figcaption>
+		{/if}
 	</figure>
-    {@render children?.()}
+	{@render children?.()}
 </div>

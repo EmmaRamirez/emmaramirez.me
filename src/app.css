@@ -1,257 +1,271 @@
 @import 'tailwindcss';
 
-
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentcolor);
+	}
 }
 
 @layer base {
-  :root {
-    color-scheme: light dark;
+	:root {
+		color-scheme: light dark;
 
-    /* Theme-aware semantic colors */
-    --page-bg: hsl(36, 38%, 80%);
-    --page-bg-subtle: hsl(36, 38%, 90%);
-    --page-bg-muted: hsl(36, 38%, 85%);
-    --text-primary: hsl(0, 9%, 15%);
-    --text-secondary: hsl(0, 9%, 27%);
-    --text-muted: hsl(0, 9%, 32%);
-    --border-color: hsl(0, 9%, 32%);
-    --header-bg: hsl(36, 38%, 90%);
-    --card-bg: hsl(36, 38%, 95%);
-    --link-color: hsl(0, 9%, 32%);
-    --link-hover: hsl(0, 9%, 15%);
-    --surface-hover: hsla(36, 38%, 70%, 0.4);
-    --selection-bg: hsl(217, 78%, 55%);
-    --selection-text: hsl(0, 0%, 100%);
+		/* Theme-aware semantic colors */
+		--page-bg: hsl(36, 38%, 80%);
+		--page-bg-subtle: hsl(36, 38%, 90%);
+		--page-bg-muted: hsl(36, 38%, 85%);
+		--text-primary: hsl(0, 9%, 15%);
+		--text-secondary: hsl(0, 9%, 27%);
+		--text-muted: hsl(0, 9%, 32%);
+		--border-color: hsl(0, 9%, 32%);
+		--header-bg: hsl(36, 38%, 90%);
+		--card-bg: hsl(36, 38%, 95%);
+		--link-color: hsl(0, 9%, 32%);
+		--link-hover: hsl(0, 9%, 15%);
+		--surface-hover: hsla(36, 38%, 70%, 0.4);
+		--selection-bg: hsl(217, 78%, 55%);
+		--selection-text: hsl(0, 0%, 100%);
 
-    --caroline-blue-base: hsla(217, 97%, 76%, 1);
-    --caroline-blue-100: hsl(217, 68%, 63%);
-    --caroline-blue-200: hsl(217, 90%, 76%);
-    --caroline-blue-400: hsl(217, 85%, 75%);
-    --caroline-blue-500: hsla(217, 97%, 76%, 1);
-    --caroline-blue-600: hsl(217, 78%, 65%);
-    --caroline-blue-700: hsl(217, 78%, 60%);
-    --caroline-blue-800: hsl(217, 78%, 55%);
-    --caroline-blue-900: hsl(217, 78%, 50%);
+		--caroline-blue-base: hsla(217, 97%, 76%, 1);
+		--caroline-blue-100: hsl(217, 68%, 63%);
+		--caroline-blue-200: hsl(217, 90%, 76%);
+		--caroline-blue-400: hsl(217, 85%, 75%);
+		--caroline-blue-500: hsla(217, 97%, 76%, 1);
+		--caroline-blue-600: hsl(217, 78%, 65%);
+		--caroline-blue-700: hsl(217, 78%, 60%);
+		--caroline-blue-800: hsl(217, 78%, 55%);
+		--caroline-blue-900: hsl(217, 78%, 50%);
 
-    --sandy-tan-200: hsl(36, 38%, 95%);
-    --sandy-tan-300: hsl(36, 38%, 90%);
-    --sandy-tan-400: hsl(36, 38%, 90%);
-    --sandy-tan-500: hsl(36, 38%, 85%);
-    --sandy-tan-600: hsl(36, 38%, 80%);
-    --sandy-tan-700: hsl(36, 38%, 75%);
-    --sandy-tan-800: hsl(36, 38%, 70%);
-    --sandy-tan-900: hsl(36, 38%, 65%);
+		--sandy-tan-200: hsl(36, 38%, 95%);
+		--sandy-tan-300: hsl(36, 38%, 90%);
+		--sandy-tan-400: hsl(36, 38%, 90%);
+		--sandy-tan-500: hsl(36, 38%, 85%);
+		--sandy-tan-600: hsl(36, 38%, 80%);
+		--sandy-tan-700: hsl(36, 38%, 75%);
+		--sandy-tan-800: hsl(36, 38%, 70%);
+		--sandy-tan-900: hsl(36, 38%, 65%);
 
-    --eggshell-white-500: hsl(40, 38%, 90%);
+		--eggshell-white-500: hsl(40, 38%, 90%);
 
-    --transit-yellow-100: hsl(47, 100%, 96%);
-    --transit-yellow-200: hsl(47, 100%, 85%);
-    --transit-yellow-300: hsl(47, 100%, 80%);
-    --transit-yellow-400: hsl(47, 100%, 75%);
-    --transit-yellow-500: hsl(47, 100%, 78%);
-    --transit-yellow-600: hsl(47, 100%, 73%);
-    --transit-yellow-700: hsl(47, 100%, 68%);
-    --transit-yellow-800: hsl(47, 100%, 63%);
-    --transit-yellow-900: hsl(47, 100%, 58%);
+		--transit-yellow-100: hsl(47, 100%, 96%);
+		--transit-yellow-200: hsl(47, 100%, 85%);
+		--transit-yellow-300: hsl(47, 100%, 80%);
+		--transit-yellow-400: hsl(47, 100%, 75%);
+		--transit-yellow-500: hsl(47, 100%, 78%);
+		--transit-yellow-600: hsl(47, 100%, 73%);
+		--transit-yellow-700: hsl(47, 100%, 68%);
+		--transit-yellow-800: hsl(47, 100%, 63%);
+		--transit-yellow-900: hsl(47, 100%, 58%);
 
-    --liver-brown-500: hsl(0, 9%, 32%);
-    --liver-brown-600: hsl(0, 9%, 27%);
-    --liver-brown-700: hsl(0, 9%, 25%);
-    --liver-brown-800: hsl(0, 9%, 20%);
-    --liver-brown-900: hsl(0, 9%, 15%);
+		--liver-brown-500: hsl(0, 9%, 32%);
+		--liver-brown-600: hsl(0, 9%, 27%);
+		--liver-brown-700: hsl(0, 9%, 25%);
+		--liver-brown-800: hsl(0, 9%, 20%);
+		--liver-brown-900: hsl(0, 9%, 15%);
 
-    --blush-pink-500: #ED9CEF;
+		--blush-pink-500: #ed9cef;
 
-    --light-rose-500: #FFCBCB;
+		--light-rose-500: #ffcbcb;
 
-    --magic-mint-500: #B8FFE5;
+		--magic-mint-500: #b8ffe5;
 
-    --lawn-green-500: hsl(128, 61%, 47%);
-    --lawn-green-600: hsl(128, 61%, 42%);
-    --lawn-green-700: hsl(128, 61%, 37%);
-    --lawn-green-800: hsl(128, 61%, 32%);
-    --lawn-green-900: hsl(128, 61%, 27%);
+		--lawn-green-500: hsl(128, 61%, 47%);
+		--lawn-green-600: hsl(128, 61%, 42%);
+		--lawn-green-700: hsl(128, 61%, 37%);
+		--lawn-green-800: hsl(128, 61%, 32%);
+		--lawn-green-900: hsl(128, 61%, 27%);
 
-    --lang-svelte: #ff3e00;
-    --lang-rust: #dea584;
-    --lang-elixir: #6e4a7e;
-    --lang-typescript: #3178c6;
-    --lang-javascript: #f1e05a;
-    --lang-haskell: #5e5086;
-  }
+		--lang-svelte: #ff3e00;
+		--lang-rust: #dea584;
+		--lang-elixir: #6e4a7e;
+		--lang-typescript: #3178c6;
+		--lang-javascript: #f1e05a;
+		--lang-haskell: #5e5086;
+	}
 
-  .dark {
-    /* Dark theme - midnight navy palette based on #1a1b27 */
-    --page-bg: #1a1b27;
-    --page-bg-subtle: #24253a;
-    --page-bg-muted: #1f2033;
-    --text-primary: #e8e9f0;
-    --text-secondary: #a8aabe;
-    --text-muted: #6b6d85;
-    --border-color: #363850;
-    --header-bg: #1f2033;
-    --card-bg: #24253a;
-    --link-color: #7aa2f7;
-    --link-hover: #9dbcff;
-    --surface-hover: hsla(235, 20%, 30%, 0.5);
-    --selection-bg: hsl(217, 92%, 72%);
-    --selection-text: hsl(235, 20%, 13%);
+	.dark {
+		/* Dark theme - midnight navy palette based on #1a1b27 */
+		--page-bg: #1a1b27;
+		--page-bg-subtle: #24253a;
+		--page-bg-muted: #1f2033;
+		--text-primary: #e8e9f0;
+		--text-secondary: #a8aabe;
+		--text-muted: #6b6d85;
+		--border-color: #363850;
+		--header-bg: #1f2033;
+		--card-bg: #24253a;
+		--link-color: #7aa2f7;
+		--link-hover: #9dbcff;
+		--surface-hover: hsla(235, 20%, 30%, 0.5);
+		--selection-bg: hsl(217, 92%, 72%);
+		--selection-text: hsl(235, 20%, 13%);
 
-    /* Navy-tinted surface colors */
-    --sandy-tan-200: #2a2c42;
-    --sandy-tan-300: #24253a;
-    --sandy-tan-400: #24253a;
-    --sandy-tan-500: #1f2033;
-    --sandy-tan-600: #1a1b27;
-    --sandy-tan-700: #1f2033;
-    --sandy-tan-800: #24253a;
-    --sandy-tan-900: #2a2c42;
+		/* Navy-tinted surface colors */
+		--sandy-tan-200: #2a2c42;
+		--sandy-tan-300: #24253a;
+		--sandy-tan-400: #24253a;
+		--sandy-tan-500: #1f2033;
+		--sandy-tan-600: #1a1b27;
+		--sandy-tan-700: #1f2033;
+		--sandy-tan-800: #24253a;
+		--sandy-tan-900: #2a2c42;
 
-    /* Light text scale for dark mode */
-    --liver-brown-500: #6b6d85;
-    --liver-brown-600: #8486a0;
-    --liver-brown-700: #a8aabe;
-    --liver-brown-800: #c8cad8;
-    --liver-brown-900: #e8e9f0;
+		/* Light text scale for dark mode */
+		--liver-brown-500: #6b6d85;
+		--liver-brown-600: #8486a0;
+		--liver-brown-700: #a8aabe;
+		--liver-brown-800: #c8cad8;
+		--liver-brown-900: #e8e9f0;
 
-    /* Vibrant accent colors for dark mode */
-    --blush-pink-500: #f7a8e0;
-    --light-rose-500: #ffa7a7;
-    --magic-mint-500: #9eecd9;
-  }
+		/* Vibrant accent colors for dark mode */
+		--blush-pink-500: #f7a8e0;
+		--light-rose-500: #ffa7a7;
+		--magic-mint-500: #9eecd9;
+	}
 }
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 14.3% 4.1%;
-    --card: 0 0% 100%;
-    --card-foreground: 20 14.3% 4.1%;
-    --border: 20 5.9% 90%;
-    --input: 20 5.9% 90%;
-    --primary: 24 9.8% 10%;
-    --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 60 4.8% 95.9%;
-    --secondary-foreground: 24 9.8% 10%;
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
-    --destructive: 0 72.2% 50.6%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --ring: 20 14.3% 4.1%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
+	:root {
+		--background: 0 0% 100%;
+		--foreground: 20 14.3% 4.1%;
+		--muted: 60 4.8% 95.9%;
+		--muted-foreground: 25 5.3% 44.7%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 20 14.3% 4.1%;
+		--card: 0 0% 100%;
+		--card-foreground: 20 14.3% 4.1%;
+		--border: 20 5.9% 90%;
+		--input: 20 5.9% 90%;
+		--primary: 24 9.8% 10%;
+		--primary-foreground: 60 9.1% 97.8%;
+		--secondary: 60 4.8% 95.9%;
+		--secondary-foreground: 24 9.8% 10%;
+		--accent: 60 4.8% 95.9%;
+		--accent-foreground: 24 9.8% 10%;
+		--destructive: 0 72.2% 50.6%;
+		--destructive-foreground: 60 9.1% 97.8%;
+		--ring: 20 14.3% 4.1%;
+		--radius: 0.5rem;
+		--sidebar-background: 0 0% 98%;
+		--sidebar-foreground: 240 5.3% 26.1%;
+		--sidebar-primary: 240 5.9% 10%;
+		--sidebar-primary-foreground: 0 0% 98%;
+		--sidebar-accent: 240 4.8% 95.9%;
+		--sidebar-accent-foreground: 240 5.9% 10%;
+		--sidebar-border: 220 13% 91%;
+		--sidebar-ring: 217.2 91.2% 59.8%;
+	}
 
-  /* Dark theme via .dark class - midnight navy palette */
-  .dark {
-    /* #1a1b27 = hsl(235, 20%, 13%) base */
-    --background: 235 20% 13%;
-    --foreground: 234 20% 93%;
-    --muted: 235 18% 19%;
-    --muted-foreground: 235 12% 55%;
-    --popover: 235 20% 13%;
-    --popover-foreground: 234 20% 93%;
-    --card: 235 18% 19%;
-    --card-foreground: 234 20% 93%;
-    --border: 235 15% 26%;
-    --input: 235 15% 26%;
-    --primary: 234 20% 93%;
-    --primary-foreground: 235 20% 13%;
-    --secondary: 235 18% 19%;
-    --secondary-foreground: 234 20% 93%;
-    --accent: 217 92% 72%;
-    --accent-foreground: 235 20% 13%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 234 20% 93%;
-    --ring: 217 92% 72%;
-    --sidebar-background: 235 18% 15%;
-    --sidebar-foreground: 234 20% 93%;
-    --sidebar-primary: 217 92% 72%;
-    --sidebar-primary-foreground: 235 20% 13%;
-    --sidebar-accent: 235 18% 22%;
-    --sidebar-accent-foreground: 234 20% 93%;
-    --sidebar-border: 235 15% 26%;
-    --sidebar-ring: 217 92% 72%;
+	/* Dark theme via .dark class - midnight navy palette */
+	.dark {
+		/* #1a1b27 = hsl(235, 20%, 13%) base */
+		--background: 235 20% 13%;
+		--foreground: 234 20% 93%;
+		--muted: 235 18% 19%;
+		--muted-foreground: 235 12% 55%;
+		--popover: 235 20% 13%;
+		--popover-foreground: 234 20% 93%;
+		--card: 235 18% 19%;
+		--card-foreground: 234 20% 93%;
+		--border: 235 15% 26%;
+		--input: 235 15% 26%;
+		--primary: 234 20% 93%;
+		--primary-foreground: 235 20% 13%;
+		--secondary: 235 18% 19%;
+		--secondary-foreground: 234 20% 93%;
+		--accent: 217 92% 72%;
+		--accent-foreground: 235 20% 13%;
+		--destructive: 0 72% 51%;
+		--destructive-foreground: 234 20% 93%;
+		--ring: 217 92% 72%;
+		--sidebar-background: 235 18% 15%;
+		--sidebar-foreground: 234 20% 93%;
+		--sidebar-primary: 217 92% 72%;
+		--sidebar-primary-foreground: 235 20% 13%;
+		--sidebar-accent: 235 18% 22%;
+		--sidebar-accent-foreground: 234 20% 93%;
+		--sidebar-border: 235 15% 26%;
+		--sidebar-ring: 217 92% 72%;
 
-    /* Navy surface scale */
-    --sandy-tan-200: #2a2c42;
-    --sandy-tan-300: #24253a;
-    --sandy-tan-400: #24253a;
-    --sandy-tan-500: #1f2033;
-    --sandy-tan-600: #1a1b27;
-    --sandy-tan-700: #1f2033;
-    --sandy-tan-800: #24253a;
-    --sandy-tan-900: #2a2c42;
+		/* Navy surface scale */
+		--sandy-tan-200: #2a2c42;
+		--sandy-tan-300: #24253a;
+		--sandy-tan-400: #24253a;
+		--sandy-tan-500: #1f2033;
+		--sandy-tan-600: #1a1b27;
+		--sandy-tan-700: #1f2033;
+		--sandy-tan-800: #24253a;
+		--sandy-tan-900: #2a2c42;
 
-    /* Light text scale */
-    --liver-brown-500: #6b6d85;
-    --liver-brown-600: #8486a0;
-    --liver-brown-700: #a8aabe;
-    --liver-brown-800: #c8cad8;
-    --liver-brown-900: #e8e9f0;
-  }
+		/* Light text scale */
+		--liver-brown-500: #6b6d85;
+		--liver-brown-600: #8486a0;
+		--liver-brown-700: #a8aabe;
+		--liver-brown-800: #c8cad8;
+		--liver-brown-900: #e8e9f0;
+	}
 }
 
 ::selection {
-  background-color: var(--selection-bg);
-  color: var(--selection-text);
+	background-color: var(--selection-bg);
+	color: var(--selection-text);
 }
 
-html, body {
-  overflow-x: hidden;
-  max-width: 100vw;
+html,
+body {
+	overflow-x: hidden;
+	max-width: 100vw;
 }
 
 body {
-  background-color: var(--page-bg);
-  color: var(--text-primary);
-  font-family: "Lora", serif;
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='26' fill='none' viewBox='0 0 24 26'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.69 2.69a2.357 2.357 0 0 1 2.495-.54L21.47 8.632a2.357 2.357 0 0 1-.255 4.494l-7.271 1.818-1.818 7.27a2.357 2.357 0 0 1-4.494.256L1.15 5.185a2.357 2.357 0 0 1 .54-2.495Z' fill='%23fff'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3.633 3.622A.786.786 0 0 0 2.62 4.633L9.103 21.92a.786.786 0 0 0 1.498-.086l2.047-8.185 8.185-2.046a.785.785 0 0 0 .086-1.498L3.633 3.622Z' fill='%23010101'/%3E%3C/svg%3E"), auto;
-  transition: background-color 0.3s ease, color 0.3s ease;
+	background-color: var(--page-bg);
+	color: var(--text-primary);
+	font-family: 'Lora', serif;
+	cursor:
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='26' fill='none' viewBox='0 0 24 26'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.69 2.69a2.357 2.357 0 0 1 2.495-.54L21.47 8.632a2.357 2.357 0 0 1-.255 4.494l-7.271 1.818-1.818 7.27a2.357 2.357 0 0 1-4.494.256L1.15 5.185a2.357 2.357 0 0 1 .54-2.495Z' fill='%23fff'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3.633 3.622A.786.786 0 0 0 2.62 4.633L9.103 21.92a.786.786 0 0 0 1.498-.086l2.047-8.185 8.185-2.046a.785.785 0 0 0 .086-1.498L3.633 3.622Z' fill='%23010101'/%3E%3C/svg%3E"),
+		auto;
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: "DM Serif Text", serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'DM Serif Text', serif;
 }
 
 .dark body {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='26' fill='none' viewBox='0 0 24 26'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.69 2.69a2.357 2.357 0 0 1 2.495-.54L21.47 8.632a2.357 2.357 0 0 1-.255 4.494l-7.271 1.818-1.818 7.27a2.357 2.357 0 0 1-4.494.256L1.15 5.185a2.357 2.357 0 0 1 .54-2.495Z' fill='%23000'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3.633 3.622A.786.786 0 0 0 2.62 4.633L9.103 21.92a.786.786 0 0 0 1.498-.086l2.047-8.185 8.185-2.046a.785.785 0 0 0 .086-1.498L3.633 3.622Z' fill='%23fff'/%3E%3C/svg%3E"), auto;
+	cursor:
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='26' fill='none' viewBox='0 0 24 26'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.69 2.69a2.357 2.357 0 0 1 2.495-.54L21.47 8.632a2.357 2.357 0 0 1-.255 4.494l-7.271 1.818-1.818 7.27a2.357 2.357 0 0 1-4.494.256L1.15 5.185a2.357 2.357 0 0 1 .54-2.495Z' fill='%23000'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3.633 3.622A.786.786 0 0 0 2.62 4.633L9.103 21.92a.786.786 0 0 0 1.498-.086l2.047-8.185 8.185-2.046a.785.785 0 0 0 .086-1.498L3.633 3.622Z' fill='%23fff'/%3E%3C/svg%3E"),
+		auto;
 }
 
 a:not(.style-none) {
-  color: var(--link-color);
-  text-decoration: underline;
-  font-weight: 600;
-  transition: color 0.2s ease-in-out;
+	color: var(--link-color);
+	text-decoration: underline;
+	font-weight: 600;
+	transition: color 0.2s ease-in-out;
 }
 
 a:not(.style-none):hover {
-  color: var(--link-hover);
+	color: var(--link-hover);
 }
 
 .cursor-disco {
-  cursor: url(https://cdn.custom-cursor.com/db/10911/32/minimal-disco-ball-pointer.png), pointer !important;
+	cursor:
+		url(https://cdn.custom-cursor.com/db/10911/32/minimal-disco-ball-pointer.png), pointer !important;
 }
 
 .cursor-pointer {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='29' fill='none' viewBox='0 0 28 29'%3E%3Cpath fill='%23fff' d='M6.84 21.83c-.47-.6-1.05-1.82-2.07-3.34-.58-.83-2.01-2.41-2.45-3.23a2.1 2.1 0 0 1-.25-1.67 2.2 2.2 0 0 1 2.39-1.67c.85.18 1.63.6 2.25 1.2.43.41.82.85 1.18 1.32.27.34.33.47.63.85.3.39.5.77.35.2-.11-.83-.31-2.23-.6-3.48-.21-.95-.26-1.1-.46-1.82s-.32-1.32-.54-2.13c-.2-.8-.35-1.62-.46-2.44a4.7 4.7 0 0 1 .43-3.08c.58-.55 1.44-.7 2.17-.37a4.4 4.4 0 0 1 1.57 2.17c.43 1.07.72 2.19.86 3.33.27 1.67.79 4.1.8 4.6 0-.61-.11-1.91 0-2.5.12-.6.54-1.1 1.12-1.33.5-.15 1.02-.19 1.53-.1.52.1.98.4 1.29.83.38.98.6 2 .63 3.05.04-.91.2-1.82.47-2.7.28-.39.68-.67 1.15-.8.55-.1 1.11-.1 1.66 0 .46.15.85.44 1.14.82.35.88.56 1.82.63 2.77 0 .23.12-.65.48-1.24a1.67 1.67 0 1 1 3.17 1.07v3.77c-.06.97-.2 1.94-.4 2.9-.29.85-.7 1.65-1.2 2.38-.8.9-1.48 1.92-1.98 3.02a6.67 6.67 0 0 0 .03 3.2c-.68.07-1.37.07-2.05 0-.65-.1-1.45-1.4-1.67-1.8a.63.63 0 0 0-1.13 0c-.37.64-1.18 1.79-1.75 1.85-1.12.14-3.42 0-5.23 0 0 0 .3-1.66-.39-2.27-.68-.6-1.38-1.3-1.9-1.76l-1.4-1.6Z'/%3E%3Cpath stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.25' d='M6.84 21.83c-.47-.6-1.05-1.82-2.07-3.34-.58-.83-2.01-2.41-2.45-3.23a2.1 2.1 0 0 1-.25-1.67 2.2 2.2 0 0 1 2.39-1.67c.85.18 1.63.6 2.25 1.2.43.41.82.85 1.18 1.32.27.34.33.47.63.85.3.39.5.77.35.2-.11-.83-.31-2.23-.6-3.48-.21-.95-.26-1.1-.46-1.82s-.32-1.32-.54-2.13c-.2-.8-.35-1.62-.46-2.44a4.7 4.7 0 0 1 .43-3.08c.58-.55 1.44-.7 2.17-.37a4.4 4.4 0 0 1 1.57 2.17c.43 1.07.72 2.19.86 3.33.27 1.67.79 4.1.8 4.6 0-.61-.11-1.91 0-2.5.12-.6.54-1.1 1.12-1.33.5-.15 1.02-.19 1.53-.1.52.1.98.4 1.29.83.38.98.6 2 .63 3.05.04-.91.2-1.82.47-2.7.28-.39.68-.67 1.15-.8.55-.1 1.11-.1 1.66 0 .46.15.85.44 1.14.82.35.88.56 1.82.63 2.77 0 .23.12-.65.48-1.24a1.67 1.67 0 1 1 3.17 1.07v3.77c-.06.97-.2 1.94-.4 2.9-.29.85-.7 1.65-1.2 2.38-.8.9-1.48 1.92-1.98 3.02a6.67 6.67 0 0 0 .03 3.2c-.68.07-1.37.07-2.05 0-.65-.1-1.45-1.4-1.67-1.8a.63.63 0 0 0-1.13 0c-.37.64-1.18 1.79-1.75 1.85-1.12.14-3.42 0-5.23 0 0 0 .3-1.66-.39-2.27-.68-.6-1.38-1.3-1.9-1.76l-1.4-1.6Z' clip-rule='evenodd'/%3E%3Cpath fill='%23000' d='M20.65 22.3v-6.24c0-.38-.31-.68-.7-.68-.37 0-.68.3-.68.68v6.23c0 .38.3.68.69.68.38 0 .69-.3.69-.68ZM17.2 22.3l-.04-6.25a.67.67 0 1 0-1.34.01l.04 6.24a.67.67 0 1 0 1.34 0ZM12.37 16.07l.04 6.22c0 .38.3.68.67.68.37 0 .67-.3.67-.68l-.04-6.23c0-.38-.3-.68-.67-.68-.37 0-.67.31-.67.69Z'/%3E%3C/svg%3E"), auto;
+	cursor:
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='29' fill='none' viewBox='0 0 28 29'%3E%3Cpath fill='%23fff' d='M6.84 21.83c-.47-.6-1.05-1.82-2.07-3.34-.58-.83-2.01-2.41-2.45-3.23a2.1 2.1 0 0 1-.25-1.67 2.2 2.2 0 0 1 2.39-1.67c.85.18 1.63.6 2.25 1.2.43.41.82.85 1.18 1.32.27.34.33.47.63.85.3.39.5.77.35.2-.11-.83-.31-2.23-.6-3.48-.21-.95-.26-1.1-.46-1.82s-.32-1.32-.54-2.13c-.2-.8-.35-1.62-.46-2.44a4.7 4.7 0 0 1 .43-3.08c.58-.55 1.44-.7 2.17-.37a4.4 4.4 0 0 1 1.57 2.17c.43 1.07.72 2.19.86 3.33.27 1.67.79 4.1.8 4.6 0-.61-.11-1.91 0-2.5.12-.6.54-1.1 1.12-1.33.5-.15 1.02-.19 1.53-.1.52.1.98.4 1.29.83.38.98.6 2 .63 3.05.04-.91.2-1.82.47-2.7.28-.39.68-.67 1.15-.8.55-.1 1.11-.1 1.66 0 .46.15.85.44 1.14.82.35.88.56 1.82.63 2.77 0 .23.12-.65.48-1.24a1.67 1.67 0 1 1 3.17 1.07v3.77c-.06.97-.2 1.94-.4 2.9-.29.85-.7 1.65-1.2 2.38-.8.9-1.48 1.92-1.98 3.02a6.67 6.67 0 0 0 .03 3.2c-.68.07-1.37.07-2.05 0-.65-.1-1.45-1.4-1.67-1.8a.63.63 0 0 0-1.13 0c-.37.64-1.18 1.79-1.75 1.85-1.12.14-3.42 0-5.23 0 0 0 .3-1.66-.39-2.27-.68-.6-1.38-1.3-1.9-1.76l-1.4-1.6Z'/%3E%3Cpath stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.25' d='M6.84 21.83c-.47-.6-1.05-1.82-2.07-3.34-.58-.83-2.01-2.41-2.45-3.23a2.1 2.1 0 0 1-.25-1.67 2.2 2.2 0 0 1 2.39-1.67c.85.18 1.63.6 2.25 1.2.43.41.82.85 1.18 1.32.27.34.33.47.63.85.3.39.5.77.35.2-.11-.83-.31-2.23-.6-3.48-.21-.95-.26-1.1-.46-1.82s-.32-1.32-.54-2.13c-.2-.8-.35-1.62-.46-2.44a4.7 4.7 0 0 1 .43-3.08c.58-.55 1.44-.7 2.17-.37a4.4 4.4 0 0 1 1.57 2.17c.43 1.07.72 2.19.86 3.33.27 1.67.79 4.1.8 4.6 0-.61-.11-1.91 0-2.5.12-.6.54-1.1 1.12-1.33.5-.15 1.02-.19 1.53-.1.52.1.98.4 1.29.83.38.98.6 2 .63 3.05.04-.91.2-1.82.47-2.7.28-.39.68-.67 1.15-.8.55-.1 1.11-.1 1.66 0 .46.15.85.44 1.14.82.35.88.56 1.82.63 2.77 0 .23.12-.65.48-1.24a1.67 1.67 0 1 1 3.17 1.07v3.77c-.06.97-.2 1.94-.4 2.9-.29.85-.7 1.65-1.2 2.38-.8.9-1.48 1.92-1.98 3.02a6.67 6.67 0 0 0 .03 3.2c-.68.07-1.37.07-2.05 0-.65-.1-1.45-1.4-1.67-1.8a.63.63 0 0 0-1.13 0c-.37.64-1.18 1.79-1.75 1.85-1.12.14-3.42 0-5.23 0 0 0 .3-1.66-.39-2.27-.68-.6-1.38-1.3-1.9-1.76l-1.4-1.6Z' clip-rule='evenodd'/%3E%3Cpath fill='%23000' d='M20.65 22.3v-6.24c0-.38-.31-.68-.7-.68-.37 0-.68.3-.68.68v6.23c0 .38.3.68.69.68.38 0 .69-.3.69-.68ZM17.2 22.3l-.04-6.25a.67.67 0 1 0-1.34.01l.04 6.24a.67.67 0 1 0 1.34 0ZM12.37 16.07l.04 6.22c0 .38.3.68.67.68.37 0 .67-.3.67-.68l-.04-6.23c0-.38-.3-.68-.67-.68-.37 0-.67.31-.67.69Z'/%3E%3C/svg%3E"),
+		auto;
 }

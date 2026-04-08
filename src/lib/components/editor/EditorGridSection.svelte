@@ -2,53 +2,31 @@
 	import { dev, browser } from '$app/environment';
 	import { dndzone, type DndEvent } from 'svelte-dnd-action';
 	import type { GridItem } from '$lib/types/homepage';
-	import type { Article } from '$lib/articles';
-	import { defaultArticles } from '$lib/articles';
-	import {
-		projectRegistry,
-		getDisco,
-		type ProjectRegistryEntry,
-		type DiscoRegistryEntry
-	} from '$lib/registry/homepage';
+	import { getDisco, type DiscoRegistryEntry } from '$lib/registry/homepage';
+	import { buildHomepageGridItems } from '$lib/registry/gridItems';
 	import { discoParams, type DiscoParams } from '$lib/stores/discoParams.svelte';
-	import { gridLayoutStore, getItemKey } from '$lib/stores/gridLayoutStore.svelte';
+	import { editorGridLayoutStore, getItemKey } from '$lib/stores/gridLayoutStore.svelte';
 	import { showSections } from '$lib/stores';
 	import { hero3dParams } from '$lib/stores/hero3dParams.svelte';
 	import { pokemonTeam } from '$lib/website.config';
 	import { onMount } from 'svelte';
-	
-	import { 
-		DiscoBlock, 
-		HomeBlock, 
+
+	import {
+		DiscoBlock,
+		HomeBlock,
 		LocationBlock,
-		PokemonBlock, 
-		ProjectBlock, 
-		TopLanguages, 
-		DesignSystemAd, 
-		CityCard 
+		PokemonBlock,
+		ProjectBlock,
+		TopLanguages,
+		DesignSystemAd,
+		CityCard
 	} from '$lib/components/blocks';
 	import { Hero } from '$lib/components/hero';
 	import { Select, Switch } from '$lib/components/ui';
 
-	const homepageArticles: Article[] = defaultArticles.slice(0, 5);
-	const homepageProjects: ProjectRegistryEntry[] = Object.values(projectRegistry)
-		.toSorted((a, b) => Number.parseInt(b.year ?? '0', 10) - Number.parseInt(a.year ?? '0', 10))
-		.slice(0, 5);
-
 	const disco: DiscoRegistryEntry = getDisco();
 
-	const gridItems: GridItem[] = [
-		{ kind: 'hero' as const },
-		{ kind: 'disco' as const },
-		{ kind: 'home' as const },
-		{ kind: 'location' as const },
-		{ kind: 'pokemon' as const },
-		{ kind: 'top-languages' as const },
-		{ kind: 'city' as const },
-		...homepageArticles.map((article) => ({ kind: 'article' as const, article })),
-		...homepageProjects.map((project) => ({ kind: 'project' as const, project })),
-		{ kind: 'design-system' as const }
-	];
+	const gridItems = buildHomepageGridItems({ includeApiExplorer: false });
 
 	interface DndItem {
 		id: string;
@@ -57,6 +35,12 @@
 
 	let dndItems = $state<DndItem[]>([]);
 	let selectedItem = $state<GridItem | null>(null);
+
+	const selectedItemLayout = $derived.by(() => {
+		const item = selectedItem;
+		if (!item) return undefined;
+		return editorGridLayoutStore.getLayout(getItemKey(item));
+	});
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
@@ -64,8 +48,8 @@
 	let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	onMount(() => {
-		gridLayoutStore.initialize(gridItems);
-		gridLayoutStore.editMode = true; // Always in edit mode in the editor
+		editorGridLayoutStore.initialize(gridItems);
+		editorGridLayoutStore.editMode = true; // Always in edit mode in the editor
 		updateDndItems();
 
 		const unsubscribe = showSections.subscribe((value) => {
@@ -78,8 +62,8 @@
 	});
 
 	function updateDndItems() {
-		const orderedItems = gridLayoutStore.reorderItems(gridItems);
-		dndItems = orderedItems.map(item => ({
+		const orderedItems = editorGridLayoutStore.reorderItems(gridItems);
+		dndItems = orderedItems.map((item) => ({
 			id: getItemKey(item),
 			item
 		}));
@@ -91,36 +75,36 @@
 
 	function handleDndFinalize(e: CustomEvent<DndEvent<DndItem>>) {
 		dndItems = e.detail.items;
-		gridLayoutStore.setOrder(dndItems.map(d => d.id));
+		editorGridLayoutStore.setOrder(dndItems.map((d) => d.id));
 	}
 
 	function handleResize(key: string, e: MouseEvent) {
 		e.stopPropagation();
 		e.preventDefault();
-		gridLayoutStore.cycleColSpan(key);
+		editorGridLayoutStore.cycleColSpan(key);
 	}
 
 	function handleRowResize(key: string, e: MouseEvent) {
 		e.stopPropagation();
 		e.preventDefault();
-		gridLayoutStore.cycleRowSpan(key);
+		editorGridLayoutStore.cycleRowSpan(key);
 	}
 
 	function getColSpanClass(key: string): string {
-		const layout = gridLayoutStore.getLayout(key);
+		const layout = editorGridLayoutStore.getLayout(key);
 		if (!layout) return '';
-		
+
 		const colClasses = {
 			1: '',
 			2: 'md:col-span-2',
 			3: 'md:col-span-2 lg:col-span-3'
 		};
-		
+
 		const rowClasses = {
 			1: '',
 			2: 'row-span-2'
 		};
-		
+
 		return `${colClasses[layout.colSpan]} ${rowClasses[layout.rowSpan]}`.trim();
 	}
 
@@ -211,7 +195,7 @@
 
 	function handleSave() {
 		saveStatus = 'saving';
-		const success = gridLayoutStore.save();
+		const success = editorGridLayoutStore.save();
 		if (success) {
 			saveStatus = 'saved';
 			setTimeout(() => {
@@ -224,7 +208,7 @@
 
 	function handleReset() {
 		if (confirm('Reset layout to defaults? This will remove your saved layout.')) {
-			gridLayoutStore.reset(gridItems);
+			editorGridLayoutStore.reset(gridItems);
 			updateDndItems();
 			selectedItem = null;
 		}
@@ -406,22 +390,17 @@
 				hero3dParams.rippleAmplitude = hero.rippleAmplitude ?? hero3dParams.rippleAmplitude;
 				hero3dParams.causticScale = hero.causticScale ?? hero3dParams.causticScale;
 				hero3dParams.causticSpeed = hero.causticSpeed ?? hero3dParams.causticSpeed;
-				hero3dParams.causticIntensity =
-					hero.causticIntensity ?? hero3dParams.causticIntensity;
-				hero3dParams.waterDistortion =
-					hero.waterDistortion ?? hero3dParams.waterDistortion;
+				hero3dParams.causticIntensity = hero.causticIntensity ?? hero3dParams.causticIntensity;
+				hero3dParams.waterDistortion = hero.waterDistortion ?? hero3dParams.waterDistortion;
 				hero3dParams.mouseDamping = hero.mouseDamping ?? hero3dParams.mouseDamping;
 				hero3dParams.revealDamping = hero.revealDamping ?? hero3dParams.revealDamping;
 				hero3dParams.mouseRangeX = hero.mouseRangeX ?? hero3dParams.mouseRangeX;
 				hero3dParams.mouseRangeY = hero.mouseRangeY ?? hero3dParams.mouseRangeY;
-				hero3dParams.depthFocusNear =
-					hero.depthFocusNear ?? hero3dParams.depthFocusNear;
+				hero3dParams.depthFocusNear = hero.depthFocusNear ?? hero3dParams.depthFocusNear;
 				hero3dParams.depthFocusFar = hero.depthFocusFar ?? hero3dParams.depthFocusFar;
 				hero3dParams.depthMixLow = hero.depthMixLow ?? hero3dParams.depthMixLow;
-				hero3dParams.parallaxXGain =
-					hero.parallaxXGain ?? hero3dParams.parallaxXGain;
-				hero3dParams.parallaxYGain =
-					hero.parallaxYGain ?? hero3dParams.parallaxYGain;
+				hero3dParams.parallaxXGain = hero.parallaxXGain ?? hero3dParams.parallaxXGain;
+				hero3dParams.parallaxYGain = hero.parallaxYGain ?? hero3dParams.parallaxYGain;
 				hero3dParams.rippleEdgeInfluence =
 					hero.rippleEdgeInfluence ?? hero3dParams.rippleEdgeInfluence;
 				hero3dParams.edgeRippleStrength =
@@ -465,34 +444,65 @@
 			</div>
 			<div class="header-actions">
 				<button type="button" class="reset-btn" onclick={handleReset}>
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<svg
+						width="16"
+						height="16"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
 						<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
 						<path d="M3 3v5h5" />
 					</svg>
 					Reset
 				</button>
-				<button 
-					type="button" 
-					class="save-btn" 
+				<button
+					type="button"
+					class="save-btn"
 					class:saved={saveStatus === 'saved'}
 					class:error={saveStatus === 'error'}
 					onclick={handleSave}
 					disabled={saveStatus === 'saving'}
 				>
-					{#if saveStatus === 'saving'}
-						Saving...
-					{:else if saveStatus === 'saved'}
-						✓ Saved
-					{:else if saveStatus === 'error'}
-						✗ Error
-					{:else}
-						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<span class="save-btn__sizer" aria-hidden="true">
+						<svg
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+						>
 							<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
 							<polyline points="17,21 17,13 7,13 7,21" />
 							<polyline points="7,3 7,8 15,8" />
 						</svg>
 						Save Layout
-					{/if}
+					</span>
+					<span class="save-btn__content">
+						{#if saveStatus === 'saving'}
+							Saving...
+						{:else if saveStatus === 'saved'}
+							✓ Saved
+						{:else if saveStatus === 'error'}
+							✗ Error
+						{:else}
+							<svg
+								width="16"
+								height="16"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+							>
+								<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+								<polyline points="17,21 17,13 7,13 7,21" />
+								<polyline points="7,3 7,8 15,8" />
+							</svg>
+							Save Layout
+						{/if}
+					</span>
 				</button>
 			</div>
 		</div>
@@ -506,7 +516,7 @@
 				<h3>Live Preview</h3>
 				<span class="item-count">{dndItems.length} items</span>
 			</div>
-			
+
 			<ul
 				class="live-grid"
 				use:dndzone={{
@@ -521,7 +531,7 @@
 				{#each dndItems as dndItem (dndItem.id)}
 					{@const item = dndItem.item}
 					{@const key = dndItem.id}
-					{@const layout = gridLayoutStore.getLayout(key)}
+					{@const layout = editorGridLayoutStore.getLayout(key)}
 					<li class="grid-item edit-mode h-full {getColSpanClass(key)}">
 						<div class="resize-controls">
 							<button
@@ -530,10 +540,20 @@
 								onclick={(e) => handleResize(key, e)}
 								title="Click to change column span (1→2→3)"
 							>
-								<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M21 12H3"/>
-									<path d="M21 6H3"/>
-									<path d="M21 18H3"/>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="12"
+									height="12"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<path d="M21 12H3" />
+									<path d="M21 6H3" />
+									<path d="M21 18H3" />
 								</svg>
 								<span class="resize-label">{layout?.colSpan ?? 1}c</span>
 							</button>
@@ -543,20 +563,26 @@
 								onclick={(e) => handleRowResize(key, e)}
 								title="Click to change row span (1→2)"
 							>
-								<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M12 3v18"/>
-									<path d="M6 3v18"/>
-									<path d="M18 3v18"/>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="12"
+									height="12"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<path d="M12 3v18" />
+									<path d="M6 3v18" />
+									<path d="M18 3v18" />
 								</svg>
 								<span class="resize-label">{layout?.rowSpan ?? 1}r</span>
 							</button>
 						</div>
-						
-						<button
-							type="button"
-							class="grid-item-content"
-							onclick={() => handleItemClick(item)}
-						>
+
+						<button type="button" class="grid-item-content" onclick={() => handleItemClick(item)}>
 							{#if item.kind === 'hero'}
 								<Hero />
 							{:else if item.kind === 'article'}
@@ -599,9 +625,8 @@
 								<LocationBlock class="h-full w-full" />
 							{:else if item.kind === 'city'}
 								<CityCard
-									src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1800&q=80"
-									alt="Houston skyline at dusk"
-									location="Houston"
+									photo="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1800&q=80"
+									description="Houston skyline at dusk"
 								/>
 							{:else if item.kind === 'design-system'}
 								<DesignSystemAd />
@@ -640,7 +665,7 @@
 								<dd>{selectedItem.article.date || 'N/A'}</dd>
 								<dt>Grid Span</dt>
 								<dd>
-									{gridLayoutStore.getLayout(getItemKey(selectedItem))?.colSpan ?? 1} col × {gridLayoutStore.getLayout(getItemKey(selectedItem))?.rowSpan ?? 1} row
+									{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
 								</dd>
 								<dt>Preview</dt>
 								<dd class="preview-text">{selectedItem.article.content.slice(0, 150)}...</dd>
@@ -661,7 +686,7 @@
 								</dd>
 								<dt>Grid Span</dt>
 								<dd>
-									{gridLayoutStore.getLayout(getItemKey(selectedItem))?.colSpan ?? 1} col × {gridLayoutStore.getLayout(getItemKey(selectedItem))?.rowSpan ?? 1} row
+									{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
 								</dd>
 								<dt>Description</dt>
 								<dd class="preview-text">{selectedItem.project.description}</dd>
@@ -672,14 +697,20 @@
 								<dd><code>{selectedItem.kind}</code></dd>
 								<dt>Grid Span</dt>
 								<dd>
-									{gridLayoutStore.getLayout(getItemKey(selectedItem))?.colSpan ?? 1} col × {gridLayoutStore.getLayout(getItemKey(selectedItem))?.rowSpan ?? 1} row
+									{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
 								</dd>
 							</dl>
 						{/if}
 					</div>
 				{:else}
 					<div class="details-empty">
-						<svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<svg
+							class="empty-icon"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+						>
 							<path d="M15 15l6 6m-11-4a7 7 0 110-14 7 7 0 010 14z" />
 						</svg>
 						<p>Click an item in the grid to view its details</p>
@@ -791,7 +822,8 @@
 		margin: 0;
 	}
 
-	.save-btn, .reset-btn {
+	.save-btn,
+	.reset-btn {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
@@ -805,8 +837,22 @@
 	}
 
 	.save-btn {
+		display: grid;
+		place-items: center;
 		background: var(--text-primary);
 		color: var(--page-bg);
+	}
+
+	.save-btn__sizer,
+	.save-btn__content {
+		grid-area: 1 / 1;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.save-btn__sizer {
+		visibility: hidden;
 	}
 
 	.save-btn:hover:not(:disabled) {
@@ -821,6 +867,7 @@
 
 	.save-btn.saved {
 		background: #10b981;
+		color: #fff;
 	}
 
 	.save-btn.error {
@@ -857,7 +904,8 @@
 			width: 100%;
 		}
 
-		.save-btn, .reset-btn {
+		.save-btn,
+		.reset-btn {
 			flex: 1;
 			justify-content: center;
 		}
@@ -923,7 +971,9 @@
 
 	.grid-item {
 		position: relative;
-		transition: transform 0.2s ease, box-shadow 0.2s ease;
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
 		border-radius: 0.625rem;
 		overflow: hidden;
 	}
@@ -981,12 +1031,12 @@
 		font-weight: 600;
 		cursor: pointer;
 		transition: all 0.15s ease;
-		box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.15);
+		box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.15);
 	}
 
 	.resize-handle:hover {
 		transform: scale(1.05);
-		box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.2);
+		box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
 	}
 
 	.resize-label {
@@ -1133,8 +1183,8 @@
 	}
 
 	.settings-card--disco {
-		background: radial-gradient(circle at top, rgba(84, 139, 255, 0.12), transparent 55%),
-			var(--surface);
+		background:
+			radial-gradient(circle at top, rgba(84, 139, 255, 0.12), transparent 55%), var(--surface);
 		border-color: color-mix(in srgb, var(--border-color) 60%, rgba(84, 139, 255, 0.2));
 	}
 

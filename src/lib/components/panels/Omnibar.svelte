@@ -24,13 +24,13 @@
 		onItemSelect?: (item: GridItem) => void;
 	}
 
-	let { 
-		open = $bindable(false), 
-		items, 
-		onclose, 
-		onArticleSelect, 
+	let {
+		open = $bindable(false),
+		items,
+		onclose,
+		onArticleSelect,
 		onProjectSelect,
-		onItemSelect 
+		onItemSelect
 	}: Props = $props();
 
 	let query = $state('');
@@ -38,7 +38,7 @@
 	let inputRef: HTMLInputElement | undefined = $state();
 	let dialogRef: HTMLDivElement | undefined = $state();
 	let resultsRef: HTMLDivElement | undefined = $state();
-	
+
 	// Generate unique IDs for ARIA
 	const listboxId = 'omnibar-listbox';
 	const getOptionId = (index: number) => `omnibar-option-${index}`;
@@ -46,7 +46,7 @@
 	// Convert grid items to searchable format
 	const searchableItems = $derived.by(() => {
 		const result: SearchableItem[] = [];
-		
+
 		for (const item of items) {
 			if (item.kind === 'article') {
 				result.push({
@@ -128,9 +128,27 @@
 
 		// Add page navigation items
 		result.push(
-			{ id: 'page-home', kind: 'hero', label: 'Go to Home', description: 'Navigate to homepage', icon: 'page' },
-			{ id: 'page-blog', kind: 'hero', label: 'Go to Blog', description: 'Browse all essays', icon: 'page' },
-			{ id: 'page-about', kind: 'hero', label: 'Go to About', description: 'Learn more about me', icon: 'page' }
+			{
+				id: 'page-home',
+				kind: 'hero',
+				label: 'Go to Home',
+				description: 'Navigate to homepage',
+				icon: 'page'
+			},
+			{
+				id: 'page-blog',
+				kind: 'hero',
+				label: 'Go to Blog',
+				description: 'Browse all essays',
+				icon: 'page'
+			},
+			{
+				id: 'page-about',
+				kind: 'hero',
+				label: 'Go to About',
+				description: 'Learn more about me',
+				icon: 'page'
+			}
 		);
 
 		return result;
@@ -140,7 +158,7 @@
 		searchableItems.filter((item: SearchableItem) => {
 			const q = query.toLowerCase();
 			if (!q) return true;
-			
+
 			return (
 				item.label.toLowerCase().includes(q) ||
 				item.description?.toLowerCase().includes(q) ||
@@ -149,24 +167,22 @@
 			);
 		})
 	);
-	
+
 	// Derived: currently highlighted item ID for aria-activedescendant
 	const activeDescendantId = $derived(
 		filteredItems.length > 0 ? getOptionId(highlightedIndex) : undefined
 	);
-	
+
 	// Live region announcement text for screen readers
 	const announcement = $derived.by(() => {
 		if (!query) return '';
 		const count = filteredItems.length;
-		return count === 0 
-			? 'No results found' 
-			: `${count} result${count === 1 ? '' : 's'} found`;
+		return count === 0 ? 'No results found' : `${count} result${count === 1 ? '' : 's'} found`;
 	});
 
 	const groupedItems = $derived.by(() => {
 		const groups: Record<string, SearchableItem[]> = {};
-		
+
 		for (const item of filteredItems) {
 			let group: string;
 			if (item.icon === 'page') {
@@ -178,18 +194,18 @@
 			} else {
 				group = 'Features';
 			}
-			
+
 			if (!groups[group]) groups[group] = [];
 			groups[group].push(item);
 		}
-		
+
 		// Order groups
 		const orderedGroups: Record<string, SearchableItem[]> = {};
 		const order = ['Navigation', 'Articles', 'Projects', 'Features'];
 		for (const key of order) {
 			if (groups[key]) orderedGroups[key] = groups[key];
 		}
-		
+
 		return orderedGroups;
 	});
 
@@ -227,7 +243,7 @@
 			onProjectSelect?.(projectId);
 		} else {
 			// For other items, scroll to them or trigger their action
-			const gridItem = items.find(i => {
+			const gridItem = items.find((i) => {
 				if (i.kind === item.kind) return true;
 				return false;
 			});
@@ -235,22 +251,18 @@
 				onItemSelect?.(gridItem);
 			}
 		}
-		
+
 		close();
 	}
 
 	async function handleKeydown(e: KeyboardEvent) {
 		// Navigation: Ctrl+j/k or Ctrl+n/p (vim/emacs style) - works while typing
 		// Also supports arrow keys as fallback
-		const isNavDown = 
-			e.key === 'ArrowDown' || 
-			(e.ctrlKey && (e.key === 'j' || e.key === 'n'));
-		const isNavUp = 
-			e.key === 'ArrowUp' || 
-			(e.ctrlKey && (e.key === 'k' || e.key === 'p'));
+		const isNavDown = e.key === 'ArrowDown' || (e.ctrlKey && (e.key === 'j' || e.key === 'n'));
+		const isNavUp = e.key === 'ArrowUp' || (e.ctrlKey && (e.key === 'k' || e.key === 'p'));
 		const isNavFirst = e.ctrlKey && e.key === 'g';
 		const isNavLast = e.ctrlKey && e.shiftKey && e.key === 'G';
-		
+
 		if (isNavDown) {
 			e.preventDefault();
 			highlightedIndex = Math.min(highlightedIndex + 1, filteredItems.length - 1);
@@ -276,13 +288,13 @@
 			await scrollHighlightedIntoView();
 		}
 	}
-	
+
 	async function scrollHighlightedIntoView() {
 		await tick();
 		const optionEl = document.getElementById(getOptionId(highlightedIndex));
 		optionEl?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 	}
-	
+
 	function handleDialogKeydown(e: KeyboardEvent) {
 		// Focus trap: prevent focus from leaving the dialog
 		if (e.key === 'Tab') {
@@ -290,10 +302,10 @@
 				'input, button, [tabindex]:not([tabindex="-1"])'
 			);
 			if (!focusableElements || focusableElements.length === 0) return;
-			
+
 			const firstElement = focusableElements[0];
 			const lastElement = focusableElements[focusableElements.length - 1];
-			
+
 			if (e.shiftKey) {
 				// Shift+Tab: if on first element, go to last
 				if (document.activeElement === firstElement) {
@@ -314,7 +326,7 @@
 		// Cmd+K on Mac, Alt+K on Windows/Linux
 		const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 		const modifier = isMac ? e.metaKey : e.altKey;
-		
+
 		if (modifier && e.key === 'k') {
 			e.preventDefault();
 			open = !open;
@@ -386,9 +398,18 @@
 	>
 		<header class="omnibar__header">
 			<div class="omnibar__search-icon" aria-hidden="true">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<circle cx="11" cy="11" r="8"/>
-					<path d="m21 21-4.3-4.3"/>
+				<svg
+					width="20"
+					height="20"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<circle cx="11" cy="11" r="8" />
+					<path d="m21 21-4.3-4.3" />
 				</svg>
 			</div>
 			<input
@@ -409,22 +430,17 @@
 				autocapitalize="off"
 				spellcheck="false"
 			/>
-			<button
-				type="button"
-				class="omnibar__close-btn"
-				onclick={close}
-				aria-label="Close search"
-			>
+			<button type="button" class="omnibar__close-btn" onclick={close} aria-label="Close search">
 				<kbd>Esc</kbd>
 			</button>
 		</header>
-		
+
 		<!-- Live region for screen reader announcements -->
 		<div class="sr-only" aria-live="polite" aria-atomic="true">
 			{announcement}
 		</div>
 
-		<div 
+		<div
 			bind:this={resultsRef}
 			class="omnibar__results"
 			id={listboxId}
@@ -440,7 +456,9 @@
 					<div class="omnibar__group" role="group" aria-labelledby="group-{group}">
 						<h3 class="omnibar__group-title" id="group-{group}">{group}</h3>
 						{#each groupItems as item (item.id)}
-							{@const globalIndex = filteredItems.findIndex((i: SearchableItem) => i.id === item.id)}
+							{@const globalIndex = filteredItems.findIndex(
+								(i: SearchableItem) => i.id === item.id
+							)}
 							<div
 								id={getOptionId(globalIndex)}
 								class="omnibar__item"
@@ -455,7 +473,7 @@
 										selectItem(item);
 									}
 								}}
-								onmouseenter={() => highlightedIndex = globalIndex}
+								onmouseenter={() => (highlightedIndex = globalIndex)}
 							>
 								<span class="omnibar__item-icon" aria-hidden="true">
 									{@html getIcon(item.icon)}
@@ -520,7 +538,7 @@
 		background: var(--page-bg);
 		border: 0.0625rem solid var(--border-color);
 		border-radius: 1rem;
-		box-shadow: 
+		box-shadow:
 			0 1.5625rem 3.75rem -0.75rem rgba(0, 0, 0, 0.35),
 			0 0 0 0.0625rem var(--border-color);
 		z-index: 201;
@@ -565,7 +583,7 @@
 		border: none;
 		cursor: pointer;
 	}
-	
+
 	.omnibar__close-btn kbd {
 		display: inline-flex;
 		align-items: center;
@@ -577,19 +595,21 @@
 		background: var(--surface);
 		border: 0.0625rem solid var(--border-color);
 		border-radius: 0.375rem;
-		transition: background 0.1s ease, border-color 0.1s ease;
+		transition:
+			background 0.1s ease,
+			border-color 0.1s ease;
 	}
-	
+
 	.omnibar__close-btn:hover kbd,
 	.omnibar__close-btn:focus-visible kbd {
 		background: var(--surface-hover);
 		border-color: var(--text-muted);
 	}
-	
+
 	.omnibar__close-btn:focus-visible {
 		outline: none;
 	}
-	
+
 	.omnibar__close-btn:focus-visible kbd {
 		outline: 0.125rem solid var(--accent-primary);
 		outline-offset: 0.125rem;
@@ -746,7 +766,7 @@
 		border: 0.0625rem solid var(--border-color);
 		border-radius: 0.25rem;
 	}
-	
+
 	/* Screen reader only class */
 	.sr-only {
 		position: absolute;
@@ -759,7 +779,7 @@
 		white-space: nowrap;
 		border: 0;
 	}
-	
+
 	/* Focus styles for keyboard navigation */
 	.omnibar__item:focus-visible {
 		outline: 0.125rem solid var(--accent-primary);

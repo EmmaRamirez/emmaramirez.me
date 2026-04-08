@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type SectionSpacing = 'none' | 'sm' | 'md' | 'lg' | 'xl';
 	type SectionBackground = 'transparent' | 'muted' | 'accent' | 'primary';
@@ -47,10 +47,6 @@
 	);
 </script>
 
-<section
-	class={combinedClasses}
-	aria-label={ariaLabel}
-	aria-labelledby={ariaLabelledby}
->
+<section class={combinedClasses} aria-label={ariaLabel} aria-labelledby={ariaLabelledby}>
 	{@render children?.()}
 </section>

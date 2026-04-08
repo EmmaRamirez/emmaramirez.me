@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	interface EmptyStateProps {
 		/** Custom class names */
@@ -14,22 +14,27 @@
 		actions?: Snippet;
 	}
 
-	let {
-		class: className = '',
-		title,
-		description,
-		icon,
-		actions
-	}: EmptyStateProps = $props();
+	let { class: className = '', title, description, icon, actions }: EmptyStateProps = $props();
 </script>
 
-<div class="flex flex-col items-center justify-center py-12 px-4 text-center {className}">
+<div class="flex flex-col items-center justify-center px-4 py-12 text-center {className}">
 	{#if icon}
 		<div class="mb-4 text-[var(--liver-brown-500)]">
 			{@render icon()}
 		</div>
 	{:else}
-		<svg class="mb-4 text-[var(--liver-brown-400)]" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+		<svg
+			class="mb-4 text-[var(--liver-brown-400)]"
+			xmlns="http://www.w3.org/2000/svg"
+			width="64"
+			height="64"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		>
 			<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
 			<polyline points="13 2 13 9 20 9"></polyline>
 			<line x1="9" y1="13" x2="15" y2="13"></line>
@@ -37,12 +42,12 @@
 		</svg>
 	{/if}
 
-	<h3 class="text-lg font-semibold text-[var(--liver-brown-800)] mb-1">
+	<h3 class="mb-1 text-lg font-semibold text-[var(--liver-brown-800)]">
 		{title}
 	</h3>
 
 	{#if description}
-		<p class="text-sm text-[var(--liver-brown-600)] max-w-sm">
+		<p class="max-w-sm text-sm text-[var(--liver-brown-600)]">
 			{description}
 		</p>
 	{/if}
@@ -53,4 +58,3 @@
 		</div>
 	{/if}
 </div>
-

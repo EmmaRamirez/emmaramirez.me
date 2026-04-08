@@ -46,7 +46,7 @@
 			{#each colors as color}
 				<button
 					type="button"
-					class="color-picker-item h-8 w-8 rounded-lg cursor-pointer"
+					class="color-picker-item h-8 w-8 cursor-pointer rounded-lg"
 					style="background-color: {color}"
 					onclick={() => handleColorChange(color, name)}
 					aria-label={`Select ${color}`}

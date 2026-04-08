@@ -27,12 +27,15 @@
 		tags = []
 	}: ArticleCardProps = $props();
 
-	const variants: Record<ArticleCardVariant, {
-		container: string;
-		title: string;
-		time: string;
-		content: string;
-	}> = {
+	const variants: Record<
+		ArticleCardVariant,
+		{
+			container: string;
+			title: string;
+			time: string;
+			content: string;
+		}
+	> = {
 		main: {
 			container: 'gap-2 p-4',
 			title: 'text-lg leading-snug font-semibold text-(--text-primary)',
@@ -66,7 +69,9 @@
 	class:article-card-active={active}
 >
 	<div class="article-card__header">
-		<span class="article-label text-xs font-semibold uppercase tracking-[0.18em] text-(--text-secondary)">
+		<span
+			class="article-label text-xs font-semibold tracking-[0.18em] text-(--text-secondary) uppercase"
+		>
 			Article
 		</span>
 		<span class="article-read-time text-xs text-(--text-muted)">{estimatedReadTime}</span>
@@ -78,7 +83,7 @@
 		</time>
 	{/if}
 	<p class={styles.content}>{content}</p>
-	
+
 	<!-- Extra info shown in roomier card layouts -->
 	<div class="article-card__footer">
 		<div class="article-card__divider"></div>
@@ -93,7 +98,13 @@
 			<span class="article-card__cta">
 				Read more
 				<svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-					<path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					<path
+						d="M6 4l4 4-4 4"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
 				</svg>
 			</span>
 		</div>
@@ -106,7 +117,9 @@
 		border: 0.0625rem solid var(--border-color);
 		background: var(--surface);
 		border-radius: 0.75rem;
-		transition: border-color 0.2s ease, box-shadow 0.2s ease;
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
 		/* Avoid size containment here: these cards live in an auto-sized grid. */
 		container-type: inline-size;
 		container-name: article;
@@ -146,7 +159,12 @@
 
 	.article-card__divider {
 		height: 1px;
-		background: linear-gradient(90deg, var(--border-color), var(--lawn-green-500), var(--border-color));
+		background: linear-gradient(
+			90deg,
+			var(--border-color),
+			var(--lawn-green-500),
+			var(--border-color)
+		);
 		margin-bottom: 0.75rem;
 		opacity: 0.6;
 	}

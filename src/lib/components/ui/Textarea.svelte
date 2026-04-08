@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type ResizeOption = 'none' | 'vertical' | 'horizontal' | 'both';
 
@@ -51,12 +51,13 @@
 		both: 'resize'
 	};
 
-	const baseTextareaClasses = "w-full px-3 py-2 rounded-lg border-2 bg-[var(--eggshell-white-500)] text-[var(--liver-brown-800)] placeholder:text-[var(--liver-brown-500)] focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
-	
+	const baseTextareaClasses =
+		'w-full px-3 py-2 rounded-lg border-2 bg-[var(--eggshell-white-500)] text-[var(--liver-brown-800)] placeholder:text-[var(--liver-brown-500)] focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+
 	const stateClasses = $derived(
 		error
-			? "border-red-500 focus:ring-red-400"
-			: "border-[var(--liver-brown-500)] focus:ring-[var(--caroline-blue-500)] focus:border-[var(--caroline-blue-600)]"
+			? 'border-red-500 focus:ring-red-400'
+			: 'border-[var(--liver-brown-500)] focus:ring-[var(--caroline-blue-500)] focus:border-[var(--caroline-blue-600)]'
 	);
 
 	const combinedTextareaClasses = $derived(
@@ -66,14 +67,11 @@
 
 <div class="flex flex-col gap-1.5">
 	{#if label}
-		<label 
-			for={inputId} 
-			class="text-sm font-medium text-[var(--liver-brown-700)]"
-		>
+		<label for={inputId} class="text-sm font-medium text-[var(--liver-brown-700)]">
 			{label}
 		</label>
 	{/if}
-	
+
 	<textarea
 		id={inputId}
 		class={combinedTextareaClasses}
@@ -84,7 +82,7 @@
 		aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
 		{...textareaProps}
 	></textarea>
-	
+
 	<div class="flex justify-between gap-2">
 		{#if error}
 			<p id="{inputId}-error" class="text-sm text-red-600" role="alert">
@@ -97,9 +95,9 @@
 		{:else}
 			<span></span>
 		{/if}
-		
+
 		{#if showCount}
-			<span class="text-sm text-[var(--liver-brown-600)] shrink-0">
+			<span class="shrink-0 text-sm text-[var(--liver-brown-600)]">
 				{charCount}{#if maxlength}/{maxlength}{/if}
 			</span>
 		{/if}

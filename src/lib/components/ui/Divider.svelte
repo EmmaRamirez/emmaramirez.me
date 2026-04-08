@@ -63,7 +63,4 @@
 	);
 </script>
 
-<hr
-	class={combinedClasses}
-	aria-orientation={orientation}
-/>
+<hr class={combinedClasses} aria-orientation={orientation} />

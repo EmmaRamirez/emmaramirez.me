@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	type TabItem = {
 		id: string;
@@ -35,7 +35,7 @@
 
 	function handleKeydown(e: KeyboardEvent, currentIndex: number) {
 		let newIndex = currentIndex;
-		
+
 		if (e.key === 'ArrowRight') {
 			newIndex = (currentIndex + 1) % tabs.length;
 		} else if (e.key === 'ArrowLeft') {
@@ -57,10 +57,7 @@
 </script>
 
 <div class={className}>
-	<div 
-		class="flex border-b-2 border-[var(--liver-brown-500)]"
-		role="tablist"
-	>
+	<div class="flex border-b-2 border-[var(--liver-brown-500)]" role="tablist">
 		{#each tabs as tab, i (tab.id)}
 			<button
 				type="button"
@@ -70,12 +67,12 @@
 				aria-controls="tabpanel-{tab.id}"
 				tabindex={activeTab === tab.id ? 0 : -1}
 				disabled={tab.disabled}
-				class="px-4 py-2.5 text-sm font-medium transition-colors relative -mb-[0.125rem]
-					{activeTab === tab.id 
-						? 'text-[var(--caroline-blue-700)] border-b-2 border-[var(--caroline-blue-700)] bg-[var(--sandy-tan-200)]' 
-						: 'text-[var(--liver-brown-600)] hover:text-[var(--liver-brown-800)] hover:bg-[var(--sandy-tan-400)] border-b-2 border-transparent'}
-					{tab.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-					focus:outline-none focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:ring-inset rounded-t-lg"
+				class="relative -mb-[0.125rem] px-4 py-2.5 text-sm font-medium transition-colors
+					{activeTab === tab.id
+					? 'border-b-2 border-[var(--caroline-blue-700)] bg-[var(--sandy-tan-200)] text-[var(--caroline-blue-700)]'
+					: 'border-b-2 border-transparent text-[var(--liver-brown-600)] hover:bg-[var(--sandy-tan-400)] hover:text-[var(--liver-brown-800)]'}
+					{tab.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
+					rounded-t-lg focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:outline-none focus:ring-inset"
 				onclick={() => !tab.disabled && selectTab(tab.id)}
 				onkeydown={(e) => handleKeydown(e, i)}
 			>
@@ -98,4 +95,3 @@
 		</div>
 	{/each}
 </div>
-

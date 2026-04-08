@@ -1,7 +1,19 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
-	type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'small' | 'lead' | 'code' | 'link';
+	type TypographyVariant =
+		| 'h1'
+		| 'h2'
+		| 'h3'
+		| 'h4'
+		| 'h5'
+		| 'h6'
+		| 'p'
+		| 'span'
+		| 'small'
+		| 'lead'
+		| 'code'
+		| 'link';
 	type TypographyWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 	type TypographyColor = 'default' | 'muted' | 'primary' | 'success' | 'warning' | 'error';
 
@@ -30,39 +42,49 @@
 	}: TypographyProps = $props();
 
 	const variantStyles: Record<TypographyVariant, string> = {
-		h1: "text-4xl font-bold tracking-tight",
-		h2: "text-3xl font-bold tracking-tight",
-		h3: "text-2xl font-semibold tracking-wide",
-		h4: "text-xl font-semibold",
-		h5: "text-lg font-medium",
-		h6: "text-base font-medium",
-		p: "text-base",
-		span: "text-base",
-		small: "text-sm",
-		lead: "text-xl text-[var(--liver-brown-600)]",
-		code: "font-mono text-sm bg-[var(--sandy-tan-400)] px-1.5 py-0.5 rounded border border-[var(--liver-brown-500)]",
-		link: "text-base underline text-[var(--caroline-blue-700)] hover:text-[var(--caroline-blue-900)] transition-colors duration-200 cursor-pointer"
+		h1: 'text-4xl font-bold tracking-tight',
+		h2: 'text-3xl font-bold tracking-tight',
+		h3: 'text-2xl font-semibold tracking-wide',
+		h4: 'text-xl font-semibold',
+		h5: 'text-lg font-medium',
+		h6: 'text-base font-medium',
+		p: 'text-base',
+		span: 'text-base',
+		small: 'text-sm',
+		lead: 'text-xl text-[var(--liver-brown-600)]',
+		code: 'font-mono text-sm bg-[var(--sandy-tan-400)] px-1.5 py-0.5 rounded border border-[var(--liver-brown-500)]',
+		link: 'text-base underline text-[var(--caroline-blue-700)] hover:text-[var(--caroline-blue-900)] transition-colors duration-200 cursor-pointer'
 	};
 
 	const weightStyles: Record<TypographyWeight, string> = {
-		normal: "font-normal",
-		medium: "font-medium",
-		semibold: "font-semibold",
-		bold: "font-bold"
+		normal: 'font-normal',
+		medium: 'font-medium',
+		semibold: 'font-semibold',
+		bold: 'font-bold'
 	};
 
 	const colorStyles: Record<TypographyColor, string> = {
-		default: "text-[var(--liver-brown-800)]",
-		muted: "text-[var(--liver-brown-600)]",
-		primary: "text-[var(--caroline-blue-700)]",
-		success: "text-[var(--lawn-green-700)]",
-		warning: "text-[var(--transit-yellow-800)]",
-		error: "text-red-600"
+		default: 'text-[var(--liver-brown-800)]',
+		muted: 'text-[var(--liver-brown-600)]',
+		primary: 'text-[var(--caroline-blue-700)]',
+		success: 'text-[var(--lawn-green-700)]',
+		warning: 'text-[var(--transit-yellow-800)]',
+		error: 'text-red-600'
 	};
 
 	const defaultElements: Record<TypographyVariant, string> = {
-		h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6',
-		p: 'p', span: 'span', small: 'small', lead: 'p', code: 'code', link: 'a'
+		h1: 'h1',
+		h2: 'h2',
+		h3: 'h3',
+		h4: 'h4',
+		h5: 'h5',
+		h6: 'h6',
+		p: 'p',
+		span: 'span',
+		small: 'small',
+		lead: 'p',
+		code: 'code',
+		link: 'a'
 	};
 
 	const element = $derived(as ?? defaultElements[variant]);
@@ -70,7 +92,7 @@
 		variant === 'link' ? (color === 'default' ? 'primary' : color) : color
 	);
 	const shouldApplyColorStyles = $derived(variant !== 'link' && variant !== 'code');
-	
+
 	const combinedClasses = $derived(
 		`${variantStyles[variant]} ${weight ? weightStyles[weight] : ''} ${shouldApplyColorStyles ? colorStyles[effectiveColor] : ''} ${className}`.trim()
 	);
@@ -97,9 +119,9 @@
 {:else if element === 'code'}
 	<code class={combinedClasses}>{@render children?.()}</code>
 {:else if element === 'a'}
-	<a 
-		class={[combinedClasses, 'style-none']} 
-		{href} 
+	<a
+		class={[combinedClasses, 'style-none']}
+		{href}
 		{target}
 		rel={target === '_blank' ? 'noopener noreferrer' : undefined}
 	>

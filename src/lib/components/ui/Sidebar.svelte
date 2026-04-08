@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	interface SidebarProps {
 		/** Custom class names */
@@ -30,7 +30,7 @@
 </script>
 
 <aside
-	class="flex flex-col h-full bg-[var(--sandy-tan-300)] border-[var(--liver-brown-500)] transition-all duration-300
+	class="flex h-full flex-col border-[var(--liver-brown-500)] bg-[var(--sandy-tan-300)] transition-all duration-300
 		{position === 'left' ? 'border-r-2' : 'border-l-2'}
 		{className}"
 	style="width: {collapsed ? '4rem' : width}"
@@ -52,4 +52,3 @@
 		</div>
 	{/if}
 </aside>
-

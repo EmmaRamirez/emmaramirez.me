@@ -77,7 +77,7 @@
 
 	async function tryEndpoint() {
 		if (!selectedEndpoint) return;
-		
+
 		isLoading = true;
 		responseData = null;
 
@@ -119,22 +119,57 @@
 		<div class="api-explorer-ad__circuit" aria-hidden="true"></div>
 		<div class="api-explorer-ad__content w-full">
 			<div class="api-explorer-ad__icon" aria-hidden="true">
-				<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<rect x="4" y="12" width="40" height="24" rx="4" stroke="currentColor" stroke-width="2.5"/>
-					<path d="M12 20h6M12 28h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-					<circle cx="36" cy="24" r="4" stroke="currentColor" stroke-width="2"/>
-					<path d="M34 22l4 4M38 22l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+				<svg
+					width="48"
+					height="48"
+					viewBox="0 0 48 48"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<rect
+						x="4"
+						y="12"
+						width="40"
+						height="24"
+						rx="4"
+						stroke="currentColor"
+						stroke-width="2.5"
+					/>
+					<path
+						d="M12 20h6M12 28h10"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+					/>
+					<circle cx="36" cy="24" r="4" stroke="currentColor" stroke-width="2" />
+					<path
+						d="M34 22l4 4M38 22l-4 4"
+						stroke="currentColor"
+						stroke-width="1.5"
+						stroke-linecap="round"
+					/>
 				</svg>
 			</div>
 			<h3>API Explorer</h3>
-			<p class="ad-body w-full">
-				Discover and test the site's internal API endpoints.
-			</p>
+			<p class="ad-body w-full">Discover and test the site's internal API endpoints.</p>
 			<span class="ad-cta">
 				<span class="ad-cta__pulse" aria-hidden="true"></span>
 				<span class="ad-cta__text">Open Explorer</span>
-				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-					<path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				<svg
+					width="16"
+					height="16"
+					viewBox="0 0 16 16"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					aria-hidden="true"
+				>
+					<path
+						d="M6 4l4 4-4 4"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
 				</svg>
 			</span>
 		</div>
@@ -149,23 +184,42 @@
 		<header class="api-explorer__header">
 			<div class="flex items-center gap-3">
 				<div class="api-explorer__logo" aria-hidden="true">
-					<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<rect width="32" height="32" rx="6" fill="var(--lawn-green-500)"/>
-						<path d="M8 12h8M8 16h12M8 20h6" stroke="var(--liver-brown-800)" stroke-width="2" stroke-linecap="round"/>
-						<circle cx="22" cy="16" r="4" stroke="var(--liver-brown-800)" stroke-width="2"/>
+					<svg
+						width="32"
+						height="32"
+						viewBox="0 0 32 32"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<rect width="32" height="32" rx="6" fill="var(--lawn-green-500)" />
+						<path
+							d="M8 12h8M8 16h12M8 20h6"
+							stroke="var(--liver-brown-800)"
+							stroke-width="2"
+							stroke-linecap="round"
+						/>
+						<circle cx="22" cy="16" r="4" stroke="var(--liver-brown-800)" stroke-width="2" />
 					</svg>
 				</div>
 				<div>
-					<h2 id="api-explorer-title" class="text-lg font-bold text-(--text-primary)">API Explorer</h2>
+					<h2 id="api-explorer-title" class="text-lg font-bold text-(--text-primary)">
+						API Explorer
+					</h2>
 					<p class="text-xs text-(--text-muted)">Test and explore endpoints</p>
 				</div>
 			</div>
-			<button
-				class="api-explorer__close"
-				onclick={onclose}
-				aria-label="Close API explorer"
-			>
-				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<button class="api-explorer__close" onclick={onclose} aria-label="Close API explorer">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="20"
+					height="20"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
 					<line x1="18" y1="6" x2="6" y2="18"></line>
 					<line x1="6" y1="6" x2="18" y2="18"></line>
 				</svg>
@@ -177,9 +231,7 @@
 				{#snippet children(tab)}
 					{#if tab === 'endpoints'}
 						<div class="api-explorer__content" in:fade={{ duration: 200, delay: 50 }}>
-							<p class="text-(--text-muted) text-sm mb-4">
-								Available API endpoints on this site.
-							</p>
+							<p class="mb-4 text-sm text-(--text-muted)">Available API endpoints on this site.</p>
 
 							<div class="endpoint-list">
 								{#each endpoints as endpoint (endpoint.path + endpoint.method)}
@@ -189,10 +241,7 @@
 										onclick={() => selectEndpoint(endpoint.path, endpoint.method as 'GET' | 'PUT')}
 									>
 										<div class="endpoint-item__header">
-											<Badge 
-												variant={endpoint.method === 'GET' ? 'success' : 'warning'} 
-												size="sm"
-											>
+											<Badge variant={endpoint.method === 'GET' ? 'success' : 'warning'} size="sm">
 												{endpoint.method}
 											</Badge>
 											<code class="endpoint-item__path">{endpoint.path}</code>
@@ -208,17 +257,14 @@
 								<div class="try-it-input">
 									<label for="endpoint-input" class="try-it-label">Endpoint</label>
 									<div class="try-it-url">
-										<Badge 
-											variant={requestMethod === 'GET' ? 'success' : 'warning'} 
-											size="sm"
-										>
+										<Badge variant={requestMethod === 'GET' ? 'success' : 'warning'} size="sm">
 											{requestMethod}
 										</Badge>
-										<input 
+										<input
 											id="endpoint-input"
-											type="text" 
-											bind:value={selectedEndpoint} 
-											placeholder="/api/..." 
+											type="text"
+											bind:value={selectedEndpoint}
+											placeholder="/api/..."
 											class="try-it-url__input"
 										/>
 									</div>
@@ -241,16 +287,16 @@
 								{#if responseData}
 									<div class="try-it-response">
 										<span class="try-it-label" aria-hidden="true">Response</span>
-										<pre class="try-it-response__code" aria-label="API Response">{responseData}</pre>
+										<pre
+											class="try-it-response__code"
+											aria-label="API Response">{responseData}</pre>
 									</div>
 								{/if}
 							</div>
 						</div>
 					{:else if tab === 'schemas'}
 						<div class="api-explorer__content" in:fade={{ duration: 200, delay: 50 }}>
-							<p class="text-(--text-muted) text-sm mb-4">
-								TypeScript schemas used by the API.
-							</p>
+							<p class="mb-4 text-sm text-(--text-muted)">TypeScript schemas used by the API.</p>
 
 							{#each Object.entries(schemas) as [name, fields] (name)}
 								<div class="schema-block">
@@ -294,8 +340,7 @@
 	.api-explorer-ad__backdrop {
 		position: absolute;
 		inset: 0;
-		background-image:
-			radial-gradient(circle at 2px 2px, var(--border-color) 1px, transparent 1px);
+		background-image: radial-gradient(circle at 2px 2px, var(--border-color) 1px, transparent 1px);
 		background-size: 24px 24px;
 		opacity: 0.3;
 		pointer-events: none;
@@ -304,8 +349,7 @@
 	.api-explorer-ad__circuit {
 		position: absolute;
 		inset: 0;
-		background: 
-			linear-gradient(90deg, transparent 0%, var(--lawn-green-500) 50%, transparent 100%);
+		background: linear-gradient(90deg, transparent 0%, var(--lawn-green-500) 50%, transparent 100%);
 		opacity: 0.06;
 		pointer-events: none;
 	}
@@ -398,7 +442,7 @@
 		background: var(--page-bg-subtle);
 		border: 0.125rem solid var(--border-color);
 		border-radius: 1rem;
-		box-shadow: 
+		box-shadow:
 			0 1.25rem 2.5rem -0.5rem rgba(0, 0, 0, 0.3),
 			0 0 0 0.0625rem var(--border-color);
 		display: flex;
@@ -442,7 +486,7 @@
 		padding: 0 1.25rem 1.25rem;
 	}
 
-	.api-explorer__tabs :global([role="tablist"]) {
+	.api-explorer__tabs :global([role='tablist']) {
 		margin-top: 0.75rem;
 	}
 
@@ -572,7 +616,9 @@
 	}
 
 	@keyframes spin {
-		to { transform: rotate(360deg); }
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	.try-it-response {
@@ -633,4 +679,3 @@
 		font-size: 0.7rem;
 	}
 </style>
-
