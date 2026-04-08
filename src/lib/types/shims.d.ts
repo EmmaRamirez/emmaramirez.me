@@ -6,4 +6,3 @@ declare module '@georgedoescode/spline' {
 declare module 'simplex-noise' {
 	export function createNoise2D(): (x: number, y: number) => number;
 }
-

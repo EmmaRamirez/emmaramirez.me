@@ -23,11 +23,11 @@ function createMockArticle(id: string): GridItem {
 	};
 }
 
-function createMockProject(id: string): GridItem {
+function createMockProject(id: import('$lib/registry/homepage').ProjectId): GridItem {
 	return {
 		kind: 'project',
 		project: {
-			id: id as 'nuzlocke-generator',
+			id,
 			title: `Project ${id}`,
 			description: 'Test description',
 			pill: 'test',
@@ -48,8 +48,8 @@ describe('getItemKey', () => {
 	it('should generate correct key for project items', async () => {
 		const { getItemKey } = await import('./gridLayoutStore.svelte');
 
-		const project = createMockProject('test-project-1');
-		expect(getItemKey(project)).toBe('project-test-project-1');
+		const project = createMockProject('nuzlocke');
+		expect(getItemKey(project)).toBe('project-nuzlocke');
 	});
 
 	it('should return kind as key for simple items', async () => {
@@ -341,15 +341,14 @@ describe('Default Layouts', () => {
 
 	it('articles and projects should be 1x1', async () => {
 		const { gridLayoutStore } = await import('./gridLayoutStore.svelte');
-		gridLayoutStore.initialize([createMockArticle('test'), createMockProject('test')]);
+		gridLayoutStore.initialize([createMockArticle('test'), createMockProject('site')]);
 
 		const articleLayout = gridLayoutStore.getLayout('article-test');
 		expect(articleLayout?.colSpan).toBe(1);
 		expect(articleLayout?.rowSpan).toBe(1);
 
-		const projectLayout = gridLayoutStore.getLayout('project-test');
+		const projectLayout = gridLayoutStore.getLayout('project-site');
 		expect(projectLayout?.colSpan).toBe(1);
 		expect(projectLayout?.rowSpan).toBe(1);
 	});
 });
-

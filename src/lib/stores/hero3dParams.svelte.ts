@@ -1,6 +1,6 @@
 /**
  * Hero 3D Parameters Store
- * 
+ *
  * Reactive state for the debug slider values controlling the 3D hero effect.
  * Uses Svelte 5 runes for reactivity.
  */
@@ -41,38 +41,38 @@ export interface Hero3DParams {
 }
 
 export const defaultHero3DParams: Hero3DParams = {
-	depthScale: 0.18,
-	revealRadius: 0.3,
-	parallaxXY: 0.2,
-	parallaxZ: 0.45,
-	splatStretch: 1.9,
-	splatCompress: 0.45,
-	depthBulge: 0.24,
-	contourOffset: 0.32,
-	blobAmplitude: 0.02,
-	noiseAmplitude: 0.028,
-	contourInfluence: 0.38,
-	edgeSoftness: 0.09,
-	saturationBoost: 1.15,
-	contrastBoost: 1.05,
-	rippleSpeed: 0.65,
-	rippleFrequency: 9.5,
-	rippleAmplitude: 0.009,
-	causticScale: 8.0,
-	causticSpeed: 0.35,
-	causticIntensity: 0.08,
-	waterDistortion: 0.00045,
-	mouseDamping: 3.2,
-	revealDamping: 2.4,
-	mouseRangeX: 2.25,
-	mouseRangeY: 1.6,
-	depthFocusNear: 0.15,
-	depthFocusFar: 0.95,
-	depthMixLow: 0.45,
-	parallaxXGain: 1.15,
-	parallaxYGain: 0.85,
-	rippleEdgeInfluence: 0.35,
-	edgeRippleStrength: 1.25
+	depthScale: 0.14,
+	revealRadius: 0.26,
+	parallaxXY: 0.17,
+	parallaxZ: 0.34,
+	splatStretch: 1.45,
+	splatCompress: 0.36,
+	depthBulge: 0.16,
+	contourOffset: 0.18,
+	blobAmplitude: 0.015,
+	noiseAmplitude: 0.018,
+	contourInfluence: 0.32,
+	edgeSoftness: 0.08,
+	saturationBoost: 1.2,
+	contrastBoost: 1.12,
+	rippleSpeed: 0.55,
+	rippleFrequency: 8.2,
+	rippleAmplitude: 0.0065,
+	causticScale: 6.4,
+	causticSpeed: 0.28,
+	causticIntensity: 0.06,
+	waterDistortion: 0.00032,
+	mouseDamping: 3.6,
+	revealDamping: 2.8,
+	mouseRangeX: 1.85,
+	mouseRangeY: 1.35,
+	depthFocusNear: 0.2,
+	depthFocusFar: 0.9,
+	depthMixLow: 0.52,
+	parallaxXGain: 1.05,
+	parallaxYGain: 0.78,
+	rippleEdgeInfluence: 0.28,
+	edgeRippleStrength: 0.95
 };
 
 let depthScale = $state(defaultHero3DParams.depthScale);
@@ -109,102 +109,230 @@ let rippleEdgeInfluence = $state(defaultHero3DParams.rippleEdgeInfluence);
 let edgeRippleStrength = $state(defaultHero3DParams.edgeRippleStrength);
 
 export const hero3dParams = {
-	get depthScale() { return depthScale; },
-	set depthScale(v: number) { depthScale = v; },
-	
-	get revealRadius() { return revealRadius; },
-	set revealRadius(v: number) { revealRadius = v; },
-	
-	get parallaxXY() { return parallaxXY; },
-	set parallaxXY(v: number) { parallaxXY = v; },
-	
-	get parallaxZ() { return parallaxZ; },
-	set parallaxZ(v: number) { parallaxZ = v; },
-	
-	get splatStretch() { return splatStretch; },
-	set splatStretch(v: number) { splatStretch = v; },
-	
-	get splatCompress() { return splatCompress; },
-	set splatCompress(v: number) { splatCompress = v; },
-	
-	get depthBulge() { return depthBulge; },
-	set depthBulge(v: number) { depthBulge = v; },
-	
-	get contourOffset() { return contourOffset; },
-	set contourOffset(v: number) { contourOffset = v; },
-	
-	get blobAmplitude() { return blobAmplitude; },
-	set blobAmplitude(v: number) { blobAmplitude = v; },
-	
-	get noiseAmplitude() { return noiseAmplitude; },
-	set noiseAmplitude(v: number) { noiseAmplitude = v; },
-	
-	get contourInfluence() { return contourInfluence; },
-	set contourInfluence(v: number) { contourInfluence = v; },
-	
-	get edgeSoftness() { return edgeSoftness; },
-	set edgeSoftness(v: number) { edgeSoftness = v; },
-	
-	get saturationBoost() { return saturationBoost; },
-	set saturationBoost(v: number) { saturationBoost = v; },
-	
-	get contrastBoost() { return contrastBoost; },
-	set contrastBoost(v: number) { contrastBoost = v; },
+	get depthScale() {
+		return depthScale;
+	},
+	set depthScale(v: number) {
+		depthScale = v;
+	},
 
-	get rippleSpeed() { return rippleSpeed; },
-	set rippleSpeed(v: number) { rippleSpeed = v; },
+	get revealRadius() {
+		return revealRadius;
+	},
+	set revealRadius(v: number) {
+		revealRadius = v;
+	},
 
-	get rippleFrequency() { return rippleFrequency; },
-	set rippleFrequency(v: number) { rippleFrequency = v; },
+	get parallaxXY() {
+		return parallaxXY;
+	},
+	set parallaxXY(v: number) {
+		parallaxXY = v;
+	},
 
-	get rippleAmplitude() { return rippleAmplitude; },
-	set rippleAmplitude(v: number) { rippleAmplitude = v; },
+	get parallaxZ() {
+		return parallaxZ;
+	},
+	set parallaxZ(v: number) {
+		parallaxZ = v;
+	},
 
-	get causticScale() { return causticScale; },
-	set causticScale(v: number) { causticScale = v; },
+	get splatStretch() {
+		return splatStretch;
+	},
+	set splatStretch(v: number) {
+		splatStretch = v;
+	},
 
-	get causticSpeed() { return causticSpeed; },
-	set causticSpeed(v: number) { causticSpeed = v; },
+	get splatCompress() {
+		return splatCompress;
+	},
+	set splatCompress(v: number) {
+		splatCompress = v;
+	},
 
-	get causticIntensity() { return causticIntensity; },
-	set causticIntensity(v: number) { causticIntensity = v; },
+	get depthBulge() {
+		return depthBulge;
+	},
+	set depthBulge(v: number) {
+		depthBulge = v;
+	},
 
-	get waterDistortion() { return waterDistortion; },
-	set waterDistortion(v: number) { waterDistortion = v; },
+	get contourOffset() {
+		return contourOffset;
+	},
+	set contourOffset(v: number) {
+		contourOffset = v;
+	},
 
-	get mouseDamping() { return mouseDamping; },
-	set mouseDamping(v: number) { mouseDamping = v; },
+	get blobAmplitude() {
+		return blobAmplitude;
+	},
+	set blobAmplitude(v: number) {
+		blobAmplitude = v;
+	},
 
-	get revealDamping() { return revealDamping; },
-	set revealDamping(v: number) { revealDamping = v; },
+	get noiseAmplitude() {
+		return noiseAmplitude;
+	},
+	set noiseAmplitude(v: number) {
+		noiseAmplitude = v;
+	},
 
-	get mouseRangeX() { return mouseRangeX; },
-	set mouseRangeX(v: number) { mouseRangeX = v; },
+	get contourInfluence() {
+		return contourInfluence;
+	},
+	set contourInfluence(v: number) {
+		contourInfluence = v;
+	},
 
-	get mouseRangeY() { return mouseRangeY; },
-	set mouseRangeY(v: number) { mouseRangeY = v; },
+	get edgeSoftness() {
+		return edgeSoftness;
+	},
+	set edgeSoftness(v: number) {
+		edgeSoftness = v;
+	},
 
-	get depthFocusNear() { return depthFocusNear; },
-	set depthFocusNear(v: number) { depthFocusNear = v; },
+	get saturationBoost() {
+		return saturationBoost;
+	},
+	set saturationBoost(v: number) {
+		saturationBoost = v;
+	},
 
-	get depthFocusFar() { return depthFocusFar; },
-	set depthFocusFar(v: number) { depthFocusFar = v; },
+	get contrastBoost() {
+		return contrastBoost;
+	},
+	set contrastBoost(v: number) {
+		contrastBoost = v;
+	},
 
-	get depthMixLow() { return depthMixLow; },
-	set depthMixLow(v: number) { depthMixLow = v; },
+	get rippleSpeed() {
+		return rippleSpeed;
+	},
+	set rippleSpeed(v: number) {
+		rippleSpeed = v;
+	},
 
-	get parallaxXGain() { return parallaxXGain; },
-	set parallaxXGain(v: number) { parallaxXGain = v; },
+	get rippleFrequency() {
+		return rippleFrequency;
+	},
+	set rippleFrequency(v: number) {
+		rippleFrequency = v;
+	},
 
-	get parallaxYGain() { return parallaxYGain; },
-	set parallaxYGain(v: number) { parallaxYGain = v; },
+	get rippleAmplitude() {
+		return rippleAmplitude;
+	},
+	set rippleAmplitude(v: number) {
+		rippleAmplitude = v;
+	},
 
-	get rippleEdgeInfluence() { return rippleEdgeInfluence; },
-	set rippleEdgeInfluence(v: number) { rippleEdgeInfluence = v; },
+	get causticScale() {
+		return causticScale;
+	},
+	set causticScale(v: number) {
+		causticScale = v;
+	},
 
-	get edgeRippleStrength() { return edgeRippleStrength; },
-	set edgeRippleStrength(v: number) { edgeRippleStrength = v; },
-	
+	get causticSpeed() {
+		return causticSpeed;
+	},
+	set causticSpeed(v: number) {
+		causticSpeed = v;
+	},
+
+	get causticIntensity() {
+		return causticIntensity;
+	},
+	set causticIntensity(v: number) {
+		causticIntensity = v;
+	},
+
+	get waterDistortion() {
+		return waterDistortion;
+	},
+	set waterDistortion(v: number) {
+		waterDistortion = v;
+	},
+
+	get mouseDamping() {
+		return mouseDamping;
+	},
+	set mouseDamping(v: number) {
+		mouseDamping = v;
+	},
+
+	get revealDamping() {
+		return revealDamping;
+	},
+	set revealDamping(v: number) {
+		revealDamping = v;
+	},
+
+	get mouseRangeX() {
+		return mouseRangeX;
+	},
+	set mouseRangeX(v: number) {
+		mouseRangeX = v;
+	},
+
+	get mouseRangeY() {
+		return mouseRangeY;
+	},
+	set mouseRangeY(v: number) {
+		mouseRangeY = v;
+	},
+
+	get depthFocusNear() {
+		return depthFocusNear;
+	},
+	set depthFocusNear(v: number) {
+		depthFocusNear = v;
+	},
+
+	get depthFocusFar() {
+		return depthFocusFar;
+	},
+	set depthFocusFar(v: number) {
+		depthFocusFar = v;
+	},
+
+	get depthMixLow() {
+		return depthMixLow;
+	},
+	set depthMixLow(v: number) {
+		depthMixLow = v;
+	},
+
+	get parallaxXGain() {
+		return parallaxXGain;
+	},
+	set parallaxXGain(v: number) {
+		parallaxXGain = v;
+	},
+
+	get parallaxYGain() {
+		return parallaxYGain;
+	},
+	set parallaxYGain(v: number) {
+		parallaxYGain = v;
+	},
+
+	get rippleEdgeInfluence() {
+		return rippleEdgeInfluence;
+	},
+	set rippleEdgeInfluence(v: number) {
+		rippleEdgeInfluence = v;
+	},
+
+	get edgeRippleStrength() {
+		return edgeRippleStrength;
+	},
+	set edgeRippleStrength(v: number) {
+		edgeRippleStrength = v;
+	},
+
 	reset() {
 		depthScale = defaultHero3DParams.depthScale;
 		revealRadius = defaultHero3DParams.revealRadius;
@@ -239,9 +367,56 @@ export const hero3dParams = {
 		rippleEdgeInfluence = defaultHero3DParams.rippleEdgeInfluence;
 		edgeRippleStrength = defaultHero3DParams.edgeRippleStrength;
 	},
-	
+
 	getDefaults(): Hero3DParams {
 		return { ...defaultHero3DParams };
 	}
 };
 
+/** Plain snapshot for merging prop overrides with live store values (reactive reads). */
+export function getHero3dParamsSnapshot(): Hero3DParams {
+	return {
+		depthScale: hero3dParams.depthScale,
+		revealRadius: hero3dParams.revealRadius,
+		parallaxXY: hero3dParams.parallaxXY,
+		parallaxZ: hero3dParams.parallaxZ,
+		splatStretch: hero3dParams.splatStretch,
+		splatCompress: hero3dParams.splatCompress,
+		depthBulge: hero3dParams.depthBulge,
+		contourOffset: hero3dParams.contourOffset,
+		blobAmplitude: hero3dParams.blobAmplitude,
+		noiseAmplitude: hero3dParams.noiseAmplitude,
+		contourInfluence: hero3dParams.contourInfluence,
+		edgeSoftness: hero3dParams.edgeSoftness,
+		saturationBoost: hero3dParams.saturationBoost,
+		contrastBoost: hero3dParams.contrastBoost,
+		rippleSpeed: hero3dParams.rippleSpeed,
+		rippleFrequency: hero3dParams.rippleFrequency,
+		rippleAmplitude: hero3dParams.rippleAmplitude,
+		causticScale: hero3dParams.causticScale,
+		causticSpeed: hero3dParams.causticSpeed,
+		causticIntensity: hero3dParams.causticIntensity,
+		waterDistortion: hero3dParams.waterDistortion,
+		mouseDamping: hero3dParams.mouseDamping,
+		revealDamping: hero3dParams.revealDamping,
+		mouseRangeX: hero3dParams.mouseRangeX,
+		mouseRangeY: hero3dParams.mouseRangeY,
+		depthFocusNear: hero3dParams.depthFocusNear,
+		depthFocusFar: hero3dParams.depthFocusFar,
+		depthMixLow: hero3dParams.depthMixLow,
+		parallaxXGain: hero3dParams.parallaxXGain,
+		parallaxYGain: hero3dParams.parallaxYGain,
+		rippleEdgeInfluence: hero3dParams.rippleEdgeInfluence,
+		edgeRippleStrength: hero3dParams.edgeRippleStrength
+	};
+}
+
+/** Apply optional Hero prop overrides on top of the current debug-store snapshot. */
+export function mergeHero3dProps(overrides: Partial<Hero3DParams>): Hero3DParams {
+	const result = { ...getHero3dParamsSnapshot() };
+	for (const k of Object.keys(result) as (keyof Hero3DParams)[]) {
+		const v = overrides[k];
+		if (v !== undefined) result[k] = v;
+	}
+	return result;
+}

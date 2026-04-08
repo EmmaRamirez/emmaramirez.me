@@ -2,7 +2,10 @@ import { browser } from '$app/environment';
 import { SvelteMap } from 'svelte/reactivity';
 import type { GridItem } from '$lib/types/homepage';
 
-const STORAGE_KEY = 'emzinnia-grid-layout';
+/**
+ * Layout persistence is namespaced per surface so the homepage grid (with api-explorer) and
+ * the /editor preview grid do not share order/layout entries in localStorage.
+ */
 
 export interface GridItemLayout {
 	key: string;
@@ -23,14 +26,14 @@ function getItemKey(item: GridItem): string {
 
 function getDefaultLayout(item: GridItem): GridItemLayout {
 	const key = getItemKey(item);
-	
+
 	if (item.kind === 'hero') return { key, colSpan: 3, rowSpan: 2 };
 	if (item.kind === 'home') return { key, colSpan: 2, rowSpan: 2 };
 	if (item.kind === 'location') return { key, colSpan: 2, rowSpan: 1 };
 	if (item.kind === 'city') return { key, colSpan: 3, rowSpan: 1 };
 	if (item.kind === 'design-system') return { key, colSpan: 2, rowSpan: 1 };
 	if (item.kind === 'api-explorer') return { key, colSpan: 1, rowSpan: 2 };
-	
+
 	return { key, colSpan: 1, rowSpan: 1 };
 }
 
@@ -40,6 +43,8 @@ class GridLayoutStore {
 	editMode = $state(false);
 	private initialized = $state(false);
 
+	constructor(private readonly storageKey: string) {}
+
 	initialize(items: GridItem[]) {
 		if (browser && !this.initialized) {
 			const saved = this.loadFromStorage();
@@ -47,7 +52,7 @@ class GridLayoutStore {
 				this.order = saved.order;
 				this.layouts = new SvelteMap(Object.entries(saved.layouts));
 				this.initialized = true;
-				
+
 				for (const item of items) {
 					const key = getItemKey(item);
 					if (!this.layouts.has(key)) {
@@ -73,7 +78,7 @@ class GridLayoutStore {
 	private loadFromStorage(): SavedLayout | null {
 		if (!browser) return null;
 		try {
-			const saved = localStorage.getItem(STORAGE_KEY);
+			const saved = localStorage.getItem(this.storageKey);
 			if (saved) {
 				return JSON.parse(saved);
 			}
@@ -90,7 +95,7 @@ class GridLayoutStore {
 				layouts: Object.fromEntries(this.layouts),
 				order: this.order
 			};
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+			localStorage.setItem(this.storageKey, JSON.stringify(data));
 			return true;
 		} catch (e) {
 			console.error('Failed to save grid layout:', e);
@@ -106,7 +111,7 @@ class GridLayoutStore {
 			this.layouts.set(layout.key, layout);
 		}
 		if (browser) {
-			localStorage.removeItem(STORAGE_KEY);
+			localStorage.removeItem(this.storageKey);
 		}
 	}
 
@@ -157,10 +162,10 @@ class GridLayoutStore {
 		for (const item of items) {
 			itemLookup[getItemKey(item)] = item;
 		}
-		
+
 		const orderedItems: T[] = [];
 		const usedKeys: Record<string, boolean> = {};
-		
+
 		for (const key of this.order) {
 			const item = itemLookup[key];
 			if (item) {
@@ -168,14 +173,14 @@ class GridLayoutStore {
 				usedKeys[key] = true;
 			}
 		}
-		
+
 		for (const item of items) {
 			const key = getItemKey(item);
 			if (!usedKeys[key]) {
 				orderedItems.push(item);
 			}
 		}
-		
+
 		return orderedItems;
 	}
 
@@ -185,9 +190,12 @@ class GridLayoutStore {
 
 	hasSavedLayout(): boolean {
 		if (!browser) return false;
-		return localStorage.getItem(STORAGE_KEY) !== null;
+		return localStorage.getItem(this.storageKey) !== null;
 	}
 }
 
-export const gridLayoutStore = new GridLayoutStore();
+/** Homepage grid (includes api-explorer); used by MainGrid and tests. */
+export const gridLayoutStore = new GridLayoutStore('emzinnia-grid-layout:homepage');
+/** Editor route grid preview; separate persistence from homepage. */
+export const editorGridLayoutStore = new GridLayoutStore('emzinnia-grid-layout:editor');
 export { getItemKey };

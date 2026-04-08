@@ -1,14 +1,14 @@
-import { writable } from "svelte/store";
-import { browser, dev } from "$app/environment";
+import { writable } from 'svelte/store';
+import { browser, dev } from '$app/environment';
 
 export const title = writable('hi, welcome to my website.');
 export const headerColor = writable('var(--caroline-blue-600)');
 
 function createShowSectionsStore() {
 	const defaultValue = browser
-		? (localStorage.getItem('debug-show-sections') === 'true') || dev
+		? localStorage.getItem('debug-show-sections') === 'true' || dev
 		: dev;
-	
+
 	const { subscribe, set } = writable<boolean>(defaultValue);
 
 	return {
@@ -25,13 +25,13 @@ function createShowSectionsStore() {
 export const showSections = createShowSectionsStore();
 
 function createThemeStore() {
-	const getSystemPreference = () => 
+	const getSystemPreference = () =>
 		window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-	
+
 	const defaultTheme = browser
-		? (localStorage.getItem('theme') as 'light' | 'dark' | null) ?? getSystemPreference()
+		? ((localStorage.getItem('theme') as 'light' | 'dark' | null) ?? getSystemPreference())
 		: 'light';
-	
+
 	const { subscribe, set, update } = writable<'light' | 'dark'>(defaultTheme);
 
 	const applyTheme = (value: 'light' | 'dark') => {
@@ -48,7 +48,7 @@ function createThemeStore() {
 			set(value);
 		},
 		toggle: () => {
-			update(current => {
+			update((current) => {
 				const next = current === 'light' ? 'dark' : 'light';
 				if (browser) {
 					localStorage.setItem('theme', next);

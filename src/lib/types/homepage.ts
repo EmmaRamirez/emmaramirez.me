@@ -21,4 +21,3 @@ export type GridItem =
 export type FeaturedItem =
 	| { kind: 'article'; article: Article }
 	| { kind: 'project'; project: ProjectRegistryEntry };
-

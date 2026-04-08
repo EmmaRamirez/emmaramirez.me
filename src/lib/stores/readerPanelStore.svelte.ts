@@ -2,7 +2,7 @@ import type { ProjectId } from '$lib/registry/homepage';
 
 /**
  * Reader Panel Store
- * 
+ *
  * Manages the state for article and project reader panels.
  * Handles mutual exclusivity (only one panel open at a time).
  */
@@ -31,18 +31,18 @@ function clearProjectCleanup() {
 
 export function openArticleReader(articleId: string) {
 	clearArticleCleanup();
-	
+
 	if (projectOpen) {
 		closeProjectReader();
 	}
-	
+
 	selectedArticleId = articleId;
 	articleOpen = true;
 }
 
 export function closeArticleReader() {
 	articleOpen = false;
-	
+
 	articleCleanupTimeout = setTimeout(() => {
 		if (!articleOpen) {
 			selectedArticleId = null;
@@ -52,18 +52,18 @@ export function closeArticleReader() {
 
 export function openProjectReader(projectId: ProjectId) {
 	clearProjectCleanup();
-	
+
 	if (articleOpen) {
 		closeArticleReader();
 	}
-	
+
 	selectedProjectId = projectId;
 	projectOpen = true;
 }
 
 export function closeProjectReader() {
 	projectOpen = false;
-	
+
 	projectCleanupTimeout = setTimeout(() => {
 		if (!projectOpen) {
 			selectedProjectId = null;
@@ -98,4 +98,3 @@ export function getSelectedProjectId() {
 export function getAnyPanelOpen() {
 	return articleOpen || projectOpen;
 }
-
