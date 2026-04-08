@@ -80,20 +80,11 @@
 		})
 	);
 
-	let isMobile = $state(false);
-
-	$effect(() => {
-		if (!browser) return;
-
-		const checkMobile = () => {
-			isMobile = window.innerWidth < 768;
-		};
-
-		checkMobile();
-		window.addEventListener('resize', checkMobile);
-		return () => window.removeEventListener('resize', checkMobile);
-	});
+	let windowWidth = $state(browser ? window.innerWidth : 0);
+	const isMobile = $derived(browser && windowWidth < 768);
 </script>
+
+<svelte:window bind:innerWidth={windowWidth} />
 
 <header class="hero-header">
 	<div class="hero-media" aria-hidden="true">

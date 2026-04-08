@@ -269,7 +269,7 @@
 			<div class="grid grid-cols-2 gap-8">
 				<div>
 					{#if prevProject}
-						<a href={`/projects/project?id=${prevProject.id}`} class="style-none group block">
+						<a href={resolve(`/projects/project?id=${prevProject.id}`)} class="style-none group block">
 							<span
 								class="mb-1 block font-sans text-xs tracking-wider text-(--text-muted) uppercase"
 							>
@@ -285,7 +285,7 @@
 				</div>
 				<div class="text-right">
 					{#if nextProject}
-						<a href={`/projects/project?id=${nextProject.id}`} class="style-none group block">
+						<a href={resolve(`/projects/project?id=${nextProject.id}`)} class="style-none group block">
 							<span
 								class="mb-1 block font-sans text-xs tracking-wider text-(--text-muted) uppercase"
 							>

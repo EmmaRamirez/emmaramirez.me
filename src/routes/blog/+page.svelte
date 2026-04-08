@@ -208,6 +208,32 @@
 		}
 	}
 
+	function getDirectionalFlatTagValue(
+		currentValue: string,
+		direction: 'previous' | 'next'
+	): string | null {
+		const values = getFlatTagNavigationValues();
+		const currentIndex = values.indexOf(currentValue);
+		if (currentIndex === -1) return null;
+
+		const nextIndex =
+			direction === 'next'
+				? Math.min(currentIndex + 1, values.length - 1)
+				: Math.max(currentIndex - 1, 0);
+
+		return nextIndex === currentIndex ? null : (values[nextIndex] ?? null);
+	}
+
+	function getDirectionalTagValue(
+		scope: TagNavigationScope,
+		currentValue: string,
+		direction: 'previous' | 'next'
+	) {
+		return scope === 'flat'
+			? getDirectionalFlatTagValue(currentValue, direction)
+			: getDirectionalWebTagValue(currentValue, direction);
+	}
+
 	async function handleTagKeydown(event: KeyboardEvent) {
 		if (event.metaKey || event.ctrlKey || event.altKey) return;
 
@@ -217,21 +243,8 @@
 		const details = getTagButtonDetails(event.target);
 		if (!details) return;
 
-		const nextValue =
-			details.scope === 'flat'
-				? (() => {
-						const values = getFlatTagNavigationValues();
-						const currentIndex = values.indexOf(details.value);
-						if (currentIndex === -1) return null;
-
-						const nextIndex =
-							key === 'j'
-								? Math.min(currentIndex + 1, values.length - 1)
-								: Math.max(currentIndex - 1, 0);
-
-						return nextIndex === currentIndex ? null : (values[nextIndex] ?? null);
-					})()
-				: getDirectionalWebTagValue(details.value, key === 'j' ? 'next' : 'previous');
+		const direction = key === 'j' ? 'next' : 'previous';
+		const nextValue = getDirectionalTagValue(details.scope, details.value, direction);
 		if (!nextValue) return;
 
 		event.preventDefault();

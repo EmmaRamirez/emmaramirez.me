@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
@@ -8,11 +9,11 @@
 
 	onMount(() => {
 		if (!dev) {
-			goto('/', { replaceState: true });
+			goto(resolve('/'), { replaceState: true });
 		}
 	});
 
-	let activeSection = $state<'grid' | 'hero' | 'settings'>('grid');
+	let activeSection = $state<'grid' | 'settings'>('grid');
 </script>
 
 {#if dev}
@@ -57,26 +58,6 @@
 				<button
 					type="button"
 					class="section-tab"
-					class:active={activeSection === 'hero'}
-					onclick={() => (activeSection = 'hero')}
-					disabled
-				>
-					<svg
-						class="h-4 w-4"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-					>
-						<rect x="2" y="4" width="20" height="16" rx="2" />
-						<path d="M2 8h20" />
-					</svg>
-					Hero
-					<span class="ml-1 text-xs opacity-50">(soon)</span>
-				</button>
-				<button
-					type="button"
-					class="section-tab"
 					class:active={activeSection === 'settings'}
 					onclick={() => (activeSection = 'settings')}
 					disabled
@@ -101,10 +82,6 @@
 			<div class="editor-content">
 				{#if activeSection === 'grid'}
 					<EditorGridSection />
-				{:else if activeSection === 'hero'}
-					<div class="coming-soon">
-						<p>Hero editor coming soon</p>
-					</div>
 				{:else if activeSection === 'settings'}
 					<div class="coming-soon">
 						<p>Settings coming soon</p>

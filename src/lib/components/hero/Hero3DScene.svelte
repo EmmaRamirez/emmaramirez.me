@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { T, useTask, useThrelte } from '@threlte/core';
+	import { T, useTask } from '@threlte/core';
 	import { useTexture } from '@threlte/extras';
 	import paintingImage from '$lib/images/photos/emma-painting.jpeg';
 	import { defaultHero3DParams } from '$lib/stores/hero3dParams.svelte';
@@ -80,17 +80,6 @@
 		rippleEdgeInfluence = defaultHero3DParams.rippleEdgeInfluence,
 		edgeRippleStrength = defaultHero3DParams.edgeRippleStrength
 	}: Props = $props();
-
-	const { renderer } = useThrelte();
-
-	$effect(() => {
-		const currentRenderer = (renderer as { current?: THREE.WebGLRenderer })?.current;
-		if (!currentRenderer) return;
-
-		currentRenderer.setClearColor(new THREE.Color('#170b17'), 0);
-		currentRenderer.toneMapping = THREE.NoToneMapping;
-		currentRenderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-	});
 
 	const textures = useTexture({
 		portrait: paintingImage
