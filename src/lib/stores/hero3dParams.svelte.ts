@@ -53,8 +53,8 @@ export const defaultHero3DParams: Hero3DParams = {
 	noiseAmplitude: 0.018,
 	contourInfluence: 0.32,
 	edgeSoftness: 0.08,
-	saturationBoost: 1.2,
-	contrastBoost: 1.12,
+	saturationBoost: 1.08,
+	contrastBoost: 1.04,
 	rippleSpeed: 0.55,
 	rippleFrequency: 8.2,
 	rippleAmplitude: 0.0065,
@@ -419,4 +419,13 @@ export function mergeHero3dProps(overrides: Partial<Hero3DParams>): Hero3DParams
 		if (v !== undefined) result[k] = v;
 	}
 	return result;
+}
+
+export function setHero3dParams(next: Partial<Hero3DParams>) {
+	for (const key of Object.keys(defaultHero3DParams) as (keyof Hero3DParams)[]) {
+		const value = next[key];
+		if (value !== undefined) {
+			hero3dParams[key] = value;
+		}
+	}
 }

@@ -10,13 +10,13 @@
 
 	let { class: className = '', sceneParams }: Props = $props();
 
-	let containerElement: HTMLDivElement;
 	let mouseX = $state(0.5);
 	let mouseY = $state(0.5);
 	let isHovering = $state(false);
 
 	function handleMouseMove(event: MouseEvent) {
-		if (!containerElement) return;
+		const containerElement = event.currentTarget;
+		if (!(containerElement instanceof HTMLDivElement)) return;
 		const rect = containerElement.getBoundingClientRect();
 		mouseX = (event.clientX - rect.left) / rect.width;
 		mouseY = 1 - (event.clientY - rect.top) / rect.height; // Flip Y for WebGL
@@ -33,14 +33,14 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-	bind:this={containerElement}
 	class="hero-3d-container {className}"
+	role="presentation"
 	onmousemove={handleMouseMove}
 	onmouseenter={handleMouseEnter}
 	onmouseleave={handleMouseLeave}
 >
 	<Canvas toneMapping={0} colorManagementEnabled={false} renderMode="always">
-		<Hero3DScene {mouseX} {mouseY} {isHovering} {...sceneParams} />
+		<Hero3DScene {mouseX} {mouseY} {isHovering} {sceneParams} />
 	</Canvas>
 </div>
 

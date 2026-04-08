@@ -5,9 +5,21 @@
 	import { getDisco, type DiscoRegistryEntry } from '$lib/registry/homepage';
 	import { buildHomepageGridItems } from '$lib/registry/gridItems';
 	import { discoParams, type DiscoParams } from '$lib/stores/discoParams.svelte';
-	import { editorGridLayoutStore, getItemKey } from '$lib/stores/gridLayoutStore.svelte';
+	import {
+		editorGridLayoutStore,
+		getGridItemSpanClasses,
+		getItemKey
+	} from '$lib/stores/gridLayoutStore.svelte';
 	import { showSections } from '$lib/stores';
-	import { hero3dParams } from '$lib/stores/hero3dParams.svelte';
+	import {
+		getHero3dParamsSnapshot,
+		setHero3dParams,
+		type Hero3DParams
+	} from '$lib/stores/hero3dParams.svelte';
+	import {
+		topLanguagesSettings,
+		topLanguagesVariantOptions
+	} from '$lib/stores/topLanguages.svelte';
 	import { pokemonTeam } from '$lib/website.config';
 	import { onMount } from 'svelte';
 
@@ -21,6 +33,12 @@
 		DesignSystemAd,
 		CityCard
 	} from '$lib/components/blocks';
+	import EditorGridLegend from '$lib/components/editor/EditorGridLegend.svelte';
+	import {
+		getEditorGridItemColor,
+		getEditorGridItemIcon,
+		getEditorGridItemLabel
+	} from '$lib/components/editor/editorGridMeta';
 	import { Hero } from '$lib/components/hero';
 	import { Select, Switch } from '$lib/components/ui';
 
@@ -44,6 +62,7 @@
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
+	let topLanguagesVariant = $state(topLanguagesSettings.variant);
 	let hasLoadedSettings = $state(false);
 	let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -92,101 +111,7 @@
 
 	function getColSpanClass(key: string): string {
 		const layout = editorGridLayoutStore.getLayout(key);
-		if (!layout) return '';
-
-		const colClasses = {
-			1: '',
-			2: 'md:col-span-2',
-			3: 'md:col-span-2 lg:col-span-3'
-		};
-
-		const rowClasses = {
-			1: '',
-			2: 'row-span-2'
-		};
-
-		return `${colClasses[layout.colSpan]} ${rowClasses[layout.rowSpan]}`.trim();
-	}
-
-	function getItemLabel(item: GridItem): string {
-		switch (item.kind) {
-			case 'article':
-				return item.article.title;
-			case 'project':
-				return item.project.title;
-			case 'hero':
-				return 'Hero Section';
-			case 'disco':
-				return 'Disco Block';
-			case 'home':
-				return 'Home Block';
-			case 'location':
-				return 'Location Block';
-			case 'pokemon':
-				return 'Pokemon Block';
-			case 'top-languages':
-				return 'Top Languages';
-			case 'city':
-				return 'City Card';
-			case 'design-system':
-				return 'Design System Ad';
-			default:
-				return 'Unknown';
-		}
-	}
-
-	function getItemIcon(item: GridItem): string {
-		switch (item.kind) {
-			case 'article':
-				return '📝';
-			case 'project':
-				return '🚀';
-			case 'hero':
-				return '👋';
-			case 'disco':
-				return '🪩';
-			case 'home':
-				return '🏠';
-			case 'location':
-				return '📍';
-			case 'pokemon':
-				return '⚡';
-			case 'top-languages':
-				return '📊';
-			case 'city':
-				return '🏙️';
-			case 'design-system':
-				return '🎨';
-			default:
-				return '❓';
-		}
-	}
-
-	function getItemColor(item: GridItem): string {
-		switch (item.kind) {
-			case 'article':
-				return 'var(--color-blue-500, #3b82f6)';
-			case 'project':
-				return 'var(--color-purple-500, #a855f7)';
-			case 'hero':
-				return 'var(--color-sky-500, #0ea5e9)';
-			case 'disco':
-				return 'var(--color-pink-500, #ec4899)';
-			case 'home':
-				return 'var(--color-emerald-500, #10b981)';
-			case 'location':
-				return 'var(--color-teal-500, #14b8a6)';
-			case 'pokemon':
-				return 'var(--color-yellow-500, #eab308)';
-			case 'top-languages':
-				return 'var(--color-orange-500, #f97316)';
-			case 'city':
-				return 'var(--color-cyan-500, #06b6d4)';
-			case 'design-system':
-				return 'var(--color-rose-500, #f43f5e)';
-			default:
-				return 'var(--text-muted)';
-		}
+		return getGridItemSpanClasses(layout);
 	}
 
 	function handleItemClick(item: GridItem) {
@@ -252,40 +177,7 @@
 		return {
 			headerBlendMode,
 			showSectionsEnabled,
-			hero3dParams: {
-				depthScale: hero3dParams.depthScale,
-				revealRadius: hero3dParams.revealRadius,
-				parallaxXY: hero3dParams.parallaxXY,
-				parallaxZ: hero3dParams.parallaxZ,
-				splatStretch: hero3dParams.splatStretch,
-				splatCompress: hero3dParams.splatCompress,
-				depthBulge: hero3dParams.depthBulge,
-				contourOffset: hero3dParams.contourOffset,
-				blobAmplitude: hero3dParams.blobAmplitude,
-				noiseAmplitude: hero3dParams.noiseAmplitude,
-				contourInfluence: hero3dParams.contourInfluence,
-				edgeSoftness: hero3dParams.edgeSoftness,
-				saturationBoost: hero3dParams.saturationBoost,
-				contrastBoost: hero3dParams.contrastBoost,
-				rippleSpeed: hero3dParams.rippleSpeed,
-				rippleFrequency: hero3dParams.rippleFrequency,
-				rippleAmplitude: hero3dParams.rippleAmplitude,
-				causticScale: hero3dParams.causticScale,
-				causticSpeed: hero3dParams.causticSpeed,
-				causticIntensity: hero3dParams.causticIntensity,
-				waterDistortion: hero3dParams.waterDistortion,
-				mouseDamping: hero3dParams.mouseDamping,
-				revealDamping: hero3dParams.revealDamping,
-				mouseRangeX: hero3dParams.mouseRangeX,
-				mouseRangeY: hero3dParams.mouseRangeY,
-				depthFocusNear: hero3dParams.depthFocusNear,
-				depthFocusFar: hero3dParams.depthFocusFar,
-				depthMixLow: hero3dParams.depthMixLow,
-				parallaxXGain: hero3dParams.parallaxXGain,
-				parallaxYGain: hero3dParams.parallaxYGain,
-				rippleEdgeInfluence: hero3dParams.rippleEdgeInfluence,
-				edgeRippleStrength: hero3dParams.edgeRippleStrength
-			},
+			hero3dParams: getHero3dParamsSnapshot(),
 			discoParams: {
 				sampleHistorySize: discoParams.sampleHistorySize,
 				minBeams: discoParams.minBeams,
@@ -309,12 +201,6 @@
 		});
 	}
 
-	function scheduleSave() {
-		if (!browser || !hasLoadedSettings) return;
-		if (saveTimeout) clearTimeout(saveTimeout);
-		saveTimeout = setTimeout(saveSettings, 500);
-	}
-
 	onMount(async () => {
 		if (!browser) return;
 		const response = await fetch('/api/debug-settings');
@@ -327,40 +213,7 @@
 			settings: {
 				headerBlendMode: string;
 				showSectionsEnabled: boolean;
-				hero3dParams: {
-					depthScale: number;
-					revealRadius: number;
-					parallaxXY: number;
-					parallaxZ: number;
-					splatStretch: number;
-					splatCompress: number;
-					depthBulge: number;
-					contourOffset: number;
-					blobAmplitude: number;
-					noiseAmplitude: number;
-					contourInfluence: number;
-					edgeSoftness: number;
-					saturationBoost: number;
-					contrastBoost: number;
-					rippleSpeed: number;
-					rippleFrequency: number;
-					rippleAmplitude: number;
-					causticScale: number;
-					causticSpeed: number;
-					causticIntensity: number;
-					waterDistortion: number;
-					mouseDamping: number;
-					revealDamping: number;
-					mouseRangeX: number;
-					mouseRangeY: number;
-					depthFocusNear: number;
-					depthFocusFar: number;
-					depthMixLow: number;
-					parallaxXGain: number;
-					parallaxYGain: number;
-					rippleEdgeInfluence: number;
-					edgeRippleStrength: number;
-				};
+				hero3dParams: Hero3DParams;
 				discoParams?: DiscoParams;
 			} | null;
 		};
@@ -371,40 +224,7 @@
 
 			const hero = settings.hero3dParams;
 			if (hero) {
-				hero3dParams.depthScale = hero.depthScale ?? hero3dParams.depthScale;
-				hero3dParams.revealRadius = hero.revealRadius ?? hero3dParams.revealRadius;
-				hero3dParams.parallaxXY = hero.parallaxXY ?? hero3dParams.parallaxXY;
-				hero3dParams.parallaxZ = hero.parallaxZ ?? hero3dParams.parallaxZ;
-				hero3dParams.splatStretch = hero.splatStretch ?? hero3dParams.splatStretch;
-				hero3dParams.splatCompress = hero.splatCompress ?? hero3dParams.splatCompress;
-				hero3dParams.depthBulge = hero.depthBulge ?? hero3dParams.depthBulge;
-				hero3dParams.contourOffset = hero.contourOffset ?? hero3dParams.contourOffset;
-				hero3dParams.blobAmplitude = hero.blobAmplitude ?? hero3dParams.blobAmplitude;
-				hero3dParams.noiseAmplitude = hero.noiseAmplitude ?? hero3dParams.noiseAmplitude;
-				hero3dParams.contourInfluence = hero.contourInfluence ?? hero3dParams.contourInfluence;
-				hero3dParams.edgeSoftness = hero.edgeSoftness ?? hero3dParams.edgeSoftness;
-				hero3dParams.saturationBoost = hero.saturationBoost ?? hero3dParams.saturationBoost;
-				hero3dParams.contrastBoost = hero.contrastBoost ?? hero3dParams.contrastBoost;
-				hero3dParams.rippleSpeed = hero.rippleSpeed ?? hero3dParams.rippleSpeed;
-				hero3dParams.rippleFrequency = hero.rippleFrequency ?? hero3dParams.rippleFrequency;
-				hero3dParams.rippleAmplitude = hero.rippleAmplitude ?? hero3dParams.rippleAmplitude;
-				hero3dParams.causticScale = hero.causticScale ?? hero3dParams.causticScale;
-				hero3dParams.causticSpeed = hero.causticSpeed ?? hero3dParams.causticSpeed;
-				hero3dParams.causticIntensity = hero.causticIntensity ?? hero3dParams.causticIntensity;
-				hero3dParams.waterDistortion = hero.waterDistortion ?? hero3dParams.waterDistortion;
-				hero3dParams.mouseDamping = hero.mouseDamping ?? hero3dParams.mouseDamping;
-				hero3dParams.revealDamping = hero.revealDamping ?? hero3dParams.revealDamping;
-				hero3dParams.mouseRangeX = hero.mouseRangeX ?? hero3dParams.mouseRangeX;
-				hero3dParams.mouseRangeY = hero.mouseRangeY ?? hero3dParams.mouseRangeY;
-				hero3dParams.depthFocusNear = hero.depthFocusNear ?? hero3dParams.depthFocusNear;
-				hero3dParams.depthFocusFar = hero.depthFocusFar ?? hero3dParams.depthFocusFar;
-				hero3dParams.depthMixLow = hero.depthMixLow ?? hero3dParams.depthMixLow;
-				hero3dParams.parallaxXGain = hero.parallaxXGain ?? hero3dParams.parallaxXGain;
-				hero3dParams.parallaxYGain = hero.parallaxYGain ?? hero3dParams.parallaxYGain;
-				hero3dParams.rippleEdgeInfluence =
-					hero.rippleEdgeInfluence ?? hero3dParams.rippleEdgeInfluence;
-				hero3dParams.edgeRippleStrength =
-					hero.edgeRippleStrength ?? hero3dParams.edgeRippleStrength;
+				setHero3dParams(hero);
 			}
 
 			const disco = settings.discoParams;
@@ -427,7 +247,13 @@
 	$effect(() => {
 		void headerBlendMode;
 		void showSectionsEnabled;
-		scheduleSave();
+		if (!browser || !hasLoadedSettings) return;
+		if (saveTimeout) clearTimeout(saveTimeout);
+		saveTimeout = setTimeout(saveSettings, 500);
+	});
+
+	$effect(() => {
+		topLanguagesSettings.variant = topLanguagesVariant;
 	});
 
 	const flipDurationMs = 200;
@@ -647,11 +473,11 @@
 			<div class="details-panel">
 				{#if selectedItem}
 					<div class="details-header">
-						<span class="details-icon" style="background: {getItemColor(selectedItem)}">
-							{getItemIcon(selectedItem)}
+						<span class="details-icon" style="background: {getEditorGridItemColor(selectedItem)}">
+							{getEditorGridItemIcon(selectedItem)}
 						</span>
 						<div>
-							<h3 class="details-title">{getItemLabel(selectedItem)}</h3>
+							<h3 class="details-title">{getEditorGridItemLabel(selectedItem)}</h3>
 							<span class="details-kind">{selectedItem.kind}</span>
 						</div>
 					</div>
@@ -660,7 +486,7 @@
 						{#if selectedItem.kind === 'article'}
 							<dl class="details-list">
 								<dt>ID</dt>
-								<dd><code>{selectedItem.article.id}</code></dd>
+								<dd><code>{selectedItem.article.slug}</code></dd>
 								<dt>Date</dt>
 								<dd>{selectedItem.article.date || 'N/A'}</dd>
 								<dt>Grid Span</dt>
@@ -691,6 +517,42 @@
 								<dt>Description</dt>
 								<dd class="preview-text">{selectedItem.project.description}</dd>
 							</dl>
+						{:else if selectedItem.kind === 'hero'}
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+								</dl>
+
+								<Select
+									label="Blend Mode"
+									bind:value={headerBlendMode}
+									options={blendModeOptions}
+									hint="Adjust the header image blend mode for the hero card."
+								/>
+							</div>
+						{:else if selectedItem.kind === 'top-languages'}
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+								</dl>
+
+								<Select
+									label="Display Style"
+									bind:value={topLanguagesVariant}
+									options={topLanguagesVariantOptions}
+									hint="Switch between the researched display treatments for this card."
+								/>
+							</div>
 						{:else}
 							<dl class="details-list">
 								<dt>Type</dt>
@@ -722,17 +584,11 @@
 				<div class="settings-card">
 					<div class="settings-card__header">
 						<div>
-							<p class="settings-title">Header Settings</p>
-							<p class="settings-subtitle">Match the homepage controls</p>
+							<p class="settings-title">Grid Settings</p>
+							<p class="settings-subtitle">Visibility and structure for the homepage grid</p>
 						</div>
 						<span class="settings-pill">Live</span>
 					</div>
-
-					<Select
-						label="Header Blend Mode"
-						bind:value={headerBlendMode}
-						options={blendModeOptions}
-					/>
 
 					<Switch
 						label="Show Essays & Projects"
@@ -763,27 +619,7 @@
 		</div>
 	</div>
 
-	<div class="legend">
-		<h4>Legend</h4>
-		<div class="legend-items">
-			<div class="legend-item">
-				<span class="legend-color" style="background: var(--color-sky-500, #0ea5e9)"></span>
-				<span>Hero</span>
-			</div>
-			<div class="legend-item">
-				<span class="legend-color" style="background: var(--color-blue-500, #3b82f6)"></span>
-				<span>Articles</span>
-			</div>
-			<div class="legend-item">
-				<span class="legend-color" style="background: var(--color-purple-500, #a855f7)"></span>
-				<span>Projects</span>
-			</div>
-			<div class="legend-item">
-				<span class="legend-color" style="background: var(--color-emerald-500, #10b981)"></span>
-				<span>Special Blocks</span>
-			</div>
-		</div>
-	</div>
+	<EditorGridLegend />
 </div>
 
 <style>
@@ -889,6 +725,7 @@
 		display: grid;
 		grid-template-columns: 1fr 20rem;
 		gap: 1.5rem;
+		align-items: start;
 	}
 
 	@media (max-width: 56.25rem) {
@@ -908,6 +745,14 @@
 		.reset-btn {
 			flex: 1;
 			justify-content: center;
+		}
+
+		.side-panel {
+			position: static;
+			top: auto;
+			max-height: none;
+			overflow: visible;
+			padding-right: 0;
 		}
 	}
 
@@ -1058,6 +903,12 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		position: sticky;
+		top: 6rem;
+		align-self: start;
+		max-height: calc(100vh - 7rem);
+		overflow-y: auto;
+		padding-right: 0.25rem;
 	}
 
 	.details-panel {
@@ -1102,6 +953,11 @@
 
 	.details-content {
 		font-size: 0.875rem;
+	}
+
+	.details-stack {
+		display: grid;
+		gap: 1rem;
 	}
 
 	.details-list {
@@ -1273,42 +1129,6 @@
 	.details-empty p {
 		margin: 0;
 		max-width: 12.5rem;
-	}
-
-	.legend {
-		background: var(--surface);
-		border: 0.0625rem solid var(--border-color);
-		border-radius: 0.75rem;
-		padding: 1rem 1.25rem;
-	}
-
-	.legend h4 {
-		font-size: 0.75rem;
-		font-weight: 600;
-		color: var(--text-muted);
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		margin: 0 0 0.75rem 0;
-	}
-
-	.legend-items {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1.5rem;
-	}
-
-	.legend-item {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		font-size: 0.8125rem;
-		color: var(--text-secondary);
-	}
-
-	.legend-color {
-		width: 0.75rem;
-		height: 0.75rem;
-		border-radius: 0.25rem;
 	}
 
 	:global([data-dnd-dragged]) {

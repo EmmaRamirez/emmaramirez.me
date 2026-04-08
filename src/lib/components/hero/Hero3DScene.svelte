@@ -1,85 +1,22 @@
 <script lang="ts">
 	import { T, useTask } from '@threlte/core';
 	import { useTexture } from '@threlte/extras';
-	import paintingImage from '$lib/images/photos/emma-painting.jpeg';
-	import { defaultHero3DParams } from '$lib/stores/hero3dParams.svelte';
+	import paintingImage from '$lib/images/photos/emma-painting-full-day.png';
+	import {
+		defaultHero3DParams,
+		type Hero3DParams
+	} from '$lib/stores/hero3dParams.svelte';
 	import * as THREE from 'three';
 
 	interface Props {
 		mouseX?: number;
 		mouseY?: number;
 		isHovering?: boolean;
-		depthScale?: number;
-		revealRadius?: number;
-		parallaxXY?: number;
-		parallaxZ?: number;
-		splatStretch?: number;
-		splatCompress?: number;
-		depthBulge?: number;
-		contourOffset?: number;
-		blobAmplitude?: number;
-		noiseAmplitude?: number;
-		contourInfluence?: number;
-		edgeSoftness?: number;
-		saturationBoost?: number;
-		contrastBoost?: number;
-		rippleSpeed?: number;
-		rippleFrequency?: number;
-		rippleAmplitude?: number;
-		causticScale?: number;
-		causticSpeed?: number;
-		causticIntensity?: number;
-		waterDistortion?: number;
-		mouseDamping?: number;
-		revealDamping?: number;
-		mouseRangeX?: number;
-		mouseRangeY?: number;
-		depthFocusNear?: number;
-		depthFocusFar?: number;
-		depthMixLow?: number;
-		parallaxXGain?: number;
-		parallaxYGain?: number;
-		rippleEdgeInfluence?: number;
-		edgeRippleStrength?: number;
+		sceneParams?: Hero3DParams;
 	}
 
-	let {
-		mouseX = 0.5,
-		mouseY = 0.5,
-		isHovering = false,
-		depthScale = defaultHero3DParams.depthScale,
-		revealRadius = defaultHero3DParams.revealRadius,
-		parallaxXY = defaultHero3DParams.parallaxXY,
-		parallaxZ = defaultHero3DParams.parallaxZ,
-		splatStretch = defaultHero3DParams.splatStretch,
-		splatCompress = defaultHero3DParams.splatCompress,
-		depthBulge = defaultHero3DParams.depthBulge,
-		contourOffset = defaultHero3DParams.contourOffset,
-		blobAmplitude = defaultHero3DParams.blobAmplitude,
-		noiseAmplitude = defaultHero3DParams.noiseAmplitude,
-		contourInfluence = defaultHero3DParams.contourInfluence,
-		edgeSoftness = defaultHero3DParams.edgeSoftness,
-		saturationBoost = defaultHero3DParams.saturationBoost,
-		contrastBoost = defaultHero3DParams.contrastBoost,
-		rippleSpeed = defaultHero3DParams.rippleSpeed,
-		rippleFrequency = defaultHero3DParams.rippleFrequency,
-		rippleAmplitude = defaultHero3DParams.rippleAmplitude,
-		causticScale = defaultHero3DParams.causticScale,
-		causticSpeed = defaultHero3DParams.causticSpeed,
-		causticIntensity = defaultHero3DParams.causticIntensity,
-		waterDistortion = defaultHero3DParams.waterDistortion,
-		mouseDamping = defaultHero3DParams.mouseDamping,
-		revealDamping = defaultHero3DParams.revealDamping,
-		mouseRangeX = defaultHero3DParams.mouseRangeX,
-		mouseRangeY = defaultHero3DParams.mouseRangeY,
-		depthFocusNear = defaultHero3DParams.depthFocusNear,
-		depthFocusFar = defaultHero3DParams.depthFocusFar,
-		depthMixLow = defaultHero3DParams.depthMixLow,
-		parallaxXGain = defaultHero3DParams.parallaxXGain,
-		parallaxYGain = defaultHero3DParams.parallaxYGain,
-		rippleEdgeInfluence = defaultHero3DParams.rippleEdgeInfluence,
-		edgeRippleStrength = defaultHero3DParams.edgeRippleStrength
-	}: Props = $props();
+	let { mouseX = 0.5, mouseY = 0.5, isHovering = false, sceneParams = defaultHero3DParams }: Props =
+		$props();
 
 	const textures = useTexture({
 		portrait: paintingImage
@@ -131,41 +68,38 @@
 		refs.targetMouse.x = mouseX;
 		refs.targetMouse.y = mouseY;
 		refs.isHovering = isHovering;
-	});
-
-	$effect(() => {
-		refs.depthScale = depthScale;
-		refs.revealRadius = revealRadius;
-		refs.parallaxXY = parallaxXY;
-		refs.parallaxZ = parallaxZ;
-		refs.splatStretch = splatStretch;
-		refs.splatCompress = splatCompress;
-		refs.depthBulge = depthBulge;
-		refs.contourOffset = contourOffset;
-		refs.blobAmplitude = blobAmplitude;
-		refs.noiseAmplitude = noiseAmplitude;
-		refs.contourInfluence = contourInfluence;
-		refs.edgeSoftness = edgeSoftness;
-		refs.saturationBoost = saturationBoost;
-		refs.contrastBoost = contrastBoost;
-		refs.rippleSpeed = rippleSpeed;
-		refs.rippleFrequency = rippleFrequency;
-		refs.rippleAmplitude = rippleAmplitude;
-		refs.causticScale = causticScale;
-		refs.causticSpeed = causticSpeed;
-		refs.causticIntensity = causticIntensity;
-		refs.waterDistortion = waterDistortion;
-		refs.mouseDamping = mouseDamping;
-		refs.revealDamping = revealDamping;
-		refs.mouseRangeX = mouseRangeX;
-		refs.mouseRangeY = mouseRangeY;
-		refs.depthFocusNear = depthFocusNear;
-		refs.depthFocusFar = depthFocusFar;
-		refs.depthMixLow = depthMixLow;
-		refs.parallaxXGain = parallaxXGain;
-		refs.parallaxYGain = parallaxYGain;
-		refs.rippleEdgeInfluence = rippleEdgeInfluence;
-		refs.edgeRippleStrength = edgeRippleStrength;
+		refs.depthScale = sceneParams.depthScale;
+		refs.revealRadius = sceneParams.revealRadius;
+		refs.parallaxXY = sceneParams.parallaxXY;
+		refs.parallaxZ = sceneParams.parallaxZ;
+		refs.splatStretch = sceneParams.splatStretch;
+		refs.splatCompress = sceneParams.splatCompress;
+		refs.depthBulge = sceneParams.depthBulge;
+		refs.contourOffset = sceneParams.contourOffset;
+		refs.blobAmplitude = sceneParams.blobAmplitude;
+		refs.noiseAmplitude = sceneParams.noiseAmplitude;
+		refs.contourInfluence = sceneParams.contourInfluence;
+		refs.edgeSoftness = sceneParams.edgeSoftness;
+		refs.saturationBoost = sceneParams.saturationBoost;
+		refs.contrastBoost = sceneParams.contrastBoost;
+		refs.rippleSpeed = sceneParams.rippleSpeed;
+		refs.rippleFrequency = sceneParams.rippleFrequency;
+		refs.rippleAmplitude = sceneParams.rippleAmplitude;
+		refs.causticScale = sceneParams.causticScale;
+		refs.causticSpeed = sceneParams.causticSpeed;
+		refs.causticIntensity = sceneParams.causticIntensity;
+		refs.waterDistortion = sceneParams.waterDistortion;
+		refs.mouseDamping = sceneParams.mouseDamping;
+		refs.revealDamping = sceneParams.revealDamping;
+		refs.mouseRangeX = sceneParams.mouseRangeX;
+		refs.mouseRangeY = sceneParams.mouseRangeY;
+		refs.depthFocusNear = sceneParams.depthFocusNear;
+		refs.depthFocusFar = sceneParams.depthFocusFar;
+		refs.depthMixLow = sceneParams.depthMixLow;
+		refs.parallaxXGain = sceneParams.parallaxXGain;
+		refs.parallaxYGain = sceneParams.parallaxYGain;
+		refs.rippleEdgeInfluence = sceneParams.rippleEdgeInfluence;
+		refs.edgeRippleStrength = sceneParams.edgeRippleStrength;
 	});
 
 	useTask((delta) => {
@@ -219,10 +153,11 @@
 		shaderMaterialRef.uniforms.uEdgeRippleStrength.value = refs.edgeRippleStrength;
 	});
 
-	const imageAspect = 359 / 388;
+	const imageAspect = 1;
 	const containerAspect = 1.78;
 	const vScale = imageAspect / containerAspect;
-	const vOffset = (1 - vScale) * 0.36;
+	const focusY = 0.52;
+	const vOffset = focusY - vScale / 2;
 
 	function createShaderMaterial(textures: { portrait: THREE.Texture }): THREE.ShaderMaterial {
 		textures.portrait.colorSpace = THREE.SRGBColorSpace;
@@ -235,35 +170,39 @@
 				uMouse: { value: new THREE.Vector2(0.5, 0.5) },
 				uProgress: { value: 0 },
 				uTime: { value: 0 },
-				uDepthScale: { value: depthScale },
-				uRevealRadius: { value: revealRadius },
-				uParallaxXY: { value: parallaxXY },
-				uParallaxZ: { value: parallaxZ },
-				uSplatStretch: { value: splatStretch },
-				uSplatCompress: { value: splatCompress },
-				uDepthBulge: { value: depthBulge },
-				uContourOffset: { value: contourOffset },
-				uBlobAmplitude: { value: blobAmplitude },
-				uNoiseAmplitude: { value: noiseAmplitude },
-				uContourInfluence: { value: contourInfluence },
-				uEdgeSoftness: { value: edgeSoftness },
-				uSaturationBoost: { value: saturationBoost },
-				uContrastBoost: { value: contrastBoost },
+				uDepthScale: { value: sceneParams.depthScale },
+				uRevealRadius: { value: sceneParams.revealRadius },
+				uParallaxXY: { value: sceneParams.parallaxXY },
+				uParallaxZ: { value: sceneParams.parallaxZ },
+				uSplatStretch: { value: sceneParams.splatStretch },
+				uSplatCompress: { value: sceneParams.splatCompress },
+				uDepthBulge: { value: sceneParams.depthBulge },
+				uContourOffset: { value: sceneParams.contourOffset },
+				uBlobAmplitude: { value: sceneParams.blobAmplitude },
+				uNoiseAmplitude: { value: sceneParams.noiseAmplitude },
+				uContourInfluence: { value: sceneParams.contourInfluence },
+				uEdgeSoftness: { value: sceneParams.edgeSoftness },
+				uSaturationBoost: { value: sceneParams.saturationBoost },
+				uContrastBoost: { value: sceneParams.contrastBoost },
 				uVScale: { value: vScale },
 				uVOffset: { value: vOffset },
-				uRippleSpeed: { value: rippleSpeed },
-				uRippleFrequency: { value: rippleFrequency },
-				uRippleAmplitude: { value: rippleAmplitude },
-				uCausticScale: { value: causticScale },
-				uCausticSpeed: { value: causticSpeed },
-				uCausticIntensity: { value: causticIntensity },
-				uWaterDistortion: { value: waterDistortion },
-				uMouseRange: { value: new THREE.Vector2(mouseRangeX, mouseRangeY) },
-				uDepthFocusRange: { value: new THREE.Vector2(depthFocusNear, depthFocusFar) },
-				uDepthMixLow: { value: depthMixLow },
-				uParallaxAxisGain: { value: new THREE.Vector2(parallaxXGain, parallaxYGain) },
-				uRippleEdgeInfluence: { value: rippleEdgeInfluence },
-				uEdgeRippleStrength: { value: edgeRippleStrength }
+				uRippleSpeed: { value: sceneParams.rippleSpeed },
+				uRippleFrequency: { value: sceneParams.rippleFrequency },
+				uRippleAmplitude: { value: sceneParams.rippleAmplitude },
+				uCausticScale: { value: sceneParams.causticScale },
+				uCausticSpeed: { value: sceneParams.causticSpeed },
+				uCausticIntensity: { value: sceneParams.causticIntensity },
+				uWaterDistortion: { value: sceneParams.waterDistortion },
+				uMouseRange: { value: new THREE.Vector2(sceneParams.mouseRangeX, sceneParams.mouseRangeY) },
+				uDepthFocusRange: {
+					value: new THREE.Vector2(sceneParams.depthFocusNear, sceneParams.depthFocusFar)
+				},
+				uDepthMixLow: { value: sceneParams.depthMixLow },
+				uParallaxAxisGain: {
+					value: new THREE.Vector2(sceneParams.parallaxXGain, sceneParams.parallaxYGain)
+				},
+				uRippleEdgeInfluence: { value: sceneParams.rippleEdgeInfluence },
+				uEdgeRippleStrength: { value: sceneParams.edgeRippleStrength }
 			},
 			vertexShader,
 			fragmentShader,
@@ -292,7 +231,7 @@
 		varying vec2 vUv;
 		varying vec2 vRawUv;
 
-		float luminance(vec3 color) {
+		float getLuma(vec3 color) {
 			return dot(color, vec3(0.299, 0.587, 0.114));
 		}
 
@@ -303,7 +242,7 @@
 
 		float samplePseudoDepth(vec2 uv) {
 			vec3 base = texture2D(uTexture, uv).rgb;
-			float luma = luminance(base);
+			float luma = getLuma(base);
 			float warmth = smoothstep(-0.05, 0.48, base.r - base.b);
 			float faceMask = softCircle(uv, vec2(0.52, 0.58), 0.12, 0.18);
 			float hairMask = softCircle(uv, vec2(0.52, 0.74), 0.18, 0.2);
@@ -427,7 +366,7 @@
 			return 130.0 * dot(cornerFalloff, cornerContribution);
 		}
 
-		float luminance(vec3 color) {
+		float getLuma(vec3 color) {
 			return dot(color, vec3(0.299, 0.587, 0.114));
 		}
 
@@ -438,7 +377,7 @@
 
 		float samplePseudoDepth(vec2 uv) {
 			vec3 base = texture2D(uTexture, uv).rgb;
-			float luma = luminance(base);
+			float luma = getLuma(base);
 			float warmth = smoothstep(-0.05, 0.48, base.r - base.b);
 			float faceMask = softCircle(uv, vec2(0.52, 0.58), 0.12, 0.18);
 			float hairMask = softCircle(uv, vec2(0.52, 0.74), 0.18, 0.2);
@@ -538,11 +477,11 @@
 
 			float warmth = smoothstep(-0.05, 0.48, baseColor.r - baseColor.b);
 			float highlight = smoothstep(0.28, 0.88, depth);
-			vec3 poster = posterize(baseColor.rgb, 5.5);
+			vec3 poster = posterize(baseColor.rgb, 6.5);
 			vec3 velvet = mix(
-				vec3(0.17, 0.07, 0.14),
-				vec3(1.0, 0.34, 0.16),
-				clamp(luminance(baseColor.rgb) * 0.7 + warmth * 0.75, 0.0, 1.0)
+				vec3(0.24, 0.1, 0.17),
+				vec3(1.0, 0.42, 0.22),
+				clamp(getLuma(baseColor.rgb) * 0.76 + warmth * 0.7, 0.0, 1.0)
 			);
 			vec3 electric = mix(
 				vec3(0.18, 0.22, 0.58),
@@ -550,17 +489,19 @@
 				clamp(gradientStrength * 6.0, 0.0, 1.0)
 			);
 
-			vec3 stylized = mix(baseColor.rgb, poster * velvet * 1.12, 0.55);
-			stylized = mix(stylized, baseColor.rgb + electric * (0.12 + 0.35 * highlight), 0.25);
-			stylized += causticPattern * mask * uProgress * vec3(1.0, 0.42, 0.24);
+			vec3 stylized = mix(baseColor.rgb, poster * velvet * 1.05, 0.34);
+			stylized = mix(stylized, baseColor.rgb + electric * (0.08 + 0.22 * highlight), 0.18);
+			stylized += causticPattern * mask * uProgress * vec3(1.0, 0.42, 0.24) * 0.72;
 
 			float contourLine = smoothstep(0.04, 0.18, gradientStrength + warmth * 0.08);
-			stylized += electric * contourLine * mask * uProgress * 0.18;
+			stylized += electric * contourLine * mask * uProgress * 0.12;
 
-			vec3 rgb = mix(baseColor.rgb, stylized, mask);
-			float lightness = luminance(rgb);
+			vec3 rgb = mix(baseColor.rgb, stylized, mask * 0.82);
+			float lightness = getLuma(rgb);
 			rgb = mix(vec3(lightness), rgb, uSaturationBoost);
 			rgb = (rgb - 0.5) * uContrastBoost + 0.5;
+			rgb = clamp(rgb, 0.0, 1.0);
+			rgb = mix(rgb, pow(rgb, vec3(0.92)), 0.18);
 			rgb = clamp(rgb, 0.0, 1.0);
 
 			gl_FragColor = vec4(rgb, baseColor.a);

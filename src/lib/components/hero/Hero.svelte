@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import painting from '$lib/images/photos/emma-painting.jpeg';
+	import painting from '$lib/images/photos/emma-painting-full.jpeg';
 	import { mergeHero3dProps, type Hero3DParams } from '$lib/stores/hero3dParams.svelte';
 	import Hero3D from './Hero3D.svelte';
 
 	type Hero3DPropOverrides = Partial<Hero3DParams>;
-
-	interface Props extends Hero3DPropOverrides {}
+	type Props = Hero3DPropOverrides;
 
 	let {
 		depthScale,
@@ -102,6 +101,8 @@
 			/>
 		{/if}
 
+		<div class="hero-image-balance"></div>
+		<div class="hero-image-sheen"></div>
 		<div class="hero-media-fade"></div>
 		<div class="hero-aurora hero-aurora-left"></div>
 		<div class="hero-aurora hero-aurora-right"></div>
@@ -162,19 +163,59 @@
 
 	.hero-base-image {
 		object-fit: cover;
-		object-position: center 22%;
-		filter: saturate(1.05) contrast(1.03) brightness(0.94);
-		transform: scale(1.03);
+		object-position: center 40%;
+		filter: saturate(1.01) contrast(0.96) brightness(1.01);
+		transform: scale(1.015);
 		transform-origin: center;
 	}
 
+	.hero-image-balance,
+	.hero-image-sheen,
 	.hero-media-fade {
 		position: absolute;
 		inset: 0;
+	}
+
+	.hero-image-balance {
 		background:
-			linear-gradient(100deg, rgba(12, 8, 16, 0.06) 0%, rgba(12, 8, 16, 0.18) 26%, rgba(12, 8, 16, 0.7) 58%, rgba(12, 8, 16, 0.94) 100%),
-			linear-gradient(180deg, rgba(255, 111, 76, 0.08) 0%, transparent 38%, rgba(10, 8, 18, 0.55) 100%);
+			radial-gradient(circle at 24% 30%, rgba(255, 221, 207, 0.16), transparent 26%),
+			radial-gradient(circle at 18% 72%, rgba(80, 97, 255, 0.1), transparent 34%),
+			linear-gradient(
+				103deg,
+				rgba(255, 240, 233, 0.14) 0%,
+				rgba(255, 240, 233, 0.06) 18%,
+				rgba(21, 10, 24, 0.08) 42%,
+				rgba(14, 9, 19, 0.34) 61%,
+				rgba(12, 8, 16, 0.78) 100%
+			);
+		z-index: 1;
+	}
+
+	.hero-image-sheen {
+		background:
+			linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 24%),
+			radial-gradient(circle at 38% 12%, rgba(255, 187, 167, 0.14), transparent 24%);
+		mix-blend-mode: screen;
+		opacity: 0.58;
 		z-index: 2;
+	}
+
+	.hero-media-fade {
+		background:
+			linear-gradient(
+				100deg,
+				rgba(12, 8, 16, 0.03) 0%,
+				rgba(12, 8, 16, 0.12) 24%,
+				rgba(12, 8, 16, 0.54) 58%,
+				rgba(12, 8, 16, 0.9) 100%
+			),
+			linear-gradient(
+				180deg,
+				rgba(255, 111, 76, 0.07) 0%,
+				transparent 38%,
+				rgba(10, 8, 18, 0.46) 100%
+			);
+		z-index: 3;
 	}
 
 	.hero-aurora {
@@ -182,7 +223,7 @@
 		border-radius: 999px;
 		filter: blur(44px);
 		opacity: 0.72;
-		z-index: 1;
+		z-index: 2;
 	}
 
 	.hero-aurora-left {
@@ -211,7 +252,7 @@
 		background-size: 3.75rem 3.75rem;
 		mask-image: linear-gradient(115deg, transparent 0%, transparent 42%, rgba(0, 0, 0, 0.9) 62%, transparent 100%);
 		opacity: 0.22;
-		z-index: 3;
+		z-index: 4;
 	}
 
 	.hero-vignette {
@@ -220,12 +261,12 @@
 		box-shadow:
 			inset 0 0 0 1px rgba(255, 255, 255, 0.05),
 			inset 0 -5rem 5rem rgba(5, 5, 12, 0.32);
-		z-index: 4;
+		z-index: 5;
 	}
 
 	.hero-content {
 		position: relative;
-		z-index: 5;
+		z-index: 6;
 		display: flex;
 		height: 100%;
 		width: min(30rem, 48%);
@@ -258,13 +299,19 @@
 		}
 
 		.hero-base-image {
-			object-position: center 18%;
+			object-position: center 36%;
 		}
 
 		.hero-media-fade {
 			background:
-				linear-gradient(180deg, rgba(12, 8, 16, 0.03) 0%, rgba(12, 8, 16, 0.2) 34%, rgba(12, 8, 16, 0.78) 57%, rgba(12, 8, 16, 0.96) 100%),
-				linear-gradient(180deg, rgba(255, 111, 76, 0.08) 0%, transparent 24%, rgba(10, 8, 18, 0.48) 100%);
+				linear-gradient(
+					180deg,
+					rgba(12, 8, 16, 0.02) 0%,
+					rgba(12, 8, 16, 0.16) 32%,
+					rgba(12, 8, 16, 0.72) 58%,
+					rgba(12, 8, 16, 0.95) 100%
+				),
+				linear-gradient(180deg, rgba(255, 111, 76, 0.07) 0%, transparent 24%, rgba(10, 8, 18, 0.42) 100%);
 		}
 
 		.hero-grid-glow {
