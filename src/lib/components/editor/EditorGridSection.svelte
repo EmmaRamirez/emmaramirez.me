@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { dev, browser } from '$app/environment';
-	import { dndzone, type DndEvent } from 'svelte-dnd-action';
+	import { dragHandle, dragHandleZone, type DndEvent } from 'svelte-dnd-action';
 	import { fetchPokemonDetails } from '$lib/api/pokemon';
 	import type { GridItem } from '$lib/types/homepage';
 	import {
@@ -22,7 +22,7 @@
 		setHero3dParams,
 		type Hero3DParams
 	} from '$lib/stores/hero3dParams.svelte';
-	import { pokemonTeamSettings } from '$lib/stores';
+	import { pokemonTeamSettings, thisSiteSettings } from '$lib/stores';
 	import {
 		topLanguagesSettings,
 		topLanguagesVariantOptions
@@ -49,7 +49,7 @@
 	} from '$lib/components/editor/editorGridMeta';
 	import { setEditorSurfaceContext } from '$lib/components/editor/editorSurfaceContext';
 	import { Hero } from '$lib/components/hero';
-	import { Select, Switch } from '$lib/components/ui';
+	import { Input, Select, Switch } from '$lib/components/ui';
 	import { performanceAnalytics, trackedFetch } from '$lib/stores/performanceAnalytics.svelte';
 
 	interface Props {
@@ -92,6 +92,7 @@
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
 	let topLanguagesVariant = $state(topLanguagesSettings.variant);
+	let thisSiteTitle = $state(thisSiteSettings.title);
 	let pokemonTeamDraft = $state(pokemonTeamSettings.team.map((pokemon: Pokemon) => pokemon.name));
 	let pokemonTeamErrors = $state(pokemonTeamSettings.team.map(() => ''));
 	let pokemonLookupPending = $state(pokemonTeamSettings.team.map(() => false));
@@ -462,6 +463,18 @@
 	});
 
 	const flipDurationMs = 200;
+
+	function handleThisSiteTitleInput() {
+		const nextTitle = thisSiteTitle.trim();
+		if (nextTitle.length > 0) {
+			thisSiteSettings.title = nextTitle;
+		}
+	}
+
+	function commitThisSiteTitle() {
+		thisSiteSettings.title = thisSiteTitle;
+		thisSiteTitle = thisSiteSettings.title;
+	}
 </script>
 
 <div class="grid-section">
@@ -470,7 +483,7 @@
 			<div>
 				<h2 class="section-title">Live Grid Editor</h2>
 				<p class="section-description">
-					Drag items to reorder, click resize buttons to change column/row span.
+					Use the drag handle to reorder items, then click a tile to edit its values.
 				</p>
 			</div>
 			<div class="header-actions">
@@ -550,11 +563,12 @@
 
 			<ul
 				class="live-grid"
-				use:dndzone={{
+				use:dragHandleZone={{
 					items: dndItems,
 					flipDurationMs,
 					dropTargetStyle: {},
-					dragDisabled: false
+					dragDisabled: false,
+					zoneItemTabIndex: -1
 				}}
 				onconsider={handleDndConsider}
 				onfinalize={handleDndFinalize}
@@ -566,8 +580,31 @@
 					<li
 						class="grid-item edit-mode h-full {getColSpanClass(key)}"
 						{@attach trackGridItemVisibility(key)}
+						onclick={() => handleItemClick(key)}
 					>
 						<div class="resize-controls">
+							<button
+								type="button"
+								class="drag-handle"
+								use:dragHandle
+								aria-label={`Drag ${getEditorGridItemLabel(item)}`}
+								title="Drag to reorder this tile"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="12"
+									height="12"
+									viewBox="0 0 24 24"
+									fill="currentColor"
+								>
+									<circle cx="8" cy="6" r="1.75" />
+									<circle cx="16" cy="6" r="1.75" />
+									<circle cx="8" cy="12" r="1.75" />
+									<circle cx="16" cy="12" r="1.75" />
+									<circle cx="8" cy="18" r="1.75" />
+									<circle cx="16" cy="18" r="1.75" />
+								</svg>
+							</button>
 							<button
 								type="button"
 								class="resize-handle"
@@ -622,7 +659,6 @@
 							role="button"
 							tabindex="0"
 							aria-pressed={selectedItemKey === key}
-							onclick={() => handleItemClick(key)}
 							onkeydown={(event) => handleItemKeydown(event, key)}
 						>
 							{#if item.kind === 'hero'}
@@ -843,6 +879,26 @@
 									bind:value={topLanguagesVariant}
 									options={topLanguagesVariantOptions}
 									hint="Switch between the researched display treatments for this card."
+								/>
+							</div>
+						{:else if selectedItem.kind === 'this-site'}
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+								</dl>
+
+								<Input
+									label="Card Title"
+									bind:value={thisSiteTitle}
+									maxlength="40"
+									oninput={handleThisSiteTitleInput}
+									onblur={commitThisSiteTitle}
+									hint="Updates the This Site card title live and persists as a homepage setting."
 								/>
 							</div>
 						{:else if selectedItem.kind === 'disco'}
@@ -1214,14 +1270,6 @@
 		overflow: hidden;
 	}
 
-	.grid-item.edit-mode {
-		cursor: grab;
-	}
-
-	.grid-item.edit-mode:active {
-		cursor: grabbing;
-	}
-
 	.grid-item.edit-mode::before {
 		content: '';
 		position: absolute;
@@ -1261,6 +1309,7 @@
 		gap: 0.25rem;
 	}
 
+	.drag-handle,
 	.resize-handle {
 		display: flex;
 		align-items: center;
@@ -1277,6 +1326,15 @@
 		box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.15);
 	}
 
+	.drag-handle {
+		cursor: grab;
+	}
+
+	.drag-handle:active {
+		cursor: grabbing;
+	}
+
+	.drag-handle:hover,
 	.resize-handle:hover {
 		transform: scale(1.05);
 		box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);

@@ -3,13 +3,15 @@
 	import { buildHomepageGridItems } from '$lib/registry/gridItems';
 	import {
 		blogSettings,
+		thisSiteSettings,
 		showSections,
 		topLanguagesSettings,
 		topLanguagesVariantOptions,
+		defaultThisSiteTitle,
 		type BlogTagView
 	} from '$lib/stores/userSettings.svelte';
 	import { editorGridLayoutStore } from '$lib/stores/gridLayoutStore.svelte';
-	import { Select, Switch } from '$lib/components/ui';
+	import { Input, Select, Switch } from '$lib/components/ui';
 
 	const blogViewOptions = [
 		{ value: 'flat', label: 'Flat Tags' },
@@ -18,6 +20,7 @@
 
 	let showSectionsEnabled = $state(false);
 	let topLanguagesVariant = $state(topLanguagesSettings.variant);
+	let thisSiteTitle = $state(thisSiteSettings.title);
 	let blogTagView = $state(blogSettings.tagView);
 	let resetStatus = $state<'idle' | 'done'>('idle');
 
@@ -41,6 +44,18 @@
 
 	function toggleHomepageSections() {
 		showSections.set(!showSectionsEnabled);
+	}
+
+	function handleThisSiteTitleInput() {
+		const nextTitle = thisSiteTitle.trim();
+		if (nextTitle.length > 0) {
+			thisSiteSettings.title = nextTitle;
+		}
+	}
+
+	function commitThisSiteTitle() {
+		thisSiteSettings.title = thisSiteTitle;
+		thisSiteTitle = thisSiteSettings.title;
 	}
 
 	function resetHomepageLayout() {
@@ -87,6 +102,15 @@
 					bind:value={topLanguagesVariant}
 					options={topLanguagesVariantOptions}
 					hint="Sets the default treatment for the Top Languages card."
+				/>
+
+				<Input
+					label="This Site Card Title"
+					bind:value={thisSiteTitle}
+					maxlength="40"
+					oninput={handleThisSiteTitleInput}
+					onblur={commitThisSiteTitle}
+					hint={`Falls back to "${defaultThisSiteTitle}" when left blank.`}
 				/>
 			</div>
 		</div>

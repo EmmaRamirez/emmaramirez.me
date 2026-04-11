@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { thisSiteSettings } from '$lib/stores';
+
 	interface Props {
 		class?: string;
 	}
@@ -6,6 +8,7 @@
 	const stack = ['SvelteKit', 'TypeScript', 'Design tokens'];
 
 	let { class: className = '' }: Props = $props();
+	const title = $derived(thisSiteSettings.title);
 </script>
 
 <article class="this-site-block relative h-full w-full overflow-hidden rounded-xl {className}">
@@ -13,7 +16,7 @@
 
 	<div class="this-site-block__content">
 		<div class="this-site-block__copy">
-			<h3 class="this-site-block__title">This Site</h3>
+			<h3 class="this-site-block__title">{title}</h3>
 		</div>
 
 		<ul class="this-site-block__stack" aria-label="Core technologies">

@@ -1,72 +1,22 @@
 import { dev } from '$app/environment';
 import { json } from '@sveltejs/kit';
+import type { RequestHandler } from '@sveltejs/kit';
 import { prisma } from '$lib/server/prisma';
+import {
+	coerceIngestPayload,
+	dedupeIngestRows,
+	isValidSessionId,
+	MAX_EVENTS_PER_REQUEST,
+	MAX_INGEST_BODY_BYTES,
+	normalizeAnalyticsEvent,
+	parseIngestJson,
+	rateLimitIngest
+} from '$lib/server/performanceAnalyticsIngest';
 import { AnalyticsEventKind, Prisma } from '$generated/prisma/client';
-
-type IncomingEvent = {
-	id?: string;
-	kind?: string;
-	name?: string;
-	route?: string;
-	source?: string;
-	method?: string;
-	url?: string;
-	status?: number | null;
-	ok?: boolean;
-	duration?: number;
-	value?: number;
-	unit?: string;
-	rating?: string;
-	navigationType?: string;
-	from?: string;
-	detail?: string;
-	timestamp?: number;
-	startTime?: number;
-};
-
-type IngestPayload = {
-	sessionId?: string;
-	events?: IncomingEvent[];
-};
 
 type AnalyticsEventDelegate = typeof prisma extends { analyticsEvent: infer Delegate }
 	? Delegate
 	: never;
-
-function isFiniteNumber(value: unknown): value is number {
-	return typeof value === 'number' && Number.isFinite(value);
-}
-
-function asNullableString(value: unknown) {
-	return typeof value === 'string' && value.length > 0 ? value : null;
-}
-
-function asNullableBoolean(value: unknown) {
-	return typeof value === 'boolean' ? value : null;
-}
-
-function asNullableInt(value: unknown) {
-	return Number.isInteger(value) ? Number(value) : null;
-}
-
-function mapKind(kind: string | undefined) {
-	switch (kind) {
-		case 'page':
-			return AnalyticsEventKind.page;
-		case 'network':
-			return AnalyticsEventKind.network;
-		case 'interaction':
-			return AnalyticsEventKind.interaction;
-		case 'render':
-			return AnalyticsEventKind.render;
-		case 'vital':
-			return AnalyticsEventKind.vital;
-		case 'paint':
-			return AnalyticsEventKind.paint;
-		default:
-			return null;
-	}
-}
 
 function sortByDuration<T extends { duration: number | null }>(items: T[]) {
 	return [...items].sort((a, b) => (b.duration ?? 0) - (a.duration ?? 0));
@@ -91,47 +41,16 @@ function getAnalyticsEventDelegate() {
 	return (prisma as typeof prisma & { analyticsEvent?: AnalyticsEventDelegate }).analyticsEvent;
 }
 
-function normalizeEvent(
-	sessionId: string,
-	event: IncomingEvent
-): Prisma.AnalyticsEventCreateManyInput | null {
-	const kind = mapKind(event.kind);
-	const name = typeof event.name === 'string' ? event.name.trim() : '';
-	if (!kind || !name) return null;
-
-	const duration = isFiniteNumber(event.duration)
-		? event.duration
-		: isFiniteNumber(event.startTime)
-			? event.startTime
-			: null;
-	const value = isFiniteNumber(event.value) ? event.value : null;
-	const timestamp = isFiniteNumber(event.timestamp) ? event.timestamp : Date.now();
-	const metadata =
-		kind === AnalyticsEventKind.paint && isFiniteNumber(event.startTime)
-			? ({ startTime: event.startTime } satisfies Prisma.InputJsonObject)
-			: null;
-
-	return {
-		clientEventId: asNullableString(event.id),
-		sessionId,
-		kind,
-		name,
-		route: asNullableString(event.route),
-		source: asNullableString(event.source),
-		method: asNullableString(event.method),
-		url: asNullableString(event.url),
-		status: asNullableInt(event.status),
-		ok: asNullableBoolean(event.ok),
-		duration,
-		value,
-		unit: asNullableString(event.unit),
-		rating: asNullableString(event.rating),
-		navigationType: asNullableString(event.navigationType),
-		fromRoute: asNullableString(event.from),
-		detail: asNullableString(event.detail),
-		clientTimestamp: new Date(timestamp),
-		metadata: metadata ?? Prisma.JsonNull
-	};
+function rateLimitClientKey(request: Request, getClientAddress: () => string) {
+	const forwarded = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+	if (forwarded) return `ip:${forwarded}`;
+	const realIp = request.headers.get('x-real-ip')?.trim();
+	if (realIp) return `ip:${realIp}`;
+	try {
+		return `ip:${getClientAddress()}`;
+	} catch {
+		return 'ip:local';
+	}
 }
 
 async function buildSummary() {
@@ -208,7 +127,7 @@ async function buildSummary() {
 	};
 }
 
-export const GET = async () => {
+export const GET: RequestHandler = async () => {
 	if (!dev) {
 		return json(
 			{ error: 'Performance analytics persistence is disabled outside development.' },
@@ -227,7 +146,7 @@ export const GET = async () => {
 	}
 };
 
-export const POST = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, getClientAddress }) => {
 	if (!dev) {
 		return json(
 			{ error: 'Performance analytics persistence is disabled outside development.' },
@@ -236,30 +155,64 @@ export const POST = async ({ request }) => {
 	}
 
 	try {
-		const body = (await request.json()) as IngestPayload;
-		const sessionId = typeof body.sessionId === 'string' ? body.sessionId.trim() : '';
-		const events = Array.isArray(body.events) ? body.events : [];
-		const delegate = getAnalyticsEventDelegate();
+		const text = await request.text();
+		if (text.length > MAX_INGEST_BODY_BYTES) {
+			return json({ error: 'Payload too large.' }, { status: 413 });
+		}
 
-		if (!sessionId || events.length === 0) {
+		const now = Date.now();
+		if (!rateLimitIngest(rateLimitClientKey(request, getClientAddress), now)) {
+			return json({ error: 'Too many ingest requests. Try again shortly.' }, { status: 429 });
+		}
+
+		const parsed = parseIngestJson(text);
+		if (!parsed.ok) {
+			return json({ error: parsed.error }, { status: 400 });
+		}
+
+		const body = coerceIngestPayload(parsed.value);
+		if (!body) {
+			return json({ error: 'Invalid payload: expected a JSON object.' }, { status: 400 });
+		}
+
+		const sessionId = typeof body.sessionId === 'string' ? body.sessionId.trim() : '';
+		if (!isValidSessionId(sessionId)) {
+			return json({ error: 'Invalid sessionId.' }, { status: 400 });
+		}
+
+		const events = Array.isArray(body.events) ? body.events : [];
+		if (events.length === 0) {
 			return json(
 				{ error: 'Invalid payload: expected sessionId and at least one event.' },
 				{ status: 400 }
 			);
 		}
 
-		const rows = events
-			.map((event) => normalizeEvent(sessionId, event))
-			.filter((event): event is Prisma.AnalyticsEventCreateManyInput => event !== null);
+		if (events.length > MAX_EVENTS_PER_REQUEST) {
+			return json(
+				{ error: `Too many events (max ${MAX_EVENTS_PER_REQUEST} per request).` },
+				{ status: 400 }
+			);
+		}
+
+		const delegate = getAnalyticsEventDelegate();
+		const rawReceived = events.length;
+
+		let rows = events
+			.map((event) => normalizeAnalyticsEvent(sessionId, event, now))
+			.filter((row): row is Prisma.AnalyticsEventCreateManyInput => row !== null);
+
+		rows = dedupeIngestRows(rows);
 
 		if (rows.length === 0) {
-			return json({ ingested: 0 });
+			return json({ ingested: 0, received: rawReceived, accepted: 0 });
 		}
 
 		if (!delegate) {
 			return json({
 				ingested: 0,
-				received: rows.length
+				received: rawReceived,
+				accepted: rows.length
 			});
 		}
 
@@ -270,7 +223,8 @@ export const POST = async ({ request }) => {
 
 		return json({
 			ingested: result.count,
-			received: rows.length
+			received: rawReceived,
+			accepted: rows.length
 		});
 	} catch (error) {
 		console.error('[performance-analytics] POST error:', error);

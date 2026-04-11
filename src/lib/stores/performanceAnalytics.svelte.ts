@@ -172,7 +172,7 @@ const MAX_PAGE_EVENTS = 40;
 const MAX_NETWORK_EVENTS = 80;
 const MAX_INTERACTION_EVENTS = 80;
 const MAX_RENDER_EVENTS = 80;
-const MAX_VITAL_EVENTS = 40;
+const MAX_VITAL_EVENTS = 200;
 const MAX_PAINT_EVENTS = 20;
 const FLUSH_BATCH_SIZE = 20;
 const FLUSH_DELAY_MS = 2500;
@@ -473,22 +473,8 @@ function getRoute() {
 	return state.currentRoute || (browser ? window.location.pathname : '/');
 }
 
-function upsertVital(event: VitalMetricEvent) {
-	const key = `${event.route}:${event.name}`;
-	const existingIndex = state.vitalEvents.findIndex(
-		(candidate) => `${candidate.route}:${candidate.name}` === key
-	);
-
-	if (existingIndex === -1) {
-		state.vitalEvents = appendCapped(state.vitalEvents, event, MAX_VITAL_EVENTS);
-		persistState();
-		enqueueForPersistence(event);
-		return;
-	}
-
-	const nextVitals = [...state.vitalEvents];
-	nextVitals[existingIndex] = event;
-	state.vitalEvents = nextVitals;
+function appendVital(event: VitalMetricEvent) {
+	state.vitalEvents = appendCapped(state.vitalEvents, event, MAX_VITAL_EVENTS);
 	persistState();
 	enqueueForPersistence(event);
 }
@@ -617,7 +603,7 @@ function setupObservers() {
 			const lastEntry = entries.at(-1);
 			if (!lastEntry) return;
 
-			upsertVital({
+			appendVital({
 				id: createId(),
 				kind: 'vital',
 				name: 'LCP',
@@ -642,7 +628,7 @@ function setupObservers() {
 				clsValue += entry.value ?? 0;
 			}
 
-			upsertVital({
+			appendVital({
 				id: createId(),
 				kind: 'vital',
 				name: 'CLS',
@@ -664,7 +650,7 @@ function setupObservers() {
 			const maxDuration = Math.max(0, ...entries.map((entry) => entry.duration));
 			if (maxDuration <= 0) return;
 
-			upsertVital({
+			appendVital({
 				id: createId(),
 				kind: 'vital',
 				name: 'INP',
@@ -849,7 +835,7 @@ export const performanceAnalytics = {
 	) {
 		if (!analyticsEnabled()) return;
 
-		upsertVital({
+		appendVital({
 			id: createId(),
 			kind: 'vital',
 			name,

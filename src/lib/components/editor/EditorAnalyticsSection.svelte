@@ -1,8 +1,67 @@
 <script lang="ts">
 	import {
 		performanceAnalytics,
-		type AnalyticsTimelineEvent
+		type AnalyticsTimelineEvent,
+		type VitalMetricEvent
 	} from '$lib/stores/performanceAnalytics.svelte';
+
+	const VITAL_NAME_ORDER = ['LCP', 'INP', 'CLS', 'FCP', 'TTFB'];
+	const CHART_W = 320;
+	const CHART_H = 124;
+	const CHART_PAD = 26;
+
+	function sortVitalNames(names: Iterable<string>) {
+		const list = [...new Set(names)];
+		return list.sort((a, b) => {
+			const ia = VITAL_NAME_ORDER.indexOf(a);
+			const ib = VITAL_NAME_ORDER.indexOf(b);
+			if (ia === -1 && ib === -1) return a.localeCompare(b);
+			if (ia === -1) return 1;
+			if (ib === -1) return -1;
+			return ia - ib;
+		});
+	}
+
+	function buildVitalChartModel(points: VitalMetricEvent[]) {
+		if (points.length === 0) return null;
+
+		const unit = points[0]!.unit;
+		let minX: number;
+		let maxX: number;
+		if (points.length === 1) {
+			const t = points[0]!.timestamp;
+			minX = t - 1500;
+			maxX = t + 1500;
+		} else {
+			const xs = points.map((p) => p.timestamp);
+			minX = Math.min(...xs);
+			maxX = Math.max(...xs);
+			if (maxX <= minX) {
+				minX -= 1;
+				maxX += 1;
+			}
+		}
+
+		const ys = points.map((p) => p.value);
+		let minY = Math.min(...ys);
+		let maxY = Math.max(...ys);
+		const yPad = Math.max(maxY - minY, 0) * 0.12 + (unit === 'score' ? 0.03 : 16);
+		minY -= yPad;
+		maxY += yPad;
+		if (maxY <= minY) {
+			minY -= 1;
+			maxY += 1;
+		}
+
+		const innerW = CHART_W - CHART_PAD * 2;
+		const innerH = CHART_H - CHART_PAD * 2;
+		const dots = points.map((p) => ({
+			cx: CHART_PAD + ((p.timestamp - minX) / (maxX - minX)) * innerW,
+			cy: CHART_PAD + innerH - ((p.value - minY) / (maxY - minY)) * innerH
+		}));
+		const polylinePoints = dots.map((d) => `${d.cx},${d.cy}`).join(' ');
+		return { polylinePoints, dots, yMin: minY, yMax: maxY, tMin: minX, tMax: maxX, unit };
+	}
 
 	const summary = $derived(performanceAnalytics.summary);
 	const sessionStartedAt = $derived(performanceAnalytics.sessionStartedAt);
@@ -11,7 +70,39 @@
 	const slowestRequests = $derived(performanceAnalytics.slowestRequests);
 	const slowestInteractions = $derived(performanceAnalytics.slowestInteractions);
 	const slowestRenders = $derived(performanceAnalytics.slowestRenders);
-	const vitals = $derived(performanceAnalytics.vitalEvents.slice(0, 6));
+	const allVitals = $derived(performanceAnalytics.vitalEvents);
+	const vitalRoutes = $derived.by(() => {
+		const set = new Set<string>();
+		for (const v of allVitals) {
+			set.add(v.route);
+		}
+		return [...set].sort((a, b) => a.localeCompare(b));
+	});
+	const vitalNames = $derived(sortVitalNames(allVitals.map((v) => v.name)));
+
+	let selectedRoute = $state('');
+	let selectedVital = $state('');
+
+	$effect(() => {
+		if (vitalNames.length && !vitalNames.includes(selectedVital)) {
+			selectedVital = vitalNames[0]!;
+		}
+	});
+
+	const vitalSeries = $derived.by(() => {
+		if (!selectedVital) return [];
+		return allVitals
+			.filter(
+				(v) => v.name === selectedVital && (selectedRoute === '' || v.route === selectedRoute)
+			)
+			.sort((a, b) => a.timestamp - b.timestamp);
+	});
+
+	const vitalChart = $derived(buildVitalChartModel(vitalSeries));
+	const latestVitalInSeries = $derived(
+		vitalSeries.length ? vitalSeries[vitalSeries.length - 1]! : null
+	);
+
 	const paints = $derived(performanceAnalytics.paintEvents.slice(0, 4));
 	const timeline = $derived(performanceAnalytics.timeline.slice(0, 12));
 	const persistedSummary = $derived(performanceAnalytics.persistedSummary);
@@ -210,31 +301,113 @@
 			</div>
 		</article>
 
-		<article class="analytics-card">
+		<article class="analytics-card analytics-card--vitals">
 			<div class="analytics-card__header">
 				<div>
-					<p class="analytics-card__title">Latest Vitals</p>
-					<p class="analytics-card__subtitle">Most recent score for each tracked metric</p>
+					<p class="analytics-card__title">Web Vitals over time</p>
+					<p class="analytics-card__subtitle">
+						Session samples with wall-clock timestamps; filter by route and metric
+					</p>
 				</div>
 			</div>
-			<div class="mini-stack">
-				{#if vitals.length === 0}
-					<p class="empty-state">Navigate around the site to populate vitals.</p>
-				{:else}
-					{#each vitals as vital (vital.id)}
-						<div class="mini-row">
-							<div class="mini-row__copy">
-								<span class="mini-row__title">{vital.name}</span>
-								<span class="mini-row__subtitle">{vital.route}</span>
-							</div>
-							<div class="mini-row__meta">
-								<span class={`rating-pill rating-pill--${vital.rating}`}>{vital.rating}</span>
-								<span>{formatVitalValue(vital.value, vital.unit)}</span>
-							</div>
-						</div>
-					{/each}
+
+			{#if allVitals.length === 0}
+				<p class="empty-state">Navigate around the site to populate vitals.</p>
+			{:else}
+				<div class="vital-filters">
+					<label class="vital-filters__field">
+						<span class="vital-filters__label">Route</span>
+						<select class="vital-filter-select" bind:value={selectedRoute}>
+							<option value="">All routes</option>
+							{#each vitalRoutes as routePath (routePath)}
+								<option value={routePath}>{routePath}</option>
+							{/each}
+						</select>
+					</label>
+					<label class="vital-filters__field">
+						<span class="vital-filters__label">Metric</span>
+						<select class="vital-filter-select" bind:value={selectedVital}>
+							{#each vitalNames as name (name)}
+								<option value={name}>{name}</option>
+							{/each}
+						</select>
+					</label>
+				</div>
+
+				{#if vitalSeries.length === 0}
+					<p class="empty-state">No samples for this route and metric yet.</p>
+				{:else if vitalChart}
+					<figure class="vital-chart-wrap">
+						<svg
+							class="vital-chart"
+							viewBox="0 0 {CHART_W} {CHART_H}"
+							role="img"
+							aria-labelledby="vital-chart-title"
+						>
+							<title id="vital-chart-title">
+								{selectedVital} samples {selectedRoute
+									? `on ${selectedRoute}`
+									: 'across all routes'}
+							</title>
+							<rect
+								class="vital-chart__plot"
+								x={CHART_PAD}
+								y={CHART_PAD}
+								width={CHART_W - CHART_PAD * 2}
+								height={CHART_H - CHART_PAD * 2}
+								rx="4"
+							/>
+							<polyline
+								class="vital-chart__line"
+								points={vitalChart.polylinePoints}
+								fill="none"
+							/>
+							{#each vitalChart.dots as dot, i (vitalSeries[i]!.id)}
+								<circle
+									class="vital-chart__dot"
+									cx={dot.cx}
+									cy={dot.cy}
+									r="3"
+								/>
+							{/each}
+							<text class="vital-chart__axis-text" x={CHART_PAD} y={CHART_H - 6}>
+								{formatTimestamp(vitalChart.tMin)}
+							</text>
+							<text
+								class="vital-chart__axis-text vital-chart__axis-text--end"
+								x={CHART_W - CHART_PAD}
+								y={CHART_H - 6}
+								text-anchor="end"
+							>
+								{formatTimestamp(vitalChart.tMax)}
+							</text>
+							<text class="vital-chart__axis-text" x={CHART_PAD + 4} y={CHART_PAD + 10}>
+								{formatVitalValue(vitalChart.yMax, vitalChart.unit)}
+							</text>
+							<text
+								class="vital-chart__axis-text"
+								x={CHART_PAD + 4}
+								y={CHART_H - CHART_PAD - 4}
+							>
+								{formatVitalValue(vitalChart.yMin, vitalChart.unit)}
+							</text>
+						</svg>
+						{#if latestVitalInSeries}
+							<figcaption class="vital-chart-caption">
+								<span class={`rating-pill rating-pill--${latestVitalInSeries.rating}`}>
+									{latestVitalInSeries.rating}
+								</span>
+								<span class="vital-chart-caption__value">
+									{formatVitalValue(latestVitalInSeries.value, latestVitalInSeries.unit)} latest
+								</span>
+								<span class="vital-chart-caption__meta">
+									{formatTimestamp(latestVitalInSeries.timestamp)} · {vitalSeries.length} sample{vitalSeries.length === 1 ? '' : 's'}
+								</span>
+							</figcaption>
+						{/if}
+					</figure>
 				{/if}
-			</div>
+			{/if}
 		</article>
 
 		<article class="analytics-card">
@@ -493,6 +666,11 @@
 		scroll-snap-align: start;
 	}
 
+	.analytics-grid .analytics-card--vitals {
+		width: min(22rem, 92vw);
+		max-height: none;
+	}
+
 	.stat-card,
 	.analytics-card {
 		display: flex;
@@ -506,6 +684,101 @@
 
 	.analytics-card--timeline {
 		gap: 1rem;
+	}
+
+	.vital-filters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.85rem;
+		align-items: flex-end;
+	}
+
+	.vital-filters__field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		min-width: 0;
+	}
+
+	.vital-filters__label {
+		font-size: 0.68rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+
+	.vital-filter-select {
+		min-width: 9rem;
+		max-width: 14rem;
+		border: 0.0625rem solid var(--border-color);
+		border-radius: 0.65rem;
+		background: var(--background);
+		color: var(--text-primary);
+		padding: 0.45rem 0.6rem;
+		font-size: 0.82rem;
+		font-weight: 500;
+	}
+
+	.vital-chart-wrap {
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.65rem;
+	}
+
+	.vital-chart {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	.vital-chart__plot {
+		fill: color-mix(in srgb, var(--surface-hover) 35%, transparent);
+		stroke: var(--border-color);
+		stroke-width: 0.5;
+	}
+
+	.vital-chart__line {
+		stroke: var(--caroline-blue-600);
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.vital-chart__dot {
+		fill: var(--caroline-blue-600);
+		stroke: var(--surface);
+		stroke-width: 1;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.vital-chart__axis-text {
+		fill: var(--text-muted);
+		font-size: 0.45rem;
+		font-family: system-ui, sans-serif;
+	}
+
+	.vital-chart-caption {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 0.75rem;
+		margin: 0;
+		font-size: 0.82rem;
+		line-height: 1.45;
+		color: var(--text-secondary);
+	}
+
+	.vital-chart-caption__value {
+		font-weight: 600;
+		color: var(--text-primary);
+	}
+
+	.vital-chart-caption__meta {
+		color: var(--text-muted);
+		font-size: 0.78rem;
 	}
 
 	.stat-card__label,
