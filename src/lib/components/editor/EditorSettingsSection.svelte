@@ -107,7 +107,6 @@
 				<Input
 					label="This Site Card Title"
 					bind:value={thisSiteTitle}
-					maxlength="40"
 					oninput={handleThisSiteTitleInput}
 					onblur={commitThisSiteTitle}
 					hint={`Falls back to "${defaultThisSiteTitle}" when left blank.`}

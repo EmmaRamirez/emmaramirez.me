@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLInputAttributes } from 'svelte/elements';
 
-	interface InputProps extends Omit<svelteHTML.HTMLAttributes<HTMLInputElement>, 'type'> {
+	interface InputProps extends Omit<HTMLInputAttributes, 'type'> {
 		class?: string;
 		type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
 		label?: string;
@@ -30,12 +31,12 @@
 	const inputId = $derived(id ?? generatedId);
 
 	const baseInputClasses =
-		'w-full px-3 py-2 rounded-lg border-2 bg-[var(--eggshell-white-500)] text-[var(--liver-brown-800)] placeholder:text-[var(--liver-brown-500)] focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+		'w-full px-3 py-2 rounded-lg border-2 bg-(--card-bg) text-(--text-primary) placeholder:text-(--text-muted) focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-(--page-bg) transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
 
 	const stateClasses = $derived(
 		error
 			? 'border-red-500 focus:ring-red-400'
-			: 'border-[var(--liver-brown-500)] focus:ring-[var(--caroline-blue-500)] focus:border-[var(--caroline-blue-600)]'
+			: 'border-(--border-color) focus:ring-(--caroline-blue-500) focus:border-(--caroline-blue-600)'
 	);
 
 	const hasLeadingIcon = $derived(leadingIcon !== undefined);
@@ -52,14 +53,14 @@
 
 <div class="flex flex-col gap-1.5">
 	{#if label}
-		<label for={inputId} class="text-sm font-medium text-[var(--liver-brown-700)]">
+		<label for={inputId} class="text-sm font-medium text-(--text-secondary)">
 			{label}
 		</label>
 	{/if}
 
 	<div class="relative">
 		{#if leadingIcon}
-			<div class="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--liver-brown-500)]">
+			<div class="absolute top-1/2 left-3 -translate-y-1/2 text-(--text-muted)">
 				{@render leadingIcon()}
 			</div>
 		{/if}
@@ -75,7 +76,7 @@
 		/>
 
 		{#if trailingIcon}
-			<div class="absolute top-1/2 right-3 -translate-y-1/2 text-[var(--liver-brown-500)]">
+			<div class="absolute top-1/2 right-3 -translate-y-1/2 text-(--text-muted)">
 				{@render trailingIcon()}
 			</div>
 		{/if}
@@ -86,7 +87,7 @@
 			{error}
 		</p>
 	{:else if hint}
-		<p id="{inputId}-hint" class="text-sm text-[var(--liver-brown-600)]">
+		<p id="{inputId}-hint" class="text-sm text-(--text-muted)">
 			{hint}
 		</p>
 	{/if}

@@ -2,6 +2,7 @@
 	import {
 		performanceAnalytics,
 		type AnalyticsTimelineEvent,
+		type TimelineDisplayEvent,
 		type VitalMetricEvent
 	} from '$lib/stores/performanceAnalytics.svelte';
 
@@ -104,7 +105,7 @@
 	);
 
 	const paints = $derived(performanceAnalytics.paintEvents.slice(0, 4));
-	const timeline = $derived(performanceAnalytics.timeline.slice(0, 12));
+	const timeline = $derived(performanceAnalytics.timelineCollapsed.slice(0, 12));
 	const persistedSummary = $derived(performanceAnalytics.persistedSummary);
 	const persistenceStatus = $derived(performanceAnalytics.persistenceStatus);
 
@@ -136,7 +137,7 @@
 		return formatTimestamp(timestamp);
 	}
 
-	function getTimelineValue(event: AnalyticsTimelineEvent) {
+	function getTimelineValue(event: TimelineDisplayEvent) {
 		switch (event.kind) {
 			case 'page':
 			case 'network':
@@ -150,7 +151,7 @@
 		}
 	}
 
-	function getTimelineLabel(event: AnalyticsTimelineEvent) {
+	function getTimelineLabel(event: TimelineDisplayEvent) {
 		switch (event.kind) {
 			case 'page':
 				return event.route;
@@ -160,6 +161,9 @@
 			case 'render':
 				return event.name;
 			case 'vital':
+				return event.collapsedCount != null && event.collapsedCount > 1
+					? `${event.name} ×${event.collapsedCount}`
+					: event.name;
 			case 'paint':
 				return event.name;
 		}
@@ -539,7 +543,9 @@
 		<div class="analytics-card__header">
 			<div>
 				<p class="analytics-card__title">Recent Timeline</p>
-				<p class="analytics-card__subtitle">A mixed stream of the latest captured events</p>
+				<p class="analytics-card__subtitle">
+					Latest events; rapid vitals are throttled and collapsed in this list
+				</p>
 			</div>
 		</div>
 		<div class="timeline">
@@ -552,7 +558,12 @@
 							<span class={`timeline-kind timeline-kind--${event.kind}`}>{event.kind}</span>
 							<div>
 								<p class="timeline-row__title">{getTimelineLabel(event)}</p>
-								<p class="timeline-row__subtitle">{formatTimestamp(event.timestamp)}</p>
+								<p class="timeline-row__subtitle">
+									{formatTimestamp(event.timestamp)}
+									{#if event.kind === 'vital' && event.collapsedCount != null && event.collapsedCount > 1}
+										<span class="timeline-row__collapsed"> · newest of {event.collapsedCount}</span>
+									{/if}
+								</p>
 							</div>
 						</div>
 						<span class="timeline-row__value">{getTimelineValue(event)}</span>
@@ -921,6 +932,11 @@
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 0.82rem;
 		color: var(--text-secondary);
+	}
+
+	.timeline-row__collapsed {
+		color: var(--text-muted);
+		font-weight: 500;
 	}
 
 	.empty-state {

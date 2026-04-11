@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const devPort = 4173;
-const devHost = '127.0.0.1';
+const devPort = 5174;
+const devHost = 'localhost';
 const baseURL = `http://${devHost}:${devPort}`;
 
 /** Dev server: `/api/content` PUT and `/editor/*` are only available when `import.meta.env.DEV` is true. */

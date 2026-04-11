@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { flip } from 'svelte/animate';
 	import { onMount } from 'svelte';
 	import type { MapPlaceRecord } from '$lib/types/mapPlaces';
 	import { trackedFetch } from '$lib/stores/performanceAnalytics.svelte';
@@ -7,10 +8,14 @@
 		dateStyle: 'medium',
 		timeStyle: 'short'
 	});
+	const DELETE_EXIT_DURATION_MS = 180;
 
 	let visitors = $state<MapPlaceRecord[]>([]);
 	let loading = $state(true);
 	let refreshing = $state(false);
+	let deletingVisitorId = $state<string | null>(null);
+	let exitingVisitorIds = $state<string[]>([]);
+	let errorTitle = $state('Could not load visitor submissions.');
 	let errorMessage = $state<string | null>(null);
 
 	const visibleVisitors = $derived(
@@ -26,8 +31,17 @@
 		return `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
 	}
 
+	function isVisitorExiting(visitorId: string) {
+		return exitingVisitorIds.includes(visitorId);
+	}
+
+	function wait(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
+
 	async function loadVisitors() {
 		refreshing = true;
+		errorTitle = 'Could not load visitor submissions.';
 		errorMessage = null;
 
 		try {
@@ -47,6 +61,50 @@
 		} finally {
 			loading = false;
 			refreshing = false;
+		}
+	}
+
+	async function deleteVisitor(visitor: MapPlaceRecord) {
+		if (
+			!confirm(`Delete ${visitor.name}'s visitor marker? This cannot be undone from the editor.`)
+		) {
+			return;
+		}
+
+		deletingVisitorId = visitor.id;
+		errorTitle = 'Could not delete visitor submission.';
+		errorMessage = null;
+
+		try {
+			const response = await trackedFetch(
+				'/api/map-places',
+				{
+					method: 'DELETE',
+					headers: {
+						'content-type': 'application/json'
+					},
+					body: JSON.stringify({ id: visitor.id })
+				},
+				{
+					label: 'Editor visitor delete',
+					source: 'EditorVisitorsSection'
+				}
+			);
+
+			if (!response.ok) {
+				const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+				throw new Error(payload?.error ?? `Request failed with ${response.status}`);
+			}
+
+			exitingVisitorIds = [...exitingVisitorIds, visitor.id];
+			await wait(DELETE_EXIT_DURATION_MS);
+			visitors = visitors.filter((entry) => entry.id !== visitor.id);
+			exitingVisitorIds = exitingVisitorIds.filter((entryId) => entryId !== visitor.id);
+		} catch (error) {
+			errorMessage = error instanceof Error ? error.message : 'Unknown error';
+			exitingVisitorIds = exitingVisitorIds.filter((entryId) => entryId !== visitor.id);
+		} finally {
+			deletingVisitorId = null;
 		}
 	}
 
@@ -93,7 +151,7 @@
 					centroid.
 				</p>
 			</div>
-			<span class="visitors-table-card__pill">Read only</span>
+			<span class="visitors-table-card__pill">Manage entries</span>
 		</div>
 
 		{#if loading}
@@ -102,7 +160,7 @@
 			</div>
 		{:else if errorMessage}
 			<div class="visitors-empty visitors-empty--error">
-				<p>Could not load visitor submissions.</p>
+				<p>{errorTitle}</p>
 				<p class="visitors-empty__detail">{errorMessage}</p>
 			</div>
 		{:else if visitors.length === 0}
@@ -120,11 +178,19 @@
 							<th scope="col">Centroid</th>
 							<th scope="col">Status</th>
 							<th scope="col">Submitted</th>
+							<th scope="col">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each visitors as visitor (visitor.id)}
-							<tr>
+							<tr
+								animate:flip={{ duration: 220 }}
+								class={[
+									'visitors-row',
+									deletingVisitorId === visitor.id && 'visitors-row--deleting',
+									isVisitorExiting(visitor.id) && 'visitors-row--exiting'
+								]}
+							>
 								<td>{visitor.name}</td>
 								<td>
 									<div class="visitors-region">
@@ -142,6 +208,17 @@
 									</span>
 								</td>
 								<td>{formatCreatedAt(visitor.createdAt)}</td>
+								<td class="visitors-actions">
+									<button
+										type="button"
+										class="visitors-delete-button"
+										disabled={deletingVisitorId !== null}
+										aria-label={`Delete visitor ${visitor.name}`}
+										onclick={() => void deleteVisitor(visitor)}
+									>
+										{deletingVisitorId === visitor.id ? 'Deleting...' : 'Delete'}
+									</button>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -307,6 +384,28 @@
 		border-bottom: none;
 	}
 
+	.visitors-row > :global(td) {
+		transition:
+			opacity 0.18s ease,
+			transform 0.18s ease,
+			filter 0.18s ease,
+			background-color 0.18s ease,
+			border-color 0.18s ease;
+		transform-origin: center;
+	}
+
+	.visitors-row--deleting > :global(td) {
+		opacity: 0.68;
+		background: color-mix(in srgb, #dc2626 4%, var(--surface));
+	}
+
+	.visitors-row--exiting > :global(td) {
+		opacity: 0;
+		filter: blur(1px);
+		transform: translateY(-0.2rem);
+		border-color: transparent;
+	}
+
 	.visitors-region {
 		display: grid;
 		gap: 0.2rem;
@@ -344,6 +443,39 @@
 	.visitors-status[data-status='hidden'] {
 		background: color-mix(in srgb, #6b7280 18%, var(--surface));
 		color: #6b7280;
+	}
+
+	.visitors-actions {
+		width: 1%;
+		white-space: nowrap;
+	}
+
+	.visitors-delete-button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.45rem 0.75rem;
+		border: 0.0625rem solid color-mix(in srgb, #dc2626 22%, var(--border-color));
+		border-radius: 0.6rem;
+		background: color-mix(in srgb, #dc2626 10%, var(--surface));
+		color: #dc2626;
+		font-size: 0.8rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition:
+			background 0.15s ease,
+			opacity 0.15s ease,
+			transform 0.15s ease;
+	}
+
+	.visitors-delete-button:hover:enabled {
+		background: color-mix(in srgb, #dc2626 16%, var(--surface));
+		transform: translateY(-0.0625rem);
+	}
+
+	.visitors-delete-button:disabled {
+		cursor: wait;
+		opacity: 0.7;
 	}
 
 	.visitors-empty {

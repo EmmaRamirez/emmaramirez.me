@@ -78,6 +78,11 @@ export type AnalyticsTimelineEvent =
 	| VitalMetricEvent
 	| PaintMetricEvent;
 
+/** Timeline row after merging consecutive vital samples for display. */
+export type TimelineDisplayEvent = AnalyticsTimelineEvent & {
+	collapsedCount?: number;
+};
+
 export type PersistedAnalyticsEvent = {
 	id: string;
 	sessionId: string;
@@ -176,6 +181,18 @@ const MAX_VITAL_EVENTS = 200;
 const MAX_PAINT_EVENTS = 20;
 const FLUSH_BATCH_SIZE = 20;
 const FLUSH_DELAY_MS = 2500;
+
+/** Wall-clock throttle for PerformanceObserver vitals (per route + metric). */
+const OBSERVER_VITAL_THROTTLE_MS = {
+	LCP: 420,
+	CLS: 650,
+	INP: 380
+} as const;
+
+/** Consecutive vital rows with gaps ≤ this (ms) collapse into one timeline row (newest first). */
+const TIMELINE_VITAL_COLLAPSE_GAP_MS = 900;
+
+const vitalThrottleWallClock = new Map<string, number>();
 
 const activeMeasures = new Map<string, ActiveMeasure>();
 let isInitialized = false;
@@ -473,7 +490,46 @@ function getRoute() {
 	return state.currentRoute || (browser ? window.location.pathname : '/');
 }
 
-function appendVital(event: VitalMetricEvent) {
+function collapseTimelineForDisplay(events: AnalyticsTimelineEvent[]): TimelineDisplayEvent[] {
+	const out: TimelineDisplayEvent[] = [];
+	let i = 0;
+	while (i < events.length) {
+		const e = events[i]!;
+		if (e.kind !== 'vital') {
+			out.push(e);
+			i++;
+			continue;
+		}
+		const rep = e;
+		let count = 1;
+		let prevTs = e.timestamp;
+		i++;
+		while (i < events.length) {
+			const next = events[i]!;
+			if (next.kind !== 'vital' || next.name !== rep.name || next.route !== rep.route) {
+				break;
+			}
+			if (prevTs - next.timestamp > TIMELINE_VITAL_COLLAPSE_GAP_MS) break;
+			count++;
+			prevTs = next.timestamp;
+			i++;
+		}
+		out.push(count > 1 ? { ...rep, collapsedCount: count } : rep);
+	}
+	return out;
+}
+
+function appendVital(event: VitalMetricEvent, options?: { throttleMs?: number }) {
+	if (options?.throttleMs !== undefined) {
+		const key = `${event.route}\0${event.name}`;
+		const wall = Date.now();
+		const last = vitalThrottleWallClock.get(key) ?? 0;
+		if (wall - last < options.throttleMs) {
+			return;
+		}
+		vitalThrottleWallClock.set(key, wall);
+	}
+
 	state.vitalEvents = appendCapped(state.vitalEvents, event, MAX_VITAL_EVENTS);
 	persistState();
 	enqueueForPersistence(event);
@@ -603,17 +659,20 @@ function setupObservers() {
 			const lastEntry = entries.at(-1);
 			if (!lastEntry) return;
 
-			appendVital({
-				id: createId(),
-				kind: 'vital',
-				name: 'LCP',
-				value: round(lastEntry.startTime),
-				unit: 'ms',
-				rating: rateVital('LCP', lastEntry.startTime),
-				route: getRoute(),
-				timestamp: Date.now(),
-				source: 'PerformanceObserver'
-			});
+			appendVital(
+				{
+					id: createId(),
+					kind: 'vital',
+					name: 'LCP',
+					value: round(lastEntry.startTime),
+					unit: 'ms',
+					rating: rateVital('LCP', lastEntry.startTime),
+					route: getRoute(),
+					timestamp: Date.now(),
+					source: 'PerformanceObserver'
+				},
+				{ throttleMs: OBSERVER_VITAL_THROTTLE_MS.LCP }
+			);
 		});
 		lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 		cleanup.push(() => lcpObserver.disconnect());
@@ -628,17 +687,20 @@ function setupObservers() {
 				clsValue += entry.value ?? 0;
 			}
 
-			appendVital({
-				id: createId(),
-				kind: 'vital',
-				name: 'CLS',
-				value: round(clsValue, 3),
-				unit: 'score',
-				rating: rateVital('CLS', clsValue),
-				route: getRoute(),
-				timestamp: Date.now(),
-				source: 'PerformanceObserver'
-			});
+			appendVital(
+				{
+					id: createId(),
+					kind: 'vital',
+					name: 'CLS',
+					value: round(clsValue, 3),
+					unit: 'score',
+					rating: rateVital('CLS', clsValue),
+					route: getRoute(),
+					timestamp: Date.now(),
+					source: 'PerformanceObserver'
+				},
+				{ throttleMs: OBSERVER_VITAL_THROTTLE_MS.CLS }
+			);
 		});
 		clsObserver.observe({ type: 'layout-shift', buffered: true });
 		cleanup.push(() => clsObserver.disconnect());
@@ -650,17 +712,20 @@ function setupObservers() {
 			const maxDuration = Math.max(0, ...entries.map((entry) => entry.duration));
 			if (maxDuration <= 0) return;
 
-			appendVital({
-				id: createId(),
-				kind: 'vital',
-				name: 'INP',
-				value: round(maxDuration),
-				unit: 'ms',
-				rating: rateVital('INP', maxDuration),
-				route: getRoute(),
-				timestamp: Date.now(),
-				source: 'PerformanceObserver'
-			});
+			appendVital(
+				{
+					id: createId(),
+					kind: 'vital',
+					name: 'INP',
+					value: round(maxDuration),
+					unit: 'ms',
+					rating: rateVital('INP', maxDuration),
+					route: getRoute(),
+					timestamp: Date.now(),
+					source: 'PerformanceObserver'
+				},
+				{ throttleMs: OBSERVER_VITAL_THROTTLE_MS.INP }
+			);
 		});
 		eventObserver.observe({
 			type: 'event',
@@ -747,6 +812,9 @@ export const performanceAnalytics = {
 			...state.vitalEvents,
 			...state.paintEvents
 		].sort((a, b) => b.timestamp - a.timestamp);
+	},
+	get timelineCollapsed() {
+		return collapseTimelineForDisplay(this.timeline);
 	},
 	get summary() {
 		return {
@@ -853,6 +921,7 @@ export const performanceAnalytics = {
 			currentRoute: getRoute()
 		};
 		clsValue = 0;
+		vitalThrottleWallClock.clear();
 		activeMeasures.clear();
 		persistenceQueue = [];
 		persistedSummary = null;

@@ -56,6 +56,13 @@ function parseSubmission(value: unknown): { name: string; regionId: string } | n
 	return { name, regionId };
 }
 
+function parseMapPlaceId(value: unknown) {
+	if (!isRecord(value)) return null;
+
+	const id = typeof value.id === 'string' ? value.id.trim() : '';
+	return id.length > 0 ? id : null;
+}
+
 function getMapPlaceDelegate() {
 	return (prisma as typeof prisma & { mapPlace?: MapPlaceDelegate }).mapPlace;
 }
@@ -141,6 +148,23 @@ async function createMapPlace(submission: { name: string; regionId: string }) {
 	return place;
 }
 
+async function deleteMapPlace(id: string) {
+	const delegate = getMapPlaceDelegate();
+	if (delegate) {
+		return delegate.delete({
+			where: { id }
+		});
+	}
+
+	const [place] = await prisma.$queryRaw<MapPlace[]>(Prisma.sql`
+		DELETE FROM "MapPlace"
+		WHERE "id" = ${id}
+		RETURNING *
+	`);
+
+	return place ?? null;
+}
+
 export const GET = async ({ url }) => {
 	try {
 		const includeAll = dev && url.searchParams.get('includeAll') === 'true';
@@ -179,5 +203,34 @@ export const POST = async ({ request }) => {
 	} catch (error) {
 		console.error('[map-places] POST error:', error);
 		return json({ error: 'Failed to save map place', details: String(error) }, { status: 500 });
+	}
+};
+
+export const DELETE = async ({ request }) => {
+	if (!dev) {
+		return json({ error: 'Not found' }, { status: 404 });
+	}
+
+	try {
+		const body = await request.json();
+		const id = parseMapPlaceId(body);
+
+		if (!id) {
+			return json({ error: 'Invalid payload: expected a non-empty id.' }, { status: 400 });
+		}
+
+		const deletedPlace = await deleteMapPlace(id);
+		if (!deletedPlace) {
+			return json({ error: 'Map place not found.' }, { status: 404 });
+		}
+
+		return json({ place: serializeMapPlace(deletedPlace) });
+	} catch (error) {
+		if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+			return json({ error: 'Map place not found.' }, { status: 404 });
+		}
+
+		console.error('[map-places] DELETE error:', error);
+		return json({ error: 'Failed to delete map place', details: String(error) }, { status: 500 });
 	}
 };

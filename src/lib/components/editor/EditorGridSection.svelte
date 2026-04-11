@@ -580,7 +580,6 @@
 					<li
 						class="grid-item edit-mode h-full {getColSpanClass(key)}"
 						{@attach trackGridItemVisibility(key)}
-						onclick={() => handleItemClick(key)}
 					>
 						<div class="resize-controls">
 							<button
@@ -659,6 +658,7 @@
 							role="button"
 							tabindex="0"
 							aria-pressed={selectedItemKey === key}
+							onclick={() => handleItemClick(key)}
 							onkeydown={(event) => handleItemKeydown(event, key)}
 						>
 							{#if item.kind === 'hero'}
@@ -895,7 +895,6 @@
 								<Input
 									label="Card Title"
 									bind:value={thisSiteTitle}
-									maxlength="40"
 									oninput={handleThisSiteTitleInput}
 									onblur={commitThisSiteTitle}
 									hint="Updates the This Site card title live and persists as a homepage setting."
@@ -946,21 +945,6 @@
 									</dd>
 									<dt>Role</dt>
 									<dd>Personal identity anchor</dd>
-								</dl>
-
-								<p class="details-note">{getStaticItemSummary(selectedItem)}</p>
-							</div>
-						{:else if selectedItem.kind === 'this-site'}
-							<div class="details-stack">
-								<dl class="details-list">
-									<dt>Type</dt>
-									<dd><code>{selectedItem.kind}</code></dd>
-									<dt>Grid Span</dt>
-									<dd>
-										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
-									</dd>
-									<dt>Tags</dt>
-									<dd>SvelteKit, TypeScript, Design tokens</dd>
 								</dl>
 
 								<p class="details-note">{getStaticItemSummary(selectedItem)}</p>
