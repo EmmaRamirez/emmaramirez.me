@@ -8,74 +8,56 @@
 	type Props = Hero3DPropOverrides;
 
 	let {
-		depthScale,
 		revealRadius,
-		parallaxXY,
-		parallaxZ,
-		splatStretch,
-		splatCompress,
-		depthBulge,
-		contourOffset,
-		blobAmplitude,
-		noiseAmplitude,
-		contourInfluence,
-		edgeSoftness,
-		saturationBoost,
-		contrastBoost,
-		rippleSpeed,
-		rippleFrequency,
-		rippleAmplitude,
-		causticScale,
-		causticSpeed,
-		causticIntensity,
-		waterDistortion,
-		mouseDamping,
+		revealSoftness,
+		revealOpacity,
+		idleReveal,
+		cursorDamping,
 		revealDamping,
-		mouseRangeX,
-		mouseRangeY,
-		depthFocusNear,
-		depthFocusFar,
-		depthMixLow,
-		parallaxXGain,
-		parallaxYGain,
-		rippleEdgeInfluence,
-		edgeRippleStrength
+		parallaxStrength,
+		tiltStrength,
+		liftStrength,
+		rippleStrength,
+		rippleFrequency,
+		rippleSpeed,
+		rippleDecay,
+		bounceStrength,
+		bounceFrequency,
+		bounceDecay,
+		fadeStrength,
+		fadeSoftness,
+		glowStrength,
+		glowRadius,
+		chromaStrength,
+		grainStrength,
+		grainScale
 	}: Props = $props();
 
 	const sceneParams = $derived.by(() =>
 		mergeHero3dProps({
-			depthScale,
 			revealRadius,
-			parallaxXY,
-			parallaxZ,
-			splatStretch,
-			splatCompress,
-			depthBulge,
-			contourOffset,
-			blobAmplitude,
-			noiseAmplitude,
-			contourInfluence,
-			edgeSoftness,
-			saturationBoost,
-			contrastBoost,
-			rippleSpeed,
-			rippleFrequency,
-			rippleAmplitude,
-			causticScale,
-			causticSpeed,
-			causticIntensity,
-			waterDistortion,
-			mouseDamping,
+			revealSoftness,
+			revealOpacity,
+			idleReveal,
+			cursorDamping,
 			revealDamping,
-			mouseRangeX,
-			mouseRangeY,
-			depthFocusNear,
-			depthFocusFar,
-			depthMixLow,
-			parallaxXGain,
-			parallaxYGain,
-			rippleEdgeInfluence,
-			edgeRippleStrength
+			parallaxStrength,
+			tiltStrength,
+			liftStrength,
+			rippleStrength,
+			rippleFrequency,
+			rippleSpeed,
+			rippleDecay,
+			bounceStrength,
+			bounceFrequency,
+			bounceDecay,
+			fadeStrength,
+			fadeSoftness,
+			glowStrength,
+			glowRadius,
+			chromaStrength,
+			grainStrength,
+			grainScale
 		})
 	);
 
@@ -143,7 +125,6 @@
 	.hero-media {
 		position: absolute;
 		inset: 0;
-		pointer-events: none;
 	}
 
 	.hero-3d-wrapper,
@@ -159,6 +140,7 @@
 
 	.hero-3d-wrapper {
 		background: linear-gradient(180deg, #3c0e12 0%, #1b101b 100%);
+		pointer-events: auto;
 	}
 
 	.hero-base-image {
@@ -167,6 +149,7 @@
 		filter: saturate(1.01) contrast(0.96) brightness(1.01);
 		transform: scale(1.015);
 		transform-origin: center;
+		pointer-events: none;
 	}
 
 	.hero-image-balance,
@@ -189,6 +172,7 @@
 				rgba(12, 8, 16, 0.78) 100%
 			);
 		z-index: 1;
+		pointer-events: none;
 	}
 
 	.hero-image-sheen {
@@ -198,6 +182,7 @@
 		mix-blend-mode: screen;
 		opacity: 0.58;
 		z-index: 2;
+		pointer-events: none;
 	}
 
 	.hero-media-fade {
@@ -216,6 +201,7 @@
 				rgba(10, 8, 18, 0.46) 100%
 			);
 		z-index: 3;
+		pointer-events: none;
 	}
 
 	.hero-aurora {
@@ -224,6 +210,7 @@
 		filter: blur(44px);
 		opacity: 0.72;
 		z-index: 2;
+		pointer-events: none;
 	}
 
 	.hero-aurora-left {
@@ -253,6 +240,7 @@
 		mask-image: linear-gradient(115deg, transparent 0%, transparent 42%, rgba(0, 0, 0, 0.9) 62%, transparent 100%);
 		opacity: 0.22;
 		z-index: 4;
+		pointer-events: none;
 	}
 
 	.hero-vignette {
@@ -262,6 +250,7 @@
 			inset 0 0 0 1px rgba(255, 255, 255, 0.05),
 			inset 0 -5rem 5rem rgba(5, 5, 12, 0.32);
 		z-index: 5;
+		pointer-events: none;
 	}
 
 	.hero-content {

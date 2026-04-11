@@ -1,4 +1,9 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import {
+		type TopLanguage,
+		type TopLanguagesResponse
+	} from '$lib/github/topLanguages';
 	import { topLanguagesSettings, type TopLanguagesVariant } from '$lib/stores/topLanguages.svelte';
 	import { cn } from '$lib/utils';
 
@@ -7,15 +12,7 @@
 		variant?: TopLanguagesVariant;
 	}
 
-	interface Language {
-		name: string;
-		percentage: number;
-		color: string;
-		note: string;
-	}
-
 	interface VoronoiCell {
-		name: string;
 		points: string;
 		labelX: number;
 		labelY: number;
@@ -24,88 +21,122 @@
 
 	let { class: className = '', variant }: TopLanguagesProps = $props();
 
-	const languages: Language[] = [
-		{
-			name: 'Svelte',
-			percentage: 30,
-			color: 'var(--lang-svelte)',
-			note: 'interfaces, motion, and design systems'
-		},
-		{
-			name: 'TypeScript',
-			percentage: 25,
-			color: 'var(--lang-typescript)',
-			note: 'component APIs, tooling, and app glue'
-		},
-		{
-			name: 'Rust',
-			percentage: 20,
-			color: 'var(--lang-rust)',
-			note: 'CLIs, experiments, and performance rabbit holes'
-		},
-		{
-			name: 'Elixir',
-			percentage: 20,
-			color: 'var(--lang-elixir)',
-			note: 'realtime backends and durable app logic'
-		},
-		{
-			name: 'Haskell',
-			percentage: 5,
-			color: 'var(--lang-haskell)',
-			note: 'type-driven side quests'
-		}
-	];
+	let languages = $state<TopLanguage[]>([]);
+	let loadState = $state<'loading' | 'ready' | 'error'>('loading');
+
+	onMount(() => {
+		const controller = new AbortController();
+
+		void (async () => {
+			try {
+				const response = await fetch('/api/github/top-languages', {
+					signal: controller.signal
+				});
+
+				if (!response.ok) {
+					loadState = 'error';
+					return;
+				}
+
+				const payload = (await response.json()) as TopLanguagesResponse;
+
+				if (payload.languages.length > 0) {
+					languages = payload.languages;
+					loadState = 'ready';
+					return;
+				}
+				loadState = 'error';
+			} catch (error) {
+				if (error instanceof DOMException && error.name === 'AbortError') {
+					return;
+				}
+
+				loadState = 'error';
+				console.error('Failed to load GitHub top languages:', error);
+			}
+		})();
+
+		return () => {
+			controller.abort();
+		};
+	});
 
 	const resolvedVariant = $derived(variant ?? topLanguagesSettings.variant);
-	const topRow = languages.slice(0, 2);
-	const bottomRow = languages.slice(2);
-	const topTotal = topRow.reduce((sum, language) => sum + language.percentage, 0);
-	const bottomTotal = bottomRow.reduce((sum, language) => sum + language.percentage, 0);
-
+	const displayVariant = $derived.by(() =>
+		resolvedVariant === 'voronoi' && languages.length !== 5 ? 'ranked-cards' : resolvedVariant
+	);
+	const topRow = $derived.by(() => languages.slice(0, 2));
+	const bottomRow = $derived.by(() => languages.slice(2));
+	const topTotal = $derived.by(() =>
+		topRow.reduce((sum, language) => sum + language.percentage, 0)
+	);
+	const bottomTotal = $derived.by(() =>
+		bottomRow.reduce((sum, language) => sum + language.percentage, 0)
+	);
 	const voronoiCells: VoronoiCell[] = [
-		{ name: 'Svelte', points: '0,0 55,0 52,47 32,55 0,50', labelX: 22, labelY: 21 },
-		{ name: 'TypeScript', points: '55,0 100,0 100,42 92,46 72,50 52,47', labelX: 77, labelY: 22 },
-		{ name: 'Rust', points: '0,50 32,55 38,100 0,100', labelX: 18, labelY: 76 },
-		{ name: 'Elixir', points: '32,55 72,50 92,46 92,100 38,100', labelX: 60, labelY: 74 },
-		{ name: 'Haskell', points: '92,46 100,42 100,100 92,100', labelX: 96, labelY: 74, rotate: 90 }
+		{ points: '0,0 55,0 52,47 32,55 0,50', labelX: 22, labelY: 21 },
+		{ points: '55,0 100,0 100,42 92,46 72,50 52,47', labelX: 77, labelY: 22 },
+		{ points: '0,50 32,55 38,100 0,100', labelX: 18, labelY: 76 },
+		{ points: '32,55 72,50 92,46 92,100 38,100', labelX: 60, labelY: 74 },
+		{ points: '92,46 100,42 100,100 92,100', labelX: 96, labelY: 74, rotate: 90 }
 	];
-
-	function getLanguageByName(name: string) {
-		return languages.find((language) => language.name === name) ?? languages[0];
-	}
 
 	function getWaffleLanguage(square: number) {
 		let total = 0;
+
 		for (const language of languages) {
 			total += language.percentage;
 			if (square <= total) {
 				return language;
 			}
 		}
+
 		return languages[languages.length - 1];
 	}
 
-	const waffleCells = Array.from({ length: 100 }, (_, index) => getWaffleLanguage(index + 1));
+	const waffleCells = $derived.by(() =>
+		Array.from({ length: 100 }, (_, index) => getWaffleLanguage(index + 1))
+	);
 </script>
 
 <div class={cn('top-languages', className)}>
-	<div class="top-languages-shell" data-variant={resolvedVariant}>
+	<div class="top-languages-shell" data-variant={displayVariant}>
 		<div class="top-languages-header">
 			<span class="top-languages-eyebrow">Programming</span>
-			<p class="top-languages-title">
-				{#if resolvedVariant === 'ranked-cards'}
-					Languages I reach for most often.
-				{:else if resolvedVariant === 'voronoi'}
-					An organic view of the current language mix.
-				{:else}
-					Five ways to read the same language mix.
-				{/if}
-			</p>
+			{#if displayVariant === 'ranked-cards' || displayVariant === 'voronoi'}
+				<p class="top-languages-title">
+					{#if displayVariant === 'ranked-cards'}
+						Languages I reach for most often.
+					{:else}
+						An organic view of the current language mix.
+					{/if}
+				</p>
+			{/if}
 		</div>
 
 		<div class="top-languages-content">
-			{#if resolvedVariant === 'horizontal-bars'}
+			{#if loadState === 'loading'}
+				<div class="loading-state" aria-live="polite" aria-busy="true">
+					<div class="loading-state__copy">
+						<span class="loading-state__title">Loading languages...</span>
+						<span class="loading-state__subtitle">Pulling the latest mix from GitHub.</span>
+					</div>
+					<div class="loading-state__bars" aria-hidden="true">
+						<span class="loading-bar" style="width: 88%"></span>
+						<span class="loading-bar" style="width: 72%"></span>
+						<span class="loading-bar" style="width: 61%"></span>
+						<span class="loading-bar" style="width: 49%"></span>
+						<span class="loading-bar" style="width: 36%"></span>
+					</div>
+				</div>
+			{:else if loadState === 'error'}
+				<div class="loading-state" aria-live="polite">
+					<div class="loading-state__copy">
+						<span class="loading-state__title">Language data unavailable.</span>
+						<span class="loading-state__subtitle">GitHub didn&apos;t return language stats just now.</span>
+					</div>
+				</div>
+			{:else if displayVariant === 'horizontal-bars'}
 				<ol class="bars-list" aria-label="Programming language usage breakdown">
 					{#each languages as language, index (language.name)}
 						<li
@@ -125,7 +156,7 @@
 						</li>
 					{/each}
 				</ol>
-			{:else if resolvedVariant === 'treemap'}
+			{:else if displayVariant === 'treemap'}
 				<div class="treemap-layout" aria-label="Programming language treemap">
 					<div class="treemap-row" style="flex: {topTotal};">
 						{#each topRow as language (language.name)}
@@ -152,15 +183,15 @@
 						{/each}
 					</div>
 				</div>
-			{:else if resolvedVariant === 'voronoi'}
+			{:else if displayVariant === 'voronoi'}
 				<div class="voronoi-layout">
 					<svg
 						viewBox="0 0 100 100"
 						class="voronoi-chart"
 						aria-label="Programming languages as approximate Voronoi cells"
 					>
-						{#each voronoiCells as cell (cell.name)}
-							{@const language = getLanguageByName(cell.name)}
+						{#each languages.slice(0, voronoiCells.length) as language, index (language.name)}
+							{@const cell = voronoiCells[index]}
 							<g style="--lang-color: {language.color};">
 								<polygon points={cell.points} class="voronoi-shape" />
 								{#if cell.rotate}
@@ -184,7 +215,7 @@
 					</svg>
 					<p class="variant-footnote">Approximate cells tuned to the target percentages.</p>
 				</div>
-			{:else if resolvedVariant === 'segmented-bar'}
+			{:else if displayVariant === 'segmented-bar'}
 				<div class="segmented-layout">
 					<div class="segmented-bar" aria-hidden="true">
 						{#each languages as language (language.name)}
@@ -209,7 +240,7 @@
 						{/each}
 					</ul>
 				</div>
-			{:else if resolvedVariant === 'waffle'}
+			{:else if displayVariant === 'waffle'}
 				<div class="waffle-layout">
 					<div class="waffle-grid" aria-hidden="true">
 						{#each waffleCells as language, index (index)}
@@ -307,6 +338,60 @@
 
 	.top-languages-content {
 		min-height: 0;
+	}
+
+	.loading-state {
+		display: grid;
+		align-content: center;
+		gap: 1rem;
+		height: 100%;
+		padding: 0.25rem 0;
+	}
+
+	.loading-state__copy {
+		display: grid;
+		gap: 0.25rem;
+	}
+
+	.loading-state__title {
+		font-size: 0.9rem;
+		font-weight: 700;
+		color: var(--text-primary);
+	}
+
+	.loading-state__subtitle {
+		font-size: 0.74rem;
+		line-height: 1.35;
+		color: var(--text-secondary);
+	}
+
+	.loading-state__bars {
+		display: grid;
+		gap: 0.55rem;
+	}
+
+	.loading-bar {
+		display: block;
+		height: 0.7rem;
+		border-radius: 999px;
+		background: linear-gradient(
+			90deg,
+			color-mix(in srgb, var(--surface-hover) 85%, transparent),
+			color-mix(in srgb, var(--border-color) 55%, transparent),
+			color-mix(in srgb, var(--surface-hover) 85%, transparent)
+		);
+		background-size: 200% 100%;
+		animation: top-languages-loading 1.4s ease-in-out infinite;
+	}
+
+	@keyframes top-languages-loading {
+		0% {
+			background-position: 200% 0;
+		}
+
+		100% {
+			background-position: -200% 0;
+		}
 	}
 
 	.bars-list,

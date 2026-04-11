@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { cn } from '$lib/utils';
 	import { ArticleBlock } from '$lib/components/blocks';
 	import { TagDrawer } from '$lib/components/panels';
@@ -46,6 +47,7 @@
 				tags={article.tags}
 				width="lg"
 				articleId={article.id}
+				href={resolve('/blog/[slug]', { slug: article.slug })}
 				class="h-full hover:border-[var(--liver-brown-700)] hover:shadow-md"
 				contentClass="line-clamp-4"
 				ontagclick={handleTagClick}

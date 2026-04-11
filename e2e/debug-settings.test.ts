@@ -23,20 +23,29 @@ test.describe('Debug Settings API', () => {
 			headerBlendMode: 'multiply',
 			showSectionsEnabled: true,
 			hero3dParams: {
-				depthScale: 0.15,
 				revealRadius: 0.4,
-				parallaxXY: 0.1,
-				parallaxZ: 0.25,
-				splatStretch: 2.0,
-				splatCompress: 0.5,
-				depthBulge: 0.3,
-				contourOffset: 0.4,
-				blobAmplitude: 0.025,
-				noiseAmplitude: 0.035,
-				contourInfluence: 0.5,
-				edgeSoftness: 0.05,
-				saturationBoost: 1.1,
-				contrastBoost: 1.0
+				revealSoftness: 0.09,
+				revealOpacity: 0.88,
+				idleReveal: 0.05,
+				cursorDamping: 4.5,
+				revealDamping: 3.8,
+				parallaxStrength: 0.07,
+				tiltStrength: 0.1,
+				liftStrength: 0.14,
+				rippleStrength: 0.42,
+				rippleFrequency: 0.82,
+				rippleSpeed: 0.74,
+				rippleDecay: 2.4,
+				bounceStrength: 0.38,
+				bounceFrequency: 1.1,
+				bounceDecay: 5.2,
+				fadeStrength: 0.32,
+				fadeSoftness: 0.58,
+				glowStrength: 0.36,
+				glowRadius: 0.16,
+				chromaStrength: 0.18,
+				grainStrength: 0.11,
+				grainScale: 92
 			},
 			discoParams: {
 				sampleHistorySize: 16,
@@ -58,8 +67,8 @@ test.describe('Debug Settings API', () => {
 		const putData = await putResponse.json();
 		expect(putData.settings).toHaveProperty('headerBlendMode', 'multiply');
 		expect(putData.settings).toHaveProperty('showSectionsEnabled', true);
-		expect(putData.settings.hero3dParams).toHaveProperty('depthScale', 0.15);
 		expect(putData.settings.hero3dParams).toHaveProperty('revealRadius', 0.4);
+		expect(putData.settings.hero3dParams).toHaveProperty('glowStrength', 0.36);
 		expect(putData.settings.discoParams).toHaveProperty('sampleHistorySize', 16);
 		expect(putData.settings.discoParams).toHaveProperty('maxBeams', 900);
 
@@ -68,7 +77,7 @@ test.describe('Debug Settings API', () => {
 		const getData = await getResponse.json();
 
 		expect(getData.settings.headerBlendMode).toBe('multiply');
-		expect(getData.settings.hero3dParams.depthScale).toBe(0.15);
+		expect(getData.settings.hero3dParams.revealRadius).toBe(0.4);
 		expect(getData.settings.discoParams.sampleHistorySize).toBe(16);
 	});
 
@@ -91,7 +100,7 @@ test.describe('Debug Settings API', () => {
 		// Missing headerBlendMode
 		const invalidPayload2 = {
 			showSectionsEnabled: false,
-			hero3dParams: { depthScale: 0.1 }
+			hero3dParams: { revealRadius: 0.1 }
 		};
 
 		const response2 = await request.put('/api/debug-settings', {
@@ -123,20 +132,29 @@ test.describe('Debug Menu UI', () => {
 			headerBlendMode: 'screen',
 			showSectionsEnabled: false,
 			hero3dParams: {
-				depthScale: 0.22,
 				revealRadius: 0.55,
-				parallaxXY: 0.18,
-				parallaxZ: 0.35,
-				splatStretch: 3.0,
-				splatCompress: 0.7,
-				depthBulge: 0.4,
-				contourOffset: 0.6,
-				blobAmplitude: 0.04,
-				noiseAmplitude: 0.05,
-				contourInfluence: 0.7,
-				edgeSoftness: 0.08,
-				saturationBoost: 1.2,
-				contrastBoost: 1.1
+				revealSoftness: 0.1,
+				revealOpacity: 0.9,
+				idleReveal: 0.02,
+				cursorDamping: 5,
+				revealDamping: 3.5,
+				parallaxStrength: 0.08,
+				tiltStrength: 0.11,
+				liftStrength: 0.16,
+				rippleStrength: 0.45,
+				rippleFrequency: 0.88,
+				rippleSpeed: 0.78,
+				rippleDecay: 2.6,
+				bounceStrength: 0.4,
+				bounceFrequency: 1.0,
+				bounceDecay: 5,
+				fadeStrength: 0.35,
+				fadeSoftness: 0.62,
+				glowStrength: 0.4,
+				glowRadius: 0.15,
+				chromaStrength: 0.2,
+				grainStrength: 0.14,
+				grainScale: 104
 			},
 			discoParams: {
 				sampleHistorySize: 14,
@@ -170,9 +188,9 @@ test.describe('Debug Menu UI', () => {
 		await page.keyboard.press('d');
 		await expect(page.locator('dialog')).toBeVisible();
 
-		// Find and interact with a slider (e.g., Depth Scale)
-		const depthScaleSlider = page.locator('input[type="range"]').first();
-		await expect(depthScaleSlider).toBeVisible();
+		// Find and interact with the first hero effect slider
+		const firstHeroSlider = page.locator('input[type="range"]').first();
+		await expect(firstHeroSlider).toBeVisible();
 
 		// Set up request interception to track API calls
 		const putRequests: string[] = [];
@@ -183,11 +201,11 @@ test.describe('Debug Menu UI', () => {
 		});
 
 		// Get the current value and change it
-		const currentValue = await depthScaleSlider.inputValue();
+		const currentValue = await firstHeroSlider.inputValue();
 		const newValue = parseFloat(currentValue) + 0.05;
 
 		// Change the slider value
-		await depthScaleSlider.fill(String(newValue));
+		await firstHeroSlider.fill(String(newValue));
 
 		// Wait for the debounced save to complete (500ms debounce + buffer)
 		await page.waitForTimeout(700);
@@ -202,20 +220,29 @@ test.describe('Debug Menu UI', () => {
 			headerBlendMode: 'overlay',
 			showSectionsEnabled: true,
 			hero3dParams: {
-				depthScale: 0.33,
 				revealRadius: 0.65,
-				parallaxXY: 0.2,
-				parallaxZ: 0.4,
-				splatStretch: 2.5,
-				splatCompress: 0.65,
-				depthBulge: 0.38,
-				contourOffset: 0.55,
-				blobAmplitude: 0.035,
-				noiseAmplitude: 0.045,
-				contourInfluence: 0.65,
-				edgeSoftness: 0.07,
-				saturationBoost: 1.18,
-				contrastBoost: 1.08
+				revealSoftness: 0.12,
+				revealOpacity: 0.94,
+				idleReveal: 0.04,
+				cursorDamping: 4.8,
+				revealDamping: 3.9,
+				parallaxStrength: 0.09,
+				tiltStrength: 0.12,
+				liftStrength: 0.18,
+				rippleStrength: 0.48,
+				rippleFrequency: 0.92,
+				rippleSpeed: 0.82,
+				rippleDecay: 2.2,
+				bounceStrength: 0.44,
+				bounceFrequency: 1.05,
+				bounceDecay: 4.7,
+				fadeStrength: 0.38,
+				fadeSoftness: 0.66,
+				glowStrength: 0.42,
+				glowRadius: 0.18,
+				chromaStrength: 0.22,
+				grainStrength: 0.16,
+				grainScale: 96
 			},
 			discoParams: {
 				sampleHistorySize: 18,

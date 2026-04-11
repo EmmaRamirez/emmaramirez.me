@@ -747,12 +747,17 @@
 			justify-content: center;
 		}
 
+		.live-grid-container {
+			order: 2;
+		}
+
 		.side-panel {
-			position: static;
-			top: auto;
-			max-height: none;
-			overflow: visible;
+			order: 1;
+			top: 5rem;
+			max-height: calc(100vh - 6rem);
+			overflow-y: auto;
 			padding-right: 0;
+			z-index: 5;
 		}
 	}
 

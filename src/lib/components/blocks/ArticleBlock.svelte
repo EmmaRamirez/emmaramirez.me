@@ -11,6 +11,7 @@
 		class?: string;
 		titleClass?: string;
 		articleId?: string;
+		href?: string;
 		contentClass?: string;
 		ontagclick?: (tag: string) => void;
 	}
@@ -24,6 +25,7 @@
 		class: className,
 		titleClass,
 		articleId = 'article-block',
+		href = '/blog',
 		contentClass,
 		ontagclick
 	}: ArticleBlockProps = $props();
@@ -42,7 +44,7 @@
 	)}
 	id={articleId}
 >
-	<a class="style-none block cursor-pointer p-4" href="/blog/article">
+	<a class="style-none block cursor-pointer p-4" {href}>
 		<div class={cn('article-block-title mb-2 text-xl leading-tight font-bold', titleClass)}>
 			{title}
 		</div>

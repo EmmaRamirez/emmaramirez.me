@@ -25,7 +25,18 @@
 	<link rel="icon" href={favicon} />
 	<script>
 		(function () {
-			const stored = localStorage.getItem('theme');
+			const settingsKey = 'emzinnia:user-settings';
+			let stored = null;
+			try {
+				const raw = localStorage.getItem(settingsKey);
+				if (raw) {
+					const parsed = JSON.parse(raw);
+					if (parsed?.theme === 'light' || parsed?.theme === 'dark') {
+						stored = parsed.theme;
+					}
+				}
+			} catch {}
+			stored = stored || localStorage.getItem('theme');
 			const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches
 				? 'dark'
 				: 'light';

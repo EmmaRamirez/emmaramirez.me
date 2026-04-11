@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { Drawer } from '$lib/components/ui';
 	import { formatShortDateAbsolute } from '$lib/utils';
 
@@ -491,7 +492,7 @@
 		<div class="space-y-4">
 			{#each articles as article (article.id)}
 				<a
-					href="/blog/article"
+					href={resolve('/blog/[slug]', { slug: article.id })}
 					class="block rounded-lg border border-[var(--liver-brown-400)] bg-[var(--transit-yellow-500)] p-4 transition-all hover:border-[var(--liver-brown-700)] hover:shadow-md"
 				>
 					<h3 class="mb-2 text-lg font-bold text-[var(--liver-brown-800)]">{article.title}</h3>

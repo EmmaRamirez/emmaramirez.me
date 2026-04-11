@@ -3,8 +3,9 @@ import { SvelteMap } from 'svelte/reactivity';
 import type { GridItem } from '$lib/types/homepage';
 
 /**
- * Layout persistence is namespaced per surface so the homepage grid (with api-explorer) and
- * the /editor preview grid do not share order/layout entries in localStorage.
+ * The editor is the live layout editor for the homepage, so both surfaces intentionally share
+ * one persisted layout/order state. Surfaces can still pass different item sets and any missing
+ * items are appended automatically by `reorderItems`.
  */
 
 export interface GridItemLayout {
@@ -75,15 +76,7 @@ class GridLayoutStore {
 				this.order = saved.order;
 				this.layouts = new SvelteMap(Object.entries(saved.layouts));
 				this.initialized = true;
-
-				for (const item of items) {
-					const key = getItemKey(item);
-					if (!this.layouts.has(key)) {
-						const layout = getDefaultLayout(item);
-						this.layouts.set(key, layout);
-						this.order.push(key);
-					}
-				}
+				this.syncItems(items);
 				return;
 			}
 		}
@@ -95,6 +88,22 @@ class GridLayoutStore {
 				this.layouts.set(layout.key, layout);
 			}
 			this.initialized = true;
+		}
+
+		this.syncItems(items);
+	}
+
+	private syncItems(items: GridItem[]) {
+		for (const item of items) {
+			const key = getItemKey(item);
+			if (!this.layouts.has(key)) {
+				const layout = getDefaultLayout(item);
+				this.layouts.set(key, layout);
+			}
+
+			if (!this.order.includes(key)) {
+				this.order.push(key);
+			}
 		}
 	}
 
@@ -217,8 +226,8 @@ class GridLayoutStore {
 	}
 }
 
-/** Homepage grid (includes api-explorer); used by MainGrid and tests. */
+/** Homepage grid (includes api-explorer); also shared by the live editor route. */
 export const gridLayoutStore = new GridLayoutStore('emzinnia-grid-layout:homepage');
-/** Editor route grid preview; separate persistence from homepage. */
-export const editorGridLayoutStore = new GridLayoutStore('emzinnia-grid-layout:editor');
+/** Editor route shares the homepage layout so ordering changes affect the homepage itself. */
+export const editorGridLayoutStore = gridLayoutStore;
 export { getItemKey };

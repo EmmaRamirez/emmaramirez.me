@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { T, useTask } from '@threlte/core';
 	import { useTexture } from '@threlte/extras';
-	import paintingImage from '$lib/images/photos/emma-painting-full-day.png';
+	import paintingBaseImage from '$lib/images/photos/emma-painting-full.jpeg';
+	import paintingRevealImage from '$lib/images/photos/emma-painting-full-day.png';
 	import {
 		defaultHero3DParams,
 		type Hero3DParams
@@ -19,7 +20,8 @@
 		$props();
 
 	const textures = useTexture({
-		portrait: paintingImage
+		base: paintingBaseImage,
+		reveal: paintingRevealImage
 	});
 
 	let shaderMaterialRef: THREE.ShaderMaterial | null = null;
@@ -28,129 +30,112 @@
 		time: 0,
 		targetMouse: { x: 0.5, y: 0.5 },
 		currentMouse: { x: 0.5, y: 0.5 },
-		revealProgress: 0,
+		previousTargetMouse: { x: 0.5, y: 0.5 },
+		hoverProgress: 0,
+		motionEnergy: 0,
 		isHovering: false,
-		depthScale: defaultHero3DParams.depthScale,
 		revealRadius: defaultHero3DParams.revealRadius,
-		parallaxXY: defaultHero3DParams.parallaxXY,
-		parallaxZ: defaultHero3DParams.parallaxZ,
-		splatStretch: defaultHero3DParams.splatStretch,
-		splatCompress: defaultHero3DParams.splatCompress,
-		depthBulge: defaultHero3DParams.depthBulge,
-		contourOffset: defaultHero3DParams.contourOffset,
-		blobAmplitude: defaultHero3DParams.blobAmplitude,
-		noiseAmplitude: defaultHero3DParams.noiseAmplitude,
-		contourInfluence: defaultHero3DParams.contourInfluence,
-		edgeSoftness: defaultHero3DParams.edgeSoftness,
-		saturationBoost: defaultHero3DParams.saturationBoost,
-		contrastBoost: defaultHero3DParams.contrastBoost,
-		rippleSpeed: defaultHero3DParams.rippleSpeed,
-		rippleFrequency: defaultHero3DParams.rippleFrequency,
-		rippleAmplitude: defaultHero3DParams.rippleAmplitude,
-		causticScale: defaultHero3DParams.causticScale,
-		causticSpeed: defaultHero3DParams.causticSpeed,
-		causticIntensity: defaultHero3DParams.causticIntensity,
-		waterDistortion: defaultHero3DParams.waterDistortion,
-		mouseDamping: defaultHero3DParams.mouseDamping,
+		revealSoftness: defaultHero3DParams.revealSoftness,
+		revealOpacity: defaultHero3DParams.revealOpacity,
+		idleReveal: defaultHero3DParams.idleReveal,
+		cursorDamping: defaultHero3DParams.cursorDamping,
 		revealDamping: defaultHero3DParams.revealDamping,
-		mouseRangeX: defaultHero3DParams.mouseRangeX,
-		mouseRangeY: defaultHero3DParams.mouseRangeY,
-		depthFocusNear: defaultHero3DParams.depthFocusNear,
-		depthFocusFar: defaultHero3DParams.depthFocusFar,
-		depthMixLow: defaultHero3DParams.depthMixLow,
-		parallaxXGain: defaultHero3DParams.parallaxXGain,
-		parallaxYGain: defaultHero3DParams.parallaxYGain,
-		rippleEdgeInfluence: defaultHero3DParams.rippleEdgeInfluence,
-		edgeRippleStrength: defaultHero3DParams.edgeRippleStrength
+		parallaxStrength: defaultHero3DParams.parallaxStrength,
+		tiltStrength: defaultHero3DParams.tiltStrength,
+		liftStrength: defaultHero3DParams.liftStrength,
+		rippleStrength: defaultHero3DParams.rippleStrength,
+		rippleFrequency: defaultHero3DParams.rippleFrequency,
+		rippleSpeed: defaultHero3DParams.rippleSpeed,
+		rippleDecay: defaultHero3DParams.rippleDecay,
+		bounceStrength: defaultHero3DParams.bounceStrength,
+		bounceFrequency: defaultHero3DParams.bounceFrequency,
+		bounceDecay: defaultHero3DParams.bounceDecay,
+		fadeStrength: defaultHero3DParams.fadeStrength,
+		fadeSoftness: defaultHero3DParams.fadeSoftness,
+		glowStrength: defaultHero3DParams.glowStrength,
+		glowRadius: defaultHero3DParams.glowRadius,
+		chromaStrength: defaultHero3DParams.chromaStrength,
+		grainStrength: defaultHero3DParams.grainStrength,
+		grainScale: defaultHero3DParams.grainScale
 	};
 
 	$effect(() => {
 		refs.targetMouse.x = mouseX;
 		refs.targetMouse.y = mouseY;
 		refs.isHovering = isHovering;
-		refs.depthScale = sceneParams.depthScale;
 		refs.revealRadius = sceneParams.revealRadius;
-		refs.parallaxXY = sceneParams.parallaxXY;
-		refs.parallaxZ = sceneParams.parallaxZ;
-		refs.splatStretch = sceneParams.splatStretch;
-		refs.splatCompress = sceneParams.splatCompress;
-		refs.depthBulge = sceneParams.depthBulge;
-		refs.contourOffset = sceneParams.contourOffset;
-		refs.blobAmplitude = sceneParams.blobAmplitude;
-		refs.noiseAmplitude = sceneParams.noiseAmplitude;
-		refs.contourInfluence = sceneParams.contourInfluence;
-		refs.edgeSoftness = sceneParams.edgeSoftness;
-		refs.saturationBoost = sceneParams.saturationBoost;
-		refs.contrastBoost = sceneParams.contrastBoost;
-		refs.rippleSpeed = sceneParams.rippleSpeed;
-		refs.rippleFrequency = sceneParams.rippleFrequency;
-		refs.rippleAmplitude = sceneParams.rippleAmplitude;
-		refs.causticScale = sceneParams.causticScale;
-		refs.causticSpeed = sceneParams.causticSpeed;
-		refs.causticIntensity = sceneParams.causticIntensity;
-		refs.waterDistortion = sceneParams.waterDistortion;
-		refs.mouseDamping = sceneParams.mouseDamping;
+		refs.revealSoftness = sceneParams.revealSoftness;
+		refs.revealOpacity = sceneParams.revealOpacity;
+		refs.idleReveal = sceneParams.idleReveal;
+		refs.cursorDamping = sceneParams.cursorDamping;
 		refs.revealDamping = sceneParams.revealDamping;
-		refs.mouseRangeX = sceneParams.mouseRangeX;
-		refs.mouseRangeY = sceneParams.mouseRangeY;
-		refs.depthFocusNear = sceneParams.depthFocusNear;
-		refs.depthFocusFar = sceneParams.depthFocusFar;
-		refs.depthMixLow = sceneParams.depthMixLow;
-		refs.parallaxXGain = sceneParams.parallaxXGain;
-		refs.parallaxYGain = sceneParams.parallaxYGain;
-		refs.rippleEdgeInfluence = sceneParams.rippleEdgeInfluence;
-		refs.edgeRippleStrength = sceneParams.edgeRippleStrength;
+		refs.parallaxStrength = sceneParams.parallaxStrength;
+		refs.tiltStrength = sceneParams.tiltStrength;
+		refs.liftStrength = sceneParams.liftStrength;
+		refs.rippleStrength = sceneParams.rippleStrength;
+		refs.rippleFrequency = sceneParams.rippleFrequency;
+		refs.rippleSpeed = sceneParams.rippleSpeed;
+		refs.rippleDecay = sceneParams.rippleDecay;
+		refs.bounceStrength = sceneParams.bounceStrength;
+		refs.bounceFrequency = sceneParams.bounceFrequency;
+		refs.bounceDecay = sceneParams.bounceDecay;
+		refs.fadeStrength = sceneParams.fadeStrength;
+		refs.fadeSoftness = sceneParams.fadeSoftness;
+		refs.glowStrength = sceneParams.glowStrength;
+		refs.glowRadius = sceneParams.glowRadius;
+		refs.chromaStrength = sceneParams.chromaStrength;
+		refs.grainStrength = sceneParams.grainStrength;
+		refs.grainScale = sceneParams.grainScale;
 	});
 
 	useTask((delta) => {
 		refs.time += delta;
-		const mouseDampingFactor = 1 - Math.exp(-delta * refs.mouseDamping);
+		const mouseDampingFactor = 1 - Math.exp(-delta * refs.cursorDamping);
 		const revealDampingFactor = 1 - Math.exp(-delta * refs.revealDamping);
 
 		refs.currentMouse.x += (refs.targetMouse.x - refs.currentMouse.x) * mouseDampingFactor;
 		refs.currentMouse.y += (refs.targetMouse.y - refs.currentMouse.y) * mouseDampingFactor;
 
+		const movement = Math.hypot(
+			refs.targetMouse.x - refs.previousTargetMouse.x,
+			refs.targetMouse.y - refs.previousTargetMouse.y
+		);
+		refs.previousTargetMouse.x = refs.targetMouse.x;
+		refs.previousTargetMouse.y = refs.targetMouse.y;
+		refs.motionEnergy = Math.min(
+			1,
+			refs.motionEnergy * Math.exp(-delta * refs.bounceDecay) + movement * 12
+		);
+
 		const targetProgress = refs.isHovering ? 1 : 0;
-		refs.revealProgress += (targetProgress - refs.revealProgress) * revealDampingFactor;
+		refs.hoverProgress += (targetProgress - refs.hoverProgress) * revealDampingFactor;
 
 		if (!shaderMaterialRef) return;
 
 		shaderMaterialRef.uniforms.uTime.value = refs.time;
 		shaderMaterialRef.uniforms.uMouse.value.set(refs.currentMouse.x, refs.currentMouse.y);
-		shaderMaterialRef.uniforms.uProgress.value = refs.revealProgress;
-		shaderMaterialRef.uniforms.uDepthScale.value = refs.depthScale;
+		shaderMaterialRef.uniforms.uHoverProgress.value = refs.hoverProgress;
+		shaderMaterialRef.uniforms.uMotionEnergy.value = refs.motionEnergy;
 		shaderMaterialRef.uniforms.uRevealRadius.value = refs.revealRadius;
-		shaderMaterialRef.uniforms.uParallaxXY.value = refs.parallaxXY;
-		shaderMaterialRef.uniforms.uParallaxZ.value = refs.parallaxZ;
-		shaderMaterialRef.uniforms.uSplatStretch.value = refs.splatStretch;
-		shaderMaterialRef.uniforms.uSplatCompress.value = refs.splatCompress;
-		shaderMaterialRef.uniforms.uDepthBulge.value = refs.depthBulge;
-		shaderMaterialRef.uniforms.uContourOffset.value = refs.contourOffset;
-		shaderMaterialRef.uniforms.uBlobAmplitude.value = refs.blobAmplitude;
-		shaderMaterialRef.uniforms.uNoiseAmplitude.value = refs.noiseAmplitude;
-		shaderMaterialRef.uniforms.uContourInfluence.value = refs.contourInfluence;
-		shaderMaterialRef.uniforms.uEdgeSoftness.value = refs.edgeSoftness;
-		shaderMaterialRef.uniforms.uSaturationBoost.value = refs.saturationBoost;
-		shaderMaterialRef.uniforms.uContrastBoost.value = refs.contrastBoost;
-		shaderMaterialRef.uniforms.uRippleSpeed.value = refs.rippleSpeed;
+		shaderMaterialRef.uniforms.uRevealSoftness.value = refs.revealSoftness;
+		shaderMaterialRef.uniforms.uRevealOpacity.value = refs.revealOpacity;
+		shaderMaterialRef.uniforms.uIdleReveal.value = refs.idleReveal;
+		shaderMaterialRef.uniforms.uParallaxStrength.value = refs.parallaxStrength;
+		shaderMaterialRef.uniforms.uTiltStrength.value = refs.tiltStrength;
+		shaderMaterialRef.uniforms.uLiftStrength.value = refs.liftStrength;
+		shaderMaterialRef.uniforms.uRippleStrength.value = refs.rippleStrength;
 		shaderMaterialRef.uniforms.uRippleFrequency.value = refs.rippleFrequency;
-		shaderMaterialRef.uniforms.uRippleAmplitude.value = refs.rippleAmplitude;
-		shaderMaterialRef.uniforms.uCausticScale.value = refs.causticScale;
-		shaderMaterialRef.uniforms.uCausticSpeed.value = refs.causticSpeed;
-		shaderMaterialRef.uniforms.uCausticIntensity.value = refs.causticIntensity;
-		shaderMaterialRef.uniforms.uWaterDistortion.value = refs.waterDistortion;
-		shaderMaterialRef.uniforms.uMouseRange.value.set(refs.mouseRangeX, refs.mouseRangeY);
-		shaderMaterialRef.uniforms.uDepthFocusRange.value.set(
-			refs.depthFocusNear,
-			refs.depthFocusFar
-		);
-		shaderMaterialRef.uniforms.uDepthMixLow.value = refs.depthMixLow;
-		shaderMaterialRef.uniforms.uParallaxAxisGain.value.set(
-			refs.parallaxXGain,
-			refs.parallaxYGain
-		);
-		shaderMaterialRef.uniforms.uRippleEdgeInfluence.value = refs.rippleEdgeInfluence;
-		shaderMaterialRef.uniforms.uEdgeRippleStrength.value = refs.edgeRippleStrength;
+		shaderMaterialRef.uniforms.uRippleSpeed.value = refs.rippleSpeed;
+		shaderMaterialRef.uniforms.uRippleDecay.value = refs.rippleDecay;
+		shaderMaterialRef.uniforms.uBounceStrength.value = refs.bounceStrength;
+		shaderMaterialRef.uniforms.uBounceFrequency.value = refs.bounceFrequency;
+		shaderMaterialRef.uniforms.uFadeStrength.value = refs.fadeStrength;
+		shaderMaterialRef.uniforms.uFadeSoftness.value = refs.fadeSoftness;
+		shaderMaterialRef.uniforms.uGlowStrength.value = refs.glowStrength;
+		shaderMaterialRef.uniforms.uGlowRadius.value = refs.glowRadius;
+		shaderMaterialRef.uniforms.uChromaStrength.value = refs.chromaStrength;
+		shaderMaterialRef.uniforms.uGrainStrength.value = refs.grainStrength;
+		shaderMaterialRef.uniforms.uGrainScale.value = refs.grainScale;
 	});
 
 	const imageAspect = 1;
@@ -159,50 +144,47 @@
 	const focusY = 0.52;
 	const vOffset = focusY - vScale / 2;
 
-	function createShaderMaterial(textures: { portrait: THREE.Texture }): THREE.ShaderMaterial {
-		textures.portrait.colorSpace = THREE.SRGBColorSpace;
-		textures.portrait.minFilter = THREE.LinearFilter;
-		textures.portrait.magFilter = THREE.LinearFilter;
+	function createShaderMaterial(textures: {
+		base: THREE.Texture;
+		reveal: THREE.Texture;
+	}): THREE.ShaderMaterial {
+		textures.base.colorSpace = THREE.SRGBColorSpace;
+		textures.base.minFilter = THREE.LinearFilter;
+		textures.base.magFilter = THREE.LinearFilter;
+		textures.reveal.colorSpace = THREE.SRGBColorSpace;
+		textures.reveal.minFilter = THREE.LinearFilter;
+		textures.reveal.magFilter = THREE.LinearFilter;
 
 		const material = new THREE.ShaderMaterial({
 			uniforms: {
-				uTexture: { value: textures.portrait },
+				uBaseTexture: { value: textures.base },
+				uRevealTexture: { value: textures.reveal },
 				uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-				uProgress: { value: 0 },
+				uHoverProgress: { value: 0 },
+				uMotionEnergy: { value: 0 },
 				uTime: { value: 0 },
-				uDepthScale: { value: sceneParams.depthScale },
 				uRevealRadius: { value: sceneParams.revealRadius },
-				uParallaxXY: { value: sceneParams.parallaxXY },
-				uParallaxZ: { value: sceneParams.parallaxZ },
-				uSplatStretch: { value: sceneParams.splatStretch },
-				uSplatCompress: { value: sceneParams.splatCompress },
-				uDepthBulge: { value: sceneParams.depthBulge },
-				uContourOffset: { value: sceneParams.contourOffset },
-				uBlobAmplitude: { value: sceneParams.blobAmplitude },
-				uNoiseAmplitude: { value: sceneParams.noiseAmplitude },
-				uContourInfluence: { value: sceneParams.contourInfluence },
-				uEdgeSoftness: { value: sceneParams.edgeSoftness },
-				uSaturationBoost: { value: sceneParams.saturationBoost },
-				uContrastBoost: { value: sceneParams.contrastBoost },
-				uVScale: { value: vScale },
-				uVOffset: { value: vOffset },
-				uRippleSpeed: { value: sceneParams.rippleSpeed },
+				uRevealSoftness: { value: sceneParams.revealSoftness },
+				uRevealOpacity: { value: sceneParams.revealOpacity },
+				uIdleReveal: { value: sceneParams.idleReveal },
+				uParallaxStrength: { value: sceneParams.parallaxStrength },
+				uTiltStrength: { value: sceneParams.tiltStrength },
+				uLiftStrength: { value: sceneParams.liftStrength },
+				uRippleStrength: { value: sceneParams.rippleStrength },
 				uRippleFrequency: { value: sceneParams.rippleFrequency },
-				uRippleAmplitude: { value: sceneParams.rippleAmplitude },
-				uCausticScale: { value: sceneParams.causticScale },
-				uCausticSpeed: { value: sceneParams.causticSpeed },
-				uCausticIntensity: { value: sceneParams.causticIntensity },
-				uWaterDistortion: { value: sceneParams.waterDistortion },
-				uMouseRange: { value: new THREE.Vector2(sceneParams.mouseRangeX, sceneParams.mouseRangeY) },
-				uDepthFocusRange: {
-					value: new THREE.Vector2(sceneParams.depthFocusNear, sceneParams.depthFocusFar)
-				},
-				uDepthMixLow: { value: sceneParams.depthMixLow },
-				uParallaxAxisGain: {
-					value: new THREE.Vector2(sceneParams.parallaxXGain, sceneParams.parallaxYGain)
-				},
-				uRippleEdgeInfluence: { value: sceneParams.rippleEdgeInfluence },
-				uEdgeRippleStrength: { value: sceneParams.edgeRippleStrength }
+				uRippleSpeed: { value: sceneParams.rippleSpeed },
+				uRippleDecay: { value: sceneParams.rippleDecay },
+				uBounceStrength: { value: sceneParams.bounceStrength },
+				uBounceFrequency: { value: sceneParams.bounceFrequency },
+				uFadeStrength: { value: sceneParams.fadeStrength },
+				uFadeSoftness: { value: sceneParams.fadeSoftness },
+				uGlowStrength: { value: sceneParams.glowStrength },
+				uGlowRadius: { value: sceneParams.glowRadius },
+				uChromaStrength: { value: sceneParams.chromaStrength },
+				uGrainStrength: { value: sceneParams.grainStrength },
+				uGrainScale: { value: sceneParams.grainScale },
+				uVScale: { value: vScale },
+				uVOffset: { value: vOffset }
 			},
 			vertexShader,
 			fragmentShader,
@@ -215,293 +197,147 @@
 	}
 
 	const vertexShader = `
-		uniform sampler2D uTexture;
 		uniform vec2 uMouse;
-		uniform float uProgress;
-		uniform float uDepthScale;
-		uniform float uParallaxXY;
-		uniform float uParallaxZ;
+		uniform float uHoverProgress;
+		uniform float uMotionEnergy;
+		uniform float uTiltStrength;
+		uniform float uLiftStrength;
 		uniform float uVScale;
 		uniform float uVOffset;
-		uniform vec2 uMouseRange;
-		uniform vec2 uDepthFocusRange;
-		uniform float uDepthMixLow;
-		uniform vec2 uParallaxAxisGain;
 
 		varying vec2 vUv;
 		varying vec2 vRawUv;
-
-		float getLuma(vec3 color) {
-			return dot(color, vec3(0.299, 0.587, 0.114));
-		}
-
-		float softCircle(vec2 uv, vec2 center, float radius, float feather) {
-			float dist = distance(uv, center);
-			return 1.0 - smoothstep(radius, radius + feather, dist);
-		}
-
-		float samplePseudoDepth(vec2 uv) {
-			vec3 base = texture2D(uTexture, uv).rgb;
-			float luma = getLuma(base);
-			float warmth = smoothstep(-0.05, 0.48, base.r - base.b);
-			float faceMask = softCircle(uv, vec2(0.52, 0.58), 0.12, 0.18);
-			float hairMask = softCircle(uv, vec2(0.52, 0.74), 0.18, 0.2);
-			float handMask = softCircle(uv, vec2(0.84, 0.48), 0.09, 0.16);
-			float torsoMask = softCircle(uv, vec2(0.52, 0.34), 0.22, 0.24);
-			float centerLift = 1.0 - smoothstep(0.18, 0.62, distance(uv, vec2(0.52, 0.54)));
-			float vignette = smoothstep(0.48, 0.98, distance(uv, vec2(0.5, 0.55)));
-			float depth = luma * 0.34
-				+ warmth * 0.18
-				+ faceMask * 0.24
-				+ hairMask * 0.18
-				+ handMask * 0.12
-				+ torsoMask * 0.09
-				+ centerLift * 0.18
-				- vignette * 0.16;
-			return clamp(depth, 0.08, 0.96);
-		}
+		varying float vLift;
 
 		void main() {
 			vRawUv = uv;
 			vUv = vec2(uv.x, uv.y * uVScale + uVOffset);
-
-			float depthBase = samplePseudoDepth(vUv);
-			float revealDepth = clamp(
-				depthBase * 0.82
-					+ softCircle(vUv, vec2(0.52, 0.58), 0.18, 0.24) * 0.2
-					+ softCircle(vUv, vec2(0.84, 0.48), 0.1, 0.18) * 0.08,
-				0.0,
-				1.0
-			);
-			float depth = mix(depthBase, revealDepth, uProgress * 0.4);
-
-			vec2 mouseOffset = (uMouse - 0.5) * uMouseRange;
-			float depthFocus = smoothstep(uDepthFocusRange.x, uDepthFocusRange.y, depth);
-			float parallaxStrength = mix(depth * uDepthMixLow, depth, depthFocus) * uDepthScale;
-
+			vec2 centered = uv - 0.5;
+			vec2 mouseOffset = uMouse - 0.5;
+			float cursorLift = exp(-distance(uv, uMouse) * 8.0) * uLiftStrength;
+			float hoverLift = cursorLift
+				* (0.4 + 0.6 * uHoverProgress)
+				* (1.0 + uMotionEnergy * 0.35);
 			vec3 displaced = position;
-			displaced.x += mouseOffset.x * parallaxStrength * uParallaxXY * uParallaxAxisGain.x;
-			displaced.y += mouseOffset.y * parallaxStrength * uParallaxXY * uParallaxAxisGain.y;
-			displaced.z += depthFocus * depth * uDepthScale * uParallaxZ;
+			displaced.x += centered.y * mouseOffset.x * uTiltStrength * 0.28;
+			displaced.y += centered.x * mouseOffset.y * uTiltStrength * 0.22;
+			displaced.z += hoverLift;
+			vLift = hoverLift;
 
 			gl_Position = projectionMatrix * modelViewMatrix * vec4(displaced, 1.0);
 		}
 	`;
 
 	const fragmentShader = `
-		uniform sampler2D uTexture;
+		uniform sampler2D uBaseTexture;
+		uniform sampler2D uRevealTexture;
 		uniform vec2 uMouse;
-		uniform float uProgress;
+		uniform float uHoverProgress;
+		uniform float uMotionEnergy;
 		uniform float uTime;
 		uniform float uRevealRadius;
-		uniform float uSplatStretch;
-		uniform float uSplatCompress;
-		uniform float uDepthBulge;
-		uniform float uContourOffset;
-		uniform float uBlobAmplitude;
-		uniform float uNoiseAmplitude;
-		uniform float uContourInfluence;
-		uniform float uEdgeSoftness;
-		uniform float uSaturationBoost;
-		uniform float uContrastBoost;
-		uniform float uRippleSpeed;
+		uniform float uRevealSoftness;
+		uniform float uRevealOpacity;
+		uniform float uIdleReveal;
+		uniform float uParallaxStrength;
+		uniform float uTiltStrength;
+		uniform float uRippleStrength;
 		uniform float uRippleFrequency;
-		uniform float uRippleAmplitude;
-		uniform float uCausticScale;
-		uniform float uCausticSpeed;
-		uniform float uCausticIntensity;
-		uniform float uWaterDistortion;
-		uniform float uRippleEdgeInfluence;
-		uniform float uEdgeRippleStrength;
+		uniform float uRippleSpeed;
+		uniform float uRippleDecay;
+		uniform float uBounceStrength;
+		uniform float uBounceFrequency;
+		uniform float uFadeStrength;
+		uniform float uFadeSoftness;
+		uniform float uGlowStrength;
+		uniform float uGlowRadius;
+		uniform float uChromaStrength;
+		uniform float uGrainStrength;
+		uniform float uGrainScale;
 
 		varying vec2 vUv;
 		varying vec2 vRawUv;
+		varying float vLift;
 
-		vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-		vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-		vec3 permute(vec3 x) { return mod289(((x * 34.0) + 1.0) * x); }
+		float hash(vec2 point) {
+			return fract(sin(dot(point, vec2(127.1, 311.7))) * 43758.5453123);
+		}
 
-		float snoise(vec2 v) {
-			const vec4 simplexConstants = vec4(
-				0.211324865405187,
-				0.366025403784439,
-				-0.577350269189626,
-				0.024390243902439
+		float noise(vec2 point) {
+			vec2 cell = floor(point);
+			vec2 local = fract(point);
+			vec2 smoothLocal = local * local * (3.0 - 2.0 * local);
+			return mix(
+				mix(hash(cell), hash(cell + vec2(1.0, 0.0)), smoothLocal.x),
+				mix(hash(cell + vec2(0.0, 1.0)), hash(cell + vec2(1.0, 1.0)), smoothLocal.x),
+				smoothLocal.y
 			);
-
-			vec2 simplexCell = floor(v + dot(v, simplexConstants.yy));
-			vec2 corner0Offset = v - simplexCell + dot(simplexCell, simplexConstants.xx);
-			vec2 cornerStep = corner0Offset.x > corner0Offset.y ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-			vec4 cornerOffsets = corner0Offset.xyxy + simplexConstants.xxzz;
-			cornerOffsets.xy -= cornerStep;
-
-			simplexCell = mod289(simplexCell);
-			vec3 gradientHash = permute(
-				permute(simplexCell.y + vec3(0.0, cornerStep.y, 1.0))
-					+ simplexCell.x
-					+ vec3(0.0, cornerStep.x, 1.0)
-			);
-
-			vec3 cornerFalloff = max(
-				0.5 - vec3(
-					dot(corner0Offset, corner0Offset),
-					dot(cornerOffsets.xy, cornerOffsets.xy),
-					dot(cornerOffsets.zw, cornerOffsets.zw)
-				),
-				0.0
-			);
-			cornerFalloff = cornerFalloff * cornerFalloff;
-			cornerFalloff = cornerFalloff * cornerFalloff;
-
-			vec3 gradientX = 2.0 * fract(gradientHash * simplexConstants.www) - 1.0;
-			vec3 gradientY = abs(gradientX) - 0.5;
-			vec3 gradientSnap = floor(gradientX + 0.5);
-			vec3 gradientBase = gradientX - gradientSnap;
-			cornerFalloff *= 1.79284291400159
-				- 0.85373472095314 * (gradientBase * gradientBase + gradientY * gradientY);
-
-			vec3 cornerContribution;
-			cornerContribution.x = gradientBase.x * corner0Offset.x + gradientY.x * corner0Offset.y;
-			cornerContribution.yz = gradientBase.yz * cornerOffsets.xz + gradientY.yz * cornerOffsets.yw;
-			return 130.0 * dot(cornerFalloff, cornerContribution);
-		}
-
-		float getLuma(vec3 color) {
-			return dot(color, vec3(0.299, 0.587, 0.114));
-		}
-
-		float softCircle(vec2 uv, vec2 center, float radius, float feather) {
-			float dist = distance(uv, center);
-			return 1.0 - smoothstep(radius, radius + feather, dist);
-		}
-
-		float samplePseudoDepth(vec2 uv) {
-			vec3 base = texture2D(uTexture, uv).rgb;
-			float luma = getLuma(base);
-			float warmth = smoothstep(-0.05, 0.48, base.r - base.b);
-			float faceMask = softCircle(uv, vec2(0.52, 0.58), 0.12, 0.18);
-			float hairMask = softCircle(uv, vec2(0.52, 0.74), 0.18, 0.2);
-			float handMask = softCircle(uv, vec2(0.84, 0.48), 0.09, 0.16);
-			float torsoMask = softCircle(uv, vec2(0.52, 0.34), 0.22, 0.24);
-			float centerLift = 1.0 - smoothstep(0.18, 0.62, distance(uv, vec2(0.52, 0.54)));
-			float vignette = smoothstep(0.48, 0.98, distance(uv, vec2(0.5, 0.55)));
-			float depth = luma * 0.34
-				+ warmth * 0.18
-				+ faceMask * 0.24
-				+ hairMask * 0.18
-				+ handMask * 0.12
-				+ torsoMask * 0.09
-				+ centerLift * 0.18
-				- vignette * 0.16;
-			return clamp(depth, 0.08, 0.96);
-		}
-
-		vec3 posterize(vec3 color, float steps) {
-			return floor(color * steps) / steps;
 		}
 
 		void main() {
-			vec2 waterOffset = vec2(
-				snoise(vUv * 3.0 + vec2(uTime * 0.2, 0.0)),
-				snoise(vUv * 3.0 + vec2(100.0, uTime * 0.15))
-			) * uWaterDistortion * (0.35 + 0.65 * uProgress);
+			vec2 sampleUv = clamp(vUv, vec2(0.001), vec2(0.999));
+			vec2 mouseOffset = uMouse - 0.5;
+			vec2 centeredUv = vRawUv - 0.5;
+			float effectPresence = clamp(max(mix(uIdleReveal, 1.0, uHoverProgress), uMotionEnergy * 0.5), 0.0, 1.0);
+			vec2 parallaxOffset = mouseOffset * uParallaxStrength * (0.25 + effectPresence * 0.75);
+			vec2 tiltOffset = vec2(centeredUv.y * mouseOffset.x, centeredUv.x * mouseOffset.y)
+				* uTiltStrength
+				* 0.16;
 
-			vec2 distortedUv = vUv + waterOffset;
-			vec4 baseColor = texture2D(uTexture, distortedUv);
-			float depth = samplePseudoDepth(distortedUv);
-
-			float texelSize = 0.005;
-			float depthLeft = samplePseudoDepth(distortedUv - vec2(texelSize, 0.0));
-			float depthRight = samplePseudoDepth(distortedUv + vec2(texelSize, 0.0));
-			float depthUp = samplePseudoDepth(distortedUv + vec2(0.0, texelSize));
-			float depthDown = samplePseudoDepth(distortedUv - vec2(0.0, texelSize));
-
-			vec2 depthGradient = vec2(depthRight - depthLeft, depthUp - depthDown);
-			float gradientStrength = length(depthGradient);
-			vec2 gradientDir = gradientStrength > 0.001 ? normalize(depthGradient) : vec2(0.0);
+			vec2 baseUv = clamp(sampleUv + parallaxOffset * 0.2 + tiltOffset * 0.35, vec2(0.001), vec2(0.999));
+			vec2 revealBaseUv = clamp(
+				sampleUv - parallaxOffset * 0.85 - tiltOffset * 0.75,
+				vec2(0.001),
+				vec2(0.999)
+			);
 
 			vec2 toMouse = vRawUv - uMouse;
-			float baseDist = length(toMouse);
-			vec2 perpDir = vec2(-gradientDir.y, gradientDir.x);
+			float dist = length(toMouse);
+			float visibility = mix(uIdleReveal, 1.0, uHoverProgress);
+			float rippleEnvelope = exp(-dist * max(0.15, uRippleDecay) * 8.0);
+			float rippleWave = sin(
+				dist * (8.0 + uRippleFrequency * 28.0) - uTime * (1.5 + uRippleSpeed * 6.0)
+			);
+			float ripple = rippleWave
+				* uRippleStrength
+				* 0.035
+				* rippleEnvelope
+				* visibility
+				* (0.45 + 0.55 * uMotionEnergy);
+			float bounce = sin(uTime * (2.0 + uBounceFrequency * 10.0))
+				* uMotionEnergy
+				* uBounceStrength
+				* 0.05;
+			float revealRadius = max(0.001, uRevealRadius + bounce);
+			float revealSoftness = max(0.001, uRevealSoftness + abs(ripple) * 0.45);
+			float mask = 1.0 - smoothstep(revealRadius, revealRadius + revealSoftness, dist + ripple);
+			float fade = pow(
+				clamp(1.0 - dist / (revealRadius + revealSoftness + 0.0001), 0.0, 1.0),
+				mix(0.7, 4.0, uFadeSoftness)
+			);
+			float revealMix = mix(mask, mask * fade, uFadeStrength) * visibility * uRevealOpacity;
+			float edgeGlow = smoothstep(revealRadius + uGlowRadius + revealSoftness, revealRadius, dist)
+				* (1.0 - mask * 0.88)
+				* uGlowStrength
+				* visibility;
 
-			float alongGradient = dot(toMouse, gradientDir);
-			float alongContour = dot(toMouse, perpDir);
-			float splatStretchVal = 1.0 + gradientStrength * uSplatStretch * uProgress;
-			float splatCompressVal = 1.0 - gradientStrength * uSplatCompress * uProgress;
-
-			vec2 splatCoords = perpDir * alongContour * splatStretchVal
-				+ gradientDir * alongGradient * splatCompressVal;
-			float depthBulgeVal = (depth - 0.5) * uDepthBulge * uProgress;
-			splatCoords *= 1.0 - depthBulgeVal;
-			splatCoords += depthGradient * uContourOffset * uProgress;
-
-			float dist = length(splatCoords);
-			float angle = atan(splatCoords.y, splatCoords.x);
-
-			float ripplePhase = baseDist * uRippleFrequency - uTime * uRippleSpeed;
-			float ripple = sin(ripplePhase) * uRippleAmplitude * uProgress;
-			float ripple2 = sin(ripplePhase * 1.7 + 1.0) * uRippleAmplitude * 0.5 * uProgress;
-			float totalRipple = ripple + ripple2;
-
-			float blob = 0.0;
-			blob += sin(angle + uTime * 0.25) * uBlobAmplitude;
-			blob += sin(angle * 2.0 - uTime * 0.18 + depth * 1.5) * (uBlobAmplitude * 0.67);
-			blob += snoise(vec2(angle * 0.8 + uTime * 0.15, dist * 1.5)) * uNoiseAmplitude;
-			blob +=
-				snoise(vec2(angle * 1.5 - uTime * 0.2, dist * 2.5 + uTime * 0.1))
-				* uNoiseAmplitude
-				* 0.6;
-			blob += snoise(vec2(angle * 2.5 + uTime * 0.3, dist * 4.0)) * uNoiseAmplitude * 0.3;
-
-			float contourInfluenceVal = gradientStrength * uContourInfluence;
-			blob += contourInfluenceVal * sin(angle * 1.5 + depth * 3.0 + uTime * 0.25);
-			blob += totalRipple * uRippleEdgeInfluence;
-
-			float blobDist = dist + blob * uProgress + totalRipple;
-			float revealSize = uRevealRadius * uProgress;
-			float edgeSoftnessModulated = uEdgeSoftness + abs(totalRipple) * uEdgeRippleStrength;
-			float mask = smoothstep(
-				revealSize + edgeSoftnessModulated,
-				revealSize - edgeSoftnessModulated,
-				blobDist
+			vec2 chromaDir = normalize(toMouse + vec2(0.0001, 0.0001));
+			vec2 chromaOffset = chromaDir * uChromaStrength * 0.01 * (0.25 + edgeGlow);
+			vec4 baseColor = texture2D(uBaseTexture, baseUv);
+			vec2 revealUvR = clamp(revealBaseUv + chromaOffset, vec2(0.001), vec2(0.999));
+			vec2 revealUvB = clamp(revealBaseUv - chromaOffset, vec2(0.001), vec2(0.999));
+			vec3 revealColor = vec3(
+				texture2D(uRevealTexture, revealUvR).r,
+				texture2D(uRevealTexture, revealBaseUv).g,
+				texture2D(uRevealTexture, revealUvB).b
 			);
 
-			float caustic1 = snoise(distortedUv * uCausticScale + vec2(uTime * uCausticSpeed, 0.0));
-			float caustic2 =
-				snoise(distortedUv * uCausticScale * 1.3 + vec2(0.0, uTime * uCausticSpeed * 0.8));
-			float caustic3 = snoise(
-				distortedUv * uCausticScale * 0.7 - vec2(uTime * uCausticSpeed * 0.5, uTime * uCausticSpeed * 0.3)
-			);
-			float causticPattern = caustic1 * caustic2 + caustic2 * caustic3;
-			causticPattern = pow(abs(causticPattern), 1.5) * uCausticIntensity;
+			vec3 rgb = mix(baseColor.rgb, revealColor, revealMix);
+			rgb += edgeGlow * vec3(1.0, 0.62, 0.42);
+			rgb += mask * visibility * (0.05 + vLift * 0.7) * vec3(0.09, 0.04, 0.03);
 
-			float warmth = smoothstep(-0.05, 0.48, baseColor.r - baseColor.b);
-			float highlight = smoothstep(0.28, 0.88, depth);
-			vec3 poster = posterize(baseColor.rgb, 6.5);
-			vec3 velvet = mix(
-				vec3(0.24, 0.1, 0.17),
-				vec3(1.0, 0.42, 0.22),
-				clamp(getLuma(baseColor.rgb) * 0.76 + warmth * 0.7, 0.0, 1.0)
-			);
-			vec3 electric = mix(
-				vec3(0.18, 0.22, 0.58),
-				vec3(0.24, 0.54, 1.0),
-				clamp(gradientStrength * 6.0, 0.0, 1.0)
-			);
-
-			vec3 stylized = mix(baseColor.rgb, poster * velvet * 1.05, 0.34);
-			stylized = mix(stylized, baseColor.rgb + electric * (0.08 + 0.22 * highlight), 0.18);
-			stylized += causticPattern * mask * uProgress * vec3(1.0, 0.42, 0.24) * 0.72;
-
-			float contourLine = smoothstep(0.04, 0.18, gradientStrength + warmth * 0.08);
-			stylized += electric * contourLine * mask * uProgress * 0.12;
-
-			vec3 rgb = mix(baseColor.rgb, stylized, mask * 0.82);
-			float lightness = getLuma(rgb);
-			rgb = mix(vec3(lightness), rgb, uSaturationBoost);
-			rgb = (rgb - 0.5) * uContrastBoost + 0.5;
-			rgb = clamp(rgb, 0.0, 1.0);
-			rgb = mix(rgb, pow(rgb, vec3(0.92)), 0.18);
+			float grain = noise(sampleUv * uGrainScale + vec2(uTime * 18.0, -uTime * 12.0));
+			rgb += (grain - 0.5) * uGrainStrength * 0.08 * (0.3 + revealMix * 0.7);
 			rgb = clamp(rgb, 0.0, 1.0);
 
 			gl_FragColor = vec4(rgb, baseColor.a);
@@ -515,7 +351,7 @@
 
 {#if $textures}
 	<T.Mesh position={[0, 0, 0]}>
-		<T.PlaneGeometry args={[4.5, 2.3, 160, 160]} />
+		<T.PlaneGeometry args={[4.5, 2.3, 64, 36]} />
 		<T is={createShaderMaterial($textures)} />
 	</T.Mesh>
 {:else}

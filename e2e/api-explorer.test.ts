@@ -110,7 +110,7 @@ test.describe('API Explorer Block', () => {
 
 			await expect(page.getByText('GET').first()).toBeVisible();
 			await expect(
-				page.getByText('Fetch current debug settings including hero 3D parameters')
+				page.getByText('Fetch current debug settings including hero and disco parameters')
 			).toBeVisible();
 		});
 
@@ -248,8 +248,8 @@ test.describe('API Explorer Block', () => {
 			await schemasTab.click();
 
 			await expect(page.getByRole('heading', { name: 'Hero3DParams' })).toBeVisible();
-			await expect(page.getByText('depthScale')).toBeVisible();
 			await expect(page.getByText('revealRadius')).toBeVisible();
+			await expect(page.getByText('glowStrength')).toBeVisible();
 		});
 	});
 

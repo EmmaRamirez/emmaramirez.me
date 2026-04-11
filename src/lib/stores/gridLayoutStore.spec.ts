@@ -102,6 +102,20 @@ describe('GridLayoutStore', () => {
 			expect(apiExplorerLayout?.colSpan).toBe(1);
 			expect(apiExplorerLayout?.rowSpan).toBe(2);
 		});
+
+		it('should add missing items when initialized again with a different surface', async () => {
+			const { gridLayoutStore } = await import('./gridLayoutStore.svelte');
+
+			gridLayoutStore.initialize([{ kind: 'hero' }]);
+			gridLayoutStore.initialize([{ kind: 'hero' }, { kind: 'api-explorer' }]);
+
+			expect(gridLayoutStore.getLayout('api-explorer')).toEqual({
+				key: 'api-explorer',
+				colSpan: 1,
+				rowSpan: 2
+			});
+			expect(gridLayoutStore.getOrder()).toContain('api-explorer');
+		});
 	});
 
 	describe('setColSpan', () => {
@@ -259,6 +273,14 @@ describe('GridLayoutStore', () => {
 
 			gridLayoutStore.toggleEditMode();
 			expect(gridLayoutStore.editMode).toBe(false);
+		});
+	});
+
+	describe('editor/homepage store sharing', () => {
+		it('should use the same store instance for editor and homepage', async () => {
+			const { gridLayoutStore, editorGridLayoutStore } = await import('./gridLayoutStore.svelte');
+
+			expect(editorGridLayoutStore).toBe(gridLayoutStore);
 		});
 	});
 

@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { headerColor, title } from '$lib/stores';
 	import {
+		blogSettings,
+		defaultBlogTagView,
+		isBlogTagView,
+		type BlogTagView
+	} from '$lib/stores/userSettings.svelte';
+	import {
 		getArticleMetas,
 		getAllTags,
 		getTagGraph,
@@ -11,7 +17,9 @@
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
 	import { dev } from '$app/environment';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import {
 		type SimulationLinkDatum,
 		type SimulationNodeDatum,
@@ -63,6 +71,16 @@
 	const tagGraph = getTagGraph();
 	let manualSelectedArticleSlug = $state<string | null>(null);
 
+	function getSelectedTagFromUrl() {
+		const value = page.url.searchParams.get('tag');
+		return value && allTags.includes(value) ? value : null;
+	}
+
+	function getTagViewFromUrl() {
+		const value = page.url.searchParams.get('view');
+		return isBlogTagView(value) ? value : blogSettings.tagView;
+	}
+
 	const articlesByYear = $derived.by(() => {
 		const grouped: Record<string, ArticleMeta[]> = {};
 		for (const article of articles) {
@@ -73,8 +91,8 @@
 		return Object.entries(grouped).sort((a, b) => b[0].localeCompare(a[0]));
 	});
 
-	let selectedTag = $state<string | null>(null);
-	let tagView = $state<'flat' | 'web'>('flat');
+	const selectedTag = $derived.by(() => getSelectedTagFromUrl());
+	const tagView = $derived.by(() => getTagViewFromUrl());
 	let graphHost = $state<HTMLDivElement | null>(null);
 	let graphWidth = $state(0);
 	let graphLayout = $state<{ nodes: RenderedGraphNode[]; links: RenderedGraphLink[] }>({
@@ -129,12 +147,58 @@
 		return formatShortDate(dateStr);
 	}
 
-	function clearTagSelection() {
-		selectedTag = null;
+	function buildBlogHref(tag: string | null, view: BlogTagView) {
+		const searchParams = new URLSearchParams(page.url.searchParams);
+
+		if (tag) {
+			searchParams.set('tag', tag);
+		} else {
+			searchParams.delete('tag');
+		}
+
+		if (view === defaultBlogTagView) {
+			searchParams.delete('view');
+		} else {
+			searchParams.set('view', view);
+		}
+
+		const query = searchParams.toString();
+		return query ? `${page.url.pathname}?${query}` : page.url.pathname;
 	}
 
-	function selectTag(tag: string | null) {
-		selectedTag = tag;
+	function getArticleHref(slug: string) {
+		const query = new URLSearchParams();
+		if (selectedTag) query.set('tag', selectedTag);
+		if (tagView !== defaultBlogTagView) query.set('view', tagView);
+
+		const baseHref = resolve('/blog/[slug]', { slug });
+		const search = query.toString();
+		return search ? `${baseHref}?${search}` : baseHref;
+	}
+
+	async function navigateBlogState(tag: string | null, view: BlogTagView) {
+		const href = buildBlogHref(tag, view);
+		const currentHref = `${page.url.pathname}${page.url.search}`;
+		if (href === currentHref) return;
+
+		await goto(href, {
+			replaceState: true,
+			noScroll: true,
+			keepFocus: true
+		});
+	}
+
+	async function clearTagSelection() {
+		await navigateBlogState(null, tagView);
+	}
+
+	async function selectTag(tag: string | null) {
+		await navigateBlogState(tag, tagView);
+	}
+
+	async function setTagView(view: BlogTagView) {
+		blogSettings.tagView = view;
+		await navigateBlogState(selectedTag, view);
 	}
 
 	function isEditableTarget(target: EventTarget | null) {
@@ -186,11 +250,11 @@
 
 	function openSelectedArticle() {
 		if (!selectedArticleSlug) return;
-		window.location.href = resolve('/blog/[slug]', { slug: selectedArticleSlug });
+		window.location.href = getArticleHref(selectedArticleSlug);
 	}
 
-	function toggleTagSelection(tag: string) {
-		selectedTag = selectedTag === tag ? null : tag;
+	async function toggleTagSelection(tag: string) {
+		await selectTag(selectedTag === tag ? null : tag);
 	}
 
 	function getFlatTagNavigationValues() {
@@ -316,7 +380,7 @@
 
 		event.preventDefault();
 
-		selectTag(nextValue === allTagValue ? null : nextValue);
+		await selectTag(nextValue === allTagValue ? null : nextValue);
 
 		await tick();
 		focusTagButton(details.scope, nextValue);
@@ -329,7 +393,7 @@
 
 		if (event.key === 'Escape') {
 			event.preventDefault();
-			tagView = 'flat';
+			await setTagView('flat');
 			return;
 		}
 
@@ -342,7 +406,7 @@
 			if (!nextValue) return;
 
 			event.preventDefault();
-			selectTag(nextValue === allTagValue ? null : nextValue);
+			await selectTag(nextValue === allTagValue ? null : nextValue);
 
 			await tick();
 			focusTagButton('web', nextValue);
@@ -613,7 +677,7 @@
 						type="button"
 						class={['view-toggle-button', { active: tagView === 'flat' }]}
 						aria-pressed={tagView === 'flat'}
-						onclick={() => (tagView = 'flat')}
+						onclick={() => void setTagView('flat')}
 					>
 						Flat
 					</button>
@@ -621,7 +685,7 @@
 						type="button"
 						class={['view-toggle-button', { active: tagView === 'web' }]}
 						aria-pressed={tagView === 'web'}
-						onclick={() => (tagView = 'web')}
+						onclick={() => void setTagView('web')}
 					>
 						Web
 					</button>
@@ -757,7 +821,7 @@
 						{#each yearArticles as article (article.slug)}
 							<li>
 								<a
-									href={resolve('/blog/[slug]', { slug: article.slug })}
+									href={getArticleHref(article.slug)}
 									class={[
 										'article-row style-none group border-opacity-30 hover:border-opacity-100 flex items-baseline justify-between gap-4 border-b border-(--border-color) py-3 transition-all',
 										{ active: tagView === 'web' && selectedArticleSlug === article.slug }

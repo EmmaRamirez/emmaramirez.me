@@ -6,6 +6,7 @@
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
 	import EditorGridSection from '$lib/components/editor/EditorGridSection.svelte';
+	import EditorSettingsSection from '$lib/components/editor/EditorSettingsSection.svelte';
 
 	onMount(() => {
 		if (!dev) {
@@ -60,7 +61,6 @@
 					class="section-tab"
 					class:active={activeSection === 'settings'}
 					onclick={() => (activeSection = 'settings')}
-					disabled
 				>
 					<svg
 						class="h-4 w-4"
@@ -75,7 +75,6 @@
 						/>
 					</svg>
 					Settings
-					<span class="ml-1 text-xs opacity-50">(soon)</span>
 				</button>
 			</nav>
 
@@ -83,9 +82,7 @@
 				{#if activeSection === 'grid'}
 					<EditorGridSection />
 				{:else if activeSection === 'settings'}
-					<div class="coming-soon">
-						<p>Settings coming soon</p>
-					</div>
+					<EditorSettingsSection />
 				{/if}
 			</div>
 		</div>
@@ -128,13 +125,4 @@
 		box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
 	}
 
-	.coming-soon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 25rem;
-		border-radius: 1rem;
-		border: 0.125rem dashed var(--border-color);
-		color: var(--text-muted);
-	}
 </style>

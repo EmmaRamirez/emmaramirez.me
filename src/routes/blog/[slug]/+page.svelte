@@ -3,6 +3,9 @@
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
 	import { getArticleBySlug, getArticleNeighbors } from '$lib/articles';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import { dev } from '$app/environment';
 	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
@@ -40,8 +43,42 @@
 		return formatRelativeDate(dateStr);
 	}
 
+	function getBlogHref(tag: string | null = page.url.searchParams.get('tag')) {
+		const searchParams = new URLSearchParams();
+		if (tag) searchParams.set('tag', tag);
+
+		const view = page.url.searchParams.get('view');
+		if (view === 'web') {
+			searchParams.set('view', view);
+		}
+
+		const query = searchParams.toString();
+		return query ? `${resolve('/blog')}?${query}` : resolve('/blog');
+	}
+
+	function getTagHref(tag: string) {
+		return getBlogHref(tag);
+	}
+
+	function isEditableTarget(target: EventTarget | null) {
+		return (
+			target instanceof HTMLElement &&
+			(target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+		);
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.metaKey || event.ctrlKey || event.altKey || isEditableTarget(event.target)) return;
+		if (event.key.toLowerCase() !== 'b') return;
+
+		event.preventDefault();
+		void goto(getBlogHref());
+	}
+
 	const readingTime = $derived(data.readingTimeMinutes);
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <svelte:head>
 	<title>{data.title} — Emma Ramirez</title>
@@ -85,8 +122,9 @@
 
 	<article bind:this={articleElement} class="article-container mx-auto max-w-2xl px-6 py-16">
 		<a
-			href="/blog"
-			class="style-none group mb-12 inline-flex items-center gap-2 text-sm text-(--text-muted) transition-colors hover:text-(--text-primary)"
+			href={getBlogHref()}
+			aria-keyshortcuts="B"
+			class="style-none group mb-12 inline-flex items-center gap-3 text-sm text-(--text-muted) transition-colors hover:text-(--text-primary)"
 			in:fade={{ duration: 300 }}
 		>
 			<svg
@@ -103,6 +141,9 @@
 				/>
 			</svg>
 			<span class="font-sans">Back to essays</span>
+			<span class="back-link-shortcut" aria-hidden="true">
+				<kbd>B</kbd>
+			</span>
 		</a>
 
 		<header class="mb-12" in:fly={{ y: 20, duration: 400, delay: 100 }}>
@@ -111,9 +152,9 @@
 				<div class="flex flex-col gap-1">
 					{#if data.tags && data.tags.length > 0}
 						<div class="flex gap-2">
-							{#each data.tags as tag}
+							{#each data.tags as tag (tag)}
 								<a
-									href={`/blog?tag=${tag}`}
+									href={getTagHref(tag)}
 									class="style-none font-sans text-[0.6875rem] tracking-[0.2em] text-(--text-muted) uppercase transition-colors hover:text-(--text-primary)"
 								>
 									{tag}
@@ -151,9 +192,9 @@
 				in:fly={{ y: 20, duration: 400, delay: 300 }}
 			>
 				<div class="flex flex-wrap gap-2">
-					{#each data.tags as tag}
+					{#each data.tags as tag (tag)}
 						<a
-							href={`/blog?tag=${tag}`}
+							href={getTagHref(tag)}
 							class="style-none rounded-full border border-(--border-color) px-3 py-1.5 font-sans text-xs tracking-wider text-(--text-secondary) uppercase transition-all hover:border-(--text-primary) hover:bg-(--text-primary) hover:text-(--page-bg)"
 						>
 							{tag}
@@ -170,7 +211,10 @@
 			<div class="grid grid-cols-2 gap-8">
 				<div>
 					{#if prevArticle}
-						<a href={`/blog/${prevArticle.slug}`} class="style-none group block">
+						<a
+							href={resolve('/blog/[slug]', { slug: prevArticle.slug })}
+							class="style-none group block"
+						>
 							<span
 								class="mb-1 block font-sans text-xs tracking-wider text-(--text-muted) uppercase"
 							>
@@ -186,7 +230,10 @@
 				</div>
 				<div class="text-right">
 					{#if nextArticle}
-						<a href={`/blog/${nextArticle.slug}`} class="style-none group block">
+						<a
+							href={resolve('/blog/[slug]', { slug: nextArticle.slug })}
+							class="style-none group block"
+						>
 							<span
 								class="mb-1 block font-sans text-xs tracking-wider text-(--text-muted) uppercase"
 							>
@@ -325,5 +372,21 @@
 		margin: 3rem 0;
 		border: none;
 		border-top: 0.0625rem solid var(--border-color);
+	}
+
+	.back-link-shortcut {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.back-link-shortcut kbd {
+		padding: 0.18rem 0.42rem;
+		border: 0.0625rem solid color-mix(in srgb, var(--text-muted) 65%, transparent);
+		border-radius: 0.45rem;
+		background: color-mix(in srgb, var(--page-bg-subtle) 82%, white 18%);
+		color: var(--text-primary);
+		font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+		font-size: 0.72rem;
+		line-height: 1;
 	}
 </style>
