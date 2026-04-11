@@ -8,7 +8,7 @@
 	} from '$lib/stores/userSettings.svelte';
 	import { type ArticleMeta, type TagGraphLink, type TagGraphNode } from '$lib/articles';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
-	import { ThemeToggle } from '$lib/components/ui';
+	import { SiteSearch, ThemeToggle } from '$lib/components/ui';
 	import { dev } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
@@ -627,6 +627,7 @@
 			{#if dev}
 				<HeaderNavItem href="/editor">Editor</HeaderNavItem>
 			{/if}
+			<SiteSearch />
 			<a
 				href="https://github.com/emzinnia"
 				target="_blank"

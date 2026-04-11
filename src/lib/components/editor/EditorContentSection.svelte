@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { trackedFetch } from '$lib/stores/performanceAnalytics.svelte';
 
 	type ProjectContentItem = {
@@ -60,6 +60,8 @@
 	let articleSaveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let projectErrorMessage = $state('');
 	let articleErrorMessage = $state('');
+	let projectSaveTimeout: ReturnType<typeof setTimeout> | null = null;
+	let articleSaveTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	const selectedProject = $derived(
 		projects.find((entry) => entry.id === selectedProjectId) ?? null
@@ -70,6 +72,10 @@
 
 	function loadProjectForm(project: ProjectContentItem | null | undefined) {
 		if (!project) return;
+		if (projectSaveTimeout) {
+			clearTimeout(projectSaveTimeout);
+			projectSaveTimeout = null;
+		}
 		selectedProjectId = project.id;
 		projectDescription = project.description;
 		projectExcerpt = project.excerpt;
@@ -80,6 +86,10 @@
 
 	function loadArticleForm(article: ArticleContentItem | null | undefined) {
 		if (!article) return;
+		if (articleSaveTimeout) {
+			clearTimeout(articleSaveTimeout);
+			articleSaveTimeout = null;
+		}
 		selectedArticleSlug = article.slug;
 		articleTitle = article.title;
 		articleDescription = article.description;
@@ -95,6 +105,11 @@
 		loadArticleForm(articles[0]);
 	});
 
+	onDestroy(() => {
+		if (projectSaveTimeout) clearTimeout(projectSaveTimeout);
+		if (articleSaveTimeout) clearTimeout(articleSaveTimeout);
+	});
+
 	function formatUpdatedAt(value: string | null) {
 		if (!value) return 'Not saved yet';
 		return new Date(value).toLocaleString();
@@ -107,9 +122,29 @@
 			.filter(Boolean);
 	}
 
+	function queueProjectSavedReset() {
+		if (projectSaveTimeout) clearTimeout(projectSaveTimeout);
+		projectSaveTimeout = setTimeout(() => {
+			projectSaveStatus = 'idle';
+			projectSaveTimeout = null;
+		}, 2000);
+	}
+
+	function queueArticleSavedReset() {
+		if (articleSaveTimeout) clearTimeout(articleSaveTimeout);
+		articleSaveTimeout = setTimeout(() => {
+			articleSaveStatus = 'idle';
+			articleSaveTimeout = null;
+		}, 2000);
+	}
+
 	async function saveProject() {
 		if (!browser || !selectedProject) return;
 
+		if (projectSaveTimeout) {
+			clearTimeout(projectSaveTimeout);
+			projectSaveTimeout = null;
+		}
 		projectSaveStatus = 'saving';
 		projectErrorMessage = '';
 
@@ -141,6 +176,7 @@
 		const payload = (await response.json()) as { record?: { updatedAt?: string | null } };
 		const updatedAt = payload.record?.updatedAt ?? new Date().toISOString();
 		projectSaveStatus = 'saved';
+		queueProjectSavedReset();
 		onprojectsaved?.({
 			id: selectedProject.id,
 			description: projectDescription,
@@ -153,6 +189,10 @@
 	async function saveArticle() {
 		if (!browser || !selectedArticle) return;
 
+		if (articleSaveTimeout) {
+			clearTimeout(articleSaveTimeout);
+			articleSaveTimeout = null;
+		}
 		articleSaveStatus = 'saving';
 		articleErrorMessage = '';
 
@@ -186,6 +226,7 @@
 		const payload = (await response.json()) as { record?: { updatedAt?: string | null } };
 		const updatedAt = payload.record?.updatedAt ?? new Date().toISOString();
 		articleSaveStatus = 'saved';
+		queueArticleSavedReset();
 		onarticlesaved?.({
 			slug: selectedArticle.slug,
 			title: articleTitle,
@@ -257,10 +298,23 @@
 							<button
 								type="button"
 								class="save-button"
+								class:saved={projectSaveStatus === 'saved'}
+								class:error={projectSaveStatus === 'error'}
 								onclick={() => void saveProject()}
 								disabled={projectSaveStatus === 'saving'}
 							>
-								{projectSaveStatus === 'saving' ? 'Saving...' : 'Save project content'}
+								<span class="save-button__sizer" aria-hidden="true">Save project content</span>
+								<span class="save-button__content">
+									{#if projectSaveStatus === 'saving'}
+										Saving...
+									{:else if projectSaveStatus === 'saved'}
+										Saved!
+									{:else if projectSaveStatus === 'error'}
+										Error
+									{:else}
+										Save project content
+									{/if}
+								</span>
 							</button>
 						</div>
 
@@ -328,10 +382,23 @@
 							<button
 								type="button"
 								class="save-button"
+								class:saved={articleSaveStatus === 'saved'}
+								class:error={articleSaveStatus === 'error'}
 								onclick={() => void saveArticle()}
 								disabled={articleSaveStatus === 'saving'}
 							>
-								{articleSaveStatus === 'saving' ? 'Saving...' : 'Save article metadata'}
+								<span class="save-button__sizer" aria-hidden="true">Save article metadata</span>
+								<span class="save-button__content">
+									{#if articleSaveStatus === 'saving'}
+										Saving...
+									{:else if articleSaveStatus === 'saved'}
+										Saved!
+									{:else if articleSaveStatus === 'error'}
+										Error
+									{:else}
+										Save article metadata
+									{/if}
+								</span>
 							</button>
 						</div>
 
@@ -514,7 +581,8 @@
 	}
 
 	.save-button {
-		display: inline-flex;
+		display: grid;
+		place-items: center;
 		align-items: center;
 		justify-content: center;
 		padding: 0.7rem 1rem;
@@ -527,9 +595,31 @@
 		cursor: pointer;
 	}
 
+	.save-button__sizer,
+	.save-button__content {
+		grid-area: 1 / 1;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.save-button__sizer {
+		visibility: hidden;
+	}
+
 	.save-button:disabled {
 		opacity: 0.7;
 		cursor: not-allowed;
+	}
+
+	.save-button.saved {
+		background: #10b981;
+		color: #fff;
+	}
+
+	.save-button.error {
+		background: #ef4444;
+		color: #fff;
 	}
 
 	.content-error {

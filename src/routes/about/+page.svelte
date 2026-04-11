@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
-	import { ThemeToggle } from '$lib/components/ui';
+	import { SiteSearch, ThemeToggle } from '$lib/components/ui';
 	import { theme } from '$lib/stores';
 	import { dev } from '$app/environment';
 
@@ -237,6 +237,7 @@
 			{#if dev}
 				<HeaderNavItem href="/editor">Editor</HeaderNavItem>
 			{/if}
+			<SiteSearch />
 			<a
 				href="https://github.com/emzinnia"
 				target="_blank"

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { flip } from 'svelte/animate';
 	import { onMount } from 'svelte';
+	import Spinner from '$lib/components/ui/Spinner.svelte';
 	import type { MapPlaceRecord } from '$lib/types/mapPlaces';
 	import { trackedFetch } from '$lib/stores/performanceAnalytics.svelte';
 
@@ -33,6 +34,10 @@
 
 	function isVisitorExiting(visitorId: string) {
 		return exitingVisitorIds.includes(visitorId);
+	}
+
+	function isDeletingVisitor(visitorId: string) {
+		return deletingVisitorId === visitorId;
 	}
 
 	function wait(ms: number) {
@@ -211,12 +216,27 @@
 								<td class="visitors-actions">
 									<button
 										type="button"
-										class="visitors-delete-button"
+										class={[
+											'visitors-delete-button',
+											isDeletingVisitor(visitor.id) && 'visitors-delete-button--loading'
+										]}
 										disabled={deletingVisitorId !== null}
 										aria-label={`Delete visitor ${visitor.name}`}
 										onclick={() => void deleteVisitor(visitor)}
 									>
-										{deletingVisitorId === visitor.id ? 'Deleting...' : 'Delete'}
+										<span class="visitors-delete-button__content">
+											<span
+												class={[
+													'visitors-delete-button__spinner',
+													!isDeletingVisitor(visitor.id) &&
+														'visitors-delete-button__spinner--hidden'
+												]}
+												aria-hidden={!isDeletingVisitor(visitor.id)}
+											>
+												<Spinner size="sm" variant="white" aria-label="Deleting visitor" />
+											</span>
+											<span class="visitors-delete-button__label">Delete</span>
+										</span>
 									</button>
 								</td>
 							</tr>
@@ -454,6 +474,7 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
+		min-width: 5.5rem;
 		padding: 0.45rem 0.75rem;
 		border: 0.0625rem solid color-mix(in srgb, #dc2626 22%, var(--border-color));
 		border-radius: 0.6rem;
@@ -468,9 +489,44 @@
 			transform 0.15s ease;
 	}
 
+	.visitors-delete-button__content {
+		display: inline-grid;
+		grid-template-columns: 1rem auto;
+		align-items: center;
+		column-gap: 0.45rem;
+	}
+
+	.visitors-delete-button__spinner {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1rem;
+		height: 1rem;
+	}
+
+	.visitors-delete-button__spinner--hidden {
+		visibility: hidden;
+	}
+
+	.visitors-delete-button__label {
+		display: inline-block;
+		min-width: 2.6rem;
+		text-align: left;
+	}
+
+	.visitors-delete-button--loading {
+		border-color: #dc2626;
+		background: #dc2626;
+		color: white;
+	}
+
 	.visitors-delete-button:hover:enabled {
 		background: color-mix(in srgb, #dc2626 16%, var(--surface));
 		transform: translateY(-0.0625rem);
+	}
+
+	.visitors-delete-button--loading:hover:enabled {
+		background: #dc2626;
 	}
 
 	.visitors-delete-button:disabled {

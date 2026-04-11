@@ -38,7 +38,7 @@
 	let selectedRegionId = $state('');
 	let visitorName = $state('');
 	let visitorPlaces = $state<MapPlaceRecord[]>([]);
-	let submissionState = $state<'idle' | 'submitting' | 'success' | 'error'>('idle');
+	let submissionState = $state<'idle' | 'submitting' | 'error'>('idle');
 	let submissionMessage = $state<string | null>(null);
 	let placesError = $state<string | null>(null);
 	let loadingPlaces = $state(true);
@@ -298,8 +298,8 @@
 			const data = (await response.json()) as { place: MapPlaceRecord };
 			visitorPlaces = [data.place, ...visitorPlaces];
 			syncVisitorPlacesSource();
-			submissionState = 'success';
-			submissionMessage = `Added ${data.place.name} to ${data.place.regionName}.`;
+			submissionState = 'idle';
+			submissionMessage = null;
 			visitorName = '';
 			selectedRegionId = '';
 			syncSelectedRegion();
@@ -705,12 +705,8 @@
 					</div>
 				</div>
 
-				{#if submissionMessage}
-					<p
-						class="visitor-form__message"
-						class:visitor-form__message--error={submissionState === 'error'}
-						class:visitor-form__message--success={submissionState === 'success'}
-					>
+				{#if submissionState === 'error' && submissionMessage}
+					<p class="visitor-form__message visitor-form__message--error">
 						{submissionMessage}
 					</p>
 				{/if}
@@ -947,10 +943,6 @@
 		margin: 0;
 		font-size: 0.82rem;
 		font-weight: 500;
-	}
-
-	.visitor-form__message--success {
-		color: #10b981;
 	}
 
 	.visitor-form__message--error {

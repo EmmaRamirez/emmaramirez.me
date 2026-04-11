@@ -36,6 +36,7 @@ export { default as Popover } from './Popover.svelte';
 export { default as ProgressBar } from './ProgressBar.svelte';
 export { default as Radio } from './Radio.svelte';
 export { default as SearchField } from './SearchField.svelte';
+export { default as SiteSearch } from './SiteSearch.svelte';
 export { default as Section } from './Section.svelte';
 export { default as Select } from './Select.svelte';
 export { default as Sidebar } from './Sidebar.svelte';
