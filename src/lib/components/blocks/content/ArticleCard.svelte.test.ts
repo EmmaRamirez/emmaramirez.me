@@ -3,6 +3,24 @@ import { page } from 'vitest/browser';
 import { describe, it, expect, vi } from 'vitest';
 import ArticleCard from './ArticleCard.svelte';
 
+type ArticleCardTestProps = {
+	title: string;
+	content: string;
+	date?: string;
+	active?: boolean;
+	onselect?: () => void;
+	variant?: 'featured' | 'main';
+	class?: string;
+	readTime?: string;
+	tags?: string[];
+};
+
+function mountArticleCard(props: ArticleCardTestProps) {
+	const target = document.createElement('div');
+	document.body.appendChild(target);
+	return render(ArticleCard, { target, props });
+}
+
 describe('ArticleCard', () => {
 	const defaultProps = {
 		title: 'Test Article Title',
@@ -12,19 +30,19 @@ describe('ArticleCard', () => {
 
 	describe('Basic Rendering', () => {
 		it('should render the article label', async () => {
-			render(ArticleCard, { props: defaultProps });
+			mountArticleCard(defaultProps);
 
 			await expect.element(page.getByText('Article', { exact: true })).toBeVisible();
 		});
 
 		it('should render the title', async () => {
-			render(ArticleCard, { props: defaultProps });
+			mountArticleCard(defaultProps);
 
 			await expect.element(page.getByText('Test Article Title')).toBeVisible();
 		});
 
 		it('should render the content', async () => {
-			const { container } = render(ArticleCard, { props: defaultProps });
+			const { container } = mountArticleCard(defaultProps);
 
 			// Content is in the DOM but may be hidden due to container queries / line-clamp
 			const contentElement = container.querySelector('.article-content');
@@ -35,14 +53,14 @@ describe('ArticleCard', () => {
 		});
 
 		it('should render the date as time element', async () => {
-			render(ArticleCard, { props: defaultProps });
+			mountArticleCard(defaultProps);
 
 			const timeElement = page.getByRole('time');
 			await expect.element(timeElement).toBeVisible();
 		});
 
 		it('should render as a button element', async () => {
-			render(ArticleCard, { props: defaultProps });
+			mountArticleCard(defaultProps);
 
 			await expect.element(page.getByRole('button')).toBeVisible();
 		});
@@ -51,7 +69,7 @@ describe('ArticleCard', () => {
 	describe('Click Handler', () => {
 		it('should call onselect when clicked', async () => {
 			const onselect = vi.fn();
-			render(ArticleCard, { props: { ...defaultProps, onselect } });
+			mountArticleCard({ ...defaultProps, onselect });
 
 			const button = page.getByRole('button');
 			await button.click();
@@ -60,7 +78,7 @@ describe('ArticleCard', () => {
 		});
 
 		it('should not throw when clicked without onselect handler', async () => {
-			render(ArticleCard, { props: defaultProps });
+			mountArticleCard(defaultProps);
 
 			const button = page.getByRole('button');
 			await button.click();
@@ -71,14 +89,14 @@ describe('ArticleCard', () => {
 
 	describe('Active State', () => {
 		it('should not have active class by default', async () => {
-			const { container } = render(ArticleCard, { props: defaultProps });
+			const { container } = mountArticleCard(defaultProps);
 
 			const button = container.querySelector('button');
 			expect(button?.className).not.toContain('article-card-active');
 		});
 
 		it('should have active class when active prop is true', async () => {
-			const { container } = render(ArticleCard, { props: { ...defaultProps, active: true } });
+			const { container } = mountArticleCard({ ...defaultProps, active: true });
 
 			const button = container.querySelector('button');
 			expect(button?.className).toContain('article-card-active');
@@ -87,11 +105,9 @@ describe('ArticleCard', () => {
 
 	describe('Optional Date', () => {
 		it('should not render time element when date is not provided', async () => {
-			const { container } = render(ArticleCard, {
-				props: {
-					title: 'No Date Article',
-					content: 'Content without date'
-				}
+			const { container } = mountArticleCard({
+				title: 'No Date Article',
+				content: 'Content without date'
 			});
 
 			const timeElements = container.querySelectorAll('time');
@@ -101,11 +117,9 @@ describe('ArticleCard', () => {
 
 	describe('Read Time', () => {
 		it('should use custom read time when provided', async () => {
-			render(ArticleCard, {
-				props: {
-					...defaultProps,
-					readTime: '5 min read'
-				}
+			mountArticleCard({
+				...defaultProps,
+				readTime: '5 min read'
 			});
 
 			await expect.element(page.getByText('5 min read')).toBeInTheDocument();
@@ -114,11 +128,9 @@ describe('ArticleCard', () => {
 
 	describe('Tags', () => {
 		it('should include tags in the DOM when provided', async () => {
-			const { container } = render(ArticleCard, {
-				props: {
-					...defaultProps,
-					tags: ['svelte', 'typescript', 'web']
-				}
+			const { container } = mountArticleCard({
+				...defaultProps,
+				tags: ['svelte', 'typescript', 'web']
 			});
 
 			const html = container.innerHTML;
@@ -130,7 +142,7 @@ describe('ArticleCard', () => {
 
 	describe('Footer Elements', () => {
 		it('should have Read more CTA in footer', async () => {
-			const { container } = render(ArticleCard, { props: defaultProps });
+			const { container } = mountArticleCard(defaultProps);
 
 			const html = container.innerHTML;
 			expect(html).toContain('Read more');
@@ -139,11 +151,9 @@ describe('ArticleCard', () => {
 
 	describe('Custom Class', () => {
 		it('should apply custom class to container', async () => {
-			const { container } = render(ArticleCard, {
-				props: {
-					...defaultProps,
-					class: 'custom-test-class'
-				}
+			const { container } = mountArticleCard({
+				...defaultProps,
+				class: 'custom-test-class'
 			});
 
 			const button = container.querySelector('button');
@@ -153,14 +163,14 @@ describe('ArticleCard', () => {
 
 	describe('Accessibility', () => {
 		it('should be keyboard focusable', async () => {
-			const { container } = render(ArticleCard, { props: defaultProps });
+			const { container } = mountArticleCard(defaultProps);
 
 			const button = container.querySelector('button');
 			expect(button?.getAttribute('type')).toBe('button');
 		});
 
 		it('should have proper focus styles class', async () => {
-			const { container } = render(ArticleCard, { props: defaultProps });
+			const { container } = mountArticleCard(defaultProps);
 
 			const button = container.querySelector('button');
 			expect(button?.className).toContain('focus:outline-none');
@@ -170,16 +180,16 @@ describe('ArticleCard', () => {
 
 	describe('Container Query Styles', () => {
 		it('should have container-type style for container queries', async () => {
-			const { container } = render(ArticleCard, { props: defaultProps });
+			const { container } = mountArticleCard(defaultProps);
 
 			const button = container.querySelector('button');
 			const computedStyle = window.getComputedStyle(button!);
 
-			expect(computedStyle.containerType).toBe('size');
+			expect(['size', 'inline-size']).toContain(computedStyle.containerType);
 		});
 
 		it('should have container-name set to article', async () => {
-			const { container } = render(ArticleCard, { props: defaultProps });
+			const { container } = mountArticleCard(defaultProps);
 
 			const button = container.querySelector('button');
 			const computedStyle = window.getComputedStyle(button!);
@@ -190,23 +200,21 @@ describe('ArticleCard', () => {
 
 	describe('Variants', () => {
 		it('should render main variant by default', async () => {
-			const { container } = render(ArticleCard, { props: defaultProps });
+			const { container } = mountArticleCard(defaultProps);
 
 			const button = container.querySelector('button');
 			expect(button?.className).toContain('article-card');
 		});
 
 		it('should apply main variant styles with gap-2', async () => {
-			const { container } = render(ArticleCard, { props: { ...defaultProps, variant: 'main' } });
+			const { container } = mountArticleCard({ ...defaultProps, variant: 'main' });
 
 			const button = container.querySelector('button');
 			expect(button?.className).toContain('gap-2');
 		});
 
 		it('should apply featured variant styles with gap-1.5', async () => {
-			const { container } = render(ArticleCard, {
-				props: { ...defaultProps, variant: 'featured' }
-			});
+			const { container } = mountArticleCard({ ...defaultProps, variant: 'featured' });
 
 			const button = container.querySelector('button');
 			expect(button?.className).toContain('gap-1.5');

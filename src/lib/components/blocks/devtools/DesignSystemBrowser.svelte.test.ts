@@ -3,9 +3,15 @@ import { page } from 'vitest/browser';
 import { describe, expect, it, vi } from 'vitest';
 import DesignSystemBrowser from './DesignSystemBrowser.svelte';
 
+function mountDesignSystemBrowser(props: { open?: boolean; inline?: boolean; onclose?: () => void }) {
+	const target = document.createElement('div');
+	document.body.appendChild(target);
+	return render(DesignSystemBrowser, { target, props });
+}
+
 describe('DesignSystemBrowser', () => {
 	it('opens a detailed view for documented components', async () => {
-		render(DesignSystemBrowser, { props: { open: true, inline: true } });
+		mountDesignSystemBrowser({ open: true, inline: true });
 
 		await page.getByRole('tab', { name: 'Components' }).click();
 		await page.getByRole('button', { name: 'View Container details' }).click();
@@ -21,7 +27,7 @@ describe('DesignSystemBrowser', () => {
 	it('closes detail before closing the explorer on Escape', async () => {
 		const onclose = vi.fn();
 
-		render(DesignSystemBrowser, { props: { open: true, inline: true, onclose } });
+		mountDesignSystemBrowser({ open: true, inline: true, onclose });
 
 		await page.getByRole('tab', { name: 'Components' }).click();
 		await page.getByRole('button', { name: 'View Button details' }).click();

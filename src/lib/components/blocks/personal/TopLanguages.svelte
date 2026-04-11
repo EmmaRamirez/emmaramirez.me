@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import {
-		type TopLanguage,
-		type TopLanguagesResponse
+		type TopLanguage
 	} from '$lib/github/topLanguages';
+	import TopLanguagesLoader from './TopLanguagesLoader.svelte';
+	import { getEditorSurfaceContext } from '$lib/components/editor/editorSurfaceContext';
 	import { topLanguagesSettings, type TopLanguagesVariant } from '$lib/stores/topLanguages.svelte';
-	import { trackedFetch } from '$lib/stores/performanceAnalytics.svelte';
 	import { cn } from '$lib/utils';
 
 	interface TopLanguagesProps {
 		class?: string;
 		variant?: TopLanguagesVariant;
+		effectsEnabled?: boolean;
 	}
 
 	interface VoronoiCell {
@@ -20,50 +20,18 @@
 		rotate?: number;
 	}
 
-	let { class: className = '', variant }: TopLanguagesProps = $props();
+let { class: className = '', variant, effectsEnabled = true }: TopLanguagesProps = $props();
+const editorSurface = getEditorSurfaceContext();
+const isEditorSurface = editorSurface?.surface === 'editor';
 
-	let languages = $state<TopLanguage[]>([]);
-	let loadState = $state<'loading' | 'ready' | 'error'>('loading');
+let languages = $state<TopLanguage[]>([]);
+let requestFailed = $state(false);
 
-	onMount(() => {
-		const controller = new AbortController();
-
-		void (async () => {
-			try {
-				const response = await trackedFetch('/api/github/top-languages', {
-					signal: controller.signal
-				}, {
-					label: 'GitHub top languages',
-					source: 'TopLanguages'
-				});
-
-				if (!response.ok) {
-					loadState = 'error';
-					return;
-				}
-
-				const payload = (await response.json()) as TopLanguagesResponse;
-
-				if (payload.languages.length > 0) {
-					languages = payload.languages;
-					loadState = 'ready';
-					return;
-				}
-				loadState = 'error';
-			} catch (error) {
-				if (error instanceof DOMException && error.name === 'AbortError') {
-					return;
-				}
-
-				loadState = 'error';
-				console.error('Failed to load GitHub top languages:', error);
-			}
-		})();
-
-		return () => {
-			controller.abort();
-		};
-	});
+const loadState = $derived.by(() => {
+	if (languages.length > 0) return 'ready';
+	if (requestFailed) return 'error';
+	return effectsEnabled ? 'loading' : 'idle';
+});
 
 	const resolvedVariant = $derived(variant ?? topLanguagesSettings.variant);
 	const displayVariant = $derived.by(() =>
@@ -116,6 +84,31 @@
 
 		<div class="top-languages-content">
 			{#if loadState === 'loading'}
+				<TopLanguagesLoader
+					onload={(nextLanguages) => {
+						languages = nextLanguages;
+						requestFailed = false;
+					}}
+					onerror={() => {
+						requestFailed = true;
+					}}
+				/>
+			{/if}
+
+			{#if loadState === 'idle'}
+				<div class="loading-state" aria-live="polite">
+					<div class="loading-state__copy">
+						<span class="loading-state__title">Language mix on standby.</span>
+						<span class="loading-state__subtitle">
+							{#if isEditorSurface}
+								The live GitHub snapshot loads when this tile enters view.
+							{:else}
+								The latest GitHub snapshot will load when effects resume.
+							{/if}
+						</span>
+					</div>
+				</div>
+			{:else if loadState === 'loading'}
 				<div class="loading-state" aria-live="polite" aria-busy="true">
 					<div class="loading-state__copy">
 						<span class="loading-state__title">Loading languages...</span>
