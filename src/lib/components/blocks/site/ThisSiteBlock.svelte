@@ -13,9 +13,7 @@
 
 	<div class="this-site-block__content">
 		<div class="this-site-block__copy">
-			<h3 class="this-site-block__title">
-				This Site
-			</h3>
+			<h3 class="this-site-block__title">This Site</h3>
 		</div>
 
 		<ul class="this-site-block__stack" aria-label="Core technologies">
@@ -35,7 +33,11 @@
 		--this-site-border: color-mix(in srgb, var(--this-site-text) 16%, transparent);
 		border: 0.0625rem solid var(--this-site-border);
 		background:
-			radial-gradient(circle at top right, color-mix(in srgb, white 34%, transparent), transparent 45%),
+			radial-gradient(
+				circle at top right,
+				color-mix(in srgb, white 34%, transparent),
+				transparent 45%
+			),
 			linear-gradient(
 				160deg,
 				color-mix(in srgb, var(--this-site-bg) 92%, white),

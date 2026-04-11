@@ -43,9 +43,13 @@
 	let placesError = $state<string | null>(null);
 	let loadingPlaces = $state(true);
 	let isDark = $derived($theme === 'dark');
-	let selectedRegion = $derived(selectedRegionId ? mapRegionById.get(selectedRegionId) ?? null : null);
+	let selectedRegion = $derived(
+		selectedRegionId ? (mapRegionById.get(selectedRegionId) ?? null) : null
+	);
 	let selectedRegionVisitorCount = $derived(
-		selectedRegionId ? visitorPlaces.filter((place) => place.regionId === selectedRegionId).length : 0
+		selectedRegionId
+			? visitorPlaces.filter((place) => place.regionId === selectedRegionId).length
+			: 0
 	);
 
 	const geographyDataUrl = `${base}/data/north-america-regions.geojson`;
@@ -99,9 +103,9 @@
 	}
 
 	function getRegionFilter(regionId: string) {
-		return (regionId
-			? ['==', ['get', 'id'], regionId]
-			: noRegionFilter) as mapboxgl.FilterSpecification;
+		return (
+			regionId ? ['==', ['get', 'id'], regionId] : noRegionFilter
+		) as mapboxgl.FilterSpecification;
 	}
 
 	function buildVisitorRegionGroups(places: MapPlaceRecord[]): VisitorRegionGroup[] {
@@ -178,7 +182,12 @@
 			.replaceAll("'", '&#39;');
 	}
 
-	function formatVisitorPopup(names: string, count: number, regionName: string, countryName: string) {
+	function formatVisitorPopup(
+		names: string,
+		count: number,
+		regionName: string,
+		countryName: string
+	) {
 		const preview = names.split(', ').slice(0, 4).map(escapeHtml);
 		const suffix = count > preview.length ? ` and ${count - preview.length} more` : '';
 		return `<strong>${count} visitor${count === 1 ? '' : 's'}</strong><br>${preview.join(', ')}${suffix}<br><span>${escapeHtml(regionName)}, ${escapeHtml(countryName)}</span>`;
@@ -231,14 +240,10 @@
 		placesError = null;
 
 		try {
-			const response = await trackedFetch(
-				'/api/map-places',
-				undefined,
-				{
-					label: 'LocationBlock places load',
-					source: 'LocationBlock'
-				}
-			);
+			const response = await trackedFetch('/api/map-places', undefined, {
+				label: 'LocationBlock places load',
+				source: 'LocationBlock'
+			});
 
 			if (!response.ok) {
 				throw new Error(`Request failed with ${response.status}`);
@@ -463,10 +468,7 @@
 
 			if (regionId) {
 				map.getCanvas().style.setProperty('cursor', 'pointer');
-				hoverPopup
-					?.setLngLat(event.lngLat)
-					.setText('Click To Add Your Place!')
-					.addTo(map);
+				hoverPopup?.setLngLat(event.lngLat).setText('Click To Add Your Place!').addTo(map);
 			} else {
 				hideTransientPopups();
 				if (map.getLayer(geographyHoverLayerId)) {
@@ -506,9 +508,13 @@
 		};
 
 		currentMapStyle = isDark ? mapStyles.dark : mapStyles.light;
-		const mapReadyMeasureId = performanceAnalytics.beginMeasure('render', 'LocationBlock map ready', {
-			source: 'LocationBlock'
-		});
+		const mapReadyMeasureId = performanceAnalytics.beginMeasure(
+			'render',
+			'LocationBlock map ready',
+			{
+				source: 'LocationBlock'
+			}
+		);
 		let hasRecordedMapReady = false;
 
 		map = new mapboxgl.Map({

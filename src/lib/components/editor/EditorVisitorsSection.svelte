@@ -13,7 +13,9 @@
 	let refreshing = $state(false);
 	let errorMessage = $state<string | null>(null);
 
-	const visibleVisitors = $derived(visitors.filter((visitor) => visitor.status === 'visible').length);
+	const visibleVisitors = $derived(
+		visitors.filter((visitor) => visitor.status === 'visible').length
+	);
 	const hiddenVisitors = $derived(visitors.filter((visitor) => visitor.status === 'hidden').length);
 
 	function formatCreatedAt(value: string) {
@@ -29,14 +31,10 @@
 		errorMessage = null;
 
 		try {
-			const response = await trackedFetch(
-				'/api/map-places?includeAll=true',
-				undefined,
-				{
-					label: 'Editor visitors load',
-					source: 'EditorVisitorsSection'
-				}
-			);
+			const response = await trackedFetch('/api/map-places?includeAll=true', undefined, {
+				label: 'Editor visitors load',
+				source: 'EditorVisitorsSection'
+			});
 
 			if (!response.ok) {
 				throw new Error(`Request failed with ${response.status}`);

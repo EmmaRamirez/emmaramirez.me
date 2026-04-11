@@ -52,7 +52,10 @@ function normalizePokemonIdentifier(identifier: number | string): string {
 		return String(identifier);
 	}
 
-	return identifier.trim().toLowerCase().replace(/[\s_]+/g, '-');
+	return identifier
+		.trim()
+		.toLowerCase()
+		.replace(/[\s_]+/g, '-');
 }
 
 export async function fetchPokemonDetails(identifier: number | string): Promise<PokemonDetails> {

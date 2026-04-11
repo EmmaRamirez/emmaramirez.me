@@ -41,17 +41,16 @@
 		CityCard
 	} from '$lib/components/blocks';
 	import EditorGridLegend from '$lib/components/editor/EditorGridLegend.svelte';
+	import EditorBlockPlaceholder from '$lib/components/editor/EditorBlockPlaceholder.svelte';
 	import {
 		getEditorGridItemColor,
 		getEditorGridItemIcon,
 		getEditorGridItemLabel
 	} from '$lib/components/editor/editorGridMeta';
+	import { setEditorSurfaceContext } from '$lib/components/editor/editorSurfaceContext';
 	import { Hero } from '$lib/components/hero';
 	import { Select, Switch } from '$lib/components/ui';
-	import {
-		performanceAnalytics,
-		trackedFetch
-	} from '$lib/stores/performanceAnalytics.svelte';
+	import { performanceAnalytics, trackedFetch } from '$lib/stores/performanceAnalytics.svelte';
 
 	interface Props {
 		articles: Array<{
@@ -62,14 +61,18 @@
 			date?: string;
 			tags?: string[];
 		}>;
-		projects: Array<ProjectRegistryEntry & { excerpt?: string; content: string; updatedAt?: string | null }>;
+		projects: Array<
+			ProjectRegistryEntry & { excerpt?: string; content: string; updatedAt?: string | null }
+		>;
 	}
 
 	let { articles, projects }: Props = $props();
 
 	const disco: DiscoRegistryEntry = getDisco();
 
-	const gridItems = $derived(buildHomepageGridItems({ includeApiExplorer: false, articles, projects }));
+	const gridItems = $derived(
+		buildHomepageGridItems({ includeApiExplorer: false, articles, projects })
+	);
 
 	interface DndItem {
 		id: string;
@@ -77,13 +80,14 @@
 	}
 
 	let dndItems = $state<DndItem[]>([]);
-	let selectedItem = $state<GridItem | null>(null);
+	let selectedItemKey = $state<string | null>(null);
 
-	const selectedItemLayout = $derived.by(() => {
-		const item = selectedItem;
-		if (!item) return undefined;
-		return editorGridLayoutStore.getLayout(getItemKey(item));
-	});
+	const selectedItem = $derived.by(() =>
+		selectedItemKey ? (dndItems.find((entry) => entry.id === selectedItemKey)?.item ?? null) : null
+	);
+	const selectedItemLayout = $derived.by(() =>
+		selectedItemKey ? editorGridLayoutStore.getLayout(selectedItemKey) : undefined
+	);
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
@@ -95,6 +99,13 @@
 	let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 	const pokemonLookupTimers: Partial<Record<number, ReturnType<typeof setTimeout>>> = {};
 	let dragMeasureId: string | null = null;
+	let isDragging = $state(false);
+	let visibleItemKeys = $state<Record<string, boolean>>({});
+
+	setEditorSurfaceContext({
+		surface: 'editor',
+		effectsMode: 'reduced'
+	});
 
 	onMount(() => {
 		editorGridLayoutStore.initialize(gridItems);
@@ -123,6 +134,12 @@
 		updateDndItems();
 	});
 
+	$effect(() => {
+		if (!selectedItemKey) return;
+		if (dndItems.some((entry) => entry.id === selectedItemKey)) return;
+		selectedItemKey = null;
+	});
+
 	function updateDndItems() {
 		const orderedItems = editorGridLayoutStore.reorderItems(gridItems);
 		dndItems = orderedItems.map((item) => ({
@@ -132,6 +149,7 @@
 	}
 
 	function handleDndConsider(e: CustomEvent<DndEvent<DndItem>>) {
+		isDragging = true;
 		dragMeasureId ??= performanceAnalytics.beginMeasure('interaction', 'Editor grid reorder', {
 			source: 'EditorGridSection'
 		});
@@ -139,6 +157,7 @@
 	}
 
 	function handleDndFinalize(e: CustomEvent<DndEvent<DndItem>>) {
+		isDragging = false;
 		dndItems = e.detail.items;
 		editorGridLayoutStore.setOrder(dndItems.map((d) => d.id));
 		performanceAnalytics.endMeasure(dragMeasureId, {
@@ -165,8 +184,79 @@
 		return getGridItemSpanClasses(layout);
 	}
 
-	function handleItemClick(item: GridItem) {
-		selectedItem = selectedItem === item ? null : item;
+	function handleItemClick(key: string) {
+		selectedItemKey = selectedItemKey === key ? null : key;
+	}
+
+	function handleItemKeydown(event: KeyboardEvent, key: string) {
+		if (event.key !== 'Enter' && event.key !== ' ') return;
+		event.preventDefault();
+		handleItemClick(key);
+	}
+
+	function trackGridItemVisibility(key: string) {
+		return (node: HTMLElement) => {
+			if (typeof IntersectionObserver === 'undefined') {
+				visibleItemKeys[key] = true;
+				return () => {
+					delete visibleItemKeys[key];
+				};
+			}
+
+			const observer = new IntersectionObserver(
+				(entries) => {
+					const [entry] = entries;
+					visibleItemKeys[key] = entry?.isIntersecting ?? false;
+				},
+				{
+					rootMargin: '120px'
+				}
+			);
+
+			observer.observe(node);
+
+			return () => {
+				observer.disconnect();
+				delete visibleItemKeys[key];
+			};
+		};
+	}
+
+	function isTileVisible(key: string) {
+		return Boolean(visibleItemKeys[key]);
+	}
+
+	function isTileFocused(key: string) {
+		return selectedItemKey === key;
+	}
+
+	function isEffectsEnabledFor(key: string) {
+		return isTileVisible(key) || isTileFocused(key);
+	}
+
+	function getStaticItemSummary(item: GridItem) {
+		switch (item.kind) {
+			case 'disco':
+				return 'Pointer-driven canvas effects with click bursts and tunable beam counts.';
+			case 'location':
+				return 'Interactive visitor map with region selection and a lightweight editor placeholder.';
+			case 'home':
+				return 'Compact site-intro card anchored around Emma’s home base.';
+			case 'this-site':
+				return 'Tech-stack card highlighting the tools and systems behind the site.';
+			case 'city':
+				return 'Editorial city card used as a visual spacer in the homepage layout.';
+			case 'design-system':
+				return 'Promotional callout that links deeper into the design system preview.';
+			case 'hero':
+				return 'Homepage hero with blend-mode tuning and optional 3D rendering on the live site.';
+			case 'pokemon':
+				return 'Pokemon team showcase with hover details on the live site and editor-friendly gating.';
+			case 'top-languages':
+				return 'GitHub language mix card with switchable visual treatments and deferred loading.';
+			default:
+				return '';
+		}
 	}
 
 	function handleSave() {
@@ -186,7 +276,7 @@
 		if (confirm('Reset layout to defaults? This will remove your saved layout.')) {
 			editorGridLayoutStore.reset(gridItems);
 			updateDndItems();
-			selectedItem = null;
+			selectedItemKey = null;
 		}
 	}
 
@@ -302,9 +392,9 @@
 		await trackedFetch(
 			'/api/debug-settings',
 			{
-			method: 'PUT',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify(getSettingsPayload())
+				method: 'PUT',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify(getSettingsPayload())
 			},
 			{
 				label: 'Editor debug settings save',
@@ -315,14 +405,10 @@
 
 	onMount(async () => {
 		if (!browser) return;
-		const response = await trackedFetch(
-			'/api/debug-settings',
-			undefined,
-			{
-				label: 'Editor debug settings load',
-				source: 'EditorGridSection'
-			}
-		);
+		const response = await trackedFetch('/api/debug-settings', undefined, {
+			label: 'Editor debug settings load',
+			source: 'EditorGridSection'
+		});
 		if (!response.ok) {
 			hasLoadedSettings = true;
 			return;
@@ -477,7 +563,10 @@
 					{@const item = dndItem.item}
 					{@const key = dndItem.id}
 					{@const layout = editorGridLayoutStore.getLayout(key)}
-					<li class="grid-item edit-mode h-full {getColSpanClass(key)}">
+					<li
+						class="grid-item edit-mode h-full {getColSpanClass(key)}"
+						{@attach trackGridItemVisibility(key)}
+					>
 						<div class="resize-controls">
 							<button
 								type="button"
@@ -527,9 +616,17 @@
 							</button>
 						</div>
 
-						<button type="button" class="grid-item-content" onclick={() => handleItemClick(item)}>
+						<div
+							class="grid-item-content"
+							class:grid-item-content--selected={selectedItemKey === key}
+							role="button"
+							tabindex="0"
+							aria-pressed={selectedItemKey === key}
+							onclick={() => handleItemClick(key)}
+							onkeydown={(event) => handleItemKeydown(event, key)}
+						>
 							{#if item.kind === 'hero'}
-								<Hero />
+								<Hero effectsEnabled={isEffectsEnabledFor(key)} />
 							{:else if item.kind === 'article'}
 								<div class="article-card">
 									<span class="text-lg leading-snug font-semibold text-(--text-primary)">
@@ -563,13 +660,23 @@
 									alt={disco.alt}
 									caption={disco.caption}
 									class={disco.class ?? 'h-full w-full'}
+									effectsEnabled={isEffectsEnabledFor(key) && !isDragging}
 								/>
 							{:else if item.kind === 'home'}
 								<HomeBlock class="h-full w-full" />
 							{:else if item.kind === 'this-site'}
 								<ThisSiteBlock class="h-full w-full" />
 							{:else if item.kind === 'location'}
-								<LocationBlock class="h-full w-full" />
+								{#if isEffectsEnabledFor(key)}
+									<LocationBlock class="h-full w-full" />
+								{:else}
+									<EditorBlockPlaceholder
+										label="Location Map"
+										description="The Mapbox preview wakes up when this tile enters view."
+										tone="blue"
+										class="h-full w-full"
+									/>
+								{/if}
 							{:else if item.kind === 'city'}
 								<CityCard
 									photo="https://images.unsplash.com/photo-1666610278692-51058ed05e9a?auto=format&fit=crop&w=1800&q=80"
@@ -579,12 +686,16 @@
 								<DesignSystemAd />
 							{:else if item.kind === 'pokemon'}
 								{#if dev}
-									<PokemonBlock team={activePokemonTeam} class="h-full w-full" />
+									<PokemonBlock
+										team={activePokemonTeam}
+										class="h-full w-full"
+										effectsEnabled={isEffectsEnabledFor(key)}
+									/>
 								{/if}
 							{:else if item.kind === 'top-languages'}
-								<TopLanguages class="h-full w-full" />
+								<TopLanguages class="h-full w-full" effectsEnabled={isEffectsEnabledFor(key)} />
 							{/if}
-						</button>
+						</div>
 					</li>
 				{/each}
 			</ul>
@@ -692,13 +803,19 @@
 													autocomplete="off"
 													spellcheck="false"
 													oninput={(event: Event) =>
-														handlePokemonNameInput(index, (event.currentTarget as HTMLInputElement).value)}
+														handlePokemonNameInput(
+															index,
+															(event.currentTarget as HTMLInputElement).value
+														)}
 													onblur={() => void commitPokemonSlot(index)}
-													onkeydown={(event: KeyboardEvent) => handlePokemonNameKeydown(index, event)}
+													onkeydown={(event: KeyboardEvent) =>
+														handlePokemonNameKeydown(index, event)}
 												/>
 												<p
 													class="pokemon-team-field__message"
-													class:pokemon-team-field__message--error={Boolean(pokemonTeamErrors[index])}
+													class:pokemon-team-field__message--error={Boolean(
+														pokemonTeamErrors[index]
+													)}
 												>
 													{pokemonTeamErrors[index] ||
 														(pokemonLookupPending[index]
@@ -728,15 +845,113 @@
 									hint="Switch between the researched display treatments for this card."
 								/>
 							</div>
+						{:else if selectedItem.kind === 'disco'}
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+									<dt>Caption</dt>
+									<dd>{disco.caption}</dd>
+									<dt>Preview Mode</dt>
+									<dd>{selectedItemKey ? 'Effects wake while selected or visible.' : 'Reduced'}</dd>
+								</dl>
+
+								<p class="details-note">{getStaticItemSummary(selectedItem)}</p>
+							</div>
+						{:else if selectedItem.kind === 'location'}
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+									<dt>Map Provider</dt>
+									<dd>Mapbox GL</dd>
+									<dt>Editor Strategy</dt>
+									<dd>Deferred mount until visible or selected</dd>
+								</dl>
+
+								<p class="details-note">{getStaticItemSummary(selectedItem)}</p>
+							</div>
+						{:else if selectedItem.kind === 'home'}
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+									<dt>Role</dt>
+									<dd>Personal identity anchor</dd>
+								</dl>
+
+								<p class="details-note">{getStaticItemSummary(selectedItem)}</p>
+							</div>
+						{:else if selectedItem.kind === 'this-site'}
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+									<dt>Tags</dt>
+									<dd>SvelteKit, TypeScript, Design tokens</dd>
+								</dl>
+
+								<p class="details-note">{getStaticItemSummary(selectedItem)}</p>
+							</div>
+						{:else if selectedItem.kind === 'city'}
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+									<dt>Photo</dt>
+									<dd>Houston skyline at night</dd>
+								</dl>
+
+								<p class="details-note">{getStaticItemSummary(selectedItem)}</p>
+							</div>
+						{:else if selectedItem.kind === 'design-system'}
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+									<dt>CTA</dt>
+									<dd>Explore design system</dd>
+								</dl>
+
+								<p class="details-note">{getStaticItemSummary(selectedItem)}</p>
+							</div>
 						{:else}
-							<dl class="details-list">
-								<dt>Type</dt>
-								<dd><code>{selectedItem.kind}</code></dd>
-								<dt>Grid Span</dt>
-								<dd>
-									{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
-								</dd>
-							</dl>
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+								</dl>
+
+								<p class="details-note">{getStaticItemSummary(selectedItem)}</p>
+							</div>
 						{/if}
 					</div>
 				{:else}
@@ -1019,6 +1234,7 @@
 	}
 
 	.grid-item-content {
+		position: relative;
 		height: 100%;
 		width: 100%;
 		min-height: 7.5rem;
@@ -1028,6 +1244,12 @@
 		margin: 0;
 		text-align: left;
 		cursor: pointer;
+	}
+
+	.grid-item-content--selected {
+		outline: 0.125rem solid color-mix(in srgb, var(--caroline-blue-600) 48%, transparent);
+		outline-offset: -0.125rem;
+		border-radius: 0.625rem;
 	}
 
 	.resize-controls {
@@ -1240,6 +1462,13 @@
 		line-height: 1.5;
 		grid-column: 1 / -1;
 		margin-top: 0.25rem;
+	}
+
+	.details-note {
+		margin: 0;
+		font-size: 0.82rem;
+		line-height: 1.55;
+		color: var(--text-secondary);
 	}
 
 	.pill {

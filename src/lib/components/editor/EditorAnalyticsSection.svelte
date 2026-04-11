@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { performanceAnalytics, type AnalyticsTimelineEvent } from '$lib/stores/performanceAnalytics.svelte';
+	import {
+		performanceAnalytics,
+		type AnalyticsTimelineEvent
+	} from '$lib/stores/performanceAnalytics.svelte';
 
 	const summary = $derived(performanceAnalytics.summary);
 	const sessionStartedAt = $derived(performanceAnalytics.sessionStartedAt);
@@ -130,7 +133,9 @@
 			<span class="stat-card__label">Persisted Events</span>
 			<strong class="stat-card__value">{persistedSummary?.totalPersistedEvents ?? 0}</strong>
 			<span class="stat-card__meta">
-				{persistenceStatus.pendingCount} pending, last sync {formatSyncTimestamp(persistenceStatus.lastSyncedAt)}
+				{persistenceStatus.pendingCount} pending, last sync {formatSyncTimestamp(
+					persistenceStatus.lastSyncedAt
+				)}
 			</span>
 		</article>
 	</div>
@@ -195,7 +200,11 @@
 							<span class="mini-row__title">Last ingest</span>
 							<span class="mini-row__subtitle">Most recent batch write</span>
 						</div>
-						<span>{persistedSummary.lastIngestedAt ? formatTimestamp(Date.parse(persistedSummary.lastIngestedAt)) : 'N/A'}</span>
+						<span
+							>{persistedSummary.lastIngestedAt
+								? formatTimestamp(Date.parse(persistedSummary.lastIngestedAt))
+								: 'N/A'}</span
+						>
 					</div>
 				{/if}
 			</div>
@@ -333,13 +342,17 @@
 			</div>
 			<div class="mini-stack">
 				{#if !persistedSummary || persistedSummary.slowestRequests.length === 0}
-					<p class="empty-state">Persisted request timing will appear after the first successful sync.</p>
+					<p class="empty-state">
+						Persisted request timing will appear after the first successful sync.
+					</p>
 				{:else}
 					{#each persistedSummary.slowestRequests as event (event.id)}
 						<div class="mini-row">
 							<div class="mini-row__copy">
 								<span class="mini-row__title">{event.name}</span>
-								<span class="mini-row__subtitle">{event.method ?? 'GET'} {event.status ?? 'ERR'}</span>
+								<span class="mini-row__subtitle"
+									>{event.method ?? 'GET'} {event.status ?? 'ERR'}</span
+								>
 							</div>
 							<span>{formatDuration(event.duration ?? 0)}</span>
 						</div>
@@ -455,16 +468,29 @@
 
 	.stats-grid,
 	.analytics-grid {
-		display: grid;
+		display: flex;
+		flex-wrap: nowrap;
 		gap: 1rem;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding-bottom: 0.35rem;
+		-webkit-overflow-scrolling: touch;
+		scroll-snap-type: x proximity;
+		scrollbar-gutter: stable;
 	}
 
-	.stats-grid {
-		grid-template-columns: repeat(5, minmax(0, 1fr));
+	.stat-card {
+		flex: 0 0 auto;
+		width: min(13.5rem, 72vw);
+		scroll-snap-align: start;
 	}
 
-	.analytics-grid {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+	.analytics-grid .analytics-card {
+		flex: 0 0 auto;
+		width: min(19rem, 78vw);
+		max-height: 22rem;
+		overflow-y: auto;
+		scroll-snap-align: start;
 	}
 
 	.stat-card,
@@ -628,16 +654,6 @@
 		margin: 0;
 	}
 
-	@media (max-width: 72rem) {
-		.stats-grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-
-		.analytics-grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
-
 	@media (max-width: 48rem) {
 		.analytics-hero {
 			flex-direction: column;
@@ -645,11 +661,6 @@
 
 		.analytics-hero__meta {
 			align-items: flex-start;
-		}
-
-		.stats-grid,
-		.analytics-grid {
-			grid-template-columns: 1fr;
 		}
 
 		.mini-row,

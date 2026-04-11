@@ -11,7 +11,12 @@
 <figure
 	class="photo-card relative flex h-full w-full items-center overflow-hidden rounded-xl border border-(--border-color) bg-(--surface) {className}"
 >
-	<img src={photo} alt={description} loading="lazy" class="photo-image h-full w-full object-cover" />
+	<img
+		src={photo}
+		alt={description}
+		loading="lazy"
+		class="photo-image h-full w-full object-cover"
+	/>
 	<figcaption class="photo-description">
 		{description}
 	</figcaption>

@@ -240,7 +240,9 @@
 								<div class="mb-1 flex items-center justify-between gap-2">
 									<span class="text-sm font-semibold text-(--text-primary)">{preset.name}</span>
 									{#if activeHeroPresetId === preset.id}
-										<span class="text-[0.65rem] font-semibold text-(--lawn-green-500)">Selected</span>
+										<span class="text-[0.65rem] font-semibold text-(--lawn-green-500)"
+											>Selected</span
+										>
 									{/if}
 								</div>
 							</button>
@@ -264,67 +266,133 @@
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Reveal Radius: {hero.revealRadius.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.revealRadius} min={0.08} max={0.5} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.revealRadius}
+								min={0.08}
+								max={0.5}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Reveal Softness: {hero.revealSoftness.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.revealSoftness} min={0.01} max={0.22} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.revealSoftness}
+								min={0.01}
+								max={0.22}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Reveal Opacity: {hero.revealOpacity.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.revealOpacity} min={0} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.revealOpacity}
+								min={0}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Cursor Width: {hero.cursorWidth.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.cursorWidth} min={0.25} max={2} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.cursorWidth}
+								min={0.25}
+								max={2}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Cursor Height: {hero.cursorHeight.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.cursorHeight} min={0.25} max={2} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.cursorHeight}
+								min={0.25}
+								max={2}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Pixel Size: {hero.pixelSize.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.pixelSize} min={0.15} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.pixelSize}
+								min={0.15}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Pixel Hardness: {hero.pixelHardness.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.pixelHardness} min={0} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.pixelHardness}
+								min={0}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Pixel Scatter: {hero.pixelScatter.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.pixelScatter} min={0} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.pixelScatter}
+								min={0}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Idle Reveal: {hero.idleReveal.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.idleReveal} min={0} max={0.4} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.idleReveal}
+								min={0}
+								max={0.4}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Cursor Damping: {hero.cursorDamping.toFixed(1)}
 							</span>
-							<Slider bind:value={hero.cursorDamping} min={1} max={10} step={0.1} showValue={false} />
+							<Slider
+								bind:value={hero.cursorDamping}
+								min={1}
+								max={10}
+								step={0.1}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Reveal Damping: {hero.revealDamping.toFixed(1)}
 							</span>
-							<Slider bind:value={hero.revealDamping} min={1} max={10} step={0.1} showValue={false} />
+							<Slider
+								bind:value={hero.revealDamping}
+								min={1}
+								max={10}
+								step={0.1}
+								showValue={false}
+							/>
 						</div>
 					</div>
 				</div>
@@ -338,19 +406,37 @@
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Parallax Strength: {hero.parallaxStrength.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.parallaxStrength} min={0} max={0.18} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.parallaxStrength}
+								min={0}
+								max={0.18}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Tilt Strength: {hero.tiltStrength.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.tiltStrength} min={0} max={0.2} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.tiltStrength}
+								min={0}
+								max={0.2}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Lift Strength: {hero.liftStrength.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.liftStrength} min={0} max={0.35} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.liftStrength}
+								min={0}
+								max={0.35}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 					</div>
 				</div>
@@ -364,13 +450,25 @@
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Ripple Strength: {hero.rippleStrength.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.rippleStrength} min={0} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.rippleStrength}
+								min={0}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Ripple Frequency: {hero.rippleFrequency.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.rippleFrequency} min={0} max={2} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.rippleFrequency}
+								min={0}
+								max={2}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
@@ -382,7 +480,13 @@
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Ripple Decay: {hero.rippleDecay.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.rippleDecay} min={0.5} max={6} step={0.1} showValue={false} />
+							<Slider
+								bind:value={hero.rippleDecay}
+								min={0.5}
+								max={6}
+								step={0.1}
+								showValue={false}
+							/>
 						</div>
 					</div>
 				</div>
@@ -396,13 +500,25 @@
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Bounce Strength: {hero.bounceStrength.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.bounceStrength} min={0} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.bounceStrength}
+								min={0}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Bounce Frequency: {hero.bounceFrequency.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.bounceFrequency} min={0} max={2} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.bounceFrequency}
+								min={0}
+								max={2}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
@@ -422,25 +538,49 @@
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Fade Strength: {hero.fadeStrength.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.fadeStrength} min={0} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.fadeStrength}
+								min={0}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Fade Softness: {hero.fadeSoftness.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.fadeSoftness} min={0} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.fadeSoftness}
+								min={0}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Glow Strength: {hero.glowStrength.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.glowStrength} min={0} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.glowStrength}
+								min={0}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Glow Radius: {hero.glowRadius.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.glowRadius} min={0} max={0.35} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.glowRadius}
+								min={0}
+								max={0.35}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
@@ -470,13 +610,25 @@
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Chroma Drift: {hero.chromaStrength.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.chromaStrength} min={0} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.chromaStrength}
+								min={0}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Grain Strength: {hero.grainStrength.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.grainStrength} min={0} max={1} step={0.01} showValue={false} />
+							<Slider
+								bind:value={hero.grainStrength}
+								min={0}
+								max={1}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">

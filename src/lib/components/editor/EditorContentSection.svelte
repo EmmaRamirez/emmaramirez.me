@@ -61,8 +61,12 @@
 	let projectErrorMessage = $state('');
 	let articleErrorMessage = $state('');
 
-	const selectedProject = $derived(projects.find((entry) => entry.id === selectedProjectId) ?? null);
-	const selectedArticle = $derived(articles.find((entry) => entry.slug === selectedArticleSlug) ?? null);
+	const selectedProject = $derived(
+		projects.find((entry) => entry.id === selectedProjectId) ?? null
+	);
+	const selectedArticle = $derived(
+		articles.find((entry) => entry.slug === selectedArticleSlug) ?? null
+	);
 
 	function loadProjectForm(project: ProjectContentItem | null | undefined) {
 		if (!project) return;
@@ -199,8 +203,8 @@
 		<div>
 			<h2 class="content-hero__title">Content</h2>
 			<p class="content-hero__body">
-				Projects now store markdown body content here, while articles keep mdsvex bodies and let
-				you edit the metadata that drives cards, SEO, and navigation.
+				Projects now store markdown body content here, while articles keep mdsvex bodies and let you
+				edit the metadata that drives cards, SEO, and navigation.
 			</p>
 		</div>
 		<span class="content-hero__pill">Server-backed</span>

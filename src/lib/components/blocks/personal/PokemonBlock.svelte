@@ -6,14 +6,18 @@
 		getPokemonSpriteUrl,
 		type PokemonDetails
 	} from '$lib/api/pokemon';
+	import { getEditorSurfaceContext } from '$lib/components/editor/editorSurfaceContext';
 	import type { Pokemon } from '$lib/website.config';
 
 	interface PokemonBlockProps {
 		team: Pokemon[];
 		class?: string;
+		effectsEnabled?: boolean;
 	}
 
-	let { team, class: className = '' }: PokemonBlockProps = $props();
+	let { team, class: className = '', effectsEnabled = true }: PokemonBlockProps = $props();
+	const editorSurface = getEditorSurfaceContext();
+	const isEditorSurface = editorSurface?.surface === 'editor';
 
 	const detailsCache = $state<Record<number, PokemonDetails>>({});
 	const popoverRefs = $state<Record<number, HTMLDivElement | null>>({});
@@ -81,6 +85,7 @@
 	}
 
 	async function selectPokemon(id: number) {
+		if (!effectsEnabled) return;
 		selectedPokemonId = id;
 		lastSelectedPokemonId = id;
 		error = null;
@@ -112,6 +117,15 @@
 	const selectedDetails = $derived(
 		lastSelectedPokemonId ? (detailsCache[lastSelectedPokemonId] ?? null) : null
 	);
+
+	$effect(() => {
+		if (effectsEnabled) return;
+		cancelHide();
+		hideAllPopovers();
+		lastSelectedPokemonId = null;
+		loadingId = null;
+		error = null;
+	});
 </script>
 
 <div
@@ -129,17 +143,19 @@
 					class="pokemon-sprite-container"
 					class:selected={selectedPokemonId === pokemon.id}
 					onmouseenter={async () => {
+						if (!effectsEnabled) return;
 						cancelHide();
 						await selectPokemon(pokemon.id);
 						showPopover(pokemon.id);
 					}}
 					onfocus={async () => {
+						if (!effectsEnabled) return;
 						cancelHide();
 						await selectPokemon(pokemon.id);
 						showPopover(pokemon.id);
 					}}
-					onmouseleave={() => scheduleHide(pokemon.id)}
-					onblur={() => scheduleHide(pokemon.id)}
+					onmouseleave={() => effectsEnabled && scheduleHide(pokemon.id)}
+					onblur={() => effectsEnabled && scheduleHide(pokemon.id)}
 				>
 					<img
 						src={getPokemonSpriteUrl(pokemon.id)}
@@ -160,7 +176,7 @@
 					class="pokemon-popover"
 					{@attach registerPopover(pokemon.id)}
 					onmouseenter={cancelHide}
-					onmouseleave={() => scheduleHide(pokemon.id)}
+					onmouseleave={() => effectsEnabled && scheduleHide(pokemon.id)}
 				>
 					{#if loadingId === pokemon.id}
 						<p class="text-xs text-(--text-muted)">Loading...</p>
@@ -217,7 +233,13 @@
 					<p class="pokemon-inline__status">Hover a Pokemon to load details.</p>
 				{/if}
 			{:else}
-				<p class="pokemon-inline__status">Hover a Pokemon to load details.</p>
+				<p class="pokemon-inline__status">
+					{#if !effectsEnabled && isEditorSurface}
+						Activate this tile in the editor to inspect Pokemon details.
+					{:else}
+						Hover a Pokemon to load details.
+					{/if}
+				</p>
 			{/if}
 		</div>
 	</div>

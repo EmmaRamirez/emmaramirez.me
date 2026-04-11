@@ -32,7 +32,7 @@
 		secondary:
 			'bg-[var(--sandy-tan-500)] text-[var(--liver-brown-800)] hover:bg-[var(--sandy-tan-600)] focus:ring-[var(--sandy-tan-700)] border-2 border-[var(--liver-brown-500)]',
 		outline:
-		'border-2 border-[var(--caroline-blue-600)] text-[var(--caroline-blue-700)] hover:bg-[var(--caroline-blue-100)] active:bg-[var(--caroline-blue-600)] active:text-white focus:ring-[var(--caroline-blue-500)] bg-transparent',
+			'border-2 border-[var(--caroline-blue-600)] text-[var(--caroline-blue-700)] hover:bg-[var(--caroline-blue-100)] active:bg-[var(--caroline-blue-600)] active:text-white focus:ring-[var(--caroline-blue-500)] bg-transparent',
 		ghost:
 			'text-[var(--liver-brown-700)] hover:bg-[var(--sandy-tan-400)] focus:ring-[var(--sandy-tan-600)] bg-transparent'
 	};

@@ -18,17 +18,17 @@ For local development, `DATABASE_URL` can point at your local Postgres instance.
 
 ## Scripts
 
-| Command            | Description                                      |
-| ------------------ | ------------------------------------------------ |
-| `npm run dev`      | Start the Vite dev server                        |
-| `npm run build`    | Production build                                 |
-| `npm run preview`  | Preview the production build                     |
-| `npm run check`    | `svelte-check` + sync                            |
-| `npm run test`     | Unit tests (Vitest) and E2E (Playwright)         |
-| `npm run test:unit`| Vitest only                                      |
-| `npm run test:e2e` | Playwright only                                  |
-| `npm run lint`     | Prettier + ESLint                                |
-| `npm run db:deploy`| Apply committed Prisma migrations                |
+| Command             | Description                              |
+| ------------------- | ---------------------------------------- |
+| `npm run dev`       | Start the Vite dev server                |
+| `npm run build`     | Production build                         |
+| `npm run preview`   | Preview the production build             |
+| `npm run check`     | `svelte-check` + sync                    |
+| `npm run test`      | Unit tests (Vitest) and E2E (Playwright) |
+| `npm run test:unit` | Vitest only                              |
+| `npm run test:e2e`  | Playwright only                          |
+| `npm run lint`      | Prettier + ESLint                        |
+| `npm run db:deploy` | Apply committed Prisma migrations        |
 
 ## Deploying With Vercel
 

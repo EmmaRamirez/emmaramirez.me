@@ -20,8 +20,13 @@
 		onnavigate?: (articleSlug: string) => void;
 	}
 
-	let { open = false, articleSlug = null, articles, onclose, onnavigate }: ArticleReaderPanelProps =
-		$props();
+	let {
+		open = false,
+		articleSlug = null,
+		articles,
+		onclose,
+		onnavigate
+	}: ArticleReaderPanelProps = $props();
 
 	const articleBody = $derived<ArticleFull | null>(
 		articleSlug ? (getArticleBySlug(articleSlug) ?? null) : null
@@ -30,7 +35,9 @@
 		articleSlug ? (articles.find((entry) => entry.slug === articleSlug) ?? null) : null
 	);
 
-	const articleNeighbors = $derived(orderedListNeighbors(articles, articleSlug, (entry) => entry.slug));
+	const articleNeighbors = $derived(
+		orderedListNeighbors(articles, articleSlug, (entry) => entry.slug)
+	);
 	const prevArticle = $derived(articleNeighbors.prev);
 	const nextArticle = $derived(articleNeighbors.next);
 

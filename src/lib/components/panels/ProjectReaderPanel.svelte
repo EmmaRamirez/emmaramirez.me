@@ -12,8 +12,13 @@
 		onnavigate?: (projectId: ProjectId) => void;
 	}
 
-	let { open = false, projectId = null, projects, onclose, onnavigate }: ProjectReaderPanelProps =
-		$props();
+	let {
+		open = false,
+		projectId = null,
+		projects,
+		onclose,
+		onnavigate
+	}: ProjectReaderPanelProps = $props();
 
 	const project = $derived(projects.find((entry) => entry.id === projectId) ?? null);
 
@@ -276,10 +281,7 @@
 						</div>
 						<div class="nav-next">
 							{#if nextProject}
-								<button
-									class="nav-link nav-link-next"
-									onclick={() => onnavigate?.(nextProject.id)}
-								>
+								<button class="nav-link nav-link-next" onclick={() => onnavigate?.(nextProject.id)}>
 									<span class="nav-direction">Next →</span>
 									<span class="nav-title">{nextProject.title}</span>
 								</button>
@@ -609,6 +611,7 @@
 		margin-top: 2.5rem;
 		padding-top: 1.5rem;
 		border-top: 0.0625rem solid var(--border-color);
+		max-width: 65ch;
 	}
 
 	.nav-grid {
@@ -666,6 +669,7 @@
 		margin-top: 2rem;
 		padding-top: 1.5rem;
 		border-top: 0.0625rem solid var(--border-color);
+		max-width: 65ch;
 	}
 
 	.read-full-link {

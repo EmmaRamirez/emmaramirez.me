@@ -80,7 +80,9 @@
 			<div class="theme-card__stack">
 				<div>
 					<p class="theme-field__label">Theme</p>
-					<p class="theme-field__hint">Switches the same stored preference used by the header toggle.</p>
+					<p class="theme-field__hint">
+						Switches the same stored preference used by the header toggle.
+					</p>
 				</div>
 
 				<div class="segmented-control" role="group" aria-label="Theme mode">
@@ -214,8 +216,7 @@
 
 	.theme-card--dark {
 		background:
-			radial-gradient(circle at top left, rgba(90, 150, 255, 0.2), transparent 32%),
-			var(--surface);
+			radial-gradient(circle at top left, rgba(90, 150, 255, 0.2), transparent 32%), var(--surface);
 	}
 
 	.theme-pane {
@@ -309,14 +310,13 @@
 		position: absolute;
 		inset: 0.65rem 0.25rem;
 		border-radius: 999px;
-		background:
-			repeating-linear-gradient(
-				to bottom,
-				color-mix(in srgb, var(--text-muted) 55%, transparent) 0,
-				color-mix(in srgb, var(--text-muted) 55%, transparent) 0.12rem,
-				transparent 0.12rem,
-				transparent 0.32rem
-			);
+		background: repeating-linear-gradient(
+			to bottom,
+			color-mix(in srgb, var(--text-muted) 55%, transparent) 0,
+			color-mix(in srgb, var(--text-muted) 55%, transparent) 0.12rem,
+			transparent 0.12rem,
+			transparent 0.32rem
+		);
 	}
 
 	.theme-divider:hover .theme-divider__handle,

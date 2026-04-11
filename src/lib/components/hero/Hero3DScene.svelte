@@ -158,7 +158,12 @@
 			revealMaskContext.ellipse(centerX, centerY, halfWidth, halfHeight, 0, 0, Math.PI * 2);
 			revealMaskContext.fill();
 		} else {
-			revealMaskContext.fillRect(centerX - halfWidth, centerY - halfHeight, brushWidth, brushHeight);
+			revealMaskContext.fillRect(
+				centerX - halfWidth,
+				centerY - halfHeight,
+				brushWidth,
+				brushHeight
+			);
 		}
 		revealMaskContext.restore();
 	}
@@ -174,12 +179,8 @@
 		const brushBaseSize = Math.max(
 			6,
 			Math.round(
-				THREE.MathUtils.lerp(8, 34, pixelScale)
-					* THREE.MathUtils.lerp(
-						0.8,
-						1.1,
-						THREE.MathUtils.clamp(refs.revealRadius / 0.45, 0, 1)
-					)
+				THREE.MathUtils.lerp(8, 34, pixelScale) *
+					THREE.MathUtils.lerp(0.8, 1.1, THREE.MathUtils.clamp(refs.revealRadius / 0.45, 0, 1))
 			)
 		);
 		const widthScale = THREE.MathUtils.clamp(refs.cursorWidth, 0.25, 2);
@@ -377,7 +378,9 @@
 				uRevealSoftness: { value: sceneParams.revealSoftness },
 				uRevealOpacity: { value: sceneParams.revealOpacity },
 				uCursorShapeMix: { value: sceneParams.cursorShape === 'square' ? 1 : 0 },
-				uCursorScale: { value: new THREE.Vector2(sceneParams.cursorWidth, sceneParams.cursorHeight) },
+				uCursorScale: {
+					value: new THREE.Vector2(sceneParams.cursorWidth, sceneParams.cursorHeight)
+				},
 				uPixelSize: { value: sceneParams.pixelSize },
 				uPixelHardness: { value: sceneParams.pixelHardness },
 				uIdleReveal: { value: sceneParams.idleReveal },

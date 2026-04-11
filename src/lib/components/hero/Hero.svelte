@@ -9,7 +9,9 @@
 	import Hero3D from './Hero3D.svelte';
 
 	type Hero3DPropOverrides = Partial<Hero3DParams>;
-	type Props = Hero3DPropOverrides;
+	type Props = Hero3DPropOverrides & {
+		effectsEnabled?: boolean;
+	};
 
 	let {
 		revealRadius,
@@ -42,7 +44,8 @@
 		revealContrast,
 		chromaStrength,
 		grainStrength,
-		grainScale
+		grainScale,
+		effectsEnabled = true
 	}: Props = $props();
 
 	const sceneParams = $derived.by(() =>
@@ -84,26 +87,21 @@
 
 	let windowWidth = $state(browser ? window.innerWidth : 0);
 	const isMobile = $derived(browser && windowWidth < 768);
+	const shouldRender3d = $derived(browser && !isMobile && effectsEnabled);
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
 
 <header class="hero-header">
 	<div class="hero-media" aria-hidden="true">
-		{#if !isMobile && browser}
+		{#if shouldRender3d}
 			<div class="hero-3d-wrapper">
 				{#key heroRenderKey}
-					<Hero3D sceneParams={sceneParams} resetKey={heroRenderKey} />
+					<Hero3D {sceneParams} resetKey={heroRenderKey} />
 				{/key}
 			</div>
 		{:else}
-			<img
-				src={painting}
-				alt=""
-				class="hero-base-image"
-				aria-hidden="true"
-				fetchpriority="high"
-			/>
+			<img src={painting} alt="" class="hero-base-image" aria-hidden="true" fetchpriority="high" />
 		{/if}
 
 		<div class="hero-image-balance"></div>
@@ -260,7 +258,13 @@
 			linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
 		background-position: right center;
 		background-size: 3.75rem 3.75rem;
-		mask-image: linear-gradient(115deg, transparent 0%, transparent 42%, rgba(0, 0, 0, 0.9) 62%, transparent 100%);
+		mask-image: linear-gradient(
+			115deg,
+			transparent 0%,
+			transparent 42%,
+			rgba(0, 0, 0, 0.9) 62%,
+			transparent 100%
+		);
 		opacity: 0.22;
 		z-index: 4;
 		pointer-events: none;
@@ -323,12 +327,22 @@
 					rgba(12, 8, 16, 0.72) 58%,
 					rgba(12, 8, 16, 0.95) 100%
 				),
-				linear-gradient(180deg, rgba(255, 111, 76, 0.07) 0%, transparent 24%, rgba(10, 8, 18, 0.42) 100%);
+				linear-gradient(
+					180deg,
+					rgba(255, 111, 76, 0.07) 0%,
+					transparent 24%,
+					rgba(10, 8, 18, 0.42) 100%
+				);
 		}
 
 		.hero-grid-glow {
 			background-size: 3rem 3rem;
-			mask-image: linear-gradient(180deg, transparent 25%, rgba(0, 0, 0, 0.88) 54%, transparent 100%);
+			mask-image: linear-gradient(
+				180deg,
+				transparent 25%,
+				rgba(0, 0, 0, 0.88) 54%,
+				transparent 100%
+			);
 		}
 
 		.hero-aurora-left {

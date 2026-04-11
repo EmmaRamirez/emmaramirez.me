@@ -15,7 +15,10 @@ test.describe('Editor content section', () => {
 		await expect(page.getByRole('button', { name: 'Save article metadata' })).toBeVisible();
 	});
 
-	test('saves project markdown from the UI and restores prior content', async ({ page, request }) => {
+	test('saves project markdown from the UI and restores prior content', async ({
+		page,
+		request
+	}) => {
 		const index = await request.get('/api/content');
 		expect(index.ok()).toBe(true);
 		const data = (await index.json()) as ContentIndexResponse;
@@ -33,13 +36,18 @@ test.describe('Editor content section', () => {
 			.first()
 			.click();
 
-		const bodyField = page.locator('label.field').filter({ hasText: 'Markdown body' }).locator('textarea');
+		const bodyField = page
+			.locator('label.field')
+			.filter({ hasText: 'Markdown body' })
+			.locator('textarea');
 		const prior = await bodyField.inputValue();
 		await bodyField.fill(`${prior}${marker}`);
 
 		await page.getByRole('button', { name: 'Save project content' }).click();
 
-		await expect(page.getByRole('button', { name: 'Save project content' })).toBeEnabled({ timeout: 15_000 });
+		await expect(page.getByRole('button', { name: 'Save project content' })).toBeEnabled({
+			timeout: 15_000
+		});
 
 		const after = await request.get('/api/content');
 		expect(after.ok()).toBe(true);
