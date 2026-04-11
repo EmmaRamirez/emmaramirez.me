@@ -218,6 +218,24 @@
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
+								Pixel Size: {hero.pixelSize.toFixed(2)}
+							</span>
+							<Slider bind:value={hero.pixelSize} min={0.15} max={1} step={0.01} showValue={false} />
+						</div>
+						<div>
+							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
+								Pixel Hardness: {hero.pixelHardness.toFixed(2)}
+							</span>
+							<Slider bind:value={hero.pixelHardness} min={0} max={1} step={0.01} showValue={false} />
+						</div>
+						<div>
+							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
+								Pixel Scatter: {hero.pixelScatter.toFixed(2)}
+							</span>
+							<Slider bind:value={hero.pixelScatter} min={0} max={1} step={0.01} showValue={false} />
+						</div>
+						<div>
+							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Idle Reveal: {hero.idleReveal.toFixed(2)}
 							</span>
 							<Slider bind:value={hero.idleReveal} min={0} max={0.4} step={0.01} showValue={false} />
@@ -348,7 +366,7 @@
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Glow Radius: {hero.glowRadius.toFixed(2)}
 							</span>
-							<Slider bind:value={hero.glowRadius} min={0.02} max={0.35} step={0.01} showValue={false} />
+							<Slider bind:value={hero.glowRadius} min={0} max={0.35} step={0.01} showValue={false} />
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">

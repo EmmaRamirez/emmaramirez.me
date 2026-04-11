@@ -249,6 +249,7 @@ test.describe('API Explorer Block', () => {
 
 			await expect(page.getByRole('heading', { name: 'Hero3DParams' })).toBeVisible();
 			await expect(page.getByText('revealRadius')).toBeVisible();
+			await expect(page.getByText('pixelSize')).toBeVisible();
 			await expect(page.getByText('glowStrength')).toBeVisible();
 		});
 	});

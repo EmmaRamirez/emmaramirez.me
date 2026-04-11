@@ -1,5 +1,8 @@
+import { trackedFetch } from '$lib/stores/performanceAnalytics.svelte';
+
 export type PokemonDetails = {
 	id: number;
+	name: string;
 	height: number;
 	weight: number;
 	baseExperience: number;
@@ -10,6 +13,7 @@ export type PokemonDetails = {
 
 type PokemonApiResponse = {
 	id: number;
+	name: string;
 	height: number;
 	weight: number;
 	base_experience: number;
@@ -27,8 +31,32 @@ export function getPokemonSpriteUrl(id: number): string {
 	return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 }
 
-export async function fetchPokemonDetails(id: number): Promise<PokemonDetails> {
-	const response = await fetch(`${POKEAPI_BASE_URL}/${id}`);
+export function formatPokemonName(name: string): string {
+	return name
+		.split(/[-\s]+/)
+		.filter(Boolean)
+		.map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+		.join(' ');
+}
+
+function normalizePokemonIdentifier(identifier: number | string): string {
+	if (typeof identifier === 'number') {
+		return String(identifier);
+	}
+
+	return identifier.trim().toLowerCase().replace(/[\s_]+/g, '-');
+}
+
+export async function fetchPokemonDetails(identifier: number | string): Promise<PokemonDetails> {
+	const normalizedIdentifier = normalizePokemonIdentifier(identifier);
+	const response = await trackedFetch(
+		`${POKEAPI_BASE_URL}/${encodeURIComponent(normalizedIdentifier)}`,
+		undefined,
+		{
+			label: `PokeAPI: ${normalizedIdentifier}`,
+			source: 'Pokemon API'
+		}
+	);
 
 	if (!response.ok) {
 		throw new Error('Unable to load Pokédex info. Please try again.');
@@ -41,6 +69,7 @@ export async function fetchPokemonDetails(id: number): Promise<PokemonDetails> {
 
 	return {
 		id: data.id,
+		name: formatPokemonName(data.name),
 		height: data.height,
 		weight: data.weight,
 		baseExperience: data.base_experience,

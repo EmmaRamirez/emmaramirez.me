@@ -2,6 +2,9 @@ export interface Hero3DParams {
 	revealRadius: number;
 	revealSoftness: number;
 	revealOpacity: number;
+	pixelSize: number;
+	pixelHardness: number;
+	pixelScatter: number;
 	idleReveal: number;
 	cursorDamping: number;
 	revealDamping: number;
@@ -28,6 +31,9 @@ export const defaultHero3DParams: Hero3DParams = {
 	revealRadius: 0.24,
 	revealSoftness: 0.08,
 	revealOpacity: 0.92,
+	pixelSize: 0.36,
+	pixelHardness: 0.94,
+	pixelScatter: 0.24,
 	idleReveal: 0,
 	cursorDamping: 4.2,
 	revealDamping: 3.4,
@@ -43,8 +49,8 @@ export const defaultHero3DParams: Hero3DParams = {
 	bounceDecay: 4.5,
 	fadeStrength: 0.28,
 	fadeSoftness: 0.55,
-	glowStrength: 0.28,
-	glowRadius: 0.12,
+	glowStrength: 0.04,
+	glowRadius: 0.03,
 	chromaStrength: 0.14,
 	grainStrength: 0.08,
 	grainScale: 88

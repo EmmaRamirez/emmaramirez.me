@@ -5,6 +5,7 @@
 		type TopLanguagesResponse
 	} from '$lib/github/topLanguages';
 	import { topLanguagesSettings, type TopLanguagesVariant } from '$lib/stores/topLanguages.svelte';
+	import { trackedFetch } from '$lib/stores/performanceAnalytics.svelte';
 	import { cn } from '$lib/utils';
 
 	interface TopLanguagesProps {
@@ -29,8 +30,11 @@
 
 		void (async () => {
 			try {
-				const response = await fetch('/api/github/top-languages', {
+				const response = await trackedFetch('/api/github/top-languages', {
 					signal: controller.signal
+				}, {
+					label: 'GitHub top languages',
+					source: 'TopLanguages'
 				});
 
 				if (!response.ok) {
@@ -103,13 +107,9 @@
 	<div class="top-languages-shell" data-variant={displayVariant}>
 		<div class="top-languages-header">
 			<span class="top-languages-eyebrow">Programming</span>
-			{#if displayVariant === 'ranked-cards' || displayVariant === 'voronoi'}
+			{#if displayVariant === 'voronoi'}
 				<p class="top-languages-title">
-					{#if displayVariant === 'ranked-cards'}
-						Languages I reach for most often.
-					{:else}
-						An organic view of the current language mix.
-					{/if}
+					An organic view of the current language mix.
 				</p>
 			{/if}
 		</div>

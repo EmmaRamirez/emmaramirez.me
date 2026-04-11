@@ -155,6 +155,7 @@ describe('ApiExplorerBlock', () => {
 
 			await expect.element(page.getByRole('heading', { name: 'Hero3DParams' })).toBeVisible();
 			await expect.element(page.getByText('revealRadius')).toBeVisible();
+			await expect.element(page.getByText('pixelSize')).toBeVisible();
 		});
 	});
 

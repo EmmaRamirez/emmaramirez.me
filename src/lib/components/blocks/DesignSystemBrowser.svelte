@@ -29,6 +29,8 @@
 		{ id: 'components', label: 'Components' }
 	];
 
+	const designPrinciples = ['Personal', 'Fun', 'Color-led', 'Clear'];
+
 	const colorPalettes = {
 		'Caroline Blue': [
 			{ name: '--caroline-blue-100', value: 'hsl(217, 68%, 63%)' },
@@ -176,13 +178,18 @@
 							<div class="overview-grid">
 								<div class="overview-card">
 									<h3>Principles</h3>
-									<p>- personal - fun - clear</p>
+									<div class="overview-principles" aria-label="Design principles">
+										{#each designPrinciples as principle (principle)}
+											<h4 class="overview-principle">{principle}</h4>
+										{/each}
+									</div>
 								</div>
 								<div class="overview-card">
 									<h3>Philosophy</h3>
 									<p>
-										This design system embraces bold contrasts, warm sandy backgrounds, and vibrant
-										caroline blue accents. Every component is built for accessibility first.
+										This design system is personal, playful, and color-led, using bold contrasts,
+										warm sandy neutrals, and vibrant blue moments to keep the interface clear and
+										memorable.
 									</p>
 								</div>
 							</div>
@@ -212,10 +219,14 @@
 						</div>
 					{:else if tab === 'tokens'}
 						<div class="design-browser__content" in:fade={{ duration: 200, delay: 50 }}>
-							<p class="mb-6 text-(--text-muted)">
-								Design tokens are the visual design atoms of the design system — specifically, they
-								are named entities that store visual design attributes.
-							</p>
+							<div class="token-intro">
+								<h3 class="token-intro__title">Color leads the system</h3>
+								<p class="text-(--text-muted)">
+									Design tokens are the visual design atoms of the system, and color is the clearest
+									through-line: bold blues, warm neutrals, and bright accents set the tone before any
+									component detail does.
+								</p>
+							</div>
 
 							{#each Object.entries(colorPalettes) as [paletteName, colors] (paletteName)}
 								<div class="token-section">
@@ -533,6 +544,36 @@
 		line-height: 1.6;
 	}
 
+	.overview-principles {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.overview-principle {
+		margin: 0;
+		font-family: var(--font-serif, Georgia, serif);
+		font-size: 2rem;
+		font-weight: 700;
+		line-height: 1;
+		color: var(--liver-brown-700);
+	}
+
+	.token-intro {
+		display: grid;
+		gap: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.token-intro__title {
+		margin: 0;
+		font-family: var(--font-serif, Georgia, serif);
+		font-size: 1.6rem;
+		font-weight: 700;
+		line-height: 1.1;
+		color: var(--liver-brown-700);
+	}
+
 	.component-preview-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
@@ -569,8 +610,9 @@
 
 	.token-section__title {
 		font-size: 1rem;
+		font-family: var(--font-serif, Georgia, serif);
 		font-weight: 700;
-		color: var(--text-primary);
+		color: var(--liver-brown-700);
 		margin-bottom: 1rem;
 		padding-bottom: 0.5rem;
 		border-bottom: 0.0625rem solid var(--border-color);

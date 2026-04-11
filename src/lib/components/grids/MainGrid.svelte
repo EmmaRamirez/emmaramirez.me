@@ -16,12 +16,12 @@
 	import GridProjectTile from './GridProjectTile.svelte';
 	import type { GridItem } from '$lib/types/homepage';
 	import type { DiscoRegistryEntry, ProjectId } from '$lib/registry/homepage';
-	import { pokemonTeam } from '$lib/website.config';
 	import {
 		gridLayoutStore,
 		getGridItemSpanClasses,
 		getItemKey
 	} from '$lib/stores/gridLayoutStore.svelte';
+	import { pokemonTeamSettings } from '$lib/stores';
 	import {
 		getArticleOpen,
 		getProjectOpen,
@@ -29,6 +29,7 @@
 		getSelectedProjectId
 	} from '$lib/stores/readerPanelStore.svelte';
 	import { onMount } from 'svelte';
+	import { performanceAnalytics } from '$lib/stores/performanceAnalytics.svelte';
 
 	interface Props {
 		items: GridItem[];
@@ -60,11 +61,19 @@
 	const selectedProjectId = $derived(getSelectedProjectId());
 	const articlePanelOpen = $derived(getArticleOpen());
 	const projectPanelOpen = $derived(getProjectOpen());
+	const activePokemonTeam = $derived(pokemonTeamSettings.team);
+	const mainGridMountMeasureId = performanceAnalytics.beginMeasure('render', 'MainGrid mount', {
+		source: 'MainGrid'
+	});
 
 	const orderedItems = $derived(gridLayoutStore.reorderItems(items));
 
 	onMount(() => {
 		gridLayoutStore.initialize(items);
+		performanceAnalytics.endMeasure(mainGridMountMeasureId, {
+			source: 'MainGrid',
+			detail: `${items.length} items`
+		});
 	});
 
 	function getColSpanClass(item: GridItem): string {
@@ -111,8 +120,8 @@
 						<HomeBlock class="h-full w-full" />
 					{:else if item.kind === 'city'}
 						<CityCard
-							photo="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1800&q=80"
-							description="Houston skyline at dusk"
+							photo="https://images.unsplash.com/photo-1666610278692-51058ed05e9a?auto=format&fit=crop&w=1800&q=80"
+							description="Houston skyline at night"
 						/>
 					{:else if item.kind === 'design-system'}
 						{#if designSystemOpen}
@@ -122,7 +131,7 @@
 						{/if}
 					{:else if item.kind === 'pokemon'}
 						{#if dev}
-							<PokemonBlock team={pokemonTeam} class="h-full w-full" />
+							<PokemonBlock team={activePokemonTeam} class="h-full w-full" />
 						{/if}
 					{:else if item.kind === 'top-languages'}
 						<TopLanguages class="h-full w-full" />

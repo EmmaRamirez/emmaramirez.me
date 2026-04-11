@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { T, useTask } from '@threlte/core';
 	import { useTexture } from '@threlte/extras';
 	import paintingBaseImage from '$lib/images/photos/emma-painting-full.jpeg';
@@ -24,6 +25,26 @@
 		reveal: paintingRevealImage
 	});
 
+	const revealMaskCanvas = browser ? document.createElement('canvas') : null;
+	if (revealMaskCanvas) {
+		revealMaskCanvas.width = 768;
+		revealMaskCanvas.height = 768;
+	}
+
+	const revealMaskContext = revealMaskCanvas?.getContext('2d');
+	if (revealMaskContext && revealMaskCanvas) {
+		revealMaskContext.fillStyle = '#000';
+		revealMaskContext.fillRect(0, 0, revealMaskCanvas.width, revealMaskCanvas.height);
+	}
+
+	const revealMaskTexture = revealMaskCanvas
+		? new THREE.CanvasTexture(revealMaskCanvas)
+		: new THREE.Texture();
+	revealMaskTexture.minFilter = THREE.NearestFilter;
+	revealMaskTexture.magFilter = THREE.NearestFilter;
+	revealMaskTexture.wrapS = THREE.ClampToEdgeWrapping;
+	revealMaskTexture.wrapT = THREE.ClampToEdgeWrapping;
+
 	let shaderMaterialRef: THREE.ShaderMaterial | null = null;
 
 	const refs = {
@@ -31,12 +52,17 @@
 		targetMouse: { x: 0.5, y: 0.5 },
 		currentMouse: { x: 0.5, y: 0.5 },
 		previousTargetMouse: { x: 0.5, y: 0.5 },
+		lastPaintedMouse: { x: 0.5, y: 0.5 },
+		hasPaintedMask: false,
 		hoverProgress: 0,
 		motionEnergy: 0,
 		isHovering: false,
 		revealRadius: defaultHero3DParams.revealRadius,
 		revealSoftness: defaultHero3DParams.revealSoftness,
 		revealOpacity: defaultHero3DParams.revealOpacity,
+		pixelSize: defaultHero3DParams.pixelSize,
+		pixelHardness: defaultHero3DParams.pixelHardness,
+		pixelScatter: defaultHero3DParams.pixelScatter,
 		idleReveal: defaultHero3DParams.idleReveal,
 		cursorDamping: defaultHero3DParams.cursorDamping,
 		revealDamping: defaultHero3DParams.revealDamping,
@@ -59,6 +85,103 @@
 		grainScale: defaultHero3DParams.grainScale
 	};
 
+	function toMaskCoordinates(point: { x: number; y: number }) {
+		if (!revealMaskCanvas) return { x: 0, y: 0 };
+
+		return {
+			x: point.x * revealMaskCanvas.width,
+			y: (1 - point.y) * revealMaskCanvas.height
+		};
+	}
+
+	function snapToPixelGrid(value: number, size: number) {
+		return Math.round(value / size) * size;
+	}
+
+	function stampPixelSquare(
+		centerX: number,
+		centerY: number,
+		pixelSize: number,
+		softness: number,
+		hardness: number
+	) {
+		if (!revealMaskContext || !revealMaskCanvas) return;
+
+		const halfSize = pixelSize * 0.5;
+
+		revealMaskContext.save();
+		revealMaskContext.globalCompositeOperation = 'source-over';
+		revealMaskContext.fillStyle = 'rgba(255,255,255,1)';
+		revealMaskContext.shadowBlur = softness * (1 - hardness) * 0.8;
+		revealMaskContext.shadowColor = 'rgba(255,255,255,0.9)';
+		revealMaskContext.fillRect(centerX - halfSize, centerY - halfSize, pixelSize, pixelSize);
+		revealMaskContext.restore();
+	}
+
+	function paintRevealMask(from: { x: number; y: number }, to: { x: number; y: number }) {
+		if (!revealMaskContext || !revealMaskCanvas) return;
+
+		const fromPoint = toMaskCoordinates(from);
+		const toPoint = toMaskCoordinates(to);
+		const pixelScale = THREE.MathUtils.clamp(refs.pixelSize, 0, 1);
+		const hardness = THREE.MathUtils.clamp(refs.pixelHardness, 0, 1);
+		const pixelSize = Math.max(
+			6,
+			Math.round(
+				THREE.MathUtils.lerp(8, 34, pixelScale)
+					* THREE.MathUtils.lerp(
+						0.8,
+						1.1,
+						THREE.MathUtils.clamp(refs.revealRadius / 0.45, 0, 1)
+					)
+			)
+		);
+		const softness = THREE.MathUtils.lerp(
+			0.2,
+			3.2,
+			THREE.MathUtils.clamp((1 - hardness) * 0.8 + refs.revealSoftness * 0.6, 0, 1)
+		);
+		const deltaX = toPoint.x - fromPoint.x;
+		const deltaY = toPoint.y - fromPoint.y;
+		const distance = Math.hypot(deltaX, deltaY);
+		const spacing = Math.max(1, pixelSize * THREE.MathUtils.lerp(0.75, 0.36, refs.pixelScatter));
+		const steps = Math.max(1, Math.ceil(distance / spacing));
+		const scatterOffsets = [
+			[1, 0],
+			[0, 1],
+			[-1, 0],
+			[0, -1],
+			[1, 1],
+			[-1, 1],
+			[1, -1],
+			[-1, -1]
+		] as const;
+
+		for (let step = 0; step <= steps; step += 1) {
+			const progress = step / steps;
+			const x = fromPoint.x + deltaX * progress;
+			const y = fromPoint.y + deltaY * progress;
+			const snappedX = snapToPixelGrid(x, pixelSize);
+			const snappedY = snapToPixelGrid(y, pixelSize);
+
+			stampPixelSquare(snappedX, snappedY, pixelSize, softness, hardness);
+
+			const burstCount = Math.min(3, Math.round(refs.pixelScatter * 3));
+			for (let burst = 0; burst < burstCount; burst += 1) {
+				const [offsetX, offsetY] = scatterOffsets[(step + burst) % scatterOffsets.length];
+				stampPixelSquare(
+					snappedX + offsetX * pixelSize,
+					snappedY + offsetY * pixelSize,
+					pixelSize,
+					softness * 0.5,
+					hardness
+				);
+			}
+		}
+
+		revealMaskTexture.needsUpdate = true;
+	}
+
 	$effect(() => {
 		refs.targetMouse.x = mouseX;
 		refs.targetMouse.y = mouseY;
@@ -66,6 +189,9 @@
 		refs.revealRadius = sceneParams.revealRadius;
 		refs.revealSoftness = sceneParams.revealSoftness;
 		refs.revealOpacity = sceneParams.revealOpacity;
+		refs.pixelSize = sceneParams.pixelSize;
+		refs.pixelHardness = sceneParams.pixelHardness;
+		refs.pixelScatter = sceneParams.pixelScatter;
 		refs.idleReveal = sceneParams.idleReveal;
 		refs.cursorDamping = sceneParams.cursorDamping;
 		refs.revealDamping = sceneParams.revealDamping;
@@ -110,6 +236,18 @@
 		const targetProgress = refs.isHovering ? 1 : 0;
 		refs.hoverProgress += (targetProgress - refs.hoverProgress) * revealDampingFactor;
 
+		if (refs.isHovering) {
+			paintRevealMask(
+				refs.hasPaintedMask ? refs.lastPaintedMouse : refs.currentMouse,
+				refs.currentMouse
+			);
+			refs.lastPaintedMouse.x = refs.currentMouse.x;
+			refs.lastPaintedMouse.y = refs.currentMouse.y;
+			refs.hasPaintedMask = true;
+		} else {
+			refs.hasPaintedMask = false;
+		}
+
 		if (!shaderMaterialRef) return;
 
 		shaderMaterialRef.uniforms.uTime.value = refs.time;
@@ -119,6 +257,8 @@
 		shaderMaterialRef.uniforms.uRevealRadius.value = refs.revealRadius;
 		shaderMaterialRef.uniforms.uRevealSoftness.value = refs.revealSoftness;
 		shaderMaterialRef.uniforms.uRevealOpacity.value = refs.revealOpacity;
+		shaderMaterialRef.uniforms.uPixelSize.value = refs.pixelSize;
+		shaderMaterialRef.uniforms.uPixelHardness.value = refs.pixelHardness;
 		shaderMaterialRef.uniforms.uIdleReveal.value = refs.idleReveal;
 		shaderMaterialRef.uniforms.uParallaxStrength.value = refs.parallaxStrength;
 		shaderMaterialRef.uniforms.uTiltStrength.value = refs.tiltStrength;
@@ -159,6 +299,7 @@
 			uniforms: {
 				uBaseTexture: { value: textures.base },
 				uRevealTexture: { value: textures.reveal },
+				uRevealMaskTexture: { value: revealMaskTexture },
 				uMouse: { value: new THREE.Vector2(0.5, 0.5) },
 				uHoverProgress: { value: 0 },
 				uMotionEnergy: { value: 0 },
@@ -166,6 +307,8 @@
 				uRevealRadius: { value: sceneParams.revealRadius },
 				uRevealSoftness: { value: sceneParams.revealSoftness },
 				uRevealOpacity: { value: sceneParams.revealOpacity },
+				uPixelSize: { value: sceneParams.pixelSize },
+				uPixelHardness: { value: sceneParams.pixelHardness },
 				uIdleReveal: { value: sceneParams.idleReveal },
 				uParallaxStrength: { value: sceneParams.parallaxStrength },
 				uTiltStrength: { value: sceneParams.tiltStrength },
@@ -231,6 +374,7 @@
 	const fragmentShader = `
 		uniform sampler2D uBaseTexture;
 		uniform sampler2D uRevealTexture;
+		uniform sampler2D uRevealMaskTexture;
 		uniform vec2 uMouse;
 		uniform float uHoverProgress;
 		uniform float uMotionEnergy;
@@ -238,6 +382,8 @@
 		uniform float uRevealRadius;
 		uniform float uRevealSoftness;
 		uniform float uRevealOpacity;
+		uniform float uPixelSize;
+		uniform float uPixelHardness;
 		uniform float uIdleReveal;
 		uniform float uParallaxStrength;
 		uniform float uTiltStrength;
@@ -293,6 +439,7 @@
 
 			vec2 toMouse = vRawUv - uMouse;
 			float dist = length(toMouse);
+			float squareDist = max(abs(toMouse.x), abs(toMouse.y));
 			float visibility = mix(uIdleReveal, 1.0, uHoverProgress);
 			float rippleEnvelope = exp(-dist * max(0.15, uRippleDecay) * 8.0);
 			float rippleWave = sin(
@@ -308,18 +455,45 @@
 				* uMotionEnergy
 				* uBounceStrength
 				* 0.05;
-			float revealRadius = max(0.001, uRevealRadius + bounce);
-			float revealSoftness = max(0.001, uRevealSoftness + abs(ripple) * 0.45);
-			float mask = 1.0 - smoothstep(revealRadius, revealRadius + revealSoftness, dist + ripple);
+			float revealRadius = max(0.001, (uRevealRadius + bounce) * mix(0.22, 1.0, uPixelSize));
+			float hardness = clamp(uPixelHardness, 0.0, 1.0);
+			float revealSoftness = max(
+				0.0008,
+				mix(0.0025, 0.045, 1.0 - hardness) + uRevealSoftness * (0.03 + (1.0 - hardness) * 0.24)
+			);
+			float brushDistance = squareDist + ripple * mix(0.02, 0.12, 1.0 - hardness);
+			float brushMask = 1.0 - smoothstep(
+				revealRadius,
+				revealRadius + revealSoftness,
+				brushDistance
+			);
 			float fade = pow(
-				clamp(1.0 - dist / (revealRadius + revealSoftness + 0.0001), 0.0, 1.0),
+				clamp(1.0 - brushDistance / (revealRadius + revealSoftness + 0.0001), 0.0, 1.0),
 				mix(0.7, 4.0, uFadeSoftness)
 			);
-			float revealMix = mix(mask, mask * fade, uFadeStrength) * visibility * uRevealOpacity;
-			float edgeGlow = smoothstep(revealRadius + uGlowRadius + revealSoftness, revealRadius, dist)
-				* (1.0 - mask * 0.88)
+			float liveMask = mix(brushMask, brushMask * fade, uFadeStrength) * visibility;
+			float trailMask = smoothstep(0.45, 0.85, texture2D(uRevealMaskTexture, vRawUv).r);
+			float mask = max(trailMask, liveMask);
+			float revealMix = mask * uRevealOpacity;
+			float edgeGlow = smoothstep(
+				revealRadius + uGlowRadius + revealSoftness,
+				revealRadius,
+				brushDistance
+			)
+				* (1.0 - brushMask * 0.88)
 				* uGlowStrength
 				* visibility;
+			edgeGlow *= 0.16;
+			edgeGlow += max(0.0, trailMask - 0.9) * uGlowStrength * 0.03;
+			float pixelOutline = smoothstep(
+				revealRadius + revealSoftness * mix(0.08, 0.2, 1.0 - hardness),
+				revealRadius,
+				brushDistance
+			) * (1.0 - smoothstep(
+				max(0.0, revealRadius - revealSoftness * mix(0.22, 0.42, 1.0 - hardness)),
+				revealRadius - revealSoftness * mix(0.03, 0.08, 1.0 - hardness),
+				brushDistance
+			));
 
 			vec2 chromaDir = normalize(toMouse + vec2(0.0001, 0.0001));
 			vec2 chromaOffset = chromaDir * uChromaStrength * 0.01 * (0.25 + edgeGlow);
@@ -331,10 +505,17 @@
 				texture2D(uRevealTexture, revealBaseUv).g,
 				texture2D(uRevealTexture, revealUvB).b
 			);
+			float revealPop = smoothstep(0.12, 0.9, mask);
+			float revealLuma = dot(revealColor, vec3(0.299, 0.587, 0.114));
+			vec3 boostedRevealColor = revealColor * (1.08 + revealPop * 0.38);
+			boostedRevealColor = mix(vec3(revealLuma), boostedRevealColor, 1.12 + revealPop * 0.18);
+			boostedRevealColor += vec3(0.1, 0.12, 0.16) * revealPop * 0.12;
+			boostedRevealColor = clamp(boostedRevealColor, 0.0, 1.0);
 
-			vec3 rgb = mix(baseColor.rgb, revealColor, revealMix);
-			rgb += edgeGlow * vec3(1.0, 0.62, 0.42);
-			rgb += mask * visibility * (0.05 + vLift * 0.7) * vec3(0.09, 0.04, 0.03);
+			vec3 rgb = mix(baseColor.rgb, boostedRevealColor, revealMix);
+			rgb += edgeGlow * vec3(1.0, 0.82, 0.62) * (0.18 + revealPop * 0.08);
+			rgb += pixelOutline * visibility * vec3(1.0, 0.97, 0.9) * (0.16 + uGlowStrength * 0.12);
+			rgb += mask * visibility * (0.08 + vLift * 0.9) * vec3(0.14, 0.08, 0.06);
 
 			float grain = noise(sampleUv * uGrainScale + vec2(uTime * 18.0, -uTime * 12.0));
 			rgb += (grain - 0.5) * uGrainStrength * 0.08 * (0.3 + revealMix * 0.7);

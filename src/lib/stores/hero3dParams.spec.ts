@@ -19,12 +19,14 @@ describe('hero3dParams', () => {
 
 		setHero3dParams({
 			revealRadius: 0.31,
+			pixelSize: 0.28,
 			glowStrength: 0.48,
 			grainScale: 120
 		});
 
 		expect(getHero3dParamsSnapshot()).toMatchObject({
 			revealRadius: 0.31,
+			pixelSize: 0.28,
 			glowStrength: 0.48,
 			grainScale: 120
 		});
@@ -32,13 +34,16 @@ describe('hero3dParams', () => {
 		expect(
 			mergeHero3dProps({
 				revealOpacity: 0.74,
+				pixelHardness: 0.88,
 				bounceStrength: 0.51
 			})
 		).toMatchObject({
 			revealRadius: 0.31,
+			pixelSize: 0.28,
 			glowStrength: 0.48,
 			grainScale: 120,
 			revealOpacity: 0.74,
+			pixelHardness: 0.88,
 			bounceStrength: 0.51
 		});
 	});

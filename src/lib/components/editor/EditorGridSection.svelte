@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { dev, browser } from '$app/environment';
 	import { dndzone, type DndEvent } from 'svelte-dnd-action';
+	import { fetchPokemonDetails } from '$lib/api/pokemon';
 	import type { GridItem } from '$lib/types/homepage';
 	import { getDisco, type DiscoRegistryEntry } from '$lib/registry/homepage';
 	import { buildHomepageGridItems } from '$lib/registry/gridItems';
+	import type { Pokemon } from '$lib/website.config';
 	import { discoParams, type DiscoParams } from '$lib/stores/discoParams.svelte';
 	import {
 		editorGridLayoutStore,
@@ -16,11 +18,11 @@
 		setHero3dParams,
 		type Hero3DParams
 	} from '$lib/stores/hero3dParams.svelte';
+	import { pokemonTeamSettings } from '$lib/stores';
 	import {
 		topLanguagesSettings,
 		topLanguagesVariantOptions
 	} from '$lib/stores/topLanguages.svelte';
-	import { pokemonTeam } from '$lib/website.config';
 	import { onMount } from 'svelte';
 
 	import {
@@ -41,6 +43,10 @@
 	} from '$lib/components/editor/editorGridMeta';
 	import { Hero } from '$lib/components/hero';
 	import { Select, Switch } from '$lib/components/ui';
+	import {
+		performanceAnalytics,
+		trackedFetch
+	} from '$lib/stores/performanceAnalytics.svelte';
 
 	const disco: DiscoRegistryEntry = getDisco();
 
@@ -63,8 +69,13 @@
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
 	let topLanguagesVariant = $state(topLanguagesSettings.variant);
+	let pokemonTeamDraft = $state(pokemonTeamSettings.team.map((pokemon: Pokemon) => pokemon.name));
+	let pokemonTeamErrors = $state(pokemonTeamSettings.team.map(() => ''));
+	let pokemonLookupPending = $state(pokemonTeamSettings.team.map(() => false));
 	let hasLoadedSettings = $state(false);
 	let saveTimeout: ReturnType<typeof setTimeout> | null = null;
+	const pokemonLookupTimers: Partial<Record<number, ReturnType<typeof setTimeout>>> = {};
+	let dragMeasureId: string | null = null;
 
 	onMount(() => {
 		editorGridLayoutStore.initialize(gridItems);
@@ -76,6 +87,14 @@
 		});
 
 		return () => {
+			for (const timer of Object.values(pokemonLookupTimers)) {
+				if (timer) clearTimeout(timer);
+			}
+			performanceAnalytics.endMeasure(dragMeasureId, {
+				source: 'EditorGridSection',
+				detail: 'cancelled'
+			});
+			dragMeasureId = null;
 			unsubscribe();
 		};
 	});
@@ -89,12 +108,20 @@
 	}
 
 	function handleDndConsider(e: CustomEvent<DndEvent<DndItem>>) {
+		dragMeasureId ??= performanceAnalytics.beginMeasure('interaction', 'Editor grid reorder', {
+			source: 'EditorGridSection'
+		});
 		dndItems = e.detail.items;
 	}
 
 	function handleDndFinalize(e: CustomEvent<DndEvent<DndItem>>) {
 		dndItems = e.detail.items;
 		editorGridLayoutStore.setOrder(dndItems.map((d) => d.id));
+		performanceAnalytics.endMeasure(dragMeasureId, {
+			source: 'EditorGridSection',
+			detail: `${dndItems.length} items`
+		});
+		dragMeasureId = null;
 	}
 
 	function handleResize(key: string, e: MouseEvent) {
@@ -172,6 +199,60 @@
 		{ label: 'Volatility smoothing', value: discoParams.volatilitySmoothing },
 		{ label: 'Volatility decay', value: discoParams.volatilityDecay }
 	]);
+	const activePokemonTeam = $derived(pokemonTeamSettings.team);
+
+	function clearPokemonLookupTimer(index: number) {
+		const timer = pokemonLookupTimers[index];
+		if (!timer) return;
+		clearTimeout(timer);
+		delete pokemonLookupTimers[index];
+	}
+
+	async function commitPokemonSlot(index: number) {
+		clearPokemonLookupTimer(index);
+		const candidate = pokemonTeamDraft[index]?.trim() ?? '';
+
+		if (!candidate) {
+			pokemonTeamErrors[index] = 'Enter a Pokemon name.';
+			return;
+		}
+
+		pokemonLookupPending[index] = true;
+		pokemonTeamErrors[index] = '';
+
+		try {
+			const resolved = await fetchPokemonDetails(candidate);
+			pokemonTeamSettings.setSlot(index, {
+				id: resolved.id,
+				name: resolved.name
+			});
+			pokemonTeamDraft[index] = resolved.name;
+		} catch {
+			pokemonTeamErrors[index] = 'Pokemon not found.';
+		} finally {
+			pokemonLookupPending[index] = false;
+		}
+	}
+
+	function handlePokemonNameInput(index: number, value: string) {
+		pokemonTeamDraft[index] = value;
+		pokemonTeamErrors[index] = '';
+		clearPokemonLookupTimer(index);
+
+		if (!value.trim()) {
+			return;
+		}
+
+		pokemonLookupTimers[index] = setTimeout(() => {
+			void commitPokemonSlot(index);
+		}, 350);
+	}
+
+	function handlePokemonNameKeydown(index: number, event: KeyboardEvent) {
+		if (event.key !== 'Enter') return;
+		event.preventDefault();
+		void commitPokemonSlot(index);
+	}
 
 	function getSettingsPayload() {
 		return {
@@ -194,16 +275,30 @@
 		if (!browser) return;
 		saveTimeout = null;
 
-		await fetch('/api/debug-settings', {
+		await trackedFetch(
+			'/api/debug-settings',
+			{
 			method: 'PUT',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify(getSettingsPayload())
-		});
+			},
+			{
+				label: 'Editor debug settings save',
+				source: 'EditorGridSection'
+			}
+		);
 	}
 
 	onMount(async () => {
 		if (!browser) return;
-		const response = await fetch('/api/debug-settings');
+		const response = await trackedFetch(
+			'/api/debug-settings',
+			undefined,
+			{
+				label: 'Editor debug settings load',
+				source: 'EditorGridSection'
+			}
+		);
 		if (!response.ok) {
 			hasLoadedSettings = true;
 			return;
@@ -451,14 +546,14 @@
 								<LocationBlock class="h-full w-full" />
 							{:else if item.kind === 'city'}
 								<CityCard
-									photo="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1800&q=80"
-									description="Houston skyline at dusk"
+									photo="https://images.unsplash.com/photo-1666610278692-51058ed05e9a?auto=format&fit=crop&w=1800&q=80"
+									description="Houston skyline at night"
 								/>
 							{:else if item.kind === 'design-system'}
 								<DesignSystemAd />
 							{:else if item.kind === 'pokemon'}
 								{#if dev}
-									<PokemonBlock team={pokemonTeam} class="h-full w-full" />
+									<PokemonBlock team={activePokemonTeam} class="h-full w-full" />
 								{/if}
 							{:else if item.kind === 'top-languages'}
 								<TopLanguages class="h-full w-full" />
@@ -534,6 +629,60 @@
 									options={blendModeOptions}
 									hint="Adjust the header image blend mode for the hero card."
 								/>
+							</div>
+						{:else if selectedItem.kind === 'pokemon'}
+							<div class="details-stack">
+								<dl class="details-list">
+									<dt>Type</dt>
+									<dd><code>{selectedItem.kind}</code></dd>
+									<dt>Grid Span</dt>
+									<dd>
+										{selectedItemLayout?.colSpan ?? 1} col × {selectedItemLayout?.rowSpan ?? 1} row
+									</dd>
+								</dl>
+
+								<section class="details-subsection" aria-labelledby="pokemon-team-heading">
+									<div class="details-subsection__header">
+										<div>
+											<p class="details-subsection__eyebrow">Team</p>
+											<h4 id="pokemon-team-heading" class="details-subsection__title">
+												Party slots
+											</h4>
+										</div>
+										<span class="details-subsection__meta">6 slots</span>
+									</div>
+
+									<div class="pokemon-team-editor">
+										{#each activePokemonTeam as pokemon, index (index)}
+											<div class="pokemon-team-field">
+												<label class="pokemon-team-field__label" for={`pokemon-slot-${index}`}>
+													Slot {index + 1}
+												</label>
+												<input
+													id={`pokemon-slot-${index}`}
+													class="pokemon-team-field__input"
+													type="text"
+													bind:value={pokemonTeamDraft[index]}
+													autocomplete="off"
+													spellcheck="false"
+													oninput={(event: Event) =>
+														handlePokemonNameInput(index, (event.currentTarget as HTMLInputElement).value)}
+													onblur={() => void commitPokemonSlot(index)}
+													onkeydown={(event: KeyboardEvent) => handlePokemonNameKeydown(index, event)}
+												/>
+												<p
+													class="pokemon-team-field__message"
+													class:pokemon-team-field__message--error={Boolean(pokemonTeamErrors[index])}
+												>
+													{pokemonTeamErrors[index] ||
+														(pokemonLookupPending[index]
+															? 'Resolving sprite...'
+															: `Sprite uses #${pokemon.id}`)}
+												</p>
+											</div>
+										{/each}
+									</div>
+								</section>
 							</div>
 						{:else if selectedItem.kind === 'top-languages'}
 							<div class="details-stack">
@@ -753,11 +902,7 @@
 
 		.side-panel {
 			order: 1;
-			top: 5rem;
-			max-height: calc(100vh - 6rem);
-			overflow-y: auto;
 			padding-right: 0;
-			z-index: 5;
 		}
 	}
 
@@ -908,15 +1053,12 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-		position: sticky;
-		top: 6rem;
 		align-self: start;
-		max-height: calc(100vh - 7rem);
-		overflow-y: auto;
 		padding-right: 0.25rem;
 	}
 
 	.details-panel {
+		flex-shrink: 0;
 		background: var(--surface);
 		border: 0.0625rem solid var(--border-color);
 		border-radius: 1rem;
@@ -963,6 +1105,84 @@
 	.details-stack {
 		display: grid;
 		gap: 1rem;
+	}
+
+	.details-subsection {
+		display: grid;
+		gap: 0.9rem;
+		padding: 1rem;
+		border-radius: 0.85rem;
+		border: 0.0625rem solid var(--border-color);
+		background: color-mix(in srgb, var(--surface-hover) 55%, transparent);
+	}
+
+	.details-subsection__header {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.75rem;
+		align-items: baseline;
+	}
+
+	.details-subsection__eyebrow {
+		margin: 0 0 0.2rem;
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+
+	.details-subsection__title {
+		margin: 0;
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: var(--text-primary);
+	}
+
+	.details-subsection__meta {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+	}
+
+	.pokemon-team-editor {
+		display: grid;
+		gap: 0.85rem;
+	}
+
+	.pokemon-team-field {
+		display: grid;
+		gap: 0.35rem;
+	}
+
+	.pokemon-team-field__label {
+		font-size: 0.82rem;
+		font-weight: 600;
+		color: var(--text-primary);
+	}
+
+	.pokemon-team-field__input {
+		width: 100%;
+		padding: 0.65rem 0.8rem;
+		border-radius: 0.7rem;
+		border: 0.0625rem solid var(--border-color);
+		background: var(--surface);
+		color: var(--text-primary);
+	}
+
+	.pokemon-team-field__input:focus {
+		outline: 0.125rem solid color-mix(in srgb, var(--caroline-blue-600) 40%, transparent);
+		outline-offset: 0.0625rem;
+		border-color: var(--caroline-blue-600);
+	}
+
+	.pokemon-team-field__message {
+		margin: 0;
+		font-size: 0.75rem;
+		color: var(--text-muted);
+	}
+
+	.pokemon-team-field__message--error {
+		color: #dc2626;
 	}
 
 	.details-list {
@@ -1031,6 +1251,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		flex-shrink: 0;
 	}
 
 	.settings-card {

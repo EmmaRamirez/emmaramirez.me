@@ -83,7 +83,7 @@
 					{/if}
 					<button
 						type="button"
-						class="-mr-2 rounded-full p-2 text-[var(--liver-brown-700)] transition-colors hover:bg-[var(--liver-brown-500)]/20"
+						class="-mr-2 cursor-pointer rounded-full p-2 text-[var(--liver-brown-700)] transition-colors hover:bg-[var(--liver-brown-500)]/20"
 						onclick={() => onclose?.()}
 						aria-label="Close modal"
 					>

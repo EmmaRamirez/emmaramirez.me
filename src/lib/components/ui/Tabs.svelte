@@ -70,7 +70,7 @@
 				class="relative -mb-[0.125rem] px-4 py-2.5 text-sm font-medium transition-colors
 					{activeTab === tab.id
 					? 'border-b-2 border-[var(--caroline-blue-700)] bg-[var(--sandy-tan-200)] text-[var(--caroline-blue-700)]'
-					: 'border-b-2 border-transparent text-[var(--liver-brown-600)] hover:bg-[var(--sandy-tan-400)] hover:text-[var(--liver-brown-800)]'}
+									: 'border-b-2 border-transparent text-[var(--liver-brown-600)] hover:border-[var(--caroline-blue-500)] hover:bg-[var(--sandy-tan-400)] hover:text-[var(--caroline-blue-700)]'}
 					{tab.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
 					rounded-t-lg focus:ring-2 focus:ring-[var(--caroline-blue-500)] focus:outline-none focus:ring-inset"
 				onclick={() => !tab.disabled && selectTab(tab.id)}

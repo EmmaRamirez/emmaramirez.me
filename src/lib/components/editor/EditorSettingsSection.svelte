@@ -4,11 +4,9 @@
 	import {
 		blogSettings,
 		showSections,
-		theme,
 		topLanguagesSettings,
 		topLanguagesVariantOptions,
-		type BlogTagView,
-		type ThemeMode
+		type BlogTagView
 	} from '$lib/stores/userSettings.svelte';
 	import { editorGridLayoutStore } from '$lib/stores/gridLayoutStore.svelte';
 	import { Select, Switch } from '$lib/components/ui';
@@ -18,25 +16,17 @@
 		{ value: 'web', label: 'Tag Web' }
 	] satisfies Array<{ value: BlogTagView; label: string }>;
 
-	let currentTheme = $state<ThemeMode>('light');
 	let showSectionsEnabled = $state(false);
 	let topLanguagesVariant = $state(topLanguagesSettings.variant);
 	let blogTagView = $state(blogSettings.tagView);
 	let resetStatus = $state<'idle' | 'done'>('idle');
 
 	onMount(() => {
-		currentTheme = $theme;
-
-		const unsubscribeTheme = theme.subscribe((value) => {
-			currentTheme = value;
-		});
-
 		const unsubscribeShowSections = showSections.subscribe((value) => {
 			showSectionsEnabled = value;
 		});
 
 		return () => {
-			unsubscribeTheme();
 			unsubscribeShowSections();
 		};
 	});
@@ -68,51 +58,14 @@
 		<div>
 			<h2 class="settings-hero__title">User Settings</h2>
 			<p class="settings-hero__body">
-				Centralized defaults for the site experience. Visual authoring and debug tuning still live in
-				the Grid section.
+				Centralized defaults for the site experience. Theme now has its own dedicated editor
+				section, while visual authoring and debug tuning still live in Grid.
 			</p>
 		</div>
 		<span class="settings-hero__pill">Shared</span>
 	</header>
 
 	<div class="settings-grid">
-		<div class="settings-card">
-			<div class="settings-card__header">
-				<div>
-					<p class="settings-card__title">Appearance</p>
-					<p class="settings-card__subtitle">Persistent UI preferences shared across the app</p>
-				</div>
-			</div>
-
-			<div class="settings-card__stack">
-				<div>
-					<p class="settings-field__label">Theme</p>
-					<p class="settings-field__hint">Applies everywhere the theme toggle does.</p>
-				</div>
-
-				<div class="segmented-control" role="group" aria-label="Theme mode">
-					<button
-						type="button"
-						class="segmented-control__button"
-						class:segmented-control__button--active={currentTheme === 'light'}
-						aria-pressed={currentTheme === 'light'}
-						onclick={() => theme.set('light')}
-					>
-						Light
-					</button>
-					<button
-						type="button"
-						class="segmented-control__button"
-						class:segmented-control__button--active={currentTheme === 'dark'}
-						aria-pressed={currentTheme === 'dark'}
-						onclick={() => theme.set('dark')}
-					>
-						Dark
-					</button>
-				</div>
-			</div>
-		</div>
-
 		<div class="settings-card">
 			<div class="settings-card__header">
 				<div>
@@ -260,59 +213,11 @@
 		gap: 1rem;
 	}
 
-	.settings-field__label {
-		margin: 0 0 0.25rem;
-		font-size: 0.9rem;
-		font-weight: 600;
-		color: var(--text-primary);
-	}
-
-	.settings-field__hint {
-		margin: 0;
-		font-size: 0.85rem;
-		color: var(--text-muted);
-	}
-
 	.settings-note {
 		margin: 0;
 		font-size: 0.9rem;
 		line-height: 1.6;
 		color: var(--text-secondary);
-	}
-
-	.segmented-control {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		width: 100%;
-		max-width: 14rem;
-		padding: 0.25rem;
-		border-radius: 999px;
-		background: color-mix(in srgb, var(--page-bg-subtle) 70%, var(--surface));
-		border: 0.0625rem solid var(--border-color);
-	}
-
-	.segmented-control__button {
-		padding: 0.5rem 0.9rem;
-		border: none;
-		border-radius: 999px;
-		background: transparent;
-		color: var(--text-secondary);
-		font-size: 0.85rem;
-		font-weight: 600;
-		text-align: center;
-		cursor: pointer;
-		transition: all 0.15s ease;
-	}
-
-	.segmented-control__button:hover {
-		color: var(--text-primary);
-		background: color-mix(in srgb, var(--surface-hover) 60%, transparent);
-	}
-
-	.segmented-control__button--active {
-		background: var(--caroline-blue-700);
-		color: #fff;
-		box-shadow: 0 0.125rem 0.35rem rgba(0, 0, 0, 0.18);
 	}
 
 	.settings-action {

@@ -40,12 +40,20 @@
 		right: 1rem;
 		padding: 0.35rem 0.9rem;
 		border-radius: 1rem;
-		background: color-mix(in srgb, var(--surface) 82%, transparent);
-		color: var(--text-primary);
+		background: color-mix(in srgb, black 35%, transparent);
+		color: #fff;
 		font-weight: 600;
 		font-size: 0.85rem;
 		line-height: 1.4;
 		backdrop-filter: blur(0.375rem);
-		border: 0.0625rem solid var(--border-color);
+		border: 0.0625rem solid rgba(255, 255, 255, 0.25);
+		text-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.4);
+	}
+
+	:global(.dark) .photo-description {
+		background: color-mix(in srgb, var(--surface) 82%, transparent);
+		color: var(--text-primary);
+		border-color: var(--border-color);
+		text-shadow: none;
 	}
 </style>

@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { ImageBlock } from '$lib/components/blocks';
 	import { discoParams } from '$lib/stores/discoParams.svelte';
+	import { performanceAnalytics } from '$lib/stores/performanceAnalytics.svelte';
 
 	interface DiscoBlockProps {
 		image: string;
@@ -59,6 +60,11 @@
 	let cursorHistory: CursorSample[] = $state([]);
 	let volatility = $state(0);
 	let targetVolatility = $state(0);
+	const discoReadyMeasureId = performanceAnalytics.beginMeasure('render', 'DiscoBlock ready', {
+		source: 'DiscoBlock'
+	});
+	let hasRecordedDiscoReady = false;
+	let discoHoverMeasureId: string | null = null;
 
 	function shouldAnimate() {
 		return isHovering || discoBalls.length > 0 || fadeOut > 0.01 || volatility > 0.01;
@@ -285,6 +291,9 @@
 			cursorHistory = [];
 			volatility = 0;
 			targetVolatility = 0;
+			discoHoverMeasureId = performanceAnalytics.beginMeasure('interaction', 'Disco hover session', {
+				source: 'DiscoBlock'
+			});
 		}
 
 		if (container) {
@@ -305,6 +314,11 @@
 		isHovering = false;
 		targetVolatility = 0;
 		fadeOut = 1;
+		performanceAnalytics.endMeasure(discoHoverMeasureId, {
+			source: 'DiscoBlock',
+			detail: `${discoBalls.length} click beams`
+		});
+		discoHoverMeasureId = null;
 		ensureAnimation();
 	}
 
@@ -355,6 +369,13 @@
 			if (!ctx || !container) return;
 
 			updateCanvasSize();
+			if (!hasRecordedDiscoReady) {
+				hasRecordedDiscoReady = true;
+				performanceAnalytics.endMeasure(discoReadyMeasureId, {
+					source: 'DiscoBlock',
+					detail: `${Math.round(canvasWidth)}x${Math.round(canvasHeight)} canvas`
+				});
+			}
 
 			if (imageBlock instanceof HTMLImageElement) {
 				if (imageBlock.complete) {
@@ -374,6 +395,11 @@
 
 		return () => {
 			clearTimeout(timeoutId);
+			performanceAnalytics.endMeasure(discoHoverMeasureId, {
+				source: 'DiscoBlock',
+				detail: 'unmounted'
+			});
+			discoHoverMeasureId = null;
 			if (resizeObserver) {
 				resizeObserver.disconnect();
 			}
