@@ -13,9 +13,8 @@ describe('hero3dParams', () => {
 	});
 
 	it('applies partial updates and merges prop overrides', async () => {
-		const { getHero3dParamsSnapshot, mergeHero3dProps, setHero3dParams } = await import(
-			'./hero3dParams.svelte'
-		);
+		const { getHero3dParamsSnapshot, mergeHero3dProps, setHero3dParams } =
+			await import('./hero3dParams.svelte');
 
 		setHero3dParams({
 			revealRadius: 0.31,

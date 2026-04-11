@@ -85,6 +85,15 @@
 		--lang-typescript: #3178c6;
 		--lang-javascript: #f1e05a;
 		--lang-haskell: #5e5086;
+
+		/* Range sliders: warm neutrals that match cream surfaces (light mode) */
+		--slider-track-filled: hsl(26, 13%, 36%);
+		--slider-track-empty: hsl(36, 24%, 86%);
+		--slider-thumb-bg: hsl(40, 42%, 98%);
+		--slider-thumb-border: hsl(24, 8%, 34%);
+		--slider-thumb-hover-bg: hsl(36, 22%, 93%);
+		--slider-focus-ring: hsla(26, 13%, 36%, 0.38);
+		--slider-thumb-shadow: 0 0.0625rem 0.125rem hsla(26, 18%, 18%, 0.14);
 	}
 
 	.dark {
@@ -125,6 +134,14 @@
 		--blush-pink-500: #f7a8e0;
 		--light-rose-500: #ffa7a7;
 		--magic-mint-500: #9eecd9;
+
+		--slider-track-filled: hsl(217, 76%, 58%);
+		--slider-track-empty: hsl(235, 16%, 24%);
+		--slider-thumb-bg: hsl(234, 22%, 93%);
+		--slider-thumb-border: hsl(235, 12%, 52%);
+		--slider-thumb-hover-bg: hsl(234, 16%, 86%);
+		--slider-focus-ring: hsla(217, 92%, 72%, 0.42);
+		--slider-thumb-shadow: 0 0.0625rem 0.125rem hsla(0, 0%, 0%, 0.4);
 	}
 }
 
@@ -207,6 +224,14 @@
 		--liver-brown-700: #a8aabe;
 		--liver-brown-800: #c8cad8;
 		--liver-brown-900: #e8e9f0;
+
+		--slider-track-filled: hsl(217, 76%, 58%);
+		--slider-track-empty: hsl(235, 16%, 24%);
+		--slider-thumb-bg: hsl(234, 22%, 93%);
+		--slider-thumb-border: hsl(235, 12%, 52%);
+		--slider-thumb-hover-bg: hsl(234, 16%, 86%);
+		--slider-focus-ring: hsla(217, 92%, 72%, 0.42);
+		--slider-thumb-shadow: 0 0.0625rem 0.125rem hsla(0, 0%, 0%, 0.4);
 	}
 }
 

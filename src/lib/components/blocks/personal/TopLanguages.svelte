@@ -1,7 +1,5 @@
 <script lang="ts">
-	import {
-		type TopLanguage
-	} from '$lib/github/topLanguages';
+	import { type TopLanguage } from '$lib/github/topLanguages';
 	import TopLanguagesLoader from './TopLanguagesLoader.svelte';
 	import { getEditorSurfaceContext } from '$lib/components/editor/editorSurfaceContext';
 	import { topLanguagesSettings, type TopLanguagesVariant } from '$lib/stores/topLanguages.svelte';
@@ -20,18 +18,18 @@
 		rotate?: number;
 	}
 
-let { class: className = '', variant, effectsEnabled = true }: TopLanguagesProps = $props();
-const editorSurface = getEditorSurfaceContext();
-const isEditorSurface = editorSurface?.surface === 'editor';
+	let { class: className = '', variant, effectsEnabled = true }: TopLanguagesProps = $props();
+	const editorSurface = getEditorSurfaceContext();
+	const isEditorSurface = editorSurface?.surface === 'editor';
 
-let languages = $state<TopLanguage[]>([]);
-let requestFailed = $state(false);
+	let languages = $state<TopLanguage[]>([]);
+	let requestFailed = $state(false);
 
-const loadState = $derived.by(() => {
-	if (languages.length > 0) return 'ready';
-	if (requestFailed) return 'error';
-	return effectsEnabled ? 'loading' : 'idle';
-});
+	const loadState = $derived.by(() => {
+		if (languages.length > 0) return 'ready';
+		if (requestFailed) return 'error';
+		return effectsEnabled ? 'loading' : 'idle';
+	});
 
 	const resolvedVariant = $derived(variant ?? topLanguagesSettings.variant);
 	const displayVariant = $derived.by(() =>
@@ -76,9 +74,7 @@ const loadState = $derived.by(() => {
 		<div class="top-languages-header">
 			<span class="top-languages-eyebrow">Programming</span>
 			{#if displayVariant === 'voronoi'}
-				<p class="top-languages-title">
-					An organic view of the current language mix.
-				</p>
+				<p class="top-languages-title">An organic view of the current language mix.</p>
 			{/if}
 		</div>
 
@@ -126,7 +122,9 @@ const loadState = $derived.by(() => {
 				<div class="loading-state" aria-live="polite">
 					<div class="loading-state__copy">
 						<span class="loading-state__title">Language data unavailable.</span>
-						<span class="loading-state__subtitle">GitHub didn&apos;t return language stats just now.</span>
+						<span class="loading-state__subtitle"
+							>GitHub didn&apos;t return language stats just now.</span
+						>
 					</div>
 				</div>
 			{:else if displayVariant === 'horizontal-bars'}

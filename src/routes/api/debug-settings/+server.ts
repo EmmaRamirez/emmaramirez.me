@@ -30,7 +30,11 @@ function readNumber(record: Record<string, unknown>, key: string, fallback: numb
 	return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 }
 
-function readCursorShape(record: Record<string, unknown>, key: string, fallback: Hero3DCursorShape) {
+function readCursorShape(
+	record: Record<string, unknown>,
+	key: string,
+	fallback: Hero3DCursorShape
+) {
 	const value = record[key];
 	return value === 'square' || value === 'circle' ? value : fallback;
 }
@@ -51,11 +55,7 @@ function normalizeHero3DParams(value: unknown): Hero3DParamsPayload {
 		idleReveal: readNumber(record, 'idleReveal', defaultHero3DParams.idleReveal),
 		cursorDamping: readNumber(record, 'cursorDamping', defaultHero3DParams.cursorDamping),
 		revealDamping: readNumber(record, 'revealDamping', defaultHero3DParams.revealDamping),
-		parallaxStrength: readNumber(
-			record,
-			'parallaxStrength',
-			defaultHero3DParams.parallaxStrength
-		),
+		parallaxStrength: readNumber(record, 'parallaxStrength', defaultHero3DParams.parallaxStrength),
 		tiltStrength: readNumber(record, 'tiltStrength', defaultHero3DParams.tiltStrength),
 		liftStrength: readNumber(record, 'liftStrength', defaultHero3DParams.liftStrength),
 		rippleStrength: readNumber(record, 'rippleStrength', defaultHero3DParams.rippleStrength),
@@ -63,21 +63,13 @@ function normalizeHero3DParams(value: unknown): Hero3DParamsPayload {
 		rippleSpeed: readNumber(record, 'rippleSpeed', defaultHero3DParams.rippleSpeed),
 		rippleDecay: readNumber(record, 'rippleDecay', defaultHero3DParams.rippleDecay),
 		bounceStrength: readNumber(record, 'bounceStrength', defaultHero3DParams.bounceStrength),
-		bounceFrequency: readNumber(
-			record,
-			'bounceFrequency',
-			defaultHero3DParams.bounceFrequency
-		),
+		bounceFrequency: readNumber(record, 'bounceFrequency', defaultHero3DParams.bounceFrequency),
 		bounceDecay: readNumber(record, 'bounceDecay', defaultHero3DParams.bounceDecay),
 		fadeStrength: readNumber(record, 'fadeStrength', defaultHero3DParams.fadeStrength),
 		fadeSoftness: readNumber(record, 'fadeSoftness', defaultHero3DParams.fadeSoftness),
 		glowStrength: readNumber(record, 'glowStrength', defaultHero3DParams.glowStrength),
 		glowRadius: readNumber(record, 'glowRadius', defaultHero3DParams.glowRadius),
-		revealBrightness: readNumber(
-			record,
-			'revealBrightness',
-			defaultHero3DParams.revealBrightness
-		),
+		revealBrightness: readNumber(record, 'revealBrightness', defaultHero3DParams.revealBrightness),
 		revealContrast: readNumber(record, 'revealContrast', defaultHero3DParams.revealContrast),
 		chromaStrength: readNumber(record, 'chromaStrength', defaultHero3DParams.chromaStrength),
 		grainStrength: readNumber(record, 'grainStrength', defaultHero3DParams.grainStrength),

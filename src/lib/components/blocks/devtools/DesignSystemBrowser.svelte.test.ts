@@ -3,7 +3,11 @@ import { page } from 'vitest/browser';
 import { describe, expect, it, vi } from 'vitest';
 import DesignSystemBrowser from './DesignSystemBrowser.svelte';
 
-function mountDesignSystemBrowser(props: { open?: boolean; inline?: boolean; onclose?: () => void }) {
+function mountDesignSystemBrowser(props: {
+	open?: boolean;
+	inline?: boolean;
+	onclose?: () => void;
+}) {
 	const target = document.createElement('div');
 	document.body.appendChild(target);
 	return render(DesignSystemBrowser, { target, props });

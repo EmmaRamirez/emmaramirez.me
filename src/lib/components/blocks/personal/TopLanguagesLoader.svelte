@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import {
-		type TopLanguage,
-		type TopLanguagesResponse
-	} from '$lib/github/topLanguages';
+	import { type TopLanguage, type TopLanguagesResponse } from '$lib/github/topLanguages';
 	import { trackedFetch } from '$lib/stores/performanceAnalytics.svelte';
 
 	interface Props {

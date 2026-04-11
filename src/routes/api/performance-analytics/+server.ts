@@ -29,7 +29,9 @@ type IngestPayload = {
 	events?: IncomingEvent[];
 };
 
-type AnalyticsEventDelegate = typeof prisma extends { analyticsEvent: infer Delegate } ? Delegate : never;
+type AnalyticsEventDelegate = typeof prisma extends { analyticsEvent: infer Delegate }
+	? Delegate
+	: never;
 
 function isFiniteNumber(value: unknown): value is number {
 	return typeof value === 'number' && Number.isFinite(value);
@@ -78,7 +80,10 @@ function average(values: number[]) {
 function percentile(values: number[], target: number) {
 	if (values.length === 0) return 0;
 	const sorted = [...values].sort((a, b) => a - b);
-	const index = Math.min(sorted.length - 1, Math.max(0, Math.ceil((target / 100) * sorted.length) - 1));
+	const index = Math.min(
+		sorted.length - 1,
+		Math.max(0, Math.ceil((target / 100) * sorted.length) - 1)
+	);
 	return Math.round(sorted[index] * 10) / 10;
 }
 
@@ -86,13 +91,19 @@ function getAnalyticsEventDelegate() {
 	return (prisma as typeof prisma & { analyticsEvent?: AnalyticsEventDelegate }).analyticsEvent;
 }
 
-function normalizeEvent(sessionId: string, event: IncomingEvent): Prisma.AnalyticsEventCreateManyInput | null {
+function normalizeEvent(
+	sessionId: string,
+	event: IncomingEvent
+): Prisma.AnalyticsEventCreateManyInput | null {
 	const kind = mapKind(event.kind);
 	const name = typeof event.name === 'string' ? event.name.trim() : '';
 	if (!kind || !name) return null;
 
-	const duration =
-		isFiniteNumber(event.duration) ? event.duration : isFiniteNumber(event.startTime) ? event.startTime : null;
+	const duration = isFiniteNumber(event.duration)
+		? event.duration
+		: isFiniteNumber(event.startTime)
+			? event.startTime
+			: null;
 	const value = isFiniteNumber(event.value) ? event.value : null;
 	const timestamp = isFiniteNumber(event.timestamp) ? event.timestamp : Date.now();
 	const metadata =
@@ -156,17 +167,21 @@ async function buildSummary() {
 
 	const pageEvents = recentEvents.filter((event) => event.kind === AnalyticsEventKind.page);
 	const networkEvents = recentEvents.filter((event) => event.kind === AnalyticsEventKind.network);
-	const interactionEvents = recentEvents.filter((event) => event.kind === AnalyticsEventKind.interaction);
+	const interactionEvents = recentEvents.filter(
+		(event) => event.kind === AnalyticsEventKind.interaction
+	);
 	const renderEvents = recentEvents.filter((event) => event.kind === AnalyticsEventKind.render);
 	const vitalEvents = recentEvents.filter((event) => event.kind === AnalyticsEventKind.vital);
 
 	return {
 		totalPersistedEvents: await delegate.count(),
 		recentEventCount: recentEvents.length,
-		sessionCount: (await delegate.findMany({
-			select: { sessionId: true },
-			distinct: ['sessionId']
-		})).length,
+		sessionCount: (
+			await delegate.findMany({
+				select: { sessionId: true },
+				distinct: ['sessionId']
+			})
+		).length,
 		lastIngestedAt: recentEvents[0]?.createdAt.toISOString() ?? null,
 		summary: {
 			pageCount: pageEvents.length,
@@ -176,7 +191,9 @@ async function buildSummary() {
 			averageInteractionDuration: average(
 				interactionEvents.map((event) => event.duration ?? 0).filter(Boolean)
 			),
-			averageRenderDuration: average(renderEvents.map((event) => event.duration ?? 0).filter(Boolean)),
+			averageRenderDuration: average(
+				renderEvents.map((event) => event.duration ?? 0).filter(Boolean)
+			),
 			p95NetworkDuration: percentile(
 				networkEvents.map((event) => event.duration ?? 0).filter(Boolean),
 				95
@@ -193,7 +210,10 @@ async function buildSummary() {
 
 export const GET = async () => {
 	if (!dev) {
-		return json({ error: 'Performance analytics persistence is disabled outside development.' }, { status: 403 });
+		return json(
+			{ error: 'Performance analytics persistence is disabled outside development.' },
+			{ status: 403 }
+		);
 	}
 
 	try {
@@ -209,7 +229,10 @@ export const GET = async () => {
 
 export const POST = async ({ request }) => {
 	if (!dev) {
-		return json({ error: 'Performance analytics persistence is disabled outside development.' }, { status: 403 });
+		return json(
+			{ error: 'Performance analytics persistence is disabled outside development.' },
+			{ status: 403 }
+		);
 	}
 
 	try {
@@ -219,7 +242,10 @@ export const POST = async ({ request }) => {
 		const delegate = getAnalyticsEventDelegate();
 
 		if (!sessionId || events.length === 0) {
-			return json({ error: 'Invalid payload: expected sessionId and at least one event.' }, { status: 400 });
+			return json(
+				{ error: 'Invalid payload: expected sessionId and at least one event.' },
+				{ status: 400 }
+			);
 		}
 
 		const rows = events

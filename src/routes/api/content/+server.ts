@@ -66,13 +66,19 @@ export const GET = async () => {
 		return json({ projects, articles });
 	} catch (error) {
 		console.error('[content] GET error:', error);
-		return json({ error: 'Failed to fetch content records', details: String(error) }, { status: 500 });
+		return json(
+			{ error: 'Failed to fetch content records', details: String(error) },
+			{ status: 500 }
+		);
 	}
 };
 
 export const PUT = async ({ request }) => {
 	if (!dev) {
-		return json({ error: 'Content editing is only available in development mode.' }, { status: 403 });
+		return json(
+			{ error: 'Content editing is only available in development mode.' },
+			{ status: 403 }
+		);
 	}
 
 	try {
@@ -93,6 +99,9 @@ export const PUT = async ({ request }) => {
 		return json({ record });
 	} catch (error) {
 		console.error('[content] PUT error:', error);
-		return json({ error: 'Failed to save content record', details: String(error) }, { status: 500 });
+		return json(
+			{ error: 'Failed to save content record', details: String(error) },
+			{ status: 500 }
+		);
 	}
 };

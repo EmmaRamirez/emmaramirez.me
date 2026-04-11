@@ -18,6 +18,7 @@ interface StoredUserSettings {
 	topLanguagesVariant?: TopLanguagesVariant;
 	blogTagView?: BlogTagView;
 	pokemonTeam?: Pokemon[];
+	thisSiteTitle?: string;
 }
 
 const STORAGE_KEY = 'emzinnia:user-settings';
@@ -28,6 +29,7 @@ const POKEMON_TEAM_SIZE = 6;
 
 export const defaultBlogTagView: BlogTagView = 'flat';
 export const defaultTopLanguagesVariant: TopLanguagesVariant = 'ranked-cards';
+export const defaultThisSiteTitle = 'This Site';
 const pokemonTeamFallback = defaultPokemonTeamConfig.map((pokemon) => ({ ...pokemon }));
 export const defaultPokemonTeam = pokemonTeamFallback.map((pokemon) => ({ ...pokemon }));
 
@@ -48,7 +50,9 @@ export function isBlogTagView(value: string | null | undefined): value is BlogTa
 	return value === 'flat' || value === 'web';
 }
 
-export function isTopLanguagesVariant(value: string | null | undefined): value is TopLanguagesVariant {
+export function isTopLanguagesVariant(
+	value: string | null | undefined
+): value is TopLanguagesVariant {
 	return topLanguagesVariantOptions.some((option) => option.value === value);
 }
 
@@ -71,7 +75,8 @@ export function normalizePokemonTeam(value: unknown): Pokemon[] {
 	const source = Array.isArray(value) ? value : [];
 
 	return Array.from({ length: POKEMON_TEAM_SIZE }, (_, index) => {
-		const fallback = pokemonTeamFallback[index] ?? pokemonTeamFallback[0] ?? { id: index + 1, name: '' };
+		const fallback = pokemonTeamFallback[index] ??
+			pokemonTeamFallback[0] ?? { id: index + 1, name: '' };
 		const candidate = source[index];
 
 		if (!isPokemonRecord(candidate)) {
@@ -126,7 +131,13 @@ function readStoredUserSettings(): StoredUserSettings {
 				? legacyTopLanguages
 				: undefined,
 		blogTagView: isBlogTagView(parsed.blogTagView) ? parsed.blogTagView : undefined,
-		pokemonTeam: Array.isArray(parsed.pokemonTeam) ? normalizePokemonTeam(parsed.pokemonTeam) : undefined
+		pokemonTeam: Array.isArray(parsed.pokemonTeam)
+			? normalizePokemonTeam(parsed.pokemonTeam)
+			: undefined,
+		thisSiteTitle:
+			typeof parsed.thisSiteTitle === 'string' && parsed.thisSiteTitle.trim().length > 0
+				? parsed.thisSiteTitle.trim()
+				: undefined
 	};
 }
 
@@ -143,10 +154,7 @@ function persistUserSettings() {
 			localStorage.setItem(LEGACY_THEME_KEY, storedUserSettings.theme);
 		}
 
-		localStorage.setItem(
-			LEGACY_SHOW_SECTIONS_KEY,
-			String(storedUserSettings.showSections ?? dev)
-		);
+		localStorage.setItem(LEGACY_SHOW_SECTIONS_KEY, String(storedUserSettings.showSections ?? dev));
 		localStorage.setItem(
 			LEGACY_TOP_LANGUAGES_KEY,
 			storedUserSettings.topLanguagesVariant ?? defaultTopLanguagesVariant
@@ -214,7 +222,9 @@ export const theme = {
 
 		if (hasThemeListener) return;
 
-		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSystemThemeChange);
+		window
+			.matchMedia('(prefers-color-scheme: dark)')
+			.addEventListener('change', handleSystemThemeChange);
 		hasThemeListener = true;
 	}
 };
@@ -237,6 +247,7 @@ let topLanguagesVariant = $state<TopLanguagesVariant>(
 let pokemonTeam = $state<Pokemon[]>(
 	normalizePokemonTeam(initialStoredUserSettings.pokemonTeam ?? defaultPokemonTeam)
 );
+let thisSiteTitle = $state<string>(initialStoredUserSettings.thisSiteTitle ?? defaultThisSiteTitle);
 
 export const topLanguagesSettings = {
 	get variant() {
@@ -276,6 +287,17 @@ export const pokemonTeamSettings = {
 	}
 };
 
+export const thisSiteSettings = {
+	get title() {
+		return thisSiteTitle;
+	},
+	set title(value: string) {
+		const nextTitle = value.trim() || defaultThisSiteTitle;
+		thisSiteTitle = nextTitle;
+		patchUserSettings({ thisSiteTitle: nextTitle });
+	}
+};
+
 let blogTagView = $state<BlogTagView>(initialStoredUserSettings.blogTagView ?? defaultBlogTagView);
 
 export const blogSettings = {
@@ -293,5 +315,6 @@ export const userSettings = {
 	showSections,
 	topLanguages: topLanguagesSettings,
 	blog: blogSettings,
-	pokemonTeam: pokemonTeamSettings
+	pokemonTeam: pokemonTeamSettings,
+	thisSite: thisSiteSettings
 };

@@ -68,10 +68,10 @@
 	.slider-input {
 		background: linear-gradient(
 			to right,
-			var(--caroline-blue-600) 0%,
-			var(--caroline-blue-600) var(--slider-percentage),
-			var(--sandy-tan-600) var(--slider-percentage),
-			var(--sandy-tan-600) 100%
+			var(--slider-track-filled) 0%,
+			var(--slider-track-filled) var(--slider-percentage),
+			var(--slider-track-empty) var(--slider-percentage),
+			var(--slider-track-empty) 100%
 		);
 	}
 
@@ -80,35 +80,39 @@
 		appearance: none;
 		width: 1.125rem;
 		height: 1.125rem;
-		background: var(--caroline-blue-700);
-		border: 0.125rem solid var(--liver-brown-500);
+		background: var(--slider-thumb-bg);
+		border: 0.125rem solid var(--slider-thumb-border);
 		border-radius: 50%;
+		box-shadow: var(--slider-thumb-shadow);
 		cursor: pointer;
 		transition:
 			transform 0.15s ease,
-			background-color 0.15s ease;
+			background-color 0.15s ease,
+			box-shadow 0.15s ease;
 	}
 
 	.slider-input::-webkit-slider-thumb:hover {
-		transform: scale(1.1);
-		background: var(--caroline-blue-800);
+		transform: scale(1.08);
+		background: var(--slider-thumb-hover-bg);
 	}
 
 	.slider-input::-moz-range-thumb {
 		width: 1.125rem;
 		height: 1.125rem;
-		background: var(--caroline-blue-700);
-		border: 0.125rem solid var(--liver-brown-500);
+		background: var(--slider-thumb-bg);
+		border: 0.125rem solid var(--slider-thumb-border);
 		border-radius: 50%;
+		box-shadow: var(--slider-thumb-shadow);
 		cursor: pointer;
 		transition:
 			transform 0.15s ease,
-			background-color 0.15s ease;
+			background-color 0.15s ease,
+			box-shadow 0.15s ease;
 	}
 
 	.slider-input::-moz-range-thumb:hover {
-		transform: scale(1.1);
-		background: var(--caroline-blue-800);
+		transform: scale(1.08);
+		background: var(--slider-thumb-hover-bg);
 	}
 
 	.slider-input:focus {
@@ -116,10 +120,14 @@
 	}
 
 	.slider-input:focus::-webkit-slider-thumb {
-		box-shadow: 0 0 0 0.1875rem var(--caroline-blue-200);
+		box-shadow:
+			0 0 0 0.1875rem var(--slider-focus-ring),
+			var(--slider-thumb-shadow);
 	}
 
 	.slider-input:focus::-moz-range-thumb {
-		box-shadow: 0 0 0 0.1875rem var(--caroline-blue-200);
+		box-shadow:
+			0 0 0 0.1875rem var(--slider-focus-ring),
+			var(--slider-thumb-shadow);
 	}
 </style>

@@ -223,8 +223,8 @@
 								<h3 class="token-intro__title">Color leads the system</h3>
 								<p class="text-(--text-muted)">
 									Design tokens are the visual design atoms of the system, and color is the clearest
-									through-line: bold blues, warm neutrals, and bright accents set the tone before any
-									component detail does.
+									through-line: bold blues, warm neutrals, and bright accents set the tone before
+									any component detail does.
 								</p>
 							</div>
 

@@ -25,7 +25,9 @@ type StoredContentEntry = Pick<
 	| 'updatedAt'
 >;
 
-type ContentEntryDelegate = typeof prisma extends { contentEntry: infer Delegate } ? Delegate : never;
+type ContentEntryDelegate = typeof prisma extends { contentEntry: infer Delegate }
+	? Delegate
+	: never;
 
 export type ResolvedProject = ProjectRegistryEntry & {
 	content: string;
@@ -141,7 +143,9 @@ async function getEntries(entityType: 'project' | 'article'): Promise<StoredCont
 
 export async function getResolvedProjects(): Promise<ResolvedProject[]> {
 	const entryMap = buildEntryMap(await getEntries('project'));
-	return Object.values(projectRegistry).map((project) => resolveProjectEntry(project, entryMap.get(project.id)));
+	return Object.values(projectRegistry).map((project) =>
+		resolveProjectEntry(project, entryMap.get(project.id))
+	);
 }
 
 export async function getResolvedProject(projectId: string): Promise<ResolvedProject | null> {
@@ -199,7 +203,9 @@ export async function getResolvedArticleMetas(): Promise<ResolvedArticleMeta[]> 
 	}));
 }
 
-export async function getResolvedArticleSummary(slug: string): Promise<ResolvedArticleSummary | null> {
+export async function getResolvedArticleSummary(
+	slug: string
+): Promise<ResolvedArticleSummary | null> {
 	const articles = await getResolvedArticleSummaries();
 	return articles.find((article) => article.slug === slug) ?? null;
 }
@@ -270,7 +276,9 @@ export async function upsertContentEntry(payload: ContentUpdatePayload) {
 			}
 		});
 
-		return getProjectContentRecords().then((records) => records.find((record) => record.id === payload.entityId));
+		return getProjectContentRecords().then((records) =>
+			records.find((record) => record.id === payload.entityId)
+		);
 	}
 
 	await delegate.upsert({

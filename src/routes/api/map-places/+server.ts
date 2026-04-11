@@ -149,10 +149,7 @@ export const GET = async ({ url }) => {
 		return json({ places: places.map(serializeMapPlace) });
 	} catch (error) {
 		console.error('[map-places] GET error:', error);
-		return json(
-			{ error: 'Failed to fetch map places', details: String(error) },
-			{ status: 500 }
-		);
+		return json({ error: 'Failed to fetch map places', details: String(error) }, { status: 500 });
 	}
 };
 
@@ -181,9 +178,6 @@ export const POST = async ({ request }) => {
 		return json({ place: serializeMapPlace(place) }, { status: 201 });
 	} catch (error) {
 		console.error('[map-places] POST error:', error);
-		return json(
-			{ error: 'Failed to save map place', details: String(error) },
-			{ status: 500 }
-		);
+		return json({ error: 'Failed to save map place', details: String(error) }, { status: 500 });
 	}
 };

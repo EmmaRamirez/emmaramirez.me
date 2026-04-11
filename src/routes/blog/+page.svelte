@@ -6,11 +6,7 @@
 		isBlogTagView,
 		type BlogTagView
 	} from '$lib/stores/userSettings.svelte';
-	import {
-		type ArticleMeta,
-		type TagGraphLink,
-		type TagGraphNode
-	} from '$lib/articles';
+	import { type ArticleMeta, type TagGraphLink, type TagGraphNode } from '$lib/articles';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
 	import { dev } from '$app/environment';
@@ -210,7 +206,9 @@
 	function isInteractiveTarget(target: EventTarget | null) {
 		return (
 			target instanceof HTMLElement &&
-			Boolean(target.closest('a, button, input, textarea, select, summary, [contenteditable="true"]'))
+			Boolean(
+				target.closest('a, button, input, textarea, select, summary, [contenteditable="true"]')
+			)
 		);
 	}
 
@@ -241,7 +239,9 @@
 			return selectedArticleSlug;
 		}
 
-		const currentIndex = filteredArticles.findIndex((article) => article.slug === selectedArticleSlug);
+		const currentIndex = filteredArticles.findIndex(
+			(article) => article.slug === selectedArticleSlug
+		);
 		const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % filteredArticles.length;
 		manualSelectedArticleSlug = filteredArticles[nextIndex]?.slug ?? null;
 		return selectedArticleSlug;
@@ -268,8 +268,8 @@
 	}
 
 	function getTopmostWebTagValue() {
-		return [...graphLayout.nodes]
-			.sort((left, right) => left.y - right.y || left.x - right.x)[0]?.id;
+		return [...graphLayout.nodes].sort((left, right) => left.y - right.y || left.x - right.x)[0]
+			?.id;
 	}
 
 	function getDirectionalWebTagValue(
@@ -605,7 +605,6 @@
 			simulation.stop();
 		};
 	});
-
 </script>
 
 <svelte:window onkeydown={handleWebModeKeydown} />
@@ -827,7 +826,9 @@
 									]}
 									data-article-nav="true"
 									data-article-slug={article.slug}
-									aria-current={tagView === 'web' && selectedArticleSlug === article.slug ? 'true' : undefined}
+									aria-current={tagView === 'web' && selectedArticleSlug === article.slug
+										? 'true'
+										: undefined}
 								>
 									<div class="min-w-0 flex-1">
 										<span

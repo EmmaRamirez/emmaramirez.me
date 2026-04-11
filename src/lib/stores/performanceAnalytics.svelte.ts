@@ -458,7 +458,10 @@ function average(values: number[]) {
 function percentile(values: number[], target: number) {
 	if (values.length === 0) return 0;
 	const sorted = [...values].sort((a, b) => a - b);
-	const index = Math.min(sorted.length - 1, Math.max(0, Math.ceil((target / 100) * sorted.length) - 1));
+	const index = Math.min(
+		sorted.length - 1,
+		Math.max(0, Math.ceil((target / 100) * sorted.length) - 1)
+	);
 	return round(sorted[index]);
 }
 
@@ -632,7 +635,9 @@ function setupObservers() {
 
 	if (supported.includes('layout-shift')) {
 		const clsObserver = new PerformanceObserver((list) => {
-			for (const entry of list.getEntries() as Array<PerformanceEntry & { value?: number; hadRecentInput?: boolean }>) {
+			for (const entry of list.getEntries() as Array<
+				PerformanceEntry & { value?: number; hadRecentInput?: boolean }
+			>) {
 				if (entry.hadRecentInput) continue;
 				clsValue += entry.value ?? 0;
 			}
@@ -835,7 +840,13 @@ export const performanceAnalytics = {
 	recordPageLoad(route: string, duration: number, navigationType: NavigationType, from?: string) {
 		recordPageEvent(route, duration, { navigationType, from });
 	},
-	recordVital(name: string, value: number, unit: 'ms' | 'score', route = getRoute(), source?: string) {
+	recordVital(
+		name: string,
+		value: number,
+		unit: 'ms' | 'score',
+		route = getRoute(),
+		source?: string
+	) {
 		if (!analyticsEnabled()) return;
 
 		upsertVital({
@@ -900,13 +911,18 @@ function getFetchName(input: RequestInfo | URL, label?: string) {
 	return input.url;
 }
 
-export async function trackedFetch(input: RequestInfo | URL, init?: RequestInit, meta: TrackedFetchMeta = {}) {
+export async function trackedFetch(
+	input: RequestInfo | URL,
+	init?: RequestInit,
+	meta: TrackedFetchMeta = {}
+) {
 	if (!analyticsEnabled() || meta.skipTracking) {
 		return fetch(input, init);
 	}
 
 	const method = init?.method?.toUpperCase() ?? 'GET';
-	const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
+	const url =
+		typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
 	const measureId = performanceAnalytics.beginMeasure('network', getFetchName(input, meta.label), {
 		method,
 		url,
