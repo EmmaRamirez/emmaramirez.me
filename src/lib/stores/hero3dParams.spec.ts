@@ -47,4 +47,24 @@ describe('hero3dParams', () => {
 			bounceStrength: 0.51
 		});
 	});
+
+	it('applies presets and detects the active preset', async () => {
+		const {
+			applyHero3dPreset,
+			getHero3dPreset,
+			getHero3dParamsSnapshot,
+			hero3dPresets,
+			isHero3dPresetActive
+		} = await import('./hero3dParams.svelte');
+
+		expect(hero3dPresets.length).toBeGreaterThan(2);
+
+		applyHero3dPreset('neon-arcade');
+
+		const neonArcade = getHero3dPreset('neon-arcade');
+		expect(neonArcade).toBeDefined();
+		expect(getHero3dParamsSnapshot()).toEqual(neonArcade?.params);
+		expect(isHero3dPresetActive(getHero3dParamsSnapshot(), 'neon-arcade')).toBe(true);
+		expect(isHero3dPresetActive(getHero3dParamsSnapshot(), 'soft-frost')).toBe(false);
+	});
 });

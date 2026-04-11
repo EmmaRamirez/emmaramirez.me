@@ -3,8 +3,10 @@
 	import { discoParams, type DiscoParams } from '$lib/stores/discoParams.svelte';
 	import { showSections } from '$lib/stores';
 	import {
+		hero3dPresets,
 		getHero3dParamsSnapshot,
 		hero3dParams,
+		isHero3dPresetActive,
 		type Hero3DParams
 	} from '$lib/stores/hero3dParams.svelte';
 	import { browser } from '$app/environment';
@@ -55,6 +57,13 @@
 
 	let hasLoadedSettings = $state(false);
 	const heroPayload = $derived.by(() => ({ ...hero }) satisfies Hero3DParams);
+	const activeHeroPresetId = $derived.by(() => {
+		for (const preset of hero3dPresets) {
+			if (isHero3dPresetActive(heroPayload, preset.id)) return preset.id;
+		}
+
+		return null;
+	});
 	const settingsPayload = $derived.by(() => ({
 		headerBlendMode,
 		showSectionsEnabled,
@@ -69,6 +78,10 @@
 			volatilityDecay
 		}
 	}));
+
+	function applyHeroPreset(params: Hero3DParams) {
+		Object.assign(hero, params);
+	}
 
 	onMount(() => {
 		const unsubscribe = showSections.subscribe((value) => {
@@ -193,6 +206,44 @@
 			</div>
 
 			<div class="space-y-3">
+				<div class="rounded-md border border-(--border-color) bg-black/8 p-3">
+					<div class="mb-3 flex items-center justify-between gap-3">
+						<p class="text-xs font-semibold tracking-[0.18em] text-(--text-secondary) uppercase">
+							Presets
+						</p>
+						{#if activeHeroPresetId}
+							<span class="text-[0.65rem] font-semibold text-(--text-secondary)">
+								Active: {hero3dPresets.find((preset) => preset.id === activeHeroPresetId)?.name}
+							</span>
+						{:else}
+							<span class="text-[0.65rem] font-semibold text-(--text-secondary)">Custom mix</span>
+						{/if}
+					</div>
+					<div class="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+						{#each hero3dPresets as preset (preset.id)}
+							<button
+								type="button"
+								class={`rounded-md border p-3 text-left transition ${
+									activeHeroPresetId === preset.id
+										? 'border-[color:var(--lawn-green-500)] bg-[color:color-mix(in_srgb,var(--lawn-green-500)_12%,transparent)]'
+										: 'border-(--border-color) bg-black/10 hover:border-(--text-secondary) hover:bg-black/16'
+								}`}
+								onclick={() => applyHeroPreset(preset.params)}
+							>
+								<div class="mb-1 flex items-center justify-between gap-2">
+									<span class="text-sm font-semibold text-(--text-primary)">{preset.name}</span>
+									{#if activeHeroPresetId === preset.id}
+										<span class="text-[0.65rem] font-semibold text-(--lawn-green-500)">Selected</span>
+									{/if}
+								</div>
+								<p class="text-xs leading-relaxed text-(--text-secondary)">
+									{preset.description}
+								</p>
+							</button>
+						{/each}
+					</div>
+				</div>
+
 				<div class="rounded-md border border-(--border-color) bg-black/8 p-3">
 					<p class="mb-3 text-xs font-semibold tracking-[0.18em] text-(--text-secondary) uppercase">
 						Reveal

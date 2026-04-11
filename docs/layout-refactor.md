@@ -228,10 +228,10 @@ Tasks:
 1. Extract local storage read/write helpers into `persistence.ts`.
 2. Extract default layout generation into `defaults.ts`.
 3. Keep `gridLayoutState.svelte.ts` focused on:
-   - initialize
-   - reorder
-   - resize
-   - save/reset
+  - initialize
+  - reorder
+  - resize
+  - save/reset
 4. Rename the exported store to reflect that homepage and editor intentionally share state.
 
 Deliverable:
@@ -389,3 +389,4 @@ Once the architecture is simplified, the next natural follow-ups would be:
 - document the tile manifest contract in a short ADR or architecture note
 - remove legacy state helpers that become redundant
 - review whether any routes or debug features can be lazy-loaded
+

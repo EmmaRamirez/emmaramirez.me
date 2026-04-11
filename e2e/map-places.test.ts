@@ -68,11 +68,12 @@ test.describe('Visitor review surfaces', () => {
 		});
 
 		await page.goto('/editor');
-		await page.getByRole('button', { name: 'Visitors' }).click();
+		await page.locator('nav[aria-label="Editor sections"]').getByRole('button', { name: 'Visitors' }).click();
 
 		await expect(page.getByRole('heading', { name: 'Visitors' })).toBeVisible();
-		await expect(page.getByRole('cell', { name: visitorName })).toBeVisible();
-		await expect(page.getByRole('cell', { name: 'British Columbia' })).toBeVisible();
+		const visitorRow = page.getByRole('row').filter({ hasText: visitorName });
+		await expect(visitorRow).toBeVisible();
+		await expect(visitorRow).toContainText('British Columbia');
 	});
 
 	test('homepage visitor form submits and persists a new place', async ({ page, request }) => {

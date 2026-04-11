@@ -5,8 +5,11 @@
 	import { onMount } from 'svelte';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
+	import EditorAnalyticsSection from '$lib/components/editor/EditorAnalyticsSection.svelte';
 	import EditorGridSection from '$lib/components/editor/EditorGridSection.svelte';
 	import EditorSettingsSection from '$lib/components/editor/EditorSettingsSection.svelte';
+	import EditorThemeSection from '$lib/components/editor/EditorThemeSection.svelte';
+	import EditorVisitorsSection from '$lib/components/editor/EditorVisitorsSection.svelte';
 
 	onMount(() => {
 		if (!dev) {
@@ -14,7 +17,7 @@
 		}
 	});
 
-	let activeSection = $state<'grid' | 'settings'>('grid');
+	let activeSection = $state<'grid' | 'theme' | 'settings' | 'analytics' | 'visitors'>('grid');
 </script>
 
 {#if dev}
@@ -59,6 +62,64 @@
 				<button
 					type="button"
 					class="section-tab"
+					class:active={activeSection === 'theme'}
+					onclick={() => (activeSection = 'theme')}
+				>
+					<svg
+						class="h-4 w-4"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<circle cx="12" cy="12" r="4" />
+						<path d="M12 2v2m0 16v2m10-10h-2M4 12H2m17.07 7.07-1.41-1.41M6.34 6.34 4.93 4.93m14.14 0-1.41 1.41M6.34 17.66l-1.41 1.41" />
+					</svg>
+					Theme
+				</button>
+				<button
+					type="button"
+					class="section-tab"
+					class:active={activeSection === 'analytics'}
+					onclick={() => (activeSection = 'analytics')}
+				>
+					<svg
+						class="h-4 w-4"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path d="M4 19h16" />
+						<path d="M7 15v-4" />
+						<path d="M12 15V9" />
+						<path d="M17 15V5" />
+					</svg>
+					Analytics
+				</button>
+				<button
+					type="button"
+					class="section-tab"
+					class:active={activeSection === 'visitors'}
+					onclick={() => (activeSection = 'visitors')}
+				>
+					<svg
+						class="h-4 w-4"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+						<circle cx="9" cy="7" r="4" />
+						<path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+						<path d="M16 3.13a4 4 0 0 1 0 7.75" />
+					</svg>
+					Visitors
+				</button>
+				<button
+					type="button"
+					class="section-tab"
 					class:active={activeSection === 'settings'}
 					onclick={() => (activeSection = 'settings')}
 				>
@@ -81,6 +142,12 @@
 			<div class="editor-content">
 				{#if activeSection === 'grid'}
 					<EditorGridSection />
+				{:else if activeSection === 'theme'}
+					<EditorThemeSection />
+				{:else if activeSection === 'analytics'}
+					<EditorAnalyticsSection />
+				{:else if activeSection === 'visitors'}
+					<EditorVisitorsSection />
 				{:else if activeSection === 'settings'}
 					<EditorSettingsSection />
 				{/if}

@@ -1,5 +1,6 @@
 import { browser, dev } from '$app/environment';
 import { writable } from 'svelte/store';
+import { pokemonTeam as defaultPokemonTeamConfig, type Pokemon } from '$lib/website.config';
 
 export type ThemeMode = 'light' | 'dark';
 export type BlogTagView = 'flat' | 'web';
@@ -16,15 +17,19 @@ interface StoredUserSettings {
 	showSections?: boolean;
 	topLanguagesVariant?: TopLanguagesVariant;
 	blogTagView?: BlogTagView;
+	pokemonTeam?: Pokemon[];
 }
 
 const STORAGE_KEY = 'emzinnia:user-settings';
 const LEGACY_THEME_KEY = 'theme';
 const LEGACY_SHOW_SECTIONS_KEY = 'debug-show-sections';
 const LEGACY_TOP_LANGUAGES_KEY = 'top-languages-variant';
+const POKEMON_TEAM_SIZE = 6;
 
 export const defaultBlogTagView: BlogTagView = 'flat';
 export const defaultTopLanguagesVariant: TopLanguagesVariant = 'ranked-cards';
+const pokemonTeamFallback = defaultPokemonTeamConfig.map((pokemon) => ({ ...pokemon }));
+export const defaultPokemonTeam = pokemonTeamFallback.map((pokemon) => ({ ...pokemon }));
 
 export const topLanguagesVariantOptions: Array<{ value: TopLanguagesVariant; label: string }> = [
 	{ value: 'horizontal-bars', label: 'Horizontal Bars' },
@@ -45,6 +50,39 @@ export function isBlogTagView(value: string | null | undefined): value is BlogTa
 
 export function isTopLanguagesVariant(value: string | null | undefined): value is TopLanguagesVariant {
 	return topLanguagesVariantOptions.some((option) => option.value === value);
+}
+
+function isPokemonRecord(value: unknown): value is Pokemon {
+	if (typeof value !== 'object' || value === null) {
+		return false;
+	}
+
+	const candidate = value as Partial<Pokemon>;
+
+	return (
+		typeof candidate.id === 'number' &&
+		Number.isFinite(candidate.id) &&
+		typeof candidate.name === 'string' &&
+		candidate.name.trim().length > 0
+	);
+}
+
+export function normalizePokemonTeam(value: unknown): Pokemon[] {
+	const source = Array.isArray(value) ? value : [];
+
+	return Array.from({ length: POKEMON_TEAM_SIZE }, (_, index) => {
+		const fallback = pokemonTeamFallback[index] ?? pokemonTeamFallback[0] ?? { id: index + 1, name: '' };
+		const candidate = source[index];
+
+		if (!isPokemonRecord(candidate)) {
+			return { ...fallback };
+		}
+
+		return {
+			id: candidate.id,
+			name: candidate.name.trim()
+		};
+	});
 }
 
 function readStoredUserSettings(): StoredUserSettings {
@@ -87,7 +125,8 @@ function readStoredUserSettings(): StoredUserSettings {
 			: isTopLanguagesVariant(legacyTopLanguages)
 				? legacyTopLanguages
 				: undefined,
-		blogTagView: isBlogTagView(parsed.blogTagView) ? parsed.blogTagView : undefined
+		blogTagView: isBlogTagView(parsed.blogTagView) ? parsed.blogTagView : undefined,
+		pokemonTeam: Array.isArray(parsed.pokemonTeam) ? normalizePokemonTeam(parsed.pokemonTeam) : undefined
 	};
 }
 
@@ -195,6 +234,9 @@ export const showSections = {
 let topLanguagesVariant = $state<TopLanguagesVariant>(
 	initialStoredUserSettings.topLanguagesVariant ?? defaultTopLanguagesVariant
 );
+let pokemonTeam = $state<Pokemon[]>(
+	normalizePokemonTeam(initialStoredUserSettings.pokemonTeam ?? defaultPokemonTeam)
+);
 
 export const topLanguagesSettings = {
 	get variant() {
@@ -203,6 +245,34 @@ export const topLanguagesSettings = {
 	set variant(value: TopLanguagesVariant) {
 		topLanguagesVariant = value;
 		patchUserSettings({ topLanguagesVariant: value });
+	}
+};
+
+export const pokemonTeamSettings = {
+	get team() {
+		return pokemonTeam;
+	},
+	set team(value: Pokemon[]) {
+		pokemonTeam = normalizePokemonTeam(value);
+		patchUserSettings({
+			pokemonTeam: pokemonTeam.map((pokemon) => ({ ...pokemon }))
+		});
+	},
+	setSlot(index: number, value: Pokemon) {
+		if (index < 0 || index >= POKEMON_TEAM_SIZE) {
+			return;
+		}
+
+		const nextTeam = pokemonTeam.map((pokemon) => ({ ...pokemon }));
+		nextTeam[index] = {
+			id: value.id,
+			name: value.name.trim()
+		};
+
+		pokemonTeamSettings.team = nextTeam;
+	},
+	reset() {
+		pokemonTeamSettings.team = defaultPokemonTeam;
 	}
 };
 
@@ -222,5 +292,6 @@ export const userSettings = {
 	theme,
 	showSections,
 	topLanguages: topLanguagesSettings,
-	blog: blogSettings
+	blog: blogSettings,
+	pokemonTeam: pokemonTeamSettings
 };
