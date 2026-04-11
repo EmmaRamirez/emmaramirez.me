@@ -1,28 +1,23 @@
 import { error } from '@sveltejs/kit';
-import { getArticleBySlug, getArticles } from '$lib/articles';
-import type { PageServerLoad, EntryGenerator } from './$types';
+import { getArticleBySlug } from '$lib/articles';
+import { getResolvedArticleSummary } from '$lib/server/content';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const article = getArticleBySlug(params.slug);
+	const articleBody = getArticleBySlug(params.slug);
+	const article = await getResolvedArticleSummary(params.slug);
 
-	if (!article) {
+	if (!article || !articleBody) {
 		throw error(404, `Article not found: ${params.slug}`);
 	}
 
 	return {
 		slug: article.slug,
-		title: article.frontmatter.title,
-		date: article.frontmatter.date,
-		tags: article.frontmatter.tags ?? [],
-		description: article.frontmatter.description,
+		title: article.title,
+		date: article.date,
+		tags: article.tags ?? [],
+		description: article.description,
+		excerpt: article.excerpt,
 		readingTimeMinutes: article.readingTimeMinutes
 	};
 };
-
-export const entries: EntryGenerator = () => {
-	return getArticles().map((article) => ({
-		slug: article.slug
-	}));
-};
-
-export const prerender = true;

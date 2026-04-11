@@ -3,8 +3,8 @@ import { trackedFetch } from '$lib/stores/performanceAnalytics.svelte';
 export type PokemonDetails = {
 	id: number;
 	name: string;
-	height: number;
-	weight: number;
+	heightMeters: number;
+	weightKilograms: number;
 	baseExperience: number;
 	types: string[];
 	abilities: string[];
@@ -39,6 +39,14 @@ export function formatPokemonName(name: string): string {
 		.join(' ');
 }
 
+export function formatPokemonHeight(heightMeters: number): string {
+	return `${heightMeters.toFixed(1)} m`;
+}
+
+export function formatPokemonWeight(weightKilograms: number): string {
+	return `${weightKilograms.toFixed(1)} kg`;
+}
+
 function normalizePokemonIdentifier(identifier: number | string): string {
 	if (typeof identifier === 'number') {
 		return String(identifier);
@@ -70,11 +78,11 @@ export async function fetchPokemonDetails(identifier: number | string): Promise<
 	return {
 		id: data.id,
 		name: formatPokemonName(data.name),
-		height: data.height,
-		weight: data.weight,
+		heightMeters: data.height / 10,
+		weightKilograms: data.weight / 10,
 		baseExperience: data.base_experience,
 		types: data.types.map((type) => type.type.name),
-		abilities: data.abilities.map((ability) => ability.ability.name),
+		abilities: data.abilities.map((ability) => formatPokemonName(ability.ability.name)),
 		sprite
 	};
 }

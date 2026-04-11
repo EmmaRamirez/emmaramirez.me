@@ -1,21 +1,26 @@
 <script lang="ts">
-	import { getProject, getProjectNeighbors, type ProjectId } from '$lib/registry/homepage';
+	import { renderMarkdownToHtml } from '$lib/markdown';
+	import { orderedListNeighbors } from '$lib/reading';
+	import type { ProjectId, ProjectRegistryEntry } from '$lib/registry/homepage';
 	import { fly, fade } from 'svelte/transition';
 
 	interface ProjectReaderPanelProps {
 		open?: boolean;
 		projectId?: ProjectId | null;
+		projects: Array<ProjectRegistryEntry & { content: string }>;
 		onclose?: () => void;
 		onnavigate?: (projectId: ProjectId) => void;
 	}
 
-	let { open = false, projectId = null, onclose, onnavigate }: ProjectReaderPanelProps = $props();
+	let { open = false, projectId = null, projects, onclose, onnavigate }: ProjectReaderPanelProps =
+		$props();
 
-	const project = $derived(projectId ? (getProject(projectId) ?? null) : null);
+	const project = $derived(projects.find((entry) => entry.id === projectId) ?? null);
 
-	const projectNeighbors = $derived(getProjectNeighbors(projectId));
-	const prevProject = $derived(projectNeighbors.prevProject);
-	const nextProject = $derived(projectNeighbors.nextProject);
+	const projectNeighbors = $derived(orderedListNeighbors(projects, projectId, (entry) => entry.id));
+	const prevProject = $derived(projectNeighbors.prev);
+	const nextProject = $derived(projectNeighbors.next);
+	const projectHtml = $derived(project ? renderMarkdownToHtml(project.content) : '');
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (!open) return;
@@ -254,9 +259,7 @@
 
 			{#if project.content}
 				<div class="project-body" in:fade={{ duration: 200, delay: 150 }}>
-					{#each project.content.split('\n\n') as paragraph, i (i)}
-						<p class:first-paragraph={i === 0}>{paragraph}</p>
-					{/each}
+					{@html projectHtml}
 				</div>
 			{/if}
 
@@ -542,11 +545,11 @@
 		max-width: 65ch;
 	}
 
-	.project-body p {
+	.project-body :global(p) {
 		margin-bottom: 1.5rem;
 	}
 
-	.first-paragraph::first-letter {
+	.project-body :global(p:first-of-type)::first-letter {
 		float: left;
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 3rem;
@@ -555,6 +558,51 @@
 		padding-top: 0.2rem;
 		color: var(--text-primary);
 		font-weight: 700;
+	}
+
+	.project-body :global(h2),
+	.project-body :global(h3) {
+		font-family: 'Source Serif 4', serif;
+		color: var(--text-primary);
+		margin-top: 2rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.project-body :global(ul),
+	.project-body :global(ol) {
+		margin: 1.25rem 0;
+		padding-left: 1.5rem;
+	}
+
+	.project-body :global(li) {
+		margin-bottom: 0.5rem;
+	}
+
+	.project-body :global(pre) {
+		margin: 1.5rem 0;
+		padding: 1rem 1.25rem;
+		background: var(--page-bg-subtle);
+		border-radius: 0.5rem;
+		overflow-x: auto;
+	}
+
+	.project-body :global(code) {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.9em;
+		padding: 0.12rem 0.35rem;
+		background: var(--page-bg-subtle);
+		border-radius: 0.25rem;
+	}
+
+	.project-body :global(pre code) {
+		padding: 0;
+		background: transparent;
+	}
+
+	.project-body :global(a) {
+		color: var(--text-primary);
+		text-decoration: underline;
+		text-underline-offset: 0.1875rem;
 	}
 
 	.project-nav {

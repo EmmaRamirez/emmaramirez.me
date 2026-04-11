@@ -6,6 +6,7 @@
 		HomeBlock,
 		LocationBlock,
 		PokemonBlock,
+		ThisSiteBlock,
 		TopLanguages,
 		DesignSystemAd,
 		DesignSystemBrowser,
@@ -118,6 +119,8 @@
 						/>
 					{:else if item.kind === 'home'}
 						<HomeBlock class="h-full w-full" />
+					{:else if item.kind === 'this-site'}
+						<ThisSiteBlock class="h-full w-full" />
 					{:else if item.kind === 'city'}
 						<CityCard
 							photo="https://images.unsplash.com/photo-1666610278692-51058ed05e9a?auto=format&fit=crop&w=1800&q=80"

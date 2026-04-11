@@ -21,6 +21,8 @@
 	import { buildHomepageGridItems } from '$lib/registry/gridItems';
 	import { onMount } from 'svelte';
 
+	let { data }: import('./$types').PageProps = $props();
+
 	let debugMenuOpen = $state(false);
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
@@ -55,7 +57,13 @@
 
 	const disco = getDisco();
 
-	const gridItems = buildHomepageGridItems({ includeApiExplorer: true });
+	const gridItems = $derived(
+		buildHomepageGridItems({
+			includeApiExplorer: true,
+			articles: data.articles,
+			projects: data.projects
+		})
+	);
 
 	const articleReaderPanelOpen = $derived(getArticleOpen());
 	const projectReaderPanelOpen = $derived(getProjectOpen());
@@ -149,6 +157,7 @@
 	<ArticleReaderPanel
 		open={articleReaderPanelOpen}
 		articleSlug={selectedArticleSlug}
+		articles={data.articles}
 		onclose={closeArticleReader}
 		onnavigate={openArticleReader}
 	/>
@@ -156,6 +165,7 @@
 	<ProjectReaderPanel
 		open={projectReaderPanelOpen}
 		projectId={selectedProjectId}
+		projects={data.projects}
 		onclose={closeProjectReader}
 		onnavigate={openProjectReader}
 	/>

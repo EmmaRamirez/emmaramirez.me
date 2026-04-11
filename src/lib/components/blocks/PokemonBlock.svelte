@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { fetchPokemonDetails, getPokemonSpriteUrl, type PokemonDetails } from '$lib/api/pokemon';
+	import {
+		fetchPokemonDetails,
+		formatPokemonHeight,
+		formatPokemonWeight,
+		getPokemonSpriteUrl,
+		type PokemonDetails
+	} from '$lib/api/pokemon';
 	import type { Pokemon } from '$lib/website.config';
 
 	interface PokemonBlockProps {
@@ -186,11 +192,15 @@
 					<div class="pokemon-inline__details">
 						<div class="pokemon-inline__stat">
 							<span class="pokemon-inline__label">Height</span>
-							<span class="pokemon-inline__value">{selectedDetails.height}</span>
+							<span class="pokemon-inline__value">
+								{formatPokemonHeight(selectedDetails.heightMeters)}
+							</span>
 						</div>
 						<div class="pokemon-inline__stat">
 							<span class="pokemon-inline__label">Weight</span>
-							<span class="pokemon-inline__value">{selectedDetails.weight}</span>
+							<span class="pokemon-inline__value">
+								{formatPokemonWeight(selectedDetails.weightKilograms)}
+							</span>
 						</div>
 						<div class="pokemon-inline__stat">
 							<span class="pokemon-inline__label">Base XP</span>

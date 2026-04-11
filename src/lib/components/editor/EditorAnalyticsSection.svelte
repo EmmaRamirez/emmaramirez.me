@@ -11,6 +11,8 @@
 	const vitals = $derived(performanceAnalytics.vitalEvents.slice(0, 6));
 	const paints = $derived(performanceAnalytics.paintEvents.slice(0, 4));
 	const timeline = $derived(performanceAnalytics.timeline.slice(0, 12));
+	const persistedSummary = $derived(performanceAnalytics.persistedSummary);
+	const persistenceStatus = $derived(performanceAnalytics.persistenceStatus);
 
 	function formatDuration(value: number) {
 		return `${value.toFixed(1)} ms`;
@@ -33,6 +35,11 @@
 			hour: 'numeric',
 			minute: '2-digit'
 		});
+	}
+
+	function formatSyncTimestamp(timestamp: number | null) {
+		if (!timestamp) return 'Not synced yet';
+		return formatTimestamp(timestamp);
 	}
 
 	function getTimelineValue(event: AnalyticsTimelineEvent) {
@@ -76,8 +83,16 @@
 		</div>
 		<div class="analytics-hero__meta">
 			<span class="analytics-hero__pill">Dev Only</span>
+			<span class="analytics-hero__sync">Backend {persistenceStatus.state}</span>
 			<button type="button" class="analytics-reset" onclick={() => performanceAnalytics.clear()}>
 				Clear session
+			</button>
+			<button
+				type="button"
+				class="analytics-reset"
+				onclick={() => void performanceAnalytics.refreshPersistedSummary()}
+			>
+				Refresh backend
 			</button>
 		</div>
 	</header>
@@ -110,6 +125,14 @@
 				Render avg {formatDuration(summary.averageRenderDuration)}
 			</span>
 		</article>
+
+		<article class="stat-card">
+			<span class="stat-card__label">Persisted Events</span>
+			<strong class="stat-card__value">{persistedSummary?.totalPersistedEvents ?? 0}</strong>
+			<span class="stat-card__meta">
+				{persistenceStatus.pendingCount} pending, last sync {formatSyncTimestamp(persistenceStatus.lastSyncedAt)}
+			</span>
+		</article>
 	</div>
 
 	<div class="analytics-grid">
@@ -131,6 +154,51 @@
 					{/each}
 				</div>
 			{/if}
+		</article>
+
+		<article class="analytics-card">
+			<div class="analytics-card__header">
+				<div>
+					<p class="analytics-card__title">Backend Summary</p>
+					<p class="analytics-card__subtitle">Aggregated from persisted analytics events</p>
+				</div>
+			</div>
+			<div class="mini-stack">
+				{#if !persistedSummary}
+					<p class="empty-state">
+						{persistenceStatus.lastError ?? 'Waiting for backend persistence to sync.'}
+					</p>
+				{:else}
+					<div class="mini-row">
+						<div class="mini-row__copy">
+							<span class="mini-row__title">Sessions</span>
+							<span class="mini-row__subtitle">Distinct persisted browser sessions</span>
+						</div>
+						<span>{persistedSummary.sessionCount}</span>
+					</div>
+					<div class="mini-row">
+						<div class="mini-row__copy">
+							<span class="mini-row__title">Network P95</span>
+							<span class="mini-row__subtitle">Across persisted request timings</span>
+						</div>
+						<span>{formatDuration(persistedSummary.summary.p95NetworkDuration)}</span>
+					</div>
+					<div class="mini-row">
+						<div class="mini-row__copy">
+							<span class="mini-row__title">Average Page</span>
+							<span class="mini-row__subtitle">Persisted route measurements</span>
+						</div>
+						<span>{formatDuration(persistedSummary.summary.averagePageDuration)}</span>
+					</div>
+					<div class="mini-row">
+						<div class="mini-row__copy">
+							<span class="mini-row__title">Last ingest</span>
+							<span class="mini-row__subtitle">Most recent batch write</span>
+						</div>
+						<span>{persistedSummary.lastIngestedAt ? formatTimestamp(Date.parse(persistedSummary.lastIngestedAt)) : 'N/A'}</span>
+					</div>
+				{/if}
+			</div>
 		</article>
 
 		<article class="analytics-card">
@@ -255,6 +323,30 @@
 				{/if}
 			</div>
 		</article>
+
+		<article class="analytics-card">
+			<div class="analytics-card__header">
+				<div>
+					<p class="analytics-card__title">Persisted Slowest Requests</p>
+					<p class="analytics-card__subtitle">Slowest request timings from the database</p>
+				</div>
+			</div>
+			<div class="mini-stack">
+				{#if !persistedSummary || persistedSummary.slowestRequests.length === 0}
+					<p class="empty-state">Persisted request timing will appear after the first successful sync.</p>
+				{:else}
+					{#each persistedSummary.slowestRequests as event (event.id)}
+						<div class="mini-row">
+							<div class="mini-row__copy">
+								<span class="mini-row__title">{event.name}</span>
+								<span class="mini-row__subtitle">{event.method ?? 'GET'} {event.status ?? 'ERR'}</span>
+							</div>
+							<span>{formatDuration(event.duration ?? 0)}</span>
+						</div>
+					{/each}
+				{/if}
+			</div>
+		</article>
 	</div>
 
 	<article class="analytics-card analytics-card--timeline">
@@ -326,6 +418,11 @@
 		gap: 0.75rem;
 	}
 
+	.analytics-hero__sync {
+		font-size: 0.78rem;
+		color: var(--text-secondary);
+	}
+
 	.analytics-hero__pill,
 	.rating-pill,
 	.timeline-kind {
@@ -363,7 +460,7 @@
 	}
 
 	.stats-grid {
-		grid-template-columns: repeat(4, minmax(0, 1fr));
+		grid-template-columns: repeat(5, minmax(0, 1fr));
 	}
 
 	.analytics-grid {

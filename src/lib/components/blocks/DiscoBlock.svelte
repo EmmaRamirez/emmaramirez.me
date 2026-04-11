@@ -38,28 +38,36 @@
 
 	let { image, alt, caption, class: className }: DiscoBlockProps = $props();
 
-	let animationId = $state(0);
-	let canvas: HTMLCanvasElement | null = $state(null);
-	let ctx: CanvasRenderingContext2D | null = $state(null);
+let animationId = 0;
+let canvas: HTMLCanvasElement | null = null;
+let ctx: CanvasRenderingContext2D | null = null;
 
 	let isHovering = $state(false);
-	let cursorX = $state(0);
-	let cursorY = $state(0);
-	let container: HTMLDivElement | null = $state(null);
-	let imageBlock: HTMLElement | null = $state(null);
-	let canvasWidth = $state(0);
-	let canvasHeight = $state(0);
+let container: HTMLDivElement | null = null;
+let imageBlock: HTMLElement | null = null;
+let cursorEl: HTMLDivElement | null = null;
+let containerBounds: DOMRect | null = null;
+let canvasWidth = 0;
+let canvasHeight = 0;
 
-	let lightBeams: LightBeam[] = $state([]);
-	let time = $state(0);
+let lightBeams: LightBeam[] = [];
+let time = 0;
 
-	let discoBalls: DiscoBall[] = $state([]);
-	let nextBallId = $state(1);
-	let fadeOut = $state(0);
+let discoBalls: DiscoBall[] = [];
+let nextBallId = 1;
+let fadeOut = 0;
 
-	let cursorHistory: CursorSample[] = $state([]);
-	let volatility = $state(0);
-	let targetVolatility = $state(0);
+let cursorX = 0;
+let cursorY = 0;
+let pendingCursorX = 0;
+let pendingCursorY = 0;
+let hasPendingCursor = false;
+
+let cursorHistory: CursorSample[] = [];
+let cursorHistoryIndex = 0;
+let cursorHistoryCount = 0;
+let volatility = 0;
+let targetVolatility = 0;
 	const discoReadyMeasureId = performanceAnalytics.beginMeasure('render', 'DiscoBlock ready', {
 		source: 'DiscoBlock'
 	});
@@ -77,16 +85,16 @@
 	}
 
 	function calculateVolatility(): number {
-		if (cursorHistory.length < 3) return 0;
+	if (cursorHistoryCount < 3) return 0;
 
 		let totalSpeed = 0;
 		let directionChanges = 0;
 		let prevDx = 0;
 		let prevDy = 0;
 
-		for (let i = 1; i < cursorHistory.length; i++) {
-			const prev = cursorHistory[i - 1];
-			const curr = cursorHistory[i];
+	for (let i = 1; i < cursorHistoryCount; i++) {
+		const prev = getCursorSample(i - 1);
+		const curr = getCursorSample(i);
 			const dt = Math.max(curr.time - prev.time, 1);
 
 			const dx = curr.x - prev.x;
@@ -111,8 +119,8 @@
 			prevDy = dy;
 		}
 
-		const avgSpeed = totalSpeed / (cursorHistory.length - 1);
-		const avgDirectionChange = directionChanges / Math.max(cursorHistory.length - 2, 1);
+	const avgSpeed = totalSpeed / (cursorHistoryCount - 1);
+	const avgDirectionChange = directionChanges / Math.max(cursorHistoryCount - 2, 1);
 
 		const speedFactor = Math.min(avgSpeed / 3, 1);
 		const directionFactor = avgDirectionChange;
@@ -120,17 +128,66 @@
 		return Math.min(speedFactor * 0.6 + directionFactor * 0.4, 1);
 	}
 
+function resetCursorHistory() {
+	cursorHistory = [];
+	cursorHistoryIndex = 0;
+	cursorHistoryCount = 0;
+}
+
+function getCursorSample(index: number) {
+	const start = (cursorHistoryIndex - cursorHistoryCount + cursorHistory.length) % cursorHistory.length;
+	return cursorHistory[(start + index) % cursorHistory.length];
+}
+
+function pushCursorSample(sample: CursorSample) {
+	const limit = discoParams.sampleHistorySize;
+	if (limit <= 0) {
+		resetCursorHistory();
+		return;
+	}
+
+	if (cursorHistory.length !== limit) {
+		const recentSamples = Array.from({ length: Math.min(cursorHistoryCount, limit - 1) }, (_, index) =>
+			getCursorSample(Math.max(0, cursorHistoryCount - Math.min(cursorHistoryCount, limit - 1) + index))
+		);
+		cursorHistory = recentSamples;
+		cursorHistoryIndex = recentSamples.length % limit;
+		cursorHistoryCount = recentSamples.length;
+	}
+
+	if (cursorHistory.length < limit) {
+		cursorHistory.push(sample);
+		cursorHistoryCount = cursorHistory.length;
+		cursorHistoryIndex = cursorHistory.length % limit;
+		return;
+	}
+
+	cursorHistory[cursorHistoryIndex] = sample;
+	cursorHistoryIndex = (cursorHistoryIndex + 1) % limit;
+	cursorHistoryCount = limit;
+}
+
 	function updateCursorTracking(x: number, y: number) {
 		const now = performance.now();
 
-		cursorHistory.push({ x, y, time: now });
-
-		if (cursorHistory.length > discoParams.sampleHistorySize) {
-			cursorHistory = cursorHistory.slice(-discoParams.sampleHistorySize);
-		}
-
+	pushCursorSample({ x, y, time: now });
 		targetVolatility = calculateVolatility();
 	}
+
+function updateCursorVisual() {
+	if (!cursorEl) return;
+	cursorEl.style.left = `${cursorX / 16}rem`;
+	cursorEl.style.top = `${cursorY / 16}rem`;
+}
+
+function consumePendingCursor() {
+	if (!hasPendingCursor) return;
+	hasPendingCursor = false;
+	cursorX = pendingCursorX;
+	cursorY = pendingCursorY;
+	updateCursorTracking(cursorX, cursorY);
+	updateCursorVisual();
+}
 
 	function updateVolatility() {
 		if (targetVolatility > volatility) {
@@ -258,6 +315,7 @@
 
 	function animate(timestamp: number) {
 		time = timestamp * 0.001;
+	consumePendingCursor();
 		updateVolatility();
 		const fadeFactor = isHovering ? 1 : fadeOut || 0;
 		drawAllDiscoBeams(fadeFactor);
@@ -276,42 +334,46 @@
 			}
 			lightBeams = [];
 			discoBalls = [];
-			cursorHistory = [];
+			resetCursorHistory();
 			volatility = 0;
 			targetVolatility = 0;
 			fadeOut = 0;
 		}
 	}
 
-	function startDisco(event: MouseEvent) {
-		if (!isHovering) {
-			isHovering = true;
-			const beamReach = getBeamReach();
-			lightBeams = generateBeams(discoParams.maxBeams, beamReach);
-			cursorHistory = [];
-			volatility = 0;
-			targetVolatility = 0;
-			discoHoverMeasureId = performanceAnalytics.beginMeasure('interaction', 'Disco hover session', {
-				source: 'DiscoBlock'
-			});
-		}
+function beginHoverSession() {
+	if (isHovering) return;
 
-		if (container) {
-			const bounds = container.getBoundingClientRect();
-			const newX = event.clientX - bounds.left;
-			const newY = event.clientY - bounds.top;
+	isHovering = true;
+	containerBounds = container?.getBoundingClientRect() ?? null;
+	const beamReach = getBeamReach();
+	lightBeams = generateBeams(discoParams.maxBeams, beamReach);
+	resetCursorHistory();
+	volatility = 0;
+	targetVolatility = 0;
+	discoHoverMeasureId = performanceAnalytics.beginMeasure('interaction', 'Disco hover session', {
+		source: 'DiscoBlock'
+	});
+}
 
-			updateCursorTracking(newX, newY);
+function handlePointerMove(event: MouseEvent) {
+	beginHoverSession();
 
-			cursorX = newX;
-			cursorY = newY;
-		}
-
-		ensureAnimation();
+	if (!containerBounds) {
+		containerBounds = container?.getBoundingClientRect() ?? null;
 	}
+
+	if (!containerBounds) return;
+
+	pendingCursorX = event.clientX - containerBounds.left;
+	pendingCursorY = event.clientY - containerBounds.top;
+	hasPendingCursor = true;
+	ensureAnimation();
+}
 
 	function stopDisco() {
 		isHovering = false;
+		hasPendingCursor = false;
 		targetVolatility = 0;
 		fadeOut = 1;
 		performanceAnalytics.endMeasure(discoHoverMeasureId, {
@@ -324,7 +386,8 @@
 
 	function updateCanvasSize() {
 		if (!canvas || !container || !ctx) return;
-		const bounds = container.getBoundingClientRect();
+	const bounds = container.getBoundingClientRect();
+	containerBounds = bounds;
 		const dpr = window.devicePixelRatio || 1;
 
 		canvasWidth = bounds.width;
@@ -412,7 +475,7 @@
 	function addDiscoBall(event: MouseEvent) {
 		if (!container) return;
 
-		const bounds = container.getBoundingClientRect();
+		const bounds = containerBounds ?? container.getBoundingClientRect();
 		const x = event.clientX - bounds.left;
 		const y = event.clientY - bounds.top;
 
@@ -446,7 +509,7 @@
 	role="presentation"
 	class="disco-block relative w-full overflow-hidden rounded-lg"
 	{@attach assignContainer}
-	onmousemove={startDisco}
+	onmousemove={handlePointerMove}
 	onmouseleave={stopDisco}
 	onclick={addDiscoBall}
 >
@@ -456,12 +519,11 @@
 		id="disco-canvas"
 	></canvas>
 
-	{#if isHovering}
-		<div
-			class="disco-cursor pointer-events-none absolute z-30 -translate-x-1/2 -translate-y-1/2 rounded-full"
-			style={`left:${cursorX / 16}rem;top:${cursorY / 16}rem;`}
-		></div>
-	{/if}
+	<div
+		bind:this={cursorEl}
+		class="disco-cursor pointer-events-none absolute z-30 -translate-x-1/2 -translate-y-1/2 rounded-full"
+		class:is-active={isHovering}
+	></div>
 </div>
 
 <style>
@@ -480,6 +542,8 @@
 		width: 2.5rem;
 		height: 2.5rem;
 		box-shadow: 0 0 1.5625rem rgba(255, 255, 255, 0.9);
+		opacity: 0;
+		transition: opacity 120ms ease;
 
 		background:
 			/* highlight */
@@ -502,5 +566,9 @@
 		background-repeat: no-repeat, no-repeat, repeat, repeat, no-repeat;
 
 		animation: disco-glint 1.8s ease-in-out infinite;
+	}
+
+	.disco-cursor.is-active {
+		opacity: 1;
 	}
 </style>

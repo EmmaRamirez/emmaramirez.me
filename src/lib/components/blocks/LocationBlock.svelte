@@ -105,17 +105,17 @@
 	}
 
 	function buildVisitorRegionGroups(places: MapPlaceRecord[]): VisitorRegionGroup[] {
-		const groups = new Map<string, VisitorRegionGroup>();
+		const groups: Record<string, VisitorRegionGroup> = {};
 
 		for (const place of places) {
-			const existing = groups.get(place.regionId);
+			const existing = groups[place.regionId];
 			if (existing) {
 				existing.count += 1;
 				existing.names.push(place.name);
 				continue;
 			}
 
-			groups.set(place.regionId, {
+			groups[place.regionId] = {
 				regionId: place.regionId,
 				regionName: place.regionName,
 				countryName: place.countryName,
@@ -123,10 +123,10 @@
 				longitude: place.longitude,
 				count: 1,
 				names: [place.name]
-			});
+			};
 		}
 
-		return Array.from(groups.values());
+		return Object.values(groups);
 	}
 
 	function buildVisitorFeatureCollection(groups: VisitorRegionGroup[]) {
@@ -687,23 +687,16 @@
 							autocomplete="name"
 						/>
 					</label>
-				</div>
 
-				<div class="visitor-form__footer">
-					<p class="visitor-form__hint">
-						{#if selectedRegion}
-							New submissions land on the shared centroid for {selectedRegion.regionName}.
-						{:else}
-							Hover a region for the “Click To Add Your Place!” prompt, then click to select it.
-						{/if}
-					</p>
-					<button
-						type="submit"
-						class="visitor-form__submit"
-						disabled={submissionState === 'submitting'}
-					>
-						{submissionState === 'submitting' ? 'Adding...' : 'Add My Place'}
-					</button>
+					<div class="visitor-form__actions">
+						<button
+							type="submit"
+							class="visitor-form__submit"
+							disabled={submissionState === 'submitting'}
+						>
+							{submissionState === 'submitting' ? 'Adding...' : 'Add My Place'}
+						</button>
+					</div>
 				</div>
 
 				{#if submissionMessage}
@@ -842,8 +835,7 @@
 		padding: 1rem;
 	}
 
-	.visitor-form__header,
-	.visitor-form__footer {
+	.visitor-form__header {
 		display: flex;
 		justify-content: space-between;
 		gap: 0.75rem;
@@ -881,8 +873,14 @@
 
 	.visitor-form__grid {
 		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;
 		gap: 0.75rem;
+		align-items: end;
+	}
+
+	.visitor-form__actions {
+		display: flex;
+		align-items: flex-end;
 	}
 
 	.visitor-field {
@@ -909,14 +907,6 @@
 		outline: 0.125rem solid color-mix(in srgb, var(--caroline-blue-600) 38%, transparent);
 		outline-offset: 0.0625rem;
 		border-color: var(--caroline-blue-600);
-	}
-
-	.visitor-form__hint {
-		margin: 0;
-		max-width: 28rem;
-		font-size: 0.8rem;
-		line-height: 1.5;
-		color: var(--text-secondary);
 	}
 
 	.visitor-form__submit {
@@ -983,7 +973,6 @@
 			0 0 8px rgba(255, 255, 255, 0.55);
 	}
 
-	:global(.map-hover-popup .mapboxgl-popup-content),
 	:global(.map-visitor-popup .mapboxgl-popup-content) {
 		padding: 0.45rem 0.6rem;
 		border-radius: 0.7rem;
@@ -995,10 +984,37 @@
 		box-shadow: 0 0.75rem 1.75rem rgba(15, 23, 42, 0.16);
 	}
 
-	:global(.map-hover-popup .mapboxgl-popup-tip),
 	:global(.map-visitor-popup .mapboxgl-popup-tip) {
 		border-top-color: color-mix(in srgb, var(--surface) 92%, transparent);
 		border-bottom-color: color-mix(in srgb, var(--surface) 92%, transparent);
+	}
+
+	:global(.map-hover-popup .mapboxgl-popup-content) {
+		padding: 0.55rem 0.9rem;
+		border-radius: 999px;
+		border: 0.0625rem solid rgba(255, 255, 255, 0.18);
+		background: rgba(0, 0, 0, 0.92);
+		color: #ffffff;
+		font-size: 0.8rem;
+		font-weight: 600;
+		line-height: 1.2;
+		box-shadow: 0 0.75rem 1.75rem rgba(15, 23, 42, 0.24);
+	}
+
+	:global(.location-block.is-dark .map-hover-popup .mapboxgl-popup-content) {
+		border-color: rgba(0, 0, 0, 0.18);
+		background: rgba(255, 255, 255, 0.96);
+		color: #111111;
+	}
+
+	:global(.map-hover-popup .mapboxgl-popup-tip) {
+		border-top-color: rgba(0, 0, 0, 0.92);
+		border-bottom-color: rgba(0, 0, 0, 0.92);
+	}
+
+	:global(.location-block.is-dark .map-hover-popup .mapboxgl-popup-tip) {
+		border-top-color: rgba(255, 255, 255, 0.96);
+		border-bottom-color: rgba(255, 255, 255, 0.96);
 	}
 
 	:global(.mapboxgl-popup-close-button) {
@@ -1012,8 +1028,7 @@
 		}
 
 		.map-summary,
-		.visitor-form__header,
-		.visitor-form__footer {
+		.visitor-form__header {
 			flex-direction: column;
 			align-items: stretch;
 			text-align: left;
@@ -1026,6 +1041,14 @@
 
 		.visitor-form__grid {
 			grid-template-columns: 1fr;
+		}
+
+		.visitor-form__actions {
+			display: block;
+		}
+
+		.visitor-form__submit {
+			width: 100%;
 		}
 	}
 </style>

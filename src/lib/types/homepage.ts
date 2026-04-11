@@ -14,6 +14,7 @@ export type GridItem =
 	| { kind: 'design-system' }
 	| { kind: 'city' }
 	| { kind: 'pokemon' }
+	| { kind: 'this-site' }
 	| { kind: 'top-languages' }
 	| { kind: 'location' }
 	| { kind: 'api-explorer' };

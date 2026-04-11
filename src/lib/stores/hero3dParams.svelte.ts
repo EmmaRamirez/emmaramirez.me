@@ -1,7 +1,12 @@
+export type Hero3DCursorShape = 'square' | 'circle';
+
 export interface Hero3DParams {
 	revealRadius: number;
 	revealSoftness: number;
 	revealOpacity: number;
+	cursorShape: Hero3DCursorShape;
+	cursorWidth: number;
+	cursorHeight: number;
 	pixelSize: number;
 	pixelHardness: number;
 	pixelScatter: number;
@@ -22,6 +27,8 @@ export interface Hero3DParams {
 	fadeSoftness: number;
 	glowStrength: number;
 	glowRadius: number;
+	revealBrightness: number;
+	revealContrast: number;
 	chromaStrength: number;
 	grainStrength: number;
 	grainScale: number;
@@ -38,6 +45,9 @@ export const defaultHero3DParams: Hero3DParams = {
 	revealRadius: 0.24,
 	revealSoftness: 0.08,
 	revealOpacity: 0.92,
+	cursorShape: 'square',
+	cursorWidth: 1,
+	cursorHeight: 1,
 	pixelSize: 0.36,
 	pixelHardness: 0.94,
 	pixelScatter: 0.24,
@@ -58,12 +68,17 @@ export const defaultHero3DParams: Hero3DParams = {
 	fadeSoftness: 0.55,
 	glowStrength: 0.04,
 	glowRadius: 0.03,
+	revealBrightness: 1.18,
+	revealContrast: 1.12,
 	chromaStrength: 0.14,
 	grainStrength: 0.08,
 	grainScale: 88
 };
 
 export const hero3dParams: Hero3DParams = $state({ ...defaultHero3DParams });
+export const hero3dRuntime = $state({
+	renderKey: 'hero3d-initial'
+});
 
 function createHero3dPreset(
 	id: string,
@@ -97,6 +112,8 @@ export const hero3dPresets: Hero3DPreset[] = [
 			revealRadius: 0.28,
 			revealSoftness: 0.05,
 			revealOpacity: 1,
+			cursorWidth: 1.08,
+			cursorHeight: 1.08,
 			pixelSize: 0.42,
 			pixelHardness: 0.82,
 			pixelScatter: 0.52,
@@ -116,6 +133,8 @@ export const hero3dPresets: Hero3DPreset[] = [
 			fadeSoftness: 0.36,
 			glowStrength: 0.14,
 			glowRadius: 0.05,
+			revealBrightness: 1.32,
+			revealContrast: 1.28,
 			chromaStrength: 0.32,
 			grainStrength: 0.12,
 			grainScale: 110
@@ -129,6 +148,9 @@ export const hero3dPresets: Hero3DPreset[] = [
 			revealRadius: 0.32,
 			revealSoftness: 0.12,
 			revealOpacity: 0.88,
+			cursorShape: 'circle',
+			cursorWidth: 1.16,
+			cursorHeight: 1.16,
 			pixelSize: 0.58,
 			pixelHardness: 0.58,
 			pixelScatter: 0.18,
@@ -148,6 +170,8 @@ export const hero3dPresets: Hero3DPreset[] = [
 			fadeSoftness: 0.74,
 			glowStrength: 0.02,
 			glowRadius: 0.01,
+			revealBrightness: 1.12,
+			revealContrast: 0.96,
 			chromaStrength: 0.04,
 			grainStrength: 0.04,
 			grainScale: 72
@@ -161,6 +185,8 @@ export const hero3dPresets: Hero3DPreset[] = [
 			revealRadius: 0.22,
 			revealSoftness: 0.04,
 			revealOpacity: 0.96,
+			cursorWidth: 0.82,
+			cursorHeight: 0.82,
 			pixelSize: 0.24,
 			pixelHardness: 0.97,
 			pixelScatter: 0.96,
@@ -180,6 +206,8 @@ export const hero3dPresets: Hero3DPreset[] = [
 			fadeSoftness: 0.22,
 			glowStrength: 0.08,
 			glowRadius: 0.02,
+			revealBrightness: 1.24,
+			revealContrast: 1.34,
 			chromaStrength: 0.22,
 			grainStrength: 0.16,
 			grainScale: 132
@@ -193,6 +221,9 @@ export const hero3dPresets: Hero3DPreset[] = [
 			revealRadius: 0.3,
 			revealSoftness: 0.09,
 			revealOpacity: 0.9,
+			cursorShape: 'circle',
+			cursorWidth: 1.04,
+			cursorHeight: 0.88,
 			pixelSize: 0.46,
 			pixelHardness: 0.76,
 			pixelScatter: 0.3,
@@ -212,9 +243,83 @@ export const hero3dPresets: Hero3DPreset[] = [
 			fadeSoftness: 0.62,
 			glowStrength: 0.03,
 			glowRadius: 0.02,
+			revealBrightness: 1.16,
+			revealContrast: 1.08,
 			chromaStrength: 0.08,
 			grainStrength: 0.06,
 			grainScale: 96
+		}
+	),
+	createHero3dPreset(
+		'spotlight-bloom',
+		'Spotlight Bloom',
+		'Round reveal with a brighter day image and softer motion falloff.',
+		{
+			revealRadius: 0.27,
+			revealSoftness: 0.1,
+			revealOpacity: 0.98,
+			cursorShape: 'circle',
+			cursorWidth: 1.18,
+			cursorHeight: 1.18,
+			pixelSize: 0.34,
+			pixelHardness: 0.7,
+			pixelScatter: 0.14,
+			rippleStrength: 0.2,
+			bounceStrength: 0.14,
+			glowStrength: 0.03,
+			glowRadius: 0.04,
+			revealBrightness: 1.42,
+			revealContrast: 1.08,
+			chromaStrength: 0.05
+		}
+	),
+	createHero3dPreset(
+		'viewport-scan',
+		'Viewport Scan',
+		'Wide rectangular cursor that sweeps bright contrast across the painting.',
+		{
+			revealRadius: 0.23,
+			revealSoftness: 0.05,
+			revealOpacity: 1,
+			cursorWidth: 1.46,
+			cursorHeight: 0.52,
+			pixelSize: 0.22,
+			pixelHardness: 0.96,
+			pixelScatter: 0.42,
+			rippleStrength: 0.3,
+			bounceStrength: 0.24,
+			fadeStrength: 0.16,
+			glowStrength: 0.01,
+			glowRadius: 0,
+			revealBrightness: 1.34,
+			revealContrast: 1.42,
+			chromaStrength: 0.1,
+			grainStrength: 0.05
+		}
+	),
+	createHero3dPreset(
+		'poster-pop',
+		'Poster Pop',
+		'Chunky square cursor with taller proportions and high-contrast posterized energy.',
+		{
+			revealRadius: 0.26,
+			revealSoftness: 0.04,
+			revealOpacity: 1,
+			cursorWidth: 0.72,
+			cursorHeight: 1.18,
+			pixelSize: 0.3,
+			pixelHardness: 0.98,
+			pixelScatter: 0.58,
+			rippleStrength: 0.4,
+			bounceStrength: 0.32,
+			fadeStrength: 0.12,
+			fadeSoftness: 0.28,
+			glowStrength: 0.02,
+			glowRadius: 0.01,
+			revealBrightness: 1.26,
+			revealContrast: 1.5,
+			chromaStrength: 0.18,
+			grainStrength: 0.1
 		}
 	)
 ];
@@ -227,6 +332,7 @@ export function applyHero3dPreset(id: string) {
 	const preset = getHero3dPreset(id);
 	if (!preset) return;
 	Object.assign(hero3dParams, preset.params);
+	refreshHero3dEffect();
 }
 
 export function isHero3dPresetActive(params: Hero3DParams, presetId: string): boolean {
@@ -258,7 +364,7 @@ export function mergeHero3dProps(overrides: Partial<Hero3DParams>): Hero3DParams
 	const result = { ...getHero3dParamsSnapshot() };
 	for (const key of Object.keys(result) as (keyof Hero3DParams)[]) {
 		const value = overrides[key];
-		if (value !== undefined) result[key] = value;
+		if (value !== undefined) result[key] = value as never;
 	}
 	return result;
 }
@@ -266,6 +372,10 @@ export function mergeHero3dProps(overrides: Partial<Hero3DParams>): Hero3DParams
 export function setHero3dParams(next: Partial<Hero3DParams>) {
 	for (const key of Object.keys(defaultHero3DParams) as (keyof Hero3DParams)[]) {
 		const value = next[key];
-		if (value !== undefined) hero3dParams[key] = value;
+		if (value !== undefined) hero3dParams[key] = value as never;
 	}
+}
+
+export function refreshHero3dEffect() {
+	hero3dRuntime.renderKey = crypto.randomUUID();
 }

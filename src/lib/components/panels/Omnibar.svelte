@@ -115,6 +115,14 @@
 					description: 'My favorite Pokémon',
 					icon: 'feature'
 				});
+			} else if (item.kind === 'this-site') {
+				result.push({
+					id: 'this-site',
+					kind: 'this-site',
+					label: 'This Site',
+					description: 'How this homepage is built',
+					icon: 'feature'
+				});
 			} else if (item.kind === 'top-languages') {
 				result.push({
 					id: 'top-languages',

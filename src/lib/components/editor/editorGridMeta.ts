@@ -24,6 +24,8 @@ export function getEditorGridItemLabel(item: GridItem): string {
 			return 'Disco Block';
 		case 'home':
 			return 'Home Block';
+		case 'this-site':
+			return 'This Site';
 		case 'location':
 			return 'Location Block';
 		case 'pokemon':
@@ -51,6 +53,8 @@ export function getEditorGridItemIcon(item: GridItem): string {
 			return '🪩';
 		case 'home':
 			return '🏠';
+		case 'this-site':
+			return '🛠️';
 		case 'location':
 			return '📍';
 		case 'pokemon':
@@ -78,6 +82,8 @@ export function getEditorGridItemColor(item: GridItem): string {
 			return 'var(--color-pink-500, #ec4899)';
 		case 'home':
 			return 'var(--color-emerald-500, #10b981)';
+		case 'this-site':
+			return 'hsl(39, 100%, 77%)';
 		case 'location':
 			return 'var(--color-teal-500, #14b8a6)';
 		case 'pokemon':

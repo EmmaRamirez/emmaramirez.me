@@ -3,7 +3,11 @@
 	import { dndzone, type DndEvent } from 'svelte-dnd-action';
 	import { fetchPokemonDetails } from '$lib/api/pokemon';
 	import type { GridItem } from '$lib/types/homepage';
-	import { getDisco, type DiscoRegistryEntry } from '$lib/registry/homepage';
+	import {
+		getDisco,
+		type DiscoRegistryEntry,
+		type ProjectRegistryEntry
+	} from '$lib/registry/homepage';
 	import { buildHomepageGridItems } from '$lib/registry/gridItems';
 	import type { Pokemon } from '$lib/website.config';
 	import { discoParams, type DiscoParams } from '$lib/stores/discoParams.svelte';
@@ -31,6 +35,7 @@
 		LocationBlock,
 		PokemonBlock,
 		ProjectBlock,
+		ThisSiteBlock,
 		TopLanguages,
 		DesignSystemAd,
 		CityCard
@@ -48,9 +53,23 @@
 		trackedFetch
 	} from '$lib/stores/performanceAnalytics.svelte';
 
+	interface Props {
+		articles: Array<{
+			id: string;
+			slug: string;
+			title: string;
+			content: string;
+			date?: string;
+			tags?: string[];
+		}>;
+		projects: Array<ProjectRegistryEntry & { excerpt?: string; content: string; updatedAt?: string | null }>;
+	}
+
+	let { articles, projects }: Props = $props();
+
 	const disco: DiscoRegistryEntry = getDisco();
 
-	const gridItems = buildHomepageGridItems({ includeApiExplorer: false });
+	const gridItems = $derived(buildHomepageGridItems({ includeApiExplorer: false, articles, projects }));
 
 	interface DndItem {
 		id: string;
@@ -97,6 +116,11 @@
 			dragMeasureId = null;
 			unsubscribe();
 		};
+	});
+
+	$effect(() => {
+		void gridItems;
+		updateDndItems();
 	});
 
 	function updateDndItems() {
@@ -542,6 +566,8 @@
 								/>
 							{:else if item.kind === 'home'}
 								<HomeBlock class="h-full w-full" />
+							{:else if item.kind === 'this-site'}
+								<ThisSiteBlock class="h-full w-full" />
 							{:else if item.kind === 'location'}
 								<LocationBlock class="h-full w-full" />
 							{:else if item.kind === 'city'}

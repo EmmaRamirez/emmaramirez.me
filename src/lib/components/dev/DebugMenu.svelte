@@ -3,10 +3,12 @@
 	import { discoParams, type DiscoParams } from '$lib/stores/discoParams.svelte';
 	import { showSections } from '$lib/stores';
 	import {
+		applyHero3dPreset,
 		hero3dPresets,
 		getHero3dParamsSnapshot,
 		hero3dParams,
 		isHero3dPresetActive,
+		type Hero3DCursorShape,
 		type Hero3DParams
 	} from '$lib/stores/hero3dParams.svelte';
 	import { browser } from '$app/environment';
@@ -45,6 +47,10 @@
 		{ value: 'color', label: 'Color' },
 		{ value: 'luminosity', label: 'Luminosity' }
 	];
+	const cursorShapeOptions: { value: Hero3DCursorShape; label: string }[] = [
+		{ value: 'square', label: 'Square' },
+		{ value: 'circle', label: 'Circle' }
+	];
 
 	let hero = $state({ ...getHero3dParamsSnapshot() });
 	let sampleHistorySize = $state(discoParams.sampleHistorySize);
@@ -79,8 +85,9 @@
 		}
 	}));
 
-	function applyHeroPreset(params: Hero3DParams) {
+	function applyHeroPreset(presetId: string, params: Hero3DParams) {
 		Object.assign(hero, params);
+		applyHero3dPreset(presetId);
 	}
 
 	onMount(() => {
@@ -223,12 +230,12 @@
 						{#each hero3dPresets as preset (preset.id)}
 							<button
 								type="button"
-								class={`rounded-md border p-3 text-left transition ${
+								class={`cursor-pointer rounded-md border p-3 text-left transition ${
 									activeHeroPresetId === preset.id
 										? 'border-[color:var(--lawn-green-500)] bg-[color:color-mix(in_srgb,var(--lawn-green-500)_12%,transparent)]'
 										: 'border-(--border-color) bg-black/10 hover:border-(--text-secondary) hover:bg-black/16'
 								}`}
-								onclick={() => applyHeroPreset(preset.params)}
+								onclick={() => applyHeroPreset(preset.id, preset.params)}
 							>
 								<div class="mb-1 flex items-center justify-between gap-2">
 									<span class="text-sm font-semibold text-(--text-primary)">{preset.name}</span>
@@ -236,9 +243,6 @@
 										<span class="text-[0.65rem] font-semibold text-(--lawn-green-500)">Selected</span>
 									{/if}
 								</div>
-								<p class="text-xs leading-relaxed text-(--text-secondary)">
-									{preset.description}
-								</p>
 							</button>
 						{/each}
 					</div>
@@ -249,6 +253,13 @@
 						Reveal
 					</p>
 					<div class="grid grid-cols-2 gap-x-4 gap-y-3">
+						<div class="col-span-2">
+							<Select
+								label="Cursor Shape"
+								bind:value={hero.cursorShape}
+								options={cursorShapeOptions}
+							/>
+						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
 								Reveal Radius: {hero.revealRadius.toFixed(2)}
@@ -266,6 +277,18 @@
 								Reveal Opacity: {hero.revealOpacity.toFixed(2)}
 							</span>
 							<Slider bind:value={hero.revealOpacity} min={0} max={1} step={0.01} showValue={false} />
+						</div>
+						<div>
+							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
+								Cursor Width: {hero.cursorWidth.toFixed(2)}
+							</span>
+							<Slider bind:value={hero.cursorWidth} min={0.25} max={2} step={0.01} showValue={false} />
+						</div>
+						<div>
+							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
+								Cursor Height: {hero.cursorHeight.toFixed(2)}
+							</span>
+							<Slider bind:value={hero.cursorHeight} min={0.25} max={2} step={0.01} showValue={false} />
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
@@ -418,6 +441,30 @@
 								Glow Radius: {hero.glowRadius.toFixed(2)}
 							</span>
 							<Slider bind:value={hero.glowRadius} min={0} max={0.35} step={0.01} showValue={false} />
+						</div>
+						<div>
+							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
+								Reveal Brightness: {hero.revealBrightness.toFixed(2)}
+							</span>
+							<Slider
+								bind:value={hero.revealBrightness}
+								min={0.5}
+								max={1.8}
+								step={0.01}
+								showValue={false}
+							/>
+						</div>
+						<div>
+							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">
+								Reveal Contrast: {hero.revealContrast.toFixed(2)}
+							</span>
+							<Slider
+								bind:value={hero.revealContrast}
+								min={0.5}
+								max={1.8}
+								step={0.01}
+								showValue={false}
+							/>
 						</div>
 						<div>
 							<span class="mb-1 block text-xs font-medium text-(--text-secondary)">

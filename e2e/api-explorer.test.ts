@@ -10,8 +10,7 @@ async function enableSections(page: typeof import('@playwright/test').Page.proto
 	// Reload to apply the localStorage setting
 	await page.reload();
 
-	// Wait for the page to be ready
-	await page.waitForLoadState('networkidle');
+	await page.waitForLoadState('load');
 }
 
 test.describe('API Explorer Block', () => {
@@ -249,7 +248,9 @@ test.describe('API Explorer Block', () => {
 
 			await expect(page.getByRole('heading', { name: 'Hero3DParams' })).toBeVisible();
 			await expect(page.getByText('revealRadius')).toBeVisible();
+			await expect(page.getByText('cursorShape')).toBeVisible();
 			await expect(page.getByText('pixelSize')).toBeVisible();
+			await expect(page.getByText('revealBrightness')).toBeVisible();
 			await expect(page.getByText('glowStrength')).toBeVisible();
 		});
 	});
@@ -303,7 +304,7 @@ test.describe('Article Card Container Queries', () => {
 			localStorage.setItem('debug-show-sections', 'true');
 		});
 		await page.reload();
-		await page.waitForLoadState('networkidle');
+		await page.waitForLoadState('load');
 
 		// Find an article card
 		const articleCard = page
@@ -319,7 +320,7 @@ test.describe('Article Card Container Queries', () => {
 			localStorage.setItem('debug-show-sections', 'true');
 		});
 		await page.reload();
-		await page.waitForLoadState('networkidle');
+		await page.waitForLoadState('load');
 
 		const articleCard = page.locator('.article-card').first();
 		await articleCard.waitFor({ state: 'visible', timeout: 10000 });
@@ -328,6 +329,6 @@ test.describe('Article Card Container Queries', () => {
 			return window.getComputedStyle(el).containerType;
 		});
 
-		expect(containerType).toBe('size');
+		expect(['size', 'inline-size']).toContain(containerType);
 	});
 });

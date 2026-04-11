@@ -78,6 +78,57 @@ export type AnalyticsTimelineEvent =
 	| VitalMetricEvent
 	| PaintMetricEvent;
 
+export type PersistedAnalyticsEvent = {
+	id: string;
+	sessionId: string;
+	route: string | null;
+	kind: string;
+	name: string;
+	source: string | null;
+	method: string | null;
+	url: string | null;
+	status: number | null;
+	ok: boolean | null;
+	duration: number | null;
+	value: number | null;
+	unit: string | null;
+	rating: string | null;
+	navigationType: string | null;
+	fromRoute: string | null;
+	detail: string | null;
+	clientTimestamp: string;
+	createdAt: string;
+};
+
+export type PersistedAnalyticsSummary = {
+	totalPersistedEvents: number;
+	recentEventCount: number;
+	sessionCount: number;
+	lastIngestedAt: string | null;
+	summary: {
+		pageCount: number;
+		networkCount: number;
+		networkErrors: number;
+		averagePageDuration: number;
+		averageInteractionDuration: number;
+		averageRenderDuration: number;
+		p95NetworkDuration: number;
+	};
+	slowestRoutes: PersistedAnalyticsEvent[];
+	slowestRequests: PersistedAnalyticsEvent[];
+	slowestInteractions: PersistedAnalyticsEvent[];
+	slowestRenders: PersistedAnalyticsEvent[];
+	vitals: PersistedAnalyticsEvent[];
+	recentEvents: PersistedAnalyticsEvent[];
+};
+
+export type PersistenceStatus = {
+	state: 'idle' | 'syncing' | 'ready' | 'error';
+	lastSyncedAt: number | null;
+	lastError: string | null;
+	pendingCount: number;
+};
+
 type AnalyticsState = {
 	sessionStartedAt: number;
 	currentRoute: string;
@@ -112,20 +163,34 @@ type ActiveMeasure = {
 export type TrackedFetchMeta = {
 	label?: string;
 	source?: string;
+	skipTracking?: boolean;
 };
 
 const STORAGE_KEY = 'emzinnia:dev-performance-analytics';
+const SESSION_KEY = 'emzinnia:dev-performance-session-id';
 const MAX_PAGE_EVENTS = 40;
 const MAX_NETWORK_EVENTS = 80;
 const MAX_INTERACTION_EVENTS = 80;
 const MAX_RENDER_EVENTS = 80;
 const MAX_VITAL_EVENTS = 40;
 const MAX_PAINT_EVENTS = 20;
+const FLUSH_BATCH_SIZE = 20;
+const FLUSH_DELAY_MS = 2500;
 
 const activeMeasures = new Map<string, ActiveMeasure>();
 let isInitialized = false;
 let observerCleanup: Array<() => void> = [];
 let clsValue = 0;
+let sessionId = '';
+let persistenceQueue: AnalyticsTimelineEvent[] = [];
+let flushTimeout: ReturnType<typeof setTimeout> | null = null;
+let persistedSummary = $state<PersistedAnalyticsSummary | null>(null);
+let persistenceStatus = $state<PersistenceStatus>({
+	state: 'idle',
+	lastSyncedAt: null,
+	lastError: null,
+	pendingCount: 0
+});
 
 function now() {
 	return browser ? performance.now() : 0;
@@ -141,6 +206,17 @@ function createId() {
 	}
 
 	return `perf-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function createSessionId() {
+	if (!analyticsEnabled()) return 'analytics-disabled';
+
+	const existing = sessionStorage.getItem(SESSION_KEY);
+	if (existing) return existing;
+
+	const next = createId();
+	sessionStorage.setItem(SESSION_KEY, next);
+	return next;
 }
 
 function createDefaultState(): AnalyticsState {
@@ -208,6 +284,163 @@ function persistState() {
 	}
 }
 
+function scheduleFlush() {
+	if (!analyticsEnabled() || flushTimeout) return;
+
+	flushTimeout = setTimeout(() => {
+		flushTimeout = null;
+		void flushPersistedEvents();
+	}, FLUSH_DELAY_MS);
+}
+
+function toPersistedPayload(event: AnalyticsTimelineEvent) {
+	switch (event.kind) {
+		case 'page':
+			return {
+				id: event.id,
+				kind: event.kind,
+				name: event.name,
+				route: event.route,
+				navigationType: event.navigationType,
+				from: event.from,
+				duration: event.duration,
+				timestamp: event.timestamp
+			};
+		case 'network':
+			return {
+				id: event.id,
+				kind: event.kind,
+				name: event.name,
+				route: getRoute(),
+				source: event.source,
+				method: event.method,
+				url: event.url,
+				status: event.status,
+				ok: event.ok,
+				duration: event.duration,
+				detail: event.error,
+				timestamp: event.timestamp
+			};
+		case 'interaction':
+		case 'render':
+			return {
+				id: event.id,
+				kind: event.kind,
+				name: event.name,
+				route: getRoute(),
+				source: event.source,
+				duration: event.duration,
+				detail: event.detail,
+				timestamp: event.timestamp
+			};
+		case 'vital':
+			return {
+				id: event.id,
+				kind: event.kind,
+				name: event.name,
+				route: event.route,
+				source: event.source,
+				value: event.value,
+				unit: event.unit,
+				rating: event.rating,
+				timestamp: event.timestamp
+			};
+		case 'paint':
+			return {
+				id: event.id,
+				kind: event.kind,
+				name: event.name,
+				route: event.route,
+				startTime: event.startTime,
+				timestamp: event.timestamp
+			};
+	}
+}
+
+function enqueueForPersistence(event: AnalyticsTimelineEvent) {
+	if (!analyticsEnabled()) return;
+
+	persistenceQueue = [...persistenceQueue, event];
+	persistenceStatus = {
+		...persistenceStatus,
+		pendingCount: persistenceQueue.length
+	};
+
+	if (persistenceQueue.length >= FLUSH_BATCH_SIZE) {
+		void flushPersistedEvents();
+		return;
+	}
+
+	scheduleFlush();
+}
+
+async function readPersistedSummary() {
+	if (!analyticsEnabled()) return null;
+
+	const response = await fetch('/api/performance-analytics');
+	if (!response.ok) {
+		throw new Error(`Summary request failed with ${response.status}`);
+	}
+
+	const payload = (await response.json()) as PersistedAnalyticsSummary;
+	persistedSummary = payload;
+	return payload;
+}
+
+async function flushPersistedEvents() {
+	if (!analyticsEnabled() || persistenceQueue.length === 0) return;
+
+	if (flushTimeout) {
+		clearTimeout(flushTimeout);
+		flushTimeout = null;
+	}
+
+	const batch = persistenceQueue.slice(0, FLUSH_BATCH_SIZE);
+	persistenceStatus = {
+		...persistenceStatus,
+		state: 'syncing',
+		lastError: null,
+		pendingCount: persistenceQueue.length
+	};
+
+	try {
+		const response = await fetch('/api/performance-analytics', {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({
+				sessionId,
+				events: batch.map(toPersistedPayload)
+			})
+		});
+
+		if (!response.ok) {
+			throw new Error(`Persist request failed with ${response.status}`);
+		}
+
+		persistenceQueue = persistenceQueue.slice(batch.length);
+		persistenceStatus = {
+			state: 'ready',
+			lastSyncedAt: Date.now(),
+			lastError: null,
+			pendingCount: persistenceQueue.length
+		};
+
+		await readPersistedSummary();
+
+		if (persistenceQueue.length > 0) {
+			scheduleFlush();
+		}
+	} catch (error) {
+		persistenceStatus = {
+			...persistenceStatus,
+			state: 'error',
+			lastError: error instanceof Error ? error.message : String(error),
+			pendingCount: persistenceQueue.length
+		};
+		scheduleFlush();
+	}
+}
+
 function appendCapped<T>(items: T[], item: T, limit: number) {
 	return [...items, item].slice(-limit);
 }
@@ -246,6 +479,7 @@ function upsertVital(event: VitalMetricEvent) {
 	if (existingIndex === -1) {
 		state.vitalEvents = appendCapped(state.vitalEvents, event, MAX_VITAL_EVENTS);
 		persistState();
+		enqueueForPersistence(event);
 		return;
 	}
 
@@ -253,6 +487,7 @@ function upsertVital(event: VitalMetricEvent) {
 	nextVitals[existingIndex] = event;
 	state.vitalEvents = nextVitals;
 	persistState();
+	enqueueForPersistence(event);
 }
 
 function rateVital(name: string, value: number): AnalyticsRating {
@@ -275,82 +510,74 @@ function rateVital(name: string, value: number): AnalyticsRating {
 function recordPageEvent(route: string, duration: number, meta: MeasureMetadata = {}) {
 	if (!analyticsEnabled()) return;
 
-	state.pageEvents = appendCapped(
-		state.pageEvents,
-		{
-			id: createId(),
-			kind: 'page',
-			route,
-			name: meta.navigationType === 'navigate' ? 'Route transition' : 'Initial page load',
-			navigationType: meta.navigationType ?? 'navigate',
-			duration: round(duration),
-			timestamp: Date.now(),
-			from: meta.from
-		},
-		MAX_PAGE_EVENTS
-	);
+	const event: PageMetricEvent = {
+		id: createId(),
+		kind: 'page',
+		route,
+		name: meta.navigationType === 'navigate' ? 'Route transition' : 'Initial page load',
+		navigationType: meta.navigationType ?? 'navigate',
+		duration: round(duration),
+		timestamp: Date.now(),
+		from: meta.from
+	};
+	state.pageEvents = appendCapped(state.pageEvents, event, MAX_PAGE_EVENTS);
 	persistState();
+	enqueueForPersistence(event);
 }
 
 function recordNetworkEvent(name: string, duration: number, meta: MeasureMetadata = {}) {
 	if (!analyticsEnabled()) return;
 
-	state.networkEvents = appendCapped(
-		state.networkEvents,
-		{
-			id: createId(),
-			kind: 'network',
-			name,
-			url: meta.url ?? name,
-			method: meta.method ?? 'GET',
-			duration: round(duration),
-			status: meta.status ?? null,
-			ok: meta.ok ?? false,
-			timestamp: Date.now(),
-			source: meta.source,
-			error: meta.error
-		},
-		MAX_NETWORK_EVENTS
-	);
+	const event: NetworkMetricEvent = {
+		id: createId(),
+		kind: 'network',
+		name,
+		url: meta.url ?? name,
+		method: meta.method ?? 'GET',
+		duration: round(duration),
+		status: meta.status ?? null,
+		ok: meta.ok ?? false,
+		timestamp: Date.now(),
+		source: meta.source,
+		error: meta.error
+	};
+	state.networkEvents = appendCapped(state.networkEvents, event, MAX_NETWORK_EVENTS);
 	persistState();
+	enqueueForPersistence(event);
 }
 
 function recordInteractionEvent(name: string, duration: number, meta: MeasureMetadata = {}) {
 	if (!analyticsEnabled()) return;
 
-	state.interactionEvents = appendCapped(
-		state.interactionEvents,
-		{
-			id: createId(),
-			kind: 'interaction',
-			name,
-			duration: round(duration),
-			timestamp: Date.now(),
-			source: meta.source,
-			detail: meta.detail
-		},
-		MAX_INTERACTION_EVENTS
-	);
+	const event: InteractionMetricEvent = {
+		id: createId(),
+		kind: 'interaction',
+		name,
+		duration: round(duration),
+		timestamp: Date.now(),
+		source: meta.source,
+		detail: meta.detail
+	};
+	state.interactionEvents = appendCapped(state.interactionEvents, event, MAX_INTERACTION_EVENTS);
 	persistState();
+	enqueueForPersistence(event);
 }
 
 function recordRenderEvent(name: string, duration: number, meta: MeasureMetadata = {}) {
 	if (!analyticsEnabled()) return;
 
-	state.renderEvents = appendCapped(
-		state.renderEvents,
-		{
-			id: createId(),
-			kind: 'render',
-			name,
-			duration: round(duration),
-			timestamp: Date.now(),
-			source: meta.source,
-			detail: meta.detail
-		},
-		MAX_RENDER_EVENTS
-	);
+	const event: RenderMetricEvent = {
+		id: createId(),
+		kind: 'render',
+		name,
+		duration: round(duration),
+		timestamp: Date.now(),
+		source: meta.source,
+		detail: meta.detail
+	};
+	state.renderEvents = appendCapped(state.renderEvents, event, MAX_RENDER_EVENTS);
 	persistState();
+	enqueueForPersistence(event);
 }
 
 function setupObservers() {
@@ -364,18 +591,16 @@ function setupObservers() {
 	if (supported.includes('paint')) {
 		const paintObserver = new PerformanceObserver((list) => {
 			for (const entry of list.getEntries()) {
-				state.paintEvents = appendCapped(
-					state.paintEvents,
-					{
-						id: createId(),
-						kind: 'paint',
-						name: entry.name,
-						startTime: round(entry.startTime),
-						route: getRoute(),
-						timestamp: Date.now()
-					},
-					MAX_PAINT_EVENTS
-				);
+				const event: PaintMetricEvent = {
+					id: createId(),
+					kind: 'paint',
+					name: entry.name,
+					startTime: round(entry.startTime),
+					route: getRoute(),
+					timestamp: Date.now()
+				};
+				state.paintEvents = appendCapped(state.paintEvents, event, MAX_PAINT_EVENTS);
+				enqueueForPersistence(event);
 			}
 			persistState();
 		});
@@ -461,9 +686,25 @@ export const performanceAnalytics = {
 	init() {
 		if (!analyticsEnabled() || isInitialized) return;
 		isInitialized = true;
+		sessionId = createSessionId();
 		setupObservers();
+		void readPersistedSummary()
+			.then(() => {
+				persistenceStatus = {
+					...persistenceStatus,
+					state: 'ready'
+				};
+			})
+			.catch((error) => {
+				persistenceStatus = {
+					...persistenceStatus,
+					state: 'error',
+					lastError: error instanceof Error ? error.message : String(error)
+				};
+			});
 	},
 	destroy() {
+		void flushPersistedEvents();
 		for (const cleanup of observerCleanup) {
 			cleanup();
 		}
@@ -478,6 +719,9 @@ export const performanceAnalytics = {
 	},
 	get currentRoute() {
 		return state.currentRoute;
+	},
+	get sessionId() {
+		return sessionId;
 	},
 	get pageEvents() {
 		return state.pageEvents;
@@ -496,6 +740,12 @@ export const performanceAnalytics = {
 	},
 	get paintEvents() {
 		return [...state.paintEvents].sort((a, b) => b.timestamp - a.timestamp);
+	},
+	get persistedSummary() {
+		return persistedSummary;
+	},
+	get persistenceStatus() {
+		return persistenceStatus;
 	},
 	get timeline() {
 		return [
@@ -607,7 +857,39 @@ export const performanceAnalytics = {
 		};
 		clsValue = 0;
 		activeMeasures.clear();
+		persistenceQueue = [];
+		persistedSummary = null;
+		persistenceStatus = {
+			state: 'idle',
+			lastSyncedAt: null,
+			lastError: null,
+			pendingCount: 0
+		};
 		persistState();
+		void readPersistedSummary().catch(() => {
+			// ignore summary reload failures after local clear
+		});
+	},
+	async refreshPersistedSummary() {
+		try {
+			persistenceStatus = {
+				...persistenceStatus,
+				state: 'syncing',
+				lastError: null
+			};
+			await readPersistedSummary();
+			persistenceStatus = {
+				...persistenceStatus,
+				state: 'ready',
+				lastSyncedAt: persistenceStatus.lastSyncedAt ?? Date.now()
+			};
+		} catch (error) {
+			persistenceStatus = {
+				...persistenceStatus,
+				state: 'error',
+				lastError: error instanceof Error ? error.message : String(error)
+			};
+		}
 	}
 };
 
@@ -619,7 +901,7 @@ function getFetchName(input: RequestInfo | URL, label?: string) {
 }
 
 export async function trackedFetch(input: RequestInfo | URL, init?: RequestInit, meta: TrackedFetchMeta = {}) {
-	if (!analyticsEnabled()) {
+	if (!analyticsEnabled() || meta.skipTracking) {
 		return fetch(input, init);
 	}
 

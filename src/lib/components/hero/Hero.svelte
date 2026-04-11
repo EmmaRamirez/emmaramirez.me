@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import painting from '$lib/images/photos/emma-painting-full.jpeg';
-	import { mergeHero3dProps, type Hero3DParams } from '$lib/stores/hero3dParams.svelte';
+	import {
+		hero3dRuntime,
+		mergeHero3dProps,
+		type Hero3DParams
+	} from '$lib/stores/hero3dParams.svelte';
 	import Hero3D from './Hero3D.svelte';
 
 	type Hero3DPropOverrides = Partial<Hero3DParams>;
@@ -11,6 +15,9 @@
 		revealRadius,
 		revealSoftness,
 		revealOpacity,
+		cursorShape,
+		cursorWidth,
+		cursorHeight,
 		pixelSize,
 		pixelHardness,
 		pixelScatter,
@@ -31,6 +38,8 @@
 		fadeSoftness,
 		glowStrength,
 		glowRadius,
+		revealBrightness,
+		revealContrast,
 		chromaStrength,
 		grainStrength,
 		grainScale
@@ -41,6 +50,9 @@
 			revealRadius,
 			revealSoftness,
 			revealOpacity,
+			cursorShape,
+			cursorWidth,
+			cursorHeight,
 			pixelSize,
 			pixelHardness,
 			pixelScatter,
@@ -61,11 +73,14 @@
 			fadeSoftness,
 			glowStrength,
 			glowRadius,
+			revealBrightness,
+			revealContrast,
 			chromaStrength,
 			grainStrength,
 			grainScale
 		})
 	);
+	const heroRenderKey = $derived(hero3dRuntime.renderKey);
 
 	let windowWidth = $state(browser ? window.innerWidth : 0);
 	const isMobile = $derived(browser && windowWidth < 768);
@@ -77,7 +92,9 @@
 	<div class="hero-media" aria-hidden="true">
 		{#if !isMobile && browser}
 			<div class="hero-3d-wrapper">
-				<Hero3D sceneParams={sceneParams} />
+				{#key heroRenderKey}
+					<Hero3D sceneParams={sceneParams} resetKey={heroRenderKey} />
+				{/key}
 			</div>
 		{:else}
 			<img

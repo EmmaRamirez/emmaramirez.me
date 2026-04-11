@@ -14,6 +14,8 @@ npm install
 cp .env.example .env   # then edit DATABASE_URL if you need the database
 ```
 
+For local development, `DATABASE_URL` can point at your local Postgres instance. For production, the simplest setup is a hosted Postgres provider like Neon.
+
 ## Scripts
 
 | Command            | Description                                      |
@@ -26,6 +28,17 @@ cp .env.example .env   # then edit DATABASE_URL if you need the database
 | `npm run test:unit`| Vitest only                                      |
 | `npm run test:e2e` | Playwright only                                  |
 | `npm run lint`     | Prettier + ESLint                                |
+| `npm run db:deploy`| Apply committed Prisma migrations                |
+
+## Deploying With Vercel
+
+Recommended setup:
+
+1. Create a hosted Postgres database, for example on [Neon](https://neon.tech/).
+2. Add `DATABASE_URL` to Vercel project environment variables.
+3. Set the Vercel build command to `npm run db:deploy && npm run build`.
+
+This repo now runs `prisma generate` automatically during install so the generated Prisma client exists before the Vite build runs on Vercel.
 
 ## AI / contributors
 

@@ -67,9 +67,7 @@ test.describe('Visitor review surfaces', () => {
 			}
 		});
 
-		await page.goto('/editor');
-		await page.locator('nav[aria-label="Editor sections"]').getByRole('button', { name: 'Visitors' }).click();
-
+		await page.goto('/editor/visitors');
 		await expect(page.getByRole('heading', { name: 'Visitors' })).toBeVisible();
 		const visitorRow = page.getByRole('row').filter({ hasText: visitorName });
 		await expect(visitorRow).toBeVisible();

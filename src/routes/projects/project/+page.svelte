@@ -2,19 +2,16 @@
 	import { headerColor, title } from '$lib/stores';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import { ThemeToggle } from '$lib/components/ui';
-	import { getProject, getProjectNeighbors, type ProjectId } from '$lib/registry/homepage';
+	import { markdownToPlainText, renderMarkdownToHtml } from '$lib/markdown';
 	import { readingTimeMinutesFromText } from '$lib/reading';
 	import { dev } from '$app/environment';
 	import { fade, fly } from 'svelte/transition';
-	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
-	const projectId = $derived(($page.url.searchParams.get('id') ?? 'nuzlocke') as ProjectId);
-	const project = $derived(getProject(projectId) ?? getProject('nuzlocke'));
-
-	const projectNeighbors = $derived(getProjectNeighbors(projectId));
-	const prevProject = $derived(projectNeighbors.prevProject);
-	const nextProject = $derived(projectNeighbors.nextProject);
+	let { data }: import('./$types').PageProps = $props();
+	const project = $derived(data.project);
+	const prevProject = $derived(data.prevProject);
+	const nextProject = $derived(data.nextProject);
 
 	$effect(() => {
 		title.set(`projects/${project.title}`);
@@ -37,7 +34,8 @@
 		return () => window.removeEventListener('scroll', handleScroll);
 	});
 
-	const readingTime = $derived(readingTimeMinutesFromText(project.content));
+	const readingTime = $derived(readingTimeMinutesFromText(markdownToPlainText(project.content)));
+	const projectHtml = $derived(renderMarkdownToHtml(project.content));
 
 	function getStatusLabel(status: string | undefined): string {
 		switch (status) {
@@ -236,9 +234,7 @@
 
 		{#if project.content}
 			<div class="project-content prose-custom" in:fly={{ y: 20, duration: 400, delay: 200 }}>
-				{#each project.content.split('\n\n') as paragraph, i (i)}
-					<p class:first-paragraph={i === 0}>{paragraph}</p>
-				{/each}
+				{@html projectHtml}
 			</div>
 		{/if}
 
@@ -413,11 +409,11 @@
 		color: var(--text-secondary);
 	}
 
-	.prose-custom p {
+	.prose-custom :global(p) {
 		margin-bottom: 1.5rem;
 	}
 
-	.first-paragraph::first-letter {
+	.prose-custom :global(p:first-of-type)::first-letter {
 		float: left;
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 3.5rem;
@@ -426,5 +422,50 @@
 		padding-top: 0.25rem;
 		color: var(--text-primary);
 		font-weight: 700;
+	}
+
+	.prose-custom :global(h2),
+	.prose-custom :global(h3) {
+		font-family: 'Source Serif 4', serif;
+		color: var(--text-primary);
+		margin-top: 2.5rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.prose-custom :global(ul),
+	.prose-custom :global(ol) {
+		margin: 1.5rem 0;
+		padding-left: 1.5rem;
+	}
+
+	.prose-custom :global(li) {
+		margin-bottom: 0.5rem;
+	}
+
+	.prose-custom :global(pre) {
+		margin: 1.5rem 0;
+		padding: 1rem 1.25rem;
+		background: var(--page-bg-subtle);
+		border-radius: 0.5rem;
+		overflow-x: auto;
+	}
+
+	.prose-custom :global(code) {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.9em;
+		padding: 0.12rem 0.35rem;
+		background: var(--page-bg-subtle);
+		border-radius: 0.25rem;
+	}
+
+	.prose-custom :global(pre code) {
+		padding: 0;
+		background: transparent;
+	}
+
+	.prose-custom :global(a) {
+		color: var(--text-primary);
+		text-decoration: underline;
+		text-underline-offset: 0.1875rem;
 	}
 </style>

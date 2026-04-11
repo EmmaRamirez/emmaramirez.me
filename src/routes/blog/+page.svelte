@@ -7,9 +7,6 @@
 		type BlogTagView
 	} from '$lib/stores/userSettings.svelte';
 	import {
-		getArticleMetas,
-		getAllTags,
-		getTagGraph,
 		type ArticleMeta,
 		type TagGraphLink,
 		type TagGraphNode
@@ -61,14 +58,16 @@
 
 	type TagNavigationScope = 'flat' | 'web';
 
+	let { data }: import('./$types').PageProps = $props();
+
 	const allTagValue = '__all__';
 
 	title.set('blog');
 	headerColor.set('var(--page-bg-subtle)');
 
-	const articles = getArticleMetas();
-	const allTags = getAllTags();
-	const tagGraph = getTagGraph();
+	const articles = $derived(data.articles);
+	const allTags = $derived(data.allTags);
+	const tagGraph = $derived(data.tagGraph);
 	let manualSelectedArticleSlug = $state<string | null>(null);
 
 	function getSelectedTagFromUrl() {

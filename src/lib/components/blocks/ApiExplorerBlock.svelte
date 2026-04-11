@@ -52,6 +52,9 @@
 			revealRadius: 'number',
 			revealSoftness: 'number',
 			revealOpacity: 'number',
+			cursorShape: 'square | circle',
+			cursorWidth: 'number',
+			cursorHeight: 'number',
 			pixelSize: 'number',
 			pixelHardness: 'number',
 			pixelScatter: 'number',
@@ -72,6 +75,8 @@
 			fadeSoftness: 'number',
 			glowStrength: 'number',
 			glowRadius: 'number',
+			revealBrightness: 'number',
+			revealContrast: 'number',
 			chromaStrength: 'number',
 			grainStrength: 'number',
 			grainScale: 'number'

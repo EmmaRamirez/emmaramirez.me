@@ -2,7 +2,11 @@ import { json } from '@sveltejs/kit';
 import type { Prisma } from '$generated/prisma/client';
 import { defaultDiscoParams, type DiscoParams } from '$lib/registry/discoParams';
 import { prisma } from '$lib/server/prisma';
-import { defaultHero3DParams, type Hero3DParams } from '$lib/stores/hero3dParams.svelte';
+import {
+	defaultHero3DParams,
+	type Hero3DCursorShape,
+	type Hero3DParams
+} from '$lib/stores/hero3dParams.svelte';
 
 const SETTINGS_KEY = 'default';
 const DISCO_PARAMS_KEY = '__discoParams';
@@ -26,6 +30,11 @@ function readNumber(record: Record<string, unknown>, key: string, fallback: numb
 	return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 }
 
+function readCursorShape(record: Record<string, unknown>, key: string, fallback: Hero3DCursorShape) {
+	const value = record[key];
+	return value === 'square' || value === 'circle' ? value : fallback;
+}
+
 function normalizeHero3DParams(value: unknown): Hero3DParamsPayload {
 	const record = isRecord(value) ? value : {};
 
@@ -33,6 +42,9 @@ function normalizeHero3DParams(value: unknown): Hero3DParamsPayload {
 		revealRadius: readNumber(record, 'revealRadius', defaultHero3DParams.revealRadius),
 		revealSoftness: readNumber(record, 'revealSoftness', defaultHero3DParams.revealSoftness),
 		revealOpacity: readNumber(record, 'revealOpacity', defaultHero3DParams.revealOpacity),
+		cursorShape: readCursorShape(record, 'cursorShape', defaultHero3DParams.cursorShape),
+		cursorWidth: readNumber(record, 'cursorWidth', defaultHero3DParams.cursorWidth),
+		cursorHeight: readNumber(record, 'cursorHeight', defaultHero3DParams.cursorHeight),
 		pixelSize: readNumber(record, 'pixelSize', defaultHero3DParams.pixelSize),
 		pixelHardness: readNumber(record, 'pixelHardness', defaultHero3DParams.pixelHardness),
 		pixelScatter: readNumber(record, 'pixelScatter', defaultHero3DParams.pixelScatter),
@@ -61,6 +73,12 @@ function normalizeHero3DParams(value: unknown): Hero3DParamsPayload {
 		fadeSoftness: readNumber(record, 'fadeSoftness', defaultHero3DParams.fadeSoftness),
 		glowStrength: readNumber(record, 'glowStrength', defaultHero3DParams.glowStrength),
 		glowRadius: readNumber(record, 'glowRadius', defaultHero3DParams.glowRadius),
+		revealBrightness: readNumber(
+			record,
+			'revealBrightness',
+			defaultHero3DParams.revealBrightness
+		),
+		revealContrast: readNumber(record, 'revealContrast', defaultHero3DParams.revealContrast),
 		chromaStrength: readNumber(record, 'chromaStrength', defaultHero3DParams.chromaStrength),
 		grainStrength: readNumber(record, 'grainStrength', defaultHero3DParams.grainStrength),
 		grainScale: readNumber(record, 'grainScale', defaultHero3DParams.grainScale)
@@ -156,6 +174,9 @@ export const PUT = async ({ request }) => {
 			revealRadius: hero3dParams.revealRadius,
 			revealSoftness: hero3dParams.revealSoftness,
 			revealOpacity: hero3dParams.revealOpacity,
+			cursorShape: hero3dParams.cursorShape,
+			cursorWidth: hero3dParams.cursorWidth,
+			cursorHeight: hero3dParams.cursorHeight,
 			pixelSize: hero3dParams.pixelSize,
 			pixelHardness: hero3dParams.pixelHardness,
 			pixelScatter: hero3dParams.pixelScatter,
@@ -176,6 +197,8 @@ export const PUT = async ({ request }) => {
 			fadeSoftness: hero3dParams.fadeSoftness,
 			glowStrength: hero3dParams.glowStrength,
 			glowRadius: hero3dParams.glowRadius,
+			revealBrightness: hero3dParams.revealBrightness,
+			revealContrast: hero3dParams.revealContrast,
 			chromaStrength: hero3dParams.chromaStrength,
 			grainStrength: hero3dParams.grainStrength,
 			grainScale: hero3dParams.grainScale,

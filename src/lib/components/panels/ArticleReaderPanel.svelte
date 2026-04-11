@@ -1,22 +1,36 @@
 <script lang="ts">
-	import { getArticleBySlug, getArticleNeighbors, type ArticleFull } from '$lib/articles';
+	import { getArticleBySlug, type ArticleFull } from '$lib/articles';
 	import { formatLongDate } from '$lib/utils';
 	import { fly, fade } from 'svelte/transition';
+	import { orderedListNeighbors } from '$lib/reading';
+
+	type ArticlePanelRecord = {
+		slug: string;
+		title: string;
+		date?: string;
+		tags?: string[];
+		readingTimeMinutes?: number;
+	};
 
 	interface ArticleReaderPanelProps {
 		open?: boolean;
 		articleSlug?: string | null;
+		articles: ArticlePanelRecord[];
 		onclose?: () => void;
 		onnavigate?: (articleSlug: string) => void;
 	}
 
-	let { open = false, articleSlug = null, onclose, onnavigate }: ArticleReaderPanelProps = $props();
+	let { open = false, articleSlug = null, articles, onclose, onnavigate }: ArticleReaderPanelProps =
+		$props();
 
-	const article = $derived<ArticleFull | null>(
+	const articleBody = $derived<ArticleFull | null>(
 		articleSlug ? (getArticleBySlug(articleSlug) ?? null) : null
 	);
+	const article = $derived(
+		articleSlug ? (articles.find((entry) => entry.slug === articleSlug) ?? null) : null
+	);
 
-	const articleNeighbors = $derived(getArticleNeighbors(articleSlug));
+	const articleNeighbors = $derived(orderedListNeighbors(articles, articleSlug, (entry) => entry.slug));
 	const prevArticle = $derived(articleNeighbors.prev);
 	const nextArticle = $derived(articleNeighbors.next);
 
@@ -41,8 +55,8 @@
 				return;
 			}
 			event.preventDefault();
-			if (article) {
-				window.location.href = `/blog/${article.slug}`;
+			if (articleBody) {
+				window.location.href = `/blog/${articleBody.slug}`;
 			}
 		}
 
@@ -63,8 +77,8 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-{#if open && article}
-	{@const ArticleComponent = article.component}
+{#if open && article && articleBody}
+	{@const ArticleComponent = articleBody.component}
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		class="panel-backdrop"
@@ -137,20 +151,20 @@
 
 		<article class="panel-content">
 			<div class="article-header" in:fade={{ duration: 200, delay: 100 }}>
-				{#if article.frontmatter.tags && article.frontmatter.tags.length > 0}
+				{#if article.tags && article.tags.length > 0}
 					<div class="article-tags">
-						{#each article.frontmatter.tags as tag (tag)}
+						{#each article.tags as tag (tag)}
 							<span class="tag">{tag}</span>
 						{/each}
 					</div>
 				{/if}
 
-				<h1 class="article-title">{article.frontmatter.title}</h1>
+				<h1 class="article-title">{article.title}</h1>
 
 				<div class="article-meta">
-					{#if article.frontmatter.date}
-						<time datetime={article.frontmatter.date}>
-							{formatLongDate(article.frontmatter.date)}
+					{#if article.date}
+						<time datetime={article.date}>
+							{formatLongDate(article.date)}
 						</time>
 					{/if}
 					<span class="meta-separator">·</span>
@@ -176,7 +190,7 @@
 							{#if prevArticle}
 								<button class="nav-link" onclick={() => onnavigate?.(prevArticle.slug)}>
 									<span class="nav-direction">← Previous</span>
-									<span class="nav-title">{prevArticle.frontmatter.title}</span>
+									<span class="nav-title">{prevArticle.title}</span>
 								</button>
 							{/if}
 						</div>
@@ -187,7 +201,7 @@
 									onclick={() => onnavigate?.(nextArticle.slug)}
 								>
 									<span class="nav-direction">Next →</span>
-									<span class="nav-title">{nextArticle.frontmatter.title}</span>
+									<span class="nav-title">{nextArticle.title}</span>
 								</button>
 							{/if}
 						</div>

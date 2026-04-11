@@ -6,9 +6,10 @@
 	interface Props {
 		class?: string;
 		sceneParams: Hero3DParams;
+		resetKey?: string;
 	}
 
-	let { class: className = '', sceneParams }: Props = $props();
+	let { class: className = '', sceneParams, resetKey = '' }: Props = $props();
 
 	let mouseX = $state(0.5);
 	let mouseY = $state(0.5);
@@ -31,7 +32,6 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	class="hero-3d-container {className}"
 	role="presentation"
@@ -40,7 +40,7 @@
 	onmouseleave={handleMouseLeave}
 >
 	<Canvas toneMapping={0} colorManagementEnabled={false} renderMode="always">
-		<Hero3DScene {mouseX} {mouseY} {isHovering} {sceneParams} />
+		<Hero3DScene {mouseX} {mouseY} {isHovering} {sceneParams} {resetKey} />
 	</Canvas>
 </div>
 

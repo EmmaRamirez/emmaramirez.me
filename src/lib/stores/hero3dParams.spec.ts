@@ -19,15 +19,23 @@ describe('hero3dParams', () => {
 
 		setHero3dParams({
 			revealRadius: 0.31,
+			cursorShape: 'circle',
+			cursorWidth: 1.34,
+			cursorHeight: 0.68,
 			pixelSize: 0.28,
 			glowStrength: 0.48,
+			revealBrightness: 1.42,
 			grainScale: 120
 		});
 
 		expect(getHero3dParamsSnapshot()).toMatchObject({
 			revealRadius: 0.31,
+			cursorShape: 'circle',
+			cursorWidth: 1.34,
+			cursorHeight: 0.68,
 			pixelSize: 0.28,
 			glowStrength: 0.48,
+			revealBrightness: 1.42,
 			grainScale: 120
 		});
 
@@ -35,16 +43,22 @@ describe('hero3dParams', () => {
 			mergeHero3dProps({
 				revealOpacity: 0.74,
 				pixelHardness: 0.88,
-				bounceStrength: 0.51
+				bounceStrength: 0.51,
+				revealContrast: 1.36
 			})
 		).toMatchObject({
 			revealRadius: 0.31,
+			cursorShape: 'circle',
+			cursorWidth: 1.34,
+			cursorHeight: 0.68,
 			pixelSize: 0.28,
 			glowStrength: 0.48,
+			revealBrightness: 1.42,
 			grainScale: 120,
 			revealOpacity: 0.74,
 			pixelHardness: 0.88,
-			bounceStrength: 0.51
+			bounceStrength: 0.51,
+			revealContrast: 1.36
 		});
 	});
 
@@ -53,18 +67,23 @@ describe('hero3dParams', () => {
 			applyHero3dPreset,
 			getHero3dPreset,
 			getHero3dParamsSnapshot,
+			hero3dRuntime,
 			hero3dPresets,
 			isHero3dPresetActive
 		} = await import('./hero3dParams.svelte');
 
 		expect(hero3dPresets.length).toBeGreaterThan(2);
+		const previousRenderKey = hero3dRuntime.renderKey;
 
 		applyHero3dPreset('neon-arcade');
 
 		const neonArcade = getHero3dPreset('neon-arcade');
 		expect(neonArcade).toBeDefined();
 		expect(getHero3dParamsSnapshot()).toEqual(neonArcade?.params);
+		expect(hero3dRuntime.renderKey).not.toBe(previousRenderKey);
 		expect(isHero3dPresetActive(getHero3dParamsSnapshot(), 'neon-arcade')).toBe(true);
 		expect(isHero3dPresetActive(getHero3dParamsSnapshot(), 'soft-frost')).toBe(false);
+		expect(neonArcade?.params.revealBrightness).toBeGreaterThan(1);
+		expect(neonArcade?.params.cursorShape).toBeTypeOf('string');
 	});
 });

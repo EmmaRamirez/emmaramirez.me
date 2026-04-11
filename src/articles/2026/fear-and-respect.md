@@ -1,9 +1,9 @@
 ---
-title: 'Fear & Respect'
+
+## title: 'Fear & Respect'
 date: 2024-05-05
 tags: [leadership]
 description: 'and/or methods of respecting fear'
----
 
 There are two ways, as a leader, to get people to do what you want them to do: fear and respect.
 

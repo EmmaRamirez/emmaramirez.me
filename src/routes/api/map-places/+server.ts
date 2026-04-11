@@ -1,6 +1,7 @@
 import { dev } from '$app/environment';
 import { json } from '@sveltejs/kit';
-import type { MapPlace, MapPlaceStatus } from '$generated/prisma/client';
+import { randomUUID } from 'node:crypto';
+import { Prisma, type MapPlace, type MapPlaceStatus } from '$generated/prisma/client';
 import { mapRegionById } from '$lib/data/mapRegions';
 import { prisma } from '$lib/server/prisma';
 import type { MapPlaceRecord, MapPlaceSubmissionPayload } from '$lib/types/mapPlaces';
@@ -8,6 +9,7 @@ import type { MapPlaceRecord, MapPlaceSubmissionPayload } from '$lib/types/mapPl
 export const prerender = false;
 
 const MAX_NAME_LENGTH = 48;
+type MapPlaceDelegate = typeof prisma extends { mapPlace: infer Delegate } ? Delegate : never;
 
 function serializeMapPlace(place: MapPlace): MapPlaceRecord {
 	return {
@@ -54,13 +56,95 @@ function parseSubmission(value: unknown): { name: string; regionId: string } | n
 	return { name, regionId };
 }
 
-export const GET = async ({ url }) => {
-	try {
-		const includeAll = dev && url.searchParams.get('includeAll') === 'true';
-		const places = await prisma.mapPlace.findMany({
+function getMapPlaceDelegate() {
+	return (prisma as typeof prisma & { mapPlace?: MapPlaceDelegate }).mapPlace;
+}
+
+async function listMapPlaces(includeAll: boolean) {
+	const delegate = getMapPlaceDelegate();
+	if (delegate) {
+		return delegate.findMany({
 			where: includeAll ? undefined : { status: 'visible' },
 			orderBy: { createdAt: 'desc' }
 		});
+	}
+
+	const whereClause = includeAll
+		? Prisma.empty
+		: Prisma.sql`WHERE "status" = 'visible'::"MapPlaceStatus"`;
+
+	return prisma.$queryRaw<MapPlace[]>(Prisma.sql`
+		SELECT *
+		FROM "MapPlace"
+		${whereClause}
+		ORDER BY "createdAt" DESC
+	`);
+}
+
+async function createMapPlace(submission: { name: string; regionId: string }) {
+	const region = mapRegionById.get(submission.regionId);
+	if (!region) {
+		throw new Error('Unknown regionId.');
+	}
+
+	const delegate = getMapPlaceDelegate();
+	if (delegate) {
+		return delegate.create({
+			data: {
+				name: submission.name,
+				regionId: region.id,
+				regionCode: region.regionCode,
+				regionName: region.regionName,
+				countryCode: region.countryCode,
+				countryName: region.countryName,
+				latitude: region.centroid.lat,
+				longitude: region.centroid.lng,
+				status: 'visible'
+			}
+		});
+	}
+
+	const [place] = await prisma.$queryRaw<MapPlace[]>(Prisma.sql`
+		INSERT INTO "MapPlace" (
+			"id",
+			"name",
+			"regionId",
+			"regionCode",
+			"regionName",
+			"countryCode",
+			"countryName",
+			"latitude",
+			"longitude",
+			"status",
+			"updatedAt"
+		)
+		VALUES (
+			${randomUUID()},
+			${submission.name},
+			${region.id},
+			${region.regionCode},
+			${region.regionName},
+			${region.countryCode},
+			${region.countryName},
+			${region.centroid.lat},
+			${region.centroid.lng},
+			'visible'::"MapPlaceStatus",
+			NOW()
+		)
+		RETURNING *
+	`);
+
+	if (!place) {
+		throw new Error('Failed to save map place.');
+	}
+
+	return place;
+}
+
+export const GET = async ({ url }) => {
+	try {
+		const includeAll = dev && url.searchParams.get('includeAll') === 'true';
+		const places = await listMapPlaces(includeAll);
 
 		return json({ places: places.map(serializeMapPlace) });
 	} catch (error) {
@@ -92,19 +176,7 @@ export const POST = async ({ request }) => {
 			return json({ error: 'Unknown regionId.' }, { status: 400 });
 		}
 
-		const place = await prisma.mapPlace.create({
-			data: {
-				name: submission.name,
-				regionId: region.id,
-				regionCode: region.regionCode,
-				regionName: region.regionName,
-				countryCode: region.countryCode,
-				countryName: region.countryName,
-				latitude: region.centroid.lat,
-				longitude: region.centroid.lng,
-				status: 'visible'
-			}
-		});
+		const place = await createMapPlace(submission);
 
 		return json({ place: serializeMapPlace(place) }, { status: 201 });
 	} catch (error) {

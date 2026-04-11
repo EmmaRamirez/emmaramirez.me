@@ -6,6 +6,7 @@
 	import paintingRevealImage from '$lib/images/photos/emma-painting-full-day.png';
 	import {
 		defaultHero3DParams,
+		type Hero3DCursorShape,
 		type Hero3DParams
 	} from '$lib/stores/hero3dParams.svelte';
 	import * as THREE from 'three';
@@ -15,10 +16,16 @@
 		mouseY?: number;
 		isHovering?: boolean;
 		sceneParams?: Hero3DParams;
+		resetKey?: string;
 	}
 
-	let { mouseX = 0.5, mouseY = 0.5, isHovering = false, sceneParams = defaultHero3DParams }: Props =
-		$props();
+	let {
+		mouseX = 0.5,
+		mouseY = 0.5,
+		isHovering = false,
+		sceneParams = defaultHero3DParams,
+		resetKey = ''
+	}: Props = $props();
 
 	const textures = useTexture({
 		base: paintingBaseImage,
@@ -60,6 +67,9 @@
 		revealRadius: defaultHero3DParams.revealRadius,
 		revealSoftness: defaultHero3DParams.revealSoftness,
 		revealOpacity: defaultHero3DParams.revealOpacity,
+		cursorShape: defaultHero3DParams.cursorShape,
+		cursorWidth: defaultHero3DParams.cursorWidth,
+		cursorHeight: defaultHero3DParams.cursorHeight,
 		pixelSize: defaultHero3DParams.pixelSize,
 		pixelHardness: defaultHero3DParams.pixelHardness,
 		pixelScatter: defaultHero3DParams.pixelScatter,
@@ -80,6 +90,8 @@
 		fadeSoftness: defaultHero3DParams.fadeSoftness,
 		glowStrength: defaultHero3DParams.glowStrength,
 		glowRadius: defaultHero3DParams.glowRadius,
+		revealBrightness: defaultHero3DParams.revealBrightness,
+		revealContrast: defaultHero3DParams.revealContrast,
 		chromaStrength: defaultHero3DParams.chromaStrength,
 		grainStrength: defaultHero3DParams.grainStrength,
 		grainScale: defaultHero3DParams.grainScale
@@ -98,23 +110,56 @@
 		return Math.round(value / size) * size;
 	}
 
-	function stampPixelSquare(
+	function clearRevealMask() {
+		if (!revealMaskContext || !revealMaskCanvas) return;
+
+		revealMaskContext.clearRect(0, 0, revealMaskCanvas.width, revealMaskCanvas.height);
+		revealMaskContext.fillStyle = '#000';
+		revealMaskContext.fillRect(0, 0, revealMaskCanvas.width, revealMaskCanvas.height);
+		revealMaskTexture.needsUpdate = true;
+	}
+
+	function resetSceneState() {
+		clearRevealMask();
+		refs.hoverProgress = 0;
+		refs.motionEnergy = 0;
+		refs.hasPaintedMask = false;
+		refs.currentMouse.x = 0.5;
+		refs.currentMouse.y = 0.5;
+		refs.targetMouse.x = 0.5;
+		refs.targetMouse.y = 0.5;
+		refs.previousTargetMouse.x = 0.5;
+		refs.previousTargetMouse.y = 0.5;
+		refs.lastPaintedMouse.x = 0.5;
+		refs.lastPaintedMouse.y = 0.5;
+	}
+
+	function stampBrushShape(
 		centerX: number,
 		centerY: number,
-		pixelSize: number,
+		brushWidth: number,
+		brushHeight: number,
 		softness: number,
-		hardness: number
+		hardness: number,
+		cursorShape: Hero3DCursorShape
 	) {
 		if (!revealMaskContext || !revealMaskCanvas) return;
 
-		const halfSize = pixelSize * 0.5;
+		const halfWidth = brushWidth * 0.5;
+		const halfHeight = brushHeight * 0.5;
 
 		revealMaskContext.save();
 		revealMaskContext.globalCompositeOperation = 'source-over';
 		revealMaskContext.fillStyle = 'rgba(255,255,255,1)';
 		revealMaskContext.shadowBlur = softness * (1 - hardness) * 0.8;
 		revealMaskContext.shadowColor = 'rgba(255,255,255,0.9)';
-		revealMaskContext.fillRect(centerX - halfSize, centerY - halfSize, pixelSize, pixelSize);
+		if (cursorShape === 'circle') {
+			revealMaskContext.beginPath();
+			revealMaskContext.ellipse(centerX, centerY, halfWidth, halfHeight, 0, 0, Math.PI * 2);
+			revealMaskContext.fill();
+		} else {
+			revealMaskContext.fillRect(centerX - halfWidth, centerY - halfHeight, brushWidth, brushHeight);
+		}
 		revealMaskContext.restore();
 	}
 
@@ -125,7 +170,8 @@
 		const toPoint = toMaskCoordinates(to);
 		const pixelScale = THREE.MathUtils.clamp(refs.pixelSize, 0, 1);
 		const hardness = THREE.MathUtils.clamp(refs.pixelHardness, 0, 1);
-		const pixelSize = Math.max(
+		const cursorShape = refs.cursorShape;
+		const brushBaseSize = Math.max(
 			6,
 			Math.round(
 				THREE.MathUtils.lerp(8, 34, pixelScale)
@@ -136,6 +182,10 @@
 					)
 			)
 		);
+		const widthScale = THREE.MathUtils.clamp(refs.cursorWidth, 0.25, 2);
+		const heightScale = THREE.MathUtils.clamp(refs.cursorHeight, 0.25, 2);
+		const brushWidth = Math.max(4, Math.round(brushBaseSize * widthScale));
+		const brushHeight = Math.max(4, Math.round(brushBaseSize * heightScale));
 		const softness = THREE.MathUtils.lerp(
 			0.2,
 			3.2,
@@ -144,7 +194,10 @@
 		const deltaX = toPoint.x - fromPoint.x;
 		const deltaY = toPoint.y - fromPoint.y;
 		const distance = Math.hypot(deltaX, deltaY);
-		const spacing = Math.max(1, pixelSize * THREE.MathUtils.lerp(0.75, 0.36, refs.pixelScatter));
+		const spacing = Math.max(
+			1,
+			Math.max(brushWidth, brushHeight) * THREE.MathUtils.lerp(0.75, 0.36, refs.pixelScatter)
+		);
 		const steps = Math.max(1, Math.ceil(distance / spacing));
 		const scatterOffsets = [
 			[1, 0],
@@ -161,20 +214,22 @@
 			const progress = step / steps;
 			const x = fromPoint.x + deltaX * progress;
 			const y = fromPoint.y + deltaY * progress;
-			const snappedX = snapToPixelGrid(x, pixelSize);
-			const snappedY = snapToPixelGrid(y, pixelSize);
+			const paintX = cursorShape === 'square' ? snapToPixelGrid(x, brushWidth) : x;
+			const paintY = cursorShape === 'square' ? snapToPixelGrid(y, brushHeight) : y;
 
-			stampPixelSquare(snappedX, snappedY, pixelSize, softness, hardness);
+			stampBrushShape(paintX, paintY, brushWidth, brushHeight, softness, hardness, cursorShape);
 
 			const burstCount = Math.min(3, Math.round(refs.pixelScatter * 3));
 			for (let burst = 0; burst < burstCount; burst += 1) {
 				const [offsetX, offsetY] = scatterOffsets[(step + burst) % scatterOffsets.length];
-				stampPixelSquare(
-					snappedX + offsetX * pixelSize,
-					snappedY + offsetY * pixelSize,
-					pixelSize,
+				stampBrushShape(
+					paintX + offsetX * brushWidth,
+					paintY + offsetY * brushHeight,
+					brushWidth,
+					brushHeight,
 					softness * 0.5,
-					hardness
+					hardness,
+					cursorShape
 				);
 			}
 		}
@@ -189,6 +244,9 @@
 		refs.revealRadius = sceneParams.revealRadius;
 		refs.revealSoftness = sceneParams.revealSoftness;
 		refs.revealOpacity = sceneParams.revealOpacity;
+		refs.cursorShape = sceneParams.cursorShape;
+		refs.cursorWidth = sceneParams.cursorWidth;
+		refs.cursorHeight = sceneParams.cursorHeight;
 		refs.pixelSize = sceneParams.pixelSize;
 		refs.pixelHardness = sceneParams.pixelHardness;
 		refs.pixelScatter = sceneParams.pixelScatter;
@@ -209,9 +267,16 @@
 		refs.fadeSoftness = sceneParams.fadeSoftness;
 		refs.glowStrength = sceneParams.glowStrength;
 		refs.glowRadius = sceneParams.glowRadius;
+		refs.revealBrightness = sceneParams.revealBrightness;
+		refs.revealContrast = sceneParams.revealContrast;
 		refs.chromaStrength = sceneParams.chromaStrength;
 		refs.grainStrength = sceneParams.grainStrength;
 		refs.grainScale = sceneParams.grainScale;
+	});
+
+	$effect(() => {
+		resetKey;
+		resetSceneState();
 	});
 
 	useTask((delta) => {
@@ -257,6 +322,8 @@
 		shaderMaterialRef.uniforms.uRevealRadius.value = refs.revealRadius;
 		shaderMaterialRef.uniforms.uRevealSoftness.value = refs.revealSoftness;
 		shaderMaterialRef.uniforms.uRevealOpacity.value = refs.revealOpacity;
+		shaderMaterialRef.uniforms.uCursorShapeMix.value = refs.cursorShape === 'square' ? 1 : 0;
+		shaderMaterialRef.uniforms.uCursorScale.value.set(refs.cursorWidth, refs.cursorHeight);
 		shaderMaterialRef.uniforms.uPixelSize.value = refs.pixelSize;
 		shaderMaterialRef.uniforms.uPixelHardness.value = refs.pixelHardness;
 		shaderMaterialRef.uniforms.uIdleReveal.value = refs.idleReveal;
@@ -273,6 +340,8 @@
 		shaderMaterialRef.uniforms.uFadeSoftness.value = refs.fadeSoftness;
 		shaderMaterialRef.uniforms.uGlowStrength.value = refs.glowStrength;
 		shaderMaterialRef.uniforms.uGlowRadius.value = refs.glowRadius;
+		shaderMaterialRef.uniforms.uRevealBrightness.value = refs.revealBrightness;
+		shaderMaterialRef.uniforms.uRevealContrast.value = refs.revealContrast;
 		shaderMaterialRef.uniforms.uChromaStrength.value = refs.chromaStrength;
 		shaderMaterialRef.uniforms.uGrainStrength.value = refs.grainStrength;
 		shaderMaterialRef.uniforms.uGrainScale.value = refs.grainScale;
@@ -307,6 +376,8 @@
 				uRevealRadius: { value: sceneParams.revealRadius },
 				uRevealSoftness: { value: sceneParams.revealSoftness },
 				uRevealOpacity: { value: sceneParams.revealOpacity },
+				uCursorShapeMix: { value: sceneParams.cursorShape === 'square' ? 1 : 0 },
+				uCursorScale: { value: new THREE.Vector2(sceneParams.cursorWidth, sceneParams.cursorHeight) },
 				uPixelSize: { value: sceneParams.pixelSize },
 				uPixelHardness: { value: sceneParams.pixelHardness },
 				uIdleReveal: { value: sceneParams.idleReveal },
@@ -323,6 +394,8 @@
 				uFadeSoftness: { value: sceneParams.fadeSoftness },
 				uGlowStrength: { value: sceneParams.glowStrength },
 				uGlowRadius: { value: sceneParams.glowRadius },
+				uRevealBrightness: { value: sceneParams.revealBrightness },
+				uRevealContrast: { value: sceneParams.revealContrast },
 				uChromaStrength: { value: sceneParams.chromaStrength },
 				uGrainStrength: { value: sceneParams.grainStrength },
 				uGrainScale: { value: sceneParams.grainScale },
@@ -382,6 +455,8 @@
 		uniform float uRevealRadius;
 		uniform float uRevealSoftness;
 		uniform float uRevealOpacity;
+		uniform float uCursorShapeMix;
+		uniform vec2 uCursorScale;
 		uniform float uPixelSize;
 		uniform float uPixelHardness;
 		uniform float uIdleReveal;
@@ -397,6 +472,8 @@
 		uniform float uFadeSoftness;
 		uniform float uGlowStrength;
 		uniform float uGlowRadius;
+		uniform float uRevealBrightness;
+		uniform float uRevealContrast;
 		uniform float uChromaStrength;
 		uniform float uGrainStrength;
 		uniform float uGrainScale;
@@ -439,8 +516,15 @@
 
 			vec2 toMouse = vRawUv - uMouse;
 			float dist = length(toMouse);
-			float squareDist = max(abs(toMouse.x), abs(toMouse.y));
 			float visibility = mix(uIdleReveal, 1.0, uHoverProgress);
+			vec2 cursorScale = max(vec2(0.25), vec2(
+				clamp(uCursorScale.x, 0.25, 2.0),
+				clamp(uCursorScale.y, 0.25, 2.0)
+			));
+			vec2 shapedMouse = toMouse / cursorScale;
+			float circleDist = length(shapedMouse);
+			float squareDist = max(abs(shapedMouse.x), abs(shapedMouse.y));
+			float shapeDist = mix(circleDist, squareDist, clamp(uCursorShapeMix, 0.0, 1.0));
 			float rippleEnvelope = exp(-dist * max(0.15, uRippleDecay) * 8.0);
 			float rippleWave = sin(
 				dist * (8.0 + uRippleFrequency * 28.0) - uTime * (1.5 + uRippleSpeed * 6.0)
@@ -461,7 +545,7 @@
 				0.0008,
 				mix(0.0025, 0.045, 1.0 - hardness) + uRevealSoftness * (0.03 + (1.0 - hardness) * 0.24)
 			);
-			float brushDistance = squareDist + ripple * mix(0.02, 0.12, 1.0 - hardness);
+			float brushDistance = shapeDist + ripple * mix(0.02, 0.12, 1.0 - hardness);
 			float brushMask = 1.0 - smoothstep(
 				revealRadius,
 				revealRadius + revealSoftness,
@@ -510,6 +594,8 @@
 			vec3 boostedRevealColor = revealColor * (1.08 + revealPop * 0.38);
 			boostedRevealColor = mix(vec3(revealLuma), boostedRevealColor, 1.12 + revealPop * 0.18);
 			boostedRevealColor += vec3(0.1, 0.12, 0.16) * revealPop * 0.12;
+			boostedRevealColor *= max(0.0, uRevealBrightness);
+			boostedRevealColor = (boostedRevealColor - 0.5) * max(0.0, uRevealContrast) + 0.5;
 			boostedRevealColor = clamp(boostedRevealColor, 0.0, 1.0);
 
 			vec3 rgb = mix(baseColor.rgb, boostedRevealColor, revealMix);

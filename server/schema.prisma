@@ -13,9 +13,23 @@ datasource db {
   provider = "postgresql"
 }
 
+enum ContentEntryType {
+  project
+  article
+}
+
 enum MapPlaceStatus {
   visible
   hidden
+}
+
+enum AnalyticsEventKind {
+  page
+  network
+  interaction
+  render
+  vital
+  paint
 }
 
 model DebugSettings {
@@ -44,4 +58,50 @@ model MapPlace {
 
   @@index([status, createdAt])
   @@index([regionId, createdAt])
+}
+
+model ContentEntry {
+  id          String           @id @default(cuid())
+  entityType  ContentEntryType
+  entityId    String
+  title       String?
+  description String?
+  excerpt     String?
+  bodyMarkdown String?
+  tags        Json?
+  publishedAt String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@unique([entityType, entityId])
+  @@index([entityType, updatedAt])
+}
+
+model AnalyticsEvent {
+  id              String             @id @default(cuid())
+  clientEventId   String?            @unique
+  sessionId       String
+  route           String?
+  kind            AnalyticsEventKind
+  name            String
+  source          String?
+  method          String?
+  url             String?
+  status          Int?
+  ok              Boolean?
+  duration        Float?
+  value           Float?
+  unit            String?
+  rating          String?
+  navigationType  String?
+  fromRoute       String?
+  detail          String?
+  clientTimestamp DateTime
+  metadata        Json?
+  createdAt       DateTime           @default(now())
+
+  @@index([createdAt])
+  @@index([kind, createdAt])
+  @@index([route, createdAt])
+  @@index([sessionId, createdAt])
 }

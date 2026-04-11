@@ -1,4 +1,16 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+/** API tests mutate `/api/debug-settings`; UI tests read the same store — avoid parallel races. */
+test.describe.configure({ mode: 'serial' });
+
+async function openDebugMenuFromHome(page: Page) {
+	await page.goto('/');
+	await page.waitForLoadState('load');
+	await page.evaluate(() =>
+		window.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }))
+	);
+	await expect(page.getByRole('heading', { name: /Debug Menu/i })).toBeVisible({ timeout: 10_000 });
+}
 
 test.describe('Debug Settings API', () => {
 	test('GET /api/debug-settings returns settings object', async ({ request }) => {
@@ -114,16 +126,9 @@ test.describe('Debug Settings API', () => {
 test.describe('Debug Menu UI', () => {
 	test('debug menu opens when pressing D key', async ({ page }) => {
 		await page.goto('/');
+		await expect(page.getByRole('heading', { name: /Debug Menu/i })).not.toBeVisible();
 
-		// Ensure the debug menu is not visible initially
-		await expect(page.locator('dialog[aria-label*="Debug"]')).not.toBeVisible();
-
-		// Press D to open debug menu
-		await page.keyboard.press('d');
-
-		// The debug menu should now be visible
-		await expect(page.locator('dialog')).toBeVisible();
-		await expect(page.getByRole('heading', { name: /Debug Menu/i })).toBeVisible();
+		await openDebugMenuFromHome(page);
 	});
 
 	test('debug menu loads saved settings from API', async ({ page, request }) => {
@@ -169,12 +174,7 @@ test.describe('Debug Menu UI', () => {
 
 		await request.put('/api/debug-settings', { data: testSettings });
 
-		// Navigate to the page and open the debug menu
-		await page.goto('/');
-		await page.keyboard.press('d');
-
-		// Wait for the debug menu to be visible
-		await expect(page.locator('dialog')).toBeVisible();
+		await openDebugMenuFromHome(page);
 
 		// Check that the header blend mode dropdown has the correct value selected
 		const blendModeSelect = page.getByRole('combobox', { name: /Header Image Blend Mode/i });
@@ -182,11 +182,7 @@ test.describe('Debug Menu UI', () => {
 	});
 
 	test('changes to sliders trigger save requests', async ({ page }) => {
-		await page.goto('/');
-
-		// Open debug menu
-		await page.keyboard.press('d');
-		await expect(page.locator('dialog')).toBeVisible();
+		await openDebugMenuFromHome(page);
 
 		// Find and interact with the first hero effect slider
 		const firstHeroSlider = page.locator('input[type="range"]').first();
@@ -257,12 +253,7 @@ test.describe('Debug Menu UI', () => {
 
 		await request.put('/api/debug-settings', { data: initialSettings });
 
-		// Navigate to the page
-		await page.goto('/');
-
-		// Open debug menu and verify settings are loaded
-		await page.keyboard.press('d');
-		await expect(page.locator('dialog')).toBeVisible();
+		await openDebugMenuFromHome(page);
 
 		const blendModeSelect = page.getByRole('combobox', { name: /Header Image Blend Mode/i });
 		await expect(blendModeSelect).toHaveValue('overlay');
@@ -271,9 +262,10 @@ test.describe('Debug Menu UI', () => {
 		await page.keyboard.press('Escape');
 		await page.reload();
 
-		// Open debug menu again
-		await page.keyboard.press('d');
-		await expect(page.locator('dialog')).toBeVisible();
+		await page.evaluate(() =>
+			window.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }))
+		);
+		await expect(page.getByRole('heading', { name: /Debug Menu/i })).toBeVisible();
 
 		// Verify settings are still the same
 		const blendModeSelectAfterReload = page.getByRole('combobox', {
