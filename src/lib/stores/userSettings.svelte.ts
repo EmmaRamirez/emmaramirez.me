@@ -165,6 +165,12 @@ function persistUserSettings() {
 }
 
 function patchUserSettings(next: Partial<StoredUserSettings>) {
+	const hasChanges = Object.entries(next).some(
+		([key, value]) => storedUserSettings[key as keyof StoredUserSettings] !== value
+	);
+
+	if (!hasChanges) return;
+
 	storedUserSettings = { ...storedUserSettings, ...next };
 	persistUserSettings();
 }
@@ -236,6 +242,7 @@ const { subscribe: subscribeShowSections, set: setShowSectionsStore } =
 export const showSections = {
 	subscribe: subscribeShowSections,
 	set: (value: boolean) => {
+		if ((storedUserSettings.showSections ?? dev) === value) return;
 		patchUserSettings({ showSections: value });
 		setShowSectionsStore(value);
 	}
@@ -254,6 +261,7 @@ export const topLanguagesSettings = {
 		return topLanguagesVariant;
 	},
 	set variant(value: TopLanguagesVariant) {
+		if (topLanguagesVariant === value) return;
 		topLanguagesVariant = value;
 		patchUserSettings({ topLanguagesVariant: value });
 	}
@@ -293,6 +301,7 @@ export const thisSiteSettings = {
 	},
 	set title(value: string) {
 		const nextTitle = value.trim() || defaultThisSiteTitle;
+		if (thisSiteTitle === nextTitle) return;
 		thisSiteTitle = nextTitle;
 		patchUserSettings({ thisSiteTitle: nextTitle });
 	}
@@ -305,6 +314,7 @@ export const blogSettings = {
 		return blogTagView;
 	},
 	set tagView(value: BlogTagView) {
+		if (blogTagView === value) return;
 		blogTagView = value;
 		patchUserSettings({ blogTagView: value });
 	}

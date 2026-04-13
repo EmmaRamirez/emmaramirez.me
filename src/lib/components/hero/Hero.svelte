@@ -118,7 +118,7 @@
 		<h1 class="mb-4 font-serif text-4xl leading-tight text-white drop-shadow-lg md:text-5xl">
 			welcome to my internet.
 		</h1>
-		<p class="max-w-lg text-xl text-balance text-white/88 drop-shadow-md md:text-2xl">
+		<p class="max-w-lg font-serif text-xl text-balance text-white/88 drop-shadow-md md:text-2xl">
 			my name&apos;s emma and my biggest passion is making stuff with code. i&apos;m into startups,
 			fashion, finance, and AI.
 		</p>
@@ -157,6 +157,24 @@
 		height: 100%;
 		border-radius: 2rem 0 0 2rem;
 		overflow: hidden;
+		-webkit-mask-image: linear-gradient(
+			to right,
+			#000 0%,
+			#000 46%,
+			rgba(0, 0, 0, 0.94) 58%,
+			rgba(0, 0, 0, 0.5) 76%,
+			transparent 100%
+		);
+		mask-image: linear-gradient(
+			to right,
+			#000 0%,
+			#000 46%,
+			rgba(0, 0, 0, 0.94) 58%,
+			rgba(0, 0, 0, 0.5) 76%,
+			transparent 100%
+		);
+		mask-repeat: no-repeat;
+		mask-size: 100% 100%;
 	}
 
 	.hero-3d-wrapper {
@@ -187,10 +205,12 @@
 			linear-gradient(
 				103deg,
 				rgba(255, 240, 233, 0.14) 0%,
-				rgba(255, 240, 233, 0.06) 18%,
-				rgba(21, 10, 24, 0.08) 42%,
-				rgba(14, 9, 19, 0.34) 61%,
-				rgba(12, 8, 16, 0.78) 100%
+				rgba(255, 240, 233, 0.06) 15%,
+				rgba(21, 10, 24, 0.05) 30%,
+				rgba(14, 9, 19, 0.18) 46%,
+				rgba(12, 8, 16, 0.48) 60%,
+				rgba(12, 8, 16, 0.76) 74%,
+				rgba(11, 8, 15, 0.9) 100%
 			);
 		z-index: 1;
 		pointer-events: none;
@@ -209,17 +229,20 @@
 	.hero-media-fade {
 		background:
 			linear-gradient(
-				100deg,
-				rgba(12, 8, 16, 0.03) 0%,
-				rgba(12, 8, 16, 0.12) 24%,
-				rgba(12, 8, 16, 0.54) 58%,
-				rgba(12, 8, 16, 0.9) 100%
+				102deg,
+				rgba(18, 8, 17, 0) 0%,
+				rgba(18, 8, 17, 0.03) 14%,
+				rgba(18, 8, 17, 0.1) 28%,
+				rgba(15, 9, 20, 0.28) 42%,
+				rgba(12, 8, 16, 0.52) 55%,
+				rgba(12, 8, 16, 0.78) 68%,
+				rgba(10, 8, 18, 0.94) 100%
 			),
 			linear-gradient(
 				180deg,
-				rgba(255, 111, 76, 0.07) 0%,
-				transparent 38%,
-				rgba(10, 8, 18, 0.46) 100%
+				rgba(255, 111, 76, 0.06) 0%,
+				transparent 36%,
+				rgba(10, 8, 18, 0.38) 100%
 			);
 		z-index: 3;
 		pointer-events: none;
@@ -312,6 +335,22 @@
 			width: 100%;
 			height: 57%;
 			border-radius: 2rem 2rem 0 0;
+			-webkit-mask-image: linear-gradient(
+				to bottom,
+				#000 0%,
+				#000 40%,
+				rgba(0, 0, 0, 0.93) 54%,
+				rgba(0, 0, 0, 0.48) 74%,
+				transparent 100%
+			);
+			mask-image: linear-gradient(
+				to bottom,
+				#000 0%,
+				#000 40%,
+				rgba(0, 0, 0, 0.93) 54%,
+				rgba(0, 0, 0, 0.48) 74%,
+				transparent 100%
+			);
 		}
 
 		.hero-base-image {
@@ -322,16 +361,18 @@
 			background:
 				linear-gradient(
 					180deg,
-					rgba(12, 8, 16, 0.02) 0%,
-					rgba(12, 8, 16, 0.16) 32%,
-					rgba(12, 8, 16, 0.72) 58%,
-					rgba(12, 8, 16, 0.95) 100%
+					rgba(18, 8, 17, 0) 0%,
+					rgba(18, 8, 17, 0.04) 22%,
+					rgba(15, 9, 20, 0.14) 38%,
+					rgba(12, 8, 16, 0.45) 52%,
+					rgba(12, 8, 16, 0.78) 66%,
+					rgba(10, 8, 18, 0.96) 100%
 				),
 				linear-gradient(
 					180deg,
-					rgba(255, 111, 76, 0.07) 0%,
-					transparent 24%,
-					rgba(10, 8, 18, 0.42) 100%
+					rgba(255, 111, 76, 0.06) 0%,
+					transparent 22%,
+					rgba(10, 8, 18, 0.36) 100%
 				);
 		}
 

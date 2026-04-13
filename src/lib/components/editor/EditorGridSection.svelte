@@ -25,7 +25,8 @@
 	import { pokemonTeamSettings, thisSiteSettings } from '$lib/stores';
 	import {
 		topLanguagesSettings,
-		topLanguagesVariantOptions
+		topLanguagesVariantOptions,
+		type TopLanguagesVariant
 	} from '$lib/stores/topLanguages.svelte';
 	import { onMount } from 'svelte';
 
@@ -83,7 +84,7 @@
 	let selectedItemKey = $state<string | null>(null);
 
 	const selectedItem = $derived.by(() =>
-		selectedItemKey ? (dndItems.find((entry) => entry.id === selectedItemKey)?.item ?? null) : null
+		selectedItemKey ? (gridItems.find((item) => getItemKey(item) === selectedItemKey) ?? null) : null
 	);
 	const selectedItemLayout = $derived.by(() =>
 		selectedItemKey ? editorGridLayoutStore.getLayout(selectedItemKey) : undefined
@@ -91,7 +92,6 @@
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let headerBlendMode = $state('difference');
 	let showSectionsEnabled = $state(false);
-	let topLanguagesVariant = $state(topLanguagesSettings.variant);
 	let thisSiteTitle = $state(thisSiteSettings.title);
 	let pokemonTeamDraft = $state(pokemonTeamSettings.team.map((pokemon: Pokemon) => pokemon.name));
 	let pokemonTeamErrors = $state(pokemonTeamSettings.team.map(() => ''));
@@ -185,14 +185,32 @@
 		return getGridItemSpanClasses(layout);
 	}
 
-	function handleItemClick(key: string) {
-		selectedItemKey = selectedItemKey === key ? null : key;
+	function selectItem(key: string) {
+		selectedItemKey = key;
+	}
+
+	function handlePreviewPointerDownCapture(event: PointerEvent, key: string) {
+		const target = event.target;
+		const clickedInteractiveChild =
+			target instanceof Element &&
+			target.closest(
+				'a, button, input, select, textarea, summary, [role="button"], [role="link"]'
+			);
+
+		// Treat the preview as a selection surface in the editor, even when the rendered tile contains
+		// links or buttons from the live site component.
+		if (clickedInteractiveChild) {
+			event.preventDefault();
+		}
+
+		event.stopPropagation();
+		selectItem(key);
 	}
 
 	function handleItemKeydown(event: KeyboardEvent, key: string) {
 		if (event.key !== 'Enter' && event.key !== ' ') return;
 		event.preventDefault();
-		handleItemClick(key);
+		selectItem(key);
 	}
 
 	function trackGridItemVisibility(key: string) {
@@ -458,10 +476,6 @@
 		saveTimeout = setTimeout(saveSettings, 500);
 	});
 
-	$effect(() => {
-		topLanguagesSettings.variant = topLanguagesVariant;
-	});
-
 	const flipDurationMs = 200;
 
 	function handleThisSiteTitleInput() {
@@ -469,6 +483,11 @@
 		if (nextTitle.length > 0) {
 			thisSiteSettings.title = nextTitle;
 		}
+	}
+
+	function handleTopLanguagesVariantChange(event: Event) {
+		topLanguagesSettings.variant = (event.currentTarget as HTMLSelectElement)
+			.value as TopLanguagesVariant;
 	}
 
 	function commitThisSiteTitle() {
@@ -657,8 +676,9 @@
 							class:grid-item-content--selected={selectedItemKey === key}
 							role="button"
 							tabindex="0"
+							aria-label={`Select ${getEditorGridItemLabel(item)} tile`}
 							aria-pressed={selectedItemKey === key}
-							onclick={() => handleItemClick(key)}
+							onpointerdowncapture={(event) => handlePreviewPointerDownCapture(event, key)}
 							onkeydown={(event) => handleItemKeydown(event, key)}
 						>
 							{#if item.kind === 'hero'}
@@ -876,7 +896,8 @@
 
 								<Select
 									label="Display Style"
-									bind:value={topLanguagesVariant}
+									value={topLanguagesSettings.variant}
+									onchange={handleTopLanguagesVariantChange}
 									options={topLanguagesVariantOptions}
 									hint="Switch between the researched display treatments for this card."
 								/>

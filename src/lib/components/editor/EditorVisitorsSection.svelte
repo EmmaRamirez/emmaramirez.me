@@ -227,6 +227,28 @@
 										<span class="visitors-delete-button__content">
 											<span
 												class={[
+													'visitors-delete-button__icon',
+													isDeletingVisitor(visitor.id) && 'visitors-delete-button__icon--hidden'
+												]}
+												aria-hidden="true"
+											>
+												<svg
+													viewBox="0 0 24 24"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="2"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+												>
+													<path d="M3 6h18" />
+													<path d="M8 6V4h8v2" />
+													<path d="M19 6l-1 14H6L5 6" />
+													<path d="M10 11v6" />
+													<path d="M14 11v6" />
+												</svg>
+											</span>
+											<span
+												class={[
 													'visitors-delete-button__spinner',
 													!isDeletingVisitor(visitor.id) &&
 														'visitors-delete-button__spinner--hidden'
@@ -491,11 +513,12 @@
 
 	.visitors-delete-button__content {
 		display: inline-grid;
-		grid-template-columns: 1rem auto;
+		grid-template-columns: 1rem 1rem auto;
 		align-items: center;
 		column-gap: 0.45rem;
 	}
 
+	.visitors-delete-button__icon,
 	.visitors-delete-button__spinner {
 		display: inline-flex;
 		align-items: center;
@@ -504,6 +527,12 @@
 		height: 1rem;
 	}
 
+	.visitors-delete-button__icon svg {
+		width: 1rem;
+		height: 1rem;
+	}
+
+	.visitors-delete-button__icon--hidden,
 	.visitors-delete-button__spinner--hidden {
 		visibility: hidden;
 	}

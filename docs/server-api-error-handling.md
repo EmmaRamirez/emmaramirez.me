@@ -120,3 +120,4 @@ This work is complete when:
 - production API responses no longer expose raw internal exception details
 - server logs still contain enough information to debug failures
 - routes follow one consistent error response pattern
+

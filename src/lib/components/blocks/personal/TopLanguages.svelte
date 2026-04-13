@@ -259,10 +259,7 @@
 							<div class="language-row">
 								<div class="language-meta">
 									<span class="language-rank">{String(index + 1).padStart(2, '0')}</span>
-									<div class="language-copy">
-										<span class="language-name">{language.name}</span>
-										<span class="language-note">{language.note}</span>
-									</div>
+									<span class="language-name">{language.name}</span>
 								</div>
 
 								<span class="language-pct">{language.percentage}%</span>
@@ -703,19 +700,5 @@
 	.language-list {
 		grid-template-rows: repeat(5, minmax(0, 1fr));
 		gap: 0.5rem;
-	}
-
-	.language-copy {
-		display: flex;
-		flex-direction: column;
-		gap: 0.12rem;
-		min-width: 0;
-	}
-
-	.language-note {
-		font-size: clamp(0.58rem, 1.05vw, 0.72rem);
-		line-height: 1.2;
-		color: var(--text-secondary);
-		text-wrap: balance;
 	}
 </style>

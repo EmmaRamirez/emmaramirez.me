@@ -8,7 +8,8 @@
 		topLanguagesSettings,
 		topLanguagesVariantOptions,
 		defaultThisSiteTitle,
-		type BlogTagView
+		type BlogTagView,
+		type TopLanguagesVariant
 	} from '$lib/stores/userSettings.svelte';
 	import { editorGridLayoutStore } from '$lib/stores/gridLayoutStore.svelte';
 	import { Input, Select, Switch } from '$lib/components/ui';
@@ -19,9 +20,7 @@
 	] satisfies Array<{ value: BlogTagView; label: string }>;
 
 	let showSectionsEnabled = $state(false);
-	let topLanguagesVariant = $state(topLanguagesSettings.variant);
 	let thisSiteTitle = $state(thisSiteSettings.title);
-	let blogTagView = $state(blogSettings.tagView);
 	let resetStatus = $state<'idle' | 'done'>('idle');
 
 	onMount(() => {
@@ -34,16 +33,17 @@
 		};
 	});
 
-	$effect(() => {
-		topLanguagesSettings.variant = topLanguagesVariant;
-	});
-
-	$effect(() => {
-		blogSettings.tagView = blogTagView;
-	});
-
 	function toggleHomepageSections() {
 		showSections.set(!showSectionsEnabled);
+	}
+
+	function handleTopLanguagesVariantChange(event: Event) {
+		topLanguagesSettings.variant = (event.currentTarget as HTMLSelectElement)
+			.value as TopLanguagesVariant;
+	}
+
+	function handleBlogTagViewChange(event: Event) {
+		blogSettings.tagView = (event.currentTarget as HTMLSelectElement).value as BlogTagView;
 	}
 
 	function handleThisSiteTitleInput() {
@@ -99,7 +99,8 @@
 
 				<Select
 					label="Top Languages View"
-					bind:value={topLanguagesVariant}
+					value={topLanguagesSettings.variant}
+					onchange={handleTopLanguagesVariantChange}
 					options={topLanguagesVariantOptions}
 					hint="Sets the default treatment for the Top Languages card."
 				/>
@@ -124,7 +125,8 @@
 
 			<Select
 				label="Tag Browser View"
-				bind:value={blogTagView}
+				value={blogSettings.tagView}
+				onchange={handleBlogTagViewChange}
 				options={blogViewOptions}
 				hint="Used as the default when the blog URL does not specify a view."
 			/>

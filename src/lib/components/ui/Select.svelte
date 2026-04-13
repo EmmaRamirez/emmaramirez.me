@@ -22,6 +22,8 @@
 		options: SelectOption[];
 		/** Placeholder text */
 		placeholder?: string;
+		/** Native change handler forwarded to the inner select */
+		onchange?: (event: Event & { currentTarget: EventTarget & HTMLSelectElement }) => void;
 	}
 
 	let {

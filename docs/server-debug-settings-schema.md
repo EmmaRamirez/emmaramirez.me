@@ -121,3 +121,4 @@ This work is complete when:
 - hero and disco settings are stored as separate concerns
 - route code no longer depends on hidden nested keys inside a shared JSON blob
 - future settings changes can be made without reconstructing unrelated payloads
+

@@ -4,6 +4,7 @@
 	import type { FeatureCollection, Point } from 'geojson';
 	import mapboxgl from 'mapbox-gl';
 	import 'mapbox-gl/dist/mapbox-gl.css';
+	import '$lib/styles/mapbox.css';
 	import { env } from '$env/dynamic/public';
 	import { mapRegionById, mapRegions } from '$lib/data/mapRegions';
 	import { theme } from '$lib/stores';
@@ -947,76 +948,6 @@
 
 	.visitor-form__message--error {
 		color: #dc2626;
-	}
-
-	:global(.state-label) {
-		font-size: 0.8rem;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.15em;
-		pointer-events: none;
-	}
-
-	:global(.state-label-dark) {
-		color: #ffffff;
-		text-shadow:
-			0 1px 3px rgba(0, 0, 0, 0.8),
-			0 0 8px rgba(0, 0, 0, 0.5);
-	}
-
-	:global(.state-label-light) {
-		color: rgba(20, 16, 12, 0.95);
-		text-shadow:
-			0 1px 3px rgba(255, 255, 255, 0.85),
-			0 0 8px rgba(255, 255, 255, 0.55);
-	}
-
-	:global(.map-visitor-popup .mapboxgl-popup-content) {
-		padding: 0.45rem 0.6rem;
-		border-radius: 0.7rem;
-		border: 0.0625rem solid color-mix(in srgb, var(--border-color) 70%, transparent);
-		background: color-mix(in srgb, var(--surface) 92%, transparent);
-		color: var(--text-primary);
-		font-size: 0.8rem;
-		line-height: 1.45;
-		box-shadow: 0 0.75rem 1.75rem rgba(15, 23, 42, 0.16);
-	}
-
-	:global(.map-visitor-popup .mapboxgl-popup-tip) {
-		border-top-color: color-mix(in srgb, var(--surface) 92%, transparent);
-		border-bottom-color: color-mix(in srgb, var(--surface) 92%, transparent);
-	}
-
-	:global(.map-hover-popup .mapboxgl-popup-content) {
-		padding: 0.55rem 0.9rem;
-		border-radius: 999px;
-		border: 0.0625rem solid rgba(255, 255, 255, 0.18);
-		background: rgba(0, 0, 0, 0.92);
-		color: #ffffff;
-		font-size: 0.8rem;
-		font-weight: 600;
-		line-height: 1.2;
-		box-shadow: 0 0.75rem 1.75rem rgba(15, 23, 42, 0.24);
-	}
-
-	:global(.location-block.is-dark .map-hover-popup .mapboxgl-popup-content) {
-		border-color: rgba(0, 0, 0, 0.18);
-		background: rgba(255, 255, 255, 0.96);
-		color: #111111;
-	}
-
-	:global(.map-hover-popup .mapboxgl-popup-tip) {
-		border-top-color: rgba(0, 0, 0, 0.92);
-		border-bottom-color: rgba(0, 0, 0, 0.92);
-	}
-
-	:global(.location-block.is-dark .map-hover-popup .mapboxgl-popup-tip) {
-		border-top-color: rgba(255, 255, 255, 0.96);
-		border-bottom-color: rgba(255, 255, 255, 0.96);
-	}
-
-	:global(.mapboxgl-popup-close-button) {
-		display: none;
 	}
 
 	@media (max-width: 48rem) {

@@ -2,7 +2,6 @@ export interface TopLanguage {
 	name: string;
 	percentage: number;
 	color: string;
-	note: string;
 }
 
 export interface TopLanguagesSummary {
@@ -38,38 +37,29 @@ export const fallbackTopLanguages: TopLanguage[] = [
 	{
 		name: 'Svelte',
 		percentage: 30,
-		color: 'var(--lang-svelte)',
-		note: 'interfaces, motion, and design systems'
+		color: 'var(--lang-svelte)'
 	},
 	{
 		name: 'TypeScript',
 		percentage: 25,
-		color: 'var(--lang-typescript)',
-		note: 'component APIs, tooling, and app glue'
+		color: 'var(--lang-typescript)'
 	},
 	{
 		name: 'Rust',
 		percentage: 20,
-		color: 'var(--lang-rust)',
-		note: 'CLIs, experiments, and performance rabbit holes'
+		color: 'var(--lang-rust)'
 	},
 	{
 		name: 'Elixir',
 		percentage: 20,
-		color: 'var(--lang-elixir)',
-		note: 'realtime backends and durable app logic'
+		color: 'var(--lang-elixir)'
 	},
 	{
 		name: 'Haskell',
 		percentage: 5,
-		color: 'var(--lang-haskell)',
-		note: 'type-driven side quests'
+		color: 'var(--lang-haskell)'
 	}
 ];
-
-function formatRepositoryNote(repositoryCount: number) {
-	return `${repositoryCount} ${repositoryCount === 1 ? 'repo' : 'repos'}`;
-}
 
 function isIncludedLanguage(name: string) {
 	return !EXCLUDED_LANGUAGE_NAMES.has(name.trim().toLowerCase());
@@ -116,8 +106,7 @@ export function buildTopLanguagesResponse(args: {
 		languages: visibleLanguages.map((language, index) => ({
 			name: language.name,
 			percentage: percentages[index] ?? 0,
-			color: language.color || fallbackTopLanguages[index]?.color || 'var(--text-muted)',
-			note: formatRepositoryNote(language.repositoryCount)
+			color: language.color || fallbackTopLanguages[index]?.color || 'var(--text-muted)'
 		})),
 		summary: {
 			totalRepositories: args.totalRepositories,
