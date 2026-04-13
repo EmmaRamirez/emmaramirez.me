@@ -33,6 +33,27 @@
 	box-shadow: 0 0.75rem 1.75rem rgba(15, 23, 42, 0.24);
 }
 
+/* Drop the content edge that meets the tip so the border doesn’t read as a seam. */
+.map-visitor-popup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-content,
+.map-visitor-popup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-content,
+.map-visitor-popup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-content {
+	border-bottom: none;
+}
+
+.map-visitor-popup.mapboxgl-popup-anchor-top .mapboxgl-popup-content,
+.map-visitor-popup.mapboxgl-popup-anchor-top-left .mapboxgl-popup-content,
+.map-visitor-popup.mapboxgl-popup-anchor-top-right .mapboxgl-popup-content {
+	border-top: none;
+}
+
+.map-visitor-popup.mapboxgl-popup-anchor-left .mapboxgl-popup-content {
+	border-left: none;
+}
+
+.map-visitor-popup.mapboxgl-popup-anchor-right .mapboxgl-popup-content {
+	border-right: none;
+}
+
 .location-block.is-dark .map-visitor-popup .mapboxgl-popup-content {
 	border-color: rgba(0, 0, 0, 0.18);
 	background: rgba(255, 255, 255, 0.96);
@@ -59,6 +80,26 @@
 	font-weight: 600;
 	line-height: 1.2;
 	box-shadow: 0 0.75rem 1.75rem rgba(15, 23, 42, 0.24);
+}
+
+.map-hover-popup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-content,
+.map-hover-popup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-content,
+.map-hover-popup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-content {
+	border-bottom: none;
+}
+
+.map-hover-popup.mapboxgl-popup-anchor-top .mapboxgl-popup-content,
+.map-hover-popup.mapboxgl-popup-anchor-top-left .mapboxgl-popup-content,
+.map-hover-popup.mapboxgl-popup-anchor-top-right .mapboxgl-popup-content {
+	border-top: none;
+}
+
+.map-hover-popup.mapboxgl-popup-anchor-left .mapboxgl-popup-content {
+	border-left: none;
+}
+
+.map-hover-popup.mapboxgl-popup-anchor-right .mapboxgl-popup-content {
+	border-right: none;
 }
 
 .location-block.is-dark .map-hover-popup .mapboxgl-popup-content {

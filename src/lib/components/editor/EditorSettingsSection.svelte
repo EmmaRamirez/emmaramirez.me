@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { ThisSiteBlock } from '$lib/components/blocks';
 	import { buildHomepageGridItems } from '$lib/registry/gridItems';
 	import {
 		blogSettings,
@@ -112,6 +113,11 @@
 					onblur={commitThisSiteTitle}
 					hint={`Falls back to "${defaultThisSiteTitle}" when left blank.`}
 				/>
+
+				<div class="settings-preview" aria-live="polite">
+					<p class="settings-preview__label">This Site card preview</p>
+					<ThisSiteBlock class="min-h-[11rem]" />
+				</div>
 			</div>
 		</div>
 
@@ -242,6 +248,18 @@
 		margin: 0;
 		font-size: 0.9rem;
 		line-height: 1.6;
+		color: var(--text-secondary);
+	}
+
+	.settings-preview {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.settings-preview__label {
+		margin: 0;
+		font-size: 0.82rem;
+		font-weight: 600;
 		color: var(--text-secondary);
 	}
 

@@ -5,8 +5,6 @@
 		class?: string;
 	}
 
-	const stack = ['SvelteKit', 'TypeScript', 'Design tokens'];
-
 	let { class: className = '' }: Props = $props();
 	const title = $derived(thisSiteSettings.title);
 </script>
@@ -18,12 +16,6 @@
 		<div class="this-site-block__copy">
 			<h3 class="this-site-block__title">{title}</h3>
 		</div>
-
-		<ul class="this-site-block__stack" aria-label="Core technologies">
-			{#each stack as item (item)}
-				<li>{item}</li>
-			{/each}
-		</ul>
 	</div>
 </article>
 
@@ -76,53 +68,28 @@
 	.this-site-block__content {
 		position: relative;
 		z-index: 1;
-		display: grid;
-		grid-template-rows: minmax(0, 1fr) auto;
+		display: flex;
+		align-items: flex-start;
 		height: 100%;
 		min-height: 0;
-		gap: 0.9rem;
 		padding: 0.95rem;
 	}
 
 	.this-site-block__copy {
-		display: grid;
-		align-content: start;
-		gap: 0.8rem;
+		display: flex;
+		align-items: flex-start;
 		min-height: 0;
+		width: 100%;
 	}
 
 	.this-site-block__title {
 		margin: 0;
-		max-width: 10ch;
-		font-size: clamp(1.5rem, 1.7vw + 1.05rem, 2.2rem);
-		line-height: 0.95;
+		max-width: min(18ch, 100%);
+		font-size: clamp(1.2rem, 1vw + 0.95rem, 1.9rem);
+		line-height: 1.02;
 		font-weight: 800;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+		overflow-wrap: anywhere;
+		word-break: break-word;
 		text-wrap: balance;
-	}
-
-	.this-site-block__stack {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	.this-site-block__stack li {
-		padding: 0.38rem 0.64rem;
-		border: 0.0625rem solid color-mix(in srgb, var(--this-site-text) 16%, transparent);
-		border-radius: 999px;
-		background: var(--this-site-chip-bg);
-		font-size: 0.68rem;
-		font-weight: 700;
-		line-height: 1;
-		color: var(--this-site-text);
-		backdrop-filter: blur(0.375rem);
 	}
 </style>
