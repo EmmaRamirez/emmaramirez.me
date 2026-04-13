@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Modal, Select, Switch, Slider } from '$lib/components/ui';
+	import { Modal, Select, Slider } from '$lib/components/ui';
 	import { discoParams, type DiscoParams } from '$lib/stores/discoParams.svelte';
 	import { showSections } from '$lib/stores';
 	import {
@@ -181,26 +181,6 @@
 			bind:value={headerBlendMode}
 			options={blendModeOptions}
 		/>
-
-		<div class="space-y-3 rounded-lg border border-(--border-color) bg-(--surface) p-3 sm:p-4">
-			<div class="flex items-start justify-between gap-3">
-				<div>
-					<p class="text-sm font-semibold text-(--text-primary)">Feature Flags</p>
-					<p class="text-xs text-(--text-secondary)">Experimental toggles for the homepage</p>
-				</div>
-				<span
-					class="text-[0.65rem] font-semibold tracking-[0.2em] text-(--text-secondary) uppercase"
-				>
-					Dev
-				</span>
-			</div>
-			<Switch
-				label="Show Essays & Projects"
-				description="Toggle visibility of Essays and Projects sections"
-				checked={showSectionsEnabled}
-				on:click={() => setShowSectionsEnabled(!showSectionsEnabled)}
-			/>
-		</div>
 
 		<div class="space-y-3 rounded-lg border border-(--border-color) bg-(--surface) p-3 sm:p-4">
 			<div class="flex items-start justify-between gap-3">
