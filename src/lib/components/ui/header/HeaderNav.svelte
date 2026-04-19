@@ -31,7 +31,13 @@
 	setContext('header-nav', navContext);
 </script>
 
-<nav bind:this={navRef} class={cn('relative flex items-center gap-1', className)}>
+<nav
+	bind:this={navRef}
+	class={cn(
+		'relative flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto',
+		className
+	)}
+>
 	{#if children}
 		{@render children()}
 	{/if}

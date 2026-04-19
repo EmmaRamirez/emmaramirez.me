@@ -153,6 +153,7 @@ to the Svelte implementation is noted.
 - **Navbar / AppHeader**
   - Top-level navigation bar with branding and primary actions.
   - Existing: `Navbar` → `$lib/components/ui/Navbar.svelte`.
+  - Proposal: `HeaderLogo` interactive monogram notes → `docs/components/header-logo.md`.
 - **Sidebar / AppShell**
   - Shell layout with persistent navigation on the side.
   - Existing: `Sidebar` → `$lib/components/ui/Sidebar.svelte`.

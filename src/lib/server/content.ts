@@ -1,4 +1,4 @@
-import type { ContentEntry, Prisma } from '$generated/prisma/client';
+import { Prisma, type ContentEntry } from '$generated/prisma/client';
 import type { Article, ArticleMeta } from '$lib/articles';
 import { getArticles } from '$lib/articles';
 import { firstMarkdownParagraph, markdownToPlainText } from '$lib/markdown';

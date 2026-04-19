@@ -229,7 +229,7 @@
 	></canvas>
 
 	<Header sticky>
-		<HeaderLogo>EMZINNIA</HeaderLogo>
+		<HeaderLogo />
 		<HeaderNav>
 			<HeaderNavItem href="/">Home</HeaderNavItem>
 			<HeaderNavItem href="/blog">Essays</HeaderNavItem>

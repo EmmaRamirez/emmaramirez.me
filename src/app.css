@@ -97,6 +97,39 @@
 		--slider-thumb-hover-bg: hsl(36, 22%, 93%);
 		--slider-focus-ring: hsla(26, 13%, 36%, 0.38);
 		--slider-thumb-shadow: 0 0.0625rem 0.125rem hsla(26, 18%, 18%, 0.14);
+
+		/* Scrollbars: thin track + rounded thumb (see global rules below) */
+		--scrollbar-track: transparent;
+		--scrollbar-thumb: color-mix(in srgb, var(--liver-brown-500) 42%, transparent);
+		--scrollbar-thumb-hover: color-mix(in srgb, var(--liver-brown-600) 58%, transparent);
+
+		/* Tooltips: dark surface + light label (liver scale is dark in light mode) */
+		--tooltip-bg: var(--liver-brown-900);
+		--tooltip-fg: hsl(0, 0%, 100%);
+
+		/* Header logo mark: warm light-mode palette */
+		--header-logo-mark-shell: color-mix(in srgb, var(--card-bg) 82%, var(--caroline-blue-200) 18%);
+		--header-logo-mark-shell-highlight: hsla(0, 0%, 100%, 0.45);
+		--header-logo-mark-static-from: color-mix(in srgb, var(--caroline-blue-200) 64%, white 36%);
+		--header-logo-mark-static-via: color-mix(
+			in srgb,
+			var(--sandy-tan-300) 74%,
+			var(--transit-yellow-300) 26%
+		);
+		--header-logo-mark-static-to: color-mix(
+			in srgb,
+			var(--light-rose-500) 20%,
+			var(--sandy-tan-200) 80%
+		);
+		--header-logo-mark-base: color-mix(in srgb, var(--sandy-tan-500) 78%, white 22%);
+		--header-logo-mark-primary: var(--caroline-blue-700);
+		--header-logo-mark-secondary: color-mix(
+			in srgb,
+			var(--light-rose-500) 58%,
+			var(--transit-yellow-700) 42%
+		);
+		--header-logo-mark-mint: color-mix(in srgb, var(--magic-mint-500) 72%, white 28%);
+		--header-logo-mark-pink: color-mix(in srgb, var(--blush-pink-500) 76%, white 24%);
 	}
 
 	.dark {
@@ -145,6 +178,26 @@
 		--slider-thumb-hover-bg: hsl(234, 16%, 86%);
 		--slider-focus-ring: hsla(217, 92%, 72%, 0.42);
 		--slider-thumb-shadow: 0 0.0625rem 0.125rem hsla(0, 0%, 0%, 0.4);
+
+		--scrollbar-track: transparent;
+		--scrollbar-thumb: color-mix(in srgb, var(--border-color) 78%, var(--page-bg));
+		--scrollbar-thumb-hover: color-mix(in srgb, var(--text-muted) 72%, var(--page-bg));
+
+		/* Tooltips: elevated navy surface (liver-brown-* are light tints in dark mode — do not use for tooltip chrome) */
+		--tooltip-bg: var(--card-bg);
+		--tooltip-fg: var(--text-primary);
+
+		/* Header logo mark: keep the existing inky dark palette */
+		--header-logo-mark-shell: #141522;
+		--header-logo-mark-shell-highlight: rgba(255, 255, 255, 0.06);
+		--header-logo-mark-static-from: #243a5c;
+		--header-logo-mark-static-via: #1f2033;
+		--header-logo-mark-static-to: #12131f;
+		--header-logo-mark-base: #171523;
+		--header-logo-mark-primary: #6b9eff;
+		--header-logo-mark-secondary: #ff856b;
+		--header-logo-mark-mint: #80fae0;
+		--header-logo-mark-pink: #ff80e0;
 	}
 }
 
@@ -241,6 +294,38 @@
 ::selection {
 	background-color: var(--selection-bg);
 	color: var(--selection-text);
+}
+
+/*
+ * Thin, theme-aware scrollbars (Firefox scrollbar-color + WebKit pseudo-elements).
+ */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar {
+	width: 0.5rem;
+	height: 0.5rem;
+}
+
+*::-webkit-scrollbar-track {
+	background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: var(--scrollbar-thumb);
+	border-radius: 999px;
+	border: 2px solid transparent;
+	background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background-color: var(--scrollbar-thumb-hover);
+}
+
+*::-webkit-scrollbar-corner {
+	background: transparent;
 }
 
 html,

@@ -27,11 +27,8 @@
 	<div class="editor-container min-h-screen bg-(--background)">
 		<Header sticky>
 			<HeaderLogo>
-				<span class="flex items-center gap-2">
-					EMZINNIA
-					<span class="rounded-md bg-amber-500/20 px-2 py-0.5 font-mono text-xs text-amber-400">
-						EDITOR
-					</span>
+				<span class="rounded-md bg-amber-500/20 px-2 py-0.5 font-mono text-xs text-amber-400">
+					EDITOR
 				</span>
 			</HeaderLogo>
 			<HeaderNav>

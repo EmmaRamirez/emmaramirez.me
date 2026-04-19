@@ -82,7 +82,7 @@
 
 <section class="page-container relative min-h-screen w-full" class:panel-open={anyPanelOpen}>
 	<Header sticky>
-		<HeaderLogo>EMZINNIA</HeaderLogo>
+		<HeaderLogo />
 		<HeaderNav>
 			<HeaderNavItem href="/" active class="text-(--text-primary)">Home</HeaderNavItem>
 			{#if showSectionsEnabled}
