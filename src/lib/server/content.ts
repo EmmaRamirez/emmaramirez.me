@@ -88,6 +88,14 @@ function getContentEntryDelegate() {
 	return (prisma as typeof prisma & { contentEntry?: ContentEntryDelegate }).contentEntry;
 }
 
+function isMissingContentEntryTableError(error: unknown): boolean {
+	return (
+		error instanceof Prisma.PrismaClientKnownRequestError &&
+		error.code === 'P2021' &&
+		error.meta?.table === 'public.ContentEntry'
+	);
+}
+
 export function resolveProjectEntry(
 	project: ProjectRegistryEntry,
 	entry?: StoredContentEntry | null
@@ -135,10 +143,16 @@ async function getEntries(entityType: 'project' | 'article'): Promise<StoredCont
 	const delegate = getContentEntryDelegate();
 	if (!delegate) return [];
 
-	return delegate.findMany({
-		where: { entityType },
-		orderBy: [{ updatedAt: 'desc' }, { entityId: 'asc' }]
-	});
+	try {
+		return await delegate.findMany({
+			where: { entityType },
+			orderBy: [{ updatedAt: 'desc' }, { entityId: 'asc' }]
+		});
+	} catch (error) {
+		// Allow the site to fall back to checked-in content while a new database is still being migrated.
+		if (isMissingContentEntryTableError(error)) return [];
+		throw error;
+	}
 }
 
 export async function getResolvedProjects(): Promise<ResolvedProject[]> {
@@ -156,14 +170,20 @@ export async function getResolvedProject(projectId: string): Promise<ResolvedPro
 		return resolveProjectEntry(projectRegistry[projectId], null);
 	}
 
-	const entry = await delegate.findUnique({
-		where: {
-			entityType_entityId: {
-				entityType: 'project',
-				entityId: projectId
+	let entry: StoredContentEntry | null = null;
+	try {
+		entry = await delegate.findUnique({
+			where: {
+				entityType_entityId: {
+					entityType: 'project',
+					entityId: projectId
+				}
 			}
-		}
-	});
+		});
+	} catch (error) {
+		// Project pages can still render from the local registry until the ContentEntry migration is applied.
+		if (!isMissingContentEntryTableError(error)) throw error;
+	}
 
 	return resolveProjectEntry(projectRegistry[projectId], entry);
 }

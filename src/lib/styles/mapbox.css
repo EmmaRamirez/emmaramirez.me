@@ -60,14 +60,46 @@
 	color: #111111;
 }
 
-.map-visitor-popup .mapboxgl-popup-tip {
-	border-top-color: rgba(0, 0, 0, 0.92);
+/* Tip fill must match .mapboxgl-popup-content, per anchor. Only set the border side Mapbox uses for that direction — global top/bottom colors break left/right tips
+   (opaque top/bottom borders read as a box around the triangle). */
+.map-visitor-popup.mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+.map-visitor-popup.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+.map-visitor-popup.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
 	border-bottom-color: rgba(0, 0, 0, 0.92);
 }
 
-.location-block.is-dark .map-visitor-popup .mapboxgl-popup-tip {
-	border-top-color: rgba(255, 255, 255, 0.96);
+.map-visitor-popup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+.map-visitor-popup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+.map-visitor-popup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+	border-top-color: rgba(0, 0, 0, 0.92);
+}
+
+.map-visitor-popup.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+	border-right-color: rgba(0, 0, 0, 0.92);
+}
+
+.map-visitor-popup.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+	border-left-color: rgba(0, 0, 0, 0.92);
+}
+
+.location-block.is-dark .map-visitor-popup.mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+.location-block.is-dark .map-visitor-popup.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+.location-block.is-dark .map-visitor-popup.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
 	border-bottom-color: rgba(255, 255, 255, 0.96);
+}
+
+.location-block.is-dark .map-visitor-popup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+.location-block.is-dark .map-visitor-popup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+.location-block.is-dark .map-visitor-popup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+	border-top-color: rgba(255, 255, 255, 0.96);
+}
+
+.location-block.is-dark .map-visitor-popup.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+	border-right-color: rgba(255, 255, 255, 0.96);
+}
+
+.location-block.is-dark .map-visitor-popup.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+	border-left-color: rgba(255, 255, 255, 0.96);
 }
 
 .map-hover-popup .mapboxgl-popup-content {
@@ -108,14 +140,44 @@
 	color: #111111;
 }
 
-.map-hover-popup .mapboxgl-popup-tip {
-	border-top-color: rgba(0, 0, 0, 0.92);
+.map-hover-popup.mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+.map-hover-popup.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+.map-hover-popup.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
 	border-bottom-color: rgba(0, 0, 0, 0.92);
 }
 
-.location-block.is-dark .map-hover-popup .mapboxgl-popup-tip {
-	border-top-color: rgba(255, 255, 255, 0.96);
+.map-hover-popup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+.map-hover-popup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+.map-hover-popup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+	border-top-color: rgba(0, 0, 0, 0.92);
+}
+
+.map-hover-popup.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+	border-right-color: rgba(0, 0, 0, 0.92);
+}
+
+.map-hover-popup.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+	border-left-color: rgba(0, 0, 0, 0.92);
+}
+
+.location-block.is-dark .map-hover-popup.mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+.location-block.is-dark .map-hover-popup.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+.location-block.is-dark .map-hover-popup.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
 	border-bottom-color: rgba(255, 255, 255, 0.96);
+}
+
+.location-block.is-dark .map-hover-popup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+.location-block.is-dark .map-hover-popup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+.location-block.is-dark .map-hover-popup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+	border-top-color: rgba(255, 255, 255, 0.96);
+}
+
+.location-block.is-dark .map-hover-popup.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+	border-right-color: rgba(255, 255, 255, 0.96);
+}
+
+.location-block.is-dark .map-hover-popup.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+	border-left-color: rgba(255, 255, 255, 0.96);
 }
 
 .mapboxgl-popup-close-button {
