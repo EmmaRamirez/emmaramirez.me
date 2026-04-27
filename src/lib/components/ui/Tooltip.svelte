@@ -105,28 +105,20 @@
 		const base = 'absolute box-border h-0 w-0 border-4 border-solid';
 		switch (position) {
 			case 'top':
-				if (align === 'start')
-					return `${base} top-full left-[1.125rem] -translate-x-1/2`;
-				if (align === 'end')
-					return `${base} top-full right-[1.125rem] translate-x-1/2`;
+				if (align === 'start') return `${base} top-full left-[1.125rem] -translate-x-1/2`;
+				if (align === 'end') return `${base} top-full right-[1.125rem] translate-x-1/2`;
 				return `${base} top-full left-1/2 -translate-x-1/2`;
 			case 'bottom':
-				if (align === 'start')
-					return `${base} bottom-full left-[1.125rem] -translate-x-1/2`;
-				if (align === 'end')
-					return `${base} bottom-full right-[1.125rem] translate-x-1/2`;
+				if (align === 'start') return `${base} bottom-full left-[1.125rem] -translate-x-1/2`;
+				if (align === 'end') return `${base} bottom-full right-[1.125rem] translate-x-1/2`;
 				return `${base} bottom-full left-1/2 -translate-x-1/2`;
 			case 'left':
-				if (align === 'start')
-					return `${base} left-full top-[1.125rem] -translate-y-1/2`;
-				if (align === 'end')
-					return `${base} left-full bottom-[1.125rem] translate-y-1/2`;
+				if (align === 'start') return `${base} left-full top-[1.125rem] -translate-y-1/2`;
+				if (align === 'end') return `${base} left-full bottom-[1.125rem] translate-y-1/2`;
 				return `${base} left-full top-1/2 -translate-y-1/2`;
 			case 'right':
-				if (align === 'start')
-					return `${base} right-full top-[1.125rem] -translate-y-1/2`;
-				if (align === 'end')
-					return `${base} right-full bottom-[1.125rem] translate-y-1/2`;
+				if (align === 'start') return `${base} right-full top-[1.125rem] -translate-y-1/2`;
+				if (align === 'end') return `${base} right-full bottom-[1.125rem] translate-y-1/2`;
 				return `${base} right-full top-1/2 -translate-y-1/2`;
 			default:
 				return base;
@@ -136,6 +128,7 @@
 
 <div
 	class="relative inline-flex {className}"
+	role="presentation"
 	onmouseenter={embeddable ? show : undefined}
 	onmouseleave={embeddable ? hide : undefined}
 	onfocusin={embeddable ? show : undefined}

@@ -326,7 +326,7 @@
 		top: 0;
 		left: 0;
 		bottom: 0;
-		width: min(68.75rem, 80vw);
+		width: min(56rem, 72vw);
 		background: var(--page-bg);
 		border-right: 0.0625rem solid var(--border-color);
 		z-index: 60;
@@ -695,7 +695,7 @@
 
 	@media (max-width: 64rem) {
 		.project-reader-panel {
-			width: min(45rem, 85vw);
+			width: min(42rem, 88vw);
 		}
 	}
 

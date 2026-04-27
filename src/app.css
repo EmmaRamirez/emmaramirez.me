@@ -107,29 +107,17 @@
 		--tooltip-bg: var(--liver-brown-900);
 		--tooltip-fg: hsl(0, 0%, 100%);
 
-		/* Header logo mark: warm light-mode palette */
-		--header-logo-mark-shell: color-mix(in srgb, var(--card-bg) 82%, var(--caroline-blue-200) 18%);
-		--header-logo-mark-shell-highlight: hsla(0, 0%, 100%, 0.45);
-		--header-logo-mark-static-from: color-mix(in srgb, var(--caroline-blue-200) 64%, white 36%);
-		--header-logo-mark-static-via: color-mix(
-			in srgb,
-			var(--sandy-tan-300) 74%,
-			var(--transit-yellow-300) 26%
-		);
-		--header-logo-mark-static-to: color-mix(
-			in srgb,
-			var(--light-rose-500) 20%,
-			var(--sandy-tan-200) 80%
-		);
-		--header-logo-mark-base: color-mix(in srgb, var(--sandy-tan-500) 78%, white 22%);
-		--header-logo-mark-primary: var(--caroline-blue-700);
-		--header-logo-mark-secondary: color-mix(
-			in srgb,
-			var(--light-rose-500) 58%,
-			var(--transit-yellow-700) 42%
-		);
-		--header-logo-mark-mint: color-mix(in srgb, var(--magic-mint-500) 72%, white 28%);
-		--header-logo-mark-pink: color-mix(in srgb, var(--blush-pink-500) 76%, white 24%);
+		/* Header logo mark: palette sampled from the orb reference image */
+		--header-logo-mark-shell: color-mix(in srgb, #151729 78%, white 22%);
+		--header-logo-mark-shell-highlight: rgba(242, 177, 201, 0.42);
+		--header-logo-mark-static-from: #2d4ad4;
+		--header-logo-mark-static-via: #9936b6;
+		--header-logo-mark-static-to: #f9614c;
+		--header-logo-mark-base: #151729;
+		--header-logo-mark-primary: #2d4ad4;
+		--header-logo-mark-secondary: #f9614c;
+		--header-logo-mark-mint: #f2b1c9;
+		--header-logo-mark-pink: #d73a82;
 	}
 
 	.dark {
@@ -187,17 +175,17 @@
 		--tooltip-bg: var(--card-bg);
 		--tooltip-fg: var(--text-primary);
 
-		/* Header logo mark: keep the existing inky dark palette */
+		/* Header logo mark: palette sampled from the orb reference image */
 		--header-logo-mark-shell: #141522;
-		--header-logo-mark-shell-highlight: rgba(255, 255, 255, 0.06);
-		--header-logo-mark-static-from: #243a5c;
-		--header-logo-mark-static-via: #1f2033;
-		--header-logo-mark-static-to: #12131f;
-		--header-logo-mark-base: #171523;
-		--header-logo-mark-primary: #6b9eff;
-		--header-logo-mark-secondary: #ff856b;
-		--header-logo-mark-mint: #80fae0;
-		--header-logo-mark-pink: #ff80e0;
+		--header-logo-mark-shell-highlight: rgba(242, 177, 201, 0.18);
+		--header-logo-mark-static-from: #2d4ad4;
+		--header-logo-mark-static-via: #9936b6;
+		--header-logo-mark-static-to: #f9614c;
+		--header-logo-mark-base: #151729;
+		--header-logo-mark-primary: #2d4ad4;
+		--header-logo-mark-secondary: #f9614c;
+		--header-logo-mark-mint: #f2b1c9;
+		--header-logo-mark-pink: #d73a82;
 	}
 }
 

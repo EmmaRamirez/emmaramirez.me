@@ -391,7 +391,7 @@
 
 <div
 	bind:this={container}
-	class="header-logo-mark relative size-9 min-h-9 min-w-9 shrink-0 overflow-hidden rounded-[32%]"
+	class="header-logo-mark relative size-9 min-h-9 min-w-9 shrink-0 overflow-hidden rounded-full"
 >
 	{#if browser && mediaReady && webglOk}
 		<div
