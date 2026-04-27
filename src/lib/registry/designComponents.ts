@@ -358,7 +358,7 @@ const categoryDefinitions: CategoryDefinition[] = [
 			{ path: 'blocks/location/CityCard.svelte', props: ['photo: string', 'description: string'] },
 			{
 				path: 'blocks/location/LocationBlock.svelte',
-				previewMode: 'documented',
+				previewMode: 'mocked',
 				dependencies: ['Mapbox token', 'GeoJSON data', 'Theme store', 'Places API']
 			},
 			{ path: 'blocks/media/DiscoBlock.svelte', dependencies: ['Canvas animation', 'Image asset'] },
@@ -376,7 +376,7 @@ const categoryDefinitions: CategoryDefinition[] = [
 			},
 			{
 				path: 'blocks/personal/TopLanguagesLoader.svelte',
-				previewMode: 'documented',
+				previewMode: 'mocked',
 				dependencies: ['/api/github/top-languages', 'Performance analytics store']
 			},
 			{
@@ -404,7 +404,7 @@ const categoryDefinitions: CategoryDefinition[] = [
 		components: [
 			{
 				path: 'blocks/devtools/ApiExplorerBlock.svelte',
-				previewMode: 'documented',
+				previewMode: 'mocked',
 				dependencies: ['/api/debug-settings']
 			},
 			{ path: 'blocks/devtools/ComponentLibraryPreview.svelte', props: ['componentId: string'] },
@@ -419,7 +419,7 @@ const categoryDefinitions: CategoryDefinition[] = [
 		id: 'editor',
 		name: 'Editor sections',
 		description: 'Dev-only editor route sections and controls.',
-		defaultPreviewMode: 'documented',
+		defaultPreviewMode: 'mocked',
 		defaultSummary: 'Editor-only component for homepage customization workflows.',
 		defaultDescription:
 			'Use inside the `/editor` experience, where editor state, project/article fixtures, and performance stores are already wired.',
@@ -450,7 +450,7 @@ const categoryDefinitions: CategoryDefinition[] = [
 		id: 'panels',
 		name: 'Reader and search panels',
 		description: 'Overlay and panel components for article, project, tag, and omnibar workflows.',
-		defaultPreviewMode: 'documented',
+		defaultPreviewMode: 'mocked',
 		defaultSummary: 'Panel component for browsing or reading app content.',
 		defaultDescription:
 			'Use with real article/project registries and navigation callbacks. The design page documents expected data and avoids hijacking navigation.',
@@ -478,7 +478,7 @@ const categoryDefinitions: CategoryDefinition[] = [
 		id: 'grids',
 		name: 'Grid tiles and layouts',
 		description: 'Homepage grid containers and selectable article/project tiles.',
-		defaultPreviewMode: 'documented',
+		defaultPreviewMode: 'mocked',
 		defaultSummary: 'Grid component that depends on homepage layout contracts.',
 		defaultDescription:
 			'Use with homepage registry items and selection state. Standalone examples use documented fixtures to avoid mutating the live grid stores.',
@@ -503,7 +503,7 @@ const categoryDefinitions: CategoryDefinition[] = [
 		id: 'hero',
 		name: 'Hero and 3D scene',
 		description: 'Homepage hero components and Threlte/Three-powered scene pieces.',
-		defaultPreviewMode: 'documented',
+		defaultPreviewMode: 'mocked',
 		defaultSummary: 'Hero component with GPU/browser runtime requirements.',
 		defaultDescription:
 			'Use on client-rendered hero surfaces with motion and WebGL capabilities available. The design page documents tunables without mounting every scene by default.',
@@ -531,18 +531,18 @@ const categoryDefinitions: CategoryDefinition[] = [
 		components: [
 			{
 				path: 'graphics/Blob.svelte',
-				previewMode: 'documented',
+				previewMode: 'live',
 				dependencies: ['Bloblet or Bloblet2 child graphic']
 			},
 			{ path: 'graphics/Bloblet.svelte' },
 			{
 				path: 'graphics/Bloblet2.svelte',
-				previewMode: 'documented',
+				previewMode: 'live',
 				dependencies: ['Console-logging hover experiment']
 			},
 			{
 				path: 'graphics/Bloblet3.svelte',
-				previewMode: 'documented',
+				previewMode: 'mocked',
 				props: ['fill?: string', 'stroke?: string', 'strokeWidth?: number'],
 				dependencies: ['@georgedoescode/spline', 'simplex-noise', 'Browser animation frame']
 			},
@@ -572,7 +572,7 @@ const categoryDefinitions: CategoryDefinition[] = [
 			},
 			{
 				path: 'dev/DebugMenu.svelte',
-				previewMode: 'documented',
+				previewMode: 'mocked',
 				dependencies: ['/api/debug-settings', 'Bindable header blend mode']
 			}
 		]
