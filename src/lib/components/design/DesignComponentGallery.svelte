@@ -60,6 +60,34 @@
 
 	const visibleCount = $derived(filteredItems.length);
 
+	const filteredCategories = $derived.by(() => {
+		const normalizedQuery = query.trim().toLowerCase();
+		return designComponentCategories
+			.map((category) => ({
+				...category,
+				components: category.components.filter((component) => {
+					const matchesQuery =
+						normalizedQuery.length === 0 ||
+						[
+							component.name,
+							component.sourcePath,
+							component.summary,
+							category.name,
+							component.previewMode,
+							...component.dependencies,
+							...component.props
+						]
+							.join(' ')
+							.toLowerCase()
+							.includes(normalizedQuery);
+					const matchesMode = selectedMode === 'all' || component.previewMode === selectedMode;
+					const matchesCategory = selectedCategory === 'all' || category.id === selectedCategory;
+					return matchesQuery && matchesMode && matchesCategory;
+				})
+			}))
+			.filter((category) => category.components.length > 0);
+	});
+
 	function clearFilters() {
 		query = '';
 		selectedMode = 'all';
@@ -109,6 +137,16 @@
 		}
 	}
 
+	function scrollToComponent(component: DesignComponentDoc) {
+		mounted = { ...mounted, [component.id]: true };
+		const target = document.getElementById(`tile-anchor-${component.id}`);
+		if (target) {
+			const top = target.getBoundingClientRect().top + window.scrollY - 16;
+			window.scrollTo({ top, behavior: 'smooth' });
+		}
+		menuOpen = false;
+	}
+
 	function lazyMount(node: HTMLElement, id: string) {
 		const observer = new IntersectionObserver(
 			(entries) => {
@@ -133,6 +171,7 @@
 <div class="design-wall" aria-label="Component wall">
 	{#each filteredItems as { component, categoryName } (component.id)}
 		<article
+			id={`tile-anchor-${component.id}`}
 			class="design-tile"
 			data-mode={component.previewMode}
 			aria-labelledby={`tile-${component.id}`}
@@ -308,6 +347,35 @@
 		</div>
 	</dl>
 
+	<nav class="design-menu__index" aria-label="Component index">
+		{#if filteredCategories.length === 0}
+			<p class="design-menu__empty">No components match those filters.</p>
+		{:else}
+			{#each filteredCategories as category (category.id)}
+				<section class="design-menu__group">
+					<h3 class="design-menu__group-title">
+						<span>{category.name}</span>
+						<span class="design-menu__group-count">{category.components.length}</span>
+					</h3>
+					<ul class="design-menu__links">
+						{#each category.components as component (component.id)}
+							<li>
+								<button
+									type="button"
+									class="design-menu__link"
+									onclick={() => scrollToComponent(component)}
+								>
+									<span class="design-status-dot" data-mode={component.previewMode}></span>
+									<span class="design-menu__link-name">{component.name}</span>
+								</button>
+							</li>
+						{/each}
+					</ul>
+				</section>
+			{/each}
+		{/if}
+	</nav>
+
 	<footer class="design-menu__footer">
 		<p>Source: <code>src/lib/components</code></p>
 		<button type="button" class="design-menu__reset" onclick={clearFilters}>Reset filters</button>
@@ -434,7 +502,8 @@
 	.design-wall {
 		display: grid;
 		gap: 0.0625rem;
-		grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr));
+		grid-auto-rows: 22rem;
 		background: rgba(255, 255, 255, 0.06);
 		border-radius: 0.625rem;
 		overflow: hidden;
@@ -446,8 +515,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		min-height: 12rem;
-		padding: 1.25rem;
+		padding: 2rem 1.75rem;
 		background: #0d0e22;
 		overflow: hidden;
 		isolation: isolate;
@@ -464,9 +532,9 @@
 		justify-content: center;
 		width: 100%;
 		max-width: 100%;
+		height: 100%;
 		max-height: 100%;
 		overflow: hidden;
-		min-height: 8rem;
 	}
 
 	.design-tile__scale {
@@ -633,7 +701,7 @@
 		top: 0;
 		right: 0;
 		bottom: 0;
-		width: min(100%, 22rem);
+		width: min(100%, 24rem);
 		display: flex;
 		flex-direction: column;
 		gap: 1.25rem;
@@ -864,6 +932,82 @@
 		font-size: 1.25rem;
 		font-weight: 700;
 		font-variant-numeric: tabular-nums;
+	}
+
+	.design-menu__index {
+		display: grid;
+		gap: 1rem;
+		padding-bottom: 0.5rem;
+	}
+
+	.design-menu__empty {
+		margin: 0;
+		color: rgba(225, 226, 255, 0.5);
+		font-size: 0.8125rem;
+	}
+
+	.design-menu__group {
+		display: grid;
+		gap: 0.375rem;
+	}
+
+	.design-menu__group-title {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0 0.125rem;
+		color: rgba(225, 226, 255, 0.55);
+		font-size: 0.6875rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.design-menu__group-count {
+		color: rgba(225, 226, 255, 0.4);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.design-menu__links {
+		display: grid;
+		gap: 0.0625rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.design-menu__link {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+		padding: 0.375rem 0.5rem;
+		border: 0;
+		border-radius: 0.3125rem;
+		background: transparent;
+		color: rgba(225, 226, 255, 0.78);
+		cursor: pointer;
+		font: inherit;
+		font-size: 0.8125rem;
+		text-align: left;
+		transition:
+			background 0.12s ease,
+			color 0.12s ease;
+	}
+
+	.design-menu__link:hover,
+	.design-menu__link:focus-visible {
+		background: rgba(255, 255, 255, 0.06);
+		color: #f4f5ff;
+		outline: none;
+	}
+
+	.design-menu__link-name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	.design-menu__footer {
