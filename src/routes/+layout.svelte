@@ -8,74 +8,18 @@
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
-	import { afterNavigate, beforeNavigate } from '$app/navigation';
-
-	import { browser, dev } from '$app/environment';
-	import { performanceAnalytics } from '$lib/stores/performanceAnalytics.svelte';
+	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
+	import ThemeToggle from '$lib/components/ui/ThemeToggle.svelte';
+	import { dev } from '$app/environment';
 
 	let { children } = $props();
-	let navigationMeasureId: string | null = null;
-	let hasCapturedInitialLoad = false;
+	const isHomeRoute = $derived(page.url.pathname === '/');
 
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
 	injectSpeedInsights();
 
-	if (browser && dev) {
-		performanceAnalytics.init();
-		performanceAnalytics.setCurrentRoute(page.url.pathname);
-	}
-
-	beforeNavigate(({ to, from }) => {
-		if (!dev || !hasCapturedInitialLoad || !to?.url) return;
-
-		navigationMeasureId = performanceAnalytics.beginMeasure('page', to.url.pathname, {
-			route: to.url.pathname,
-			navigationType: 'navigate',
-			from: from?.url.pathname ?? page.url.pathname
-		});
-	});
-
-	afterNavigate(({ to }) => {
-		if (!dev) return;
-
-		const route = to?.url.pathname ?? page.url.pathname;
-		performanceAnalytics.setCurrentRoute(route);
-
-		if (!hasCapturedInitialLoad && browser) {
-			hasCapturedInitialLoad = true;
-			const navigationEntry = performance.getEntriesByType('navigation')[0] as
-				| PerformanceNavigationTiming
-				| undefined;
-
-			if (navigationEntry) {
-				performanceAnalytics.recordPageLoad(route, navigationEntry.duration, 'load');
-				performanceAnalytics.recordVital(
-					'TTFB',
-					navigationEntry.responseStart,
-					'ms',
-					route,
-					'PerformanceNavigationTiming'
-				);
-			}
-
-			return;
-		}
-
-		performanceAnalytics.endMeasure(navigationMeasureId, {
-			route,
-			navigationType: 'navigate'
-		});
-		navigationMeasureId = null;
-	});
-
 	onMount(() => {
 		theme.init();
-
-		return () => {
-			if (dev) {
-				performanceAnalytics.destroy();
-			}
-		};
 	});
 </script>
 
@@ -105,6 +49,14 @@
 		})();
 	</script>
 </svelte:head>
+
+<Header sticky>
+	<HeaderLogo />
+	<HeaderNav>
+		<HeaderNavItem href="/" active={isHomeRoute}>Home</HeaderNavItem>
+		<ThemeToggle class="ml-2" />
+	</HeaderNav>
+</Header>
 
 <main>
 	{#key page.url.pathname}

@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { theme } from '$lib/stores';
-	import seattleDay from '$lib/images/photos/seattle-day.png';
-	import seattleNight from '$lib/images/photos/seattle-night.jpg';
+	import seattleNightPlate from '$lib/images/photos/seattle-day.png';
+	import seattleDayPlate from '$lib/images/photos/seattle-night.jpg';
+	import SpaceNeedleHeroModel from '$lib/components/hero/SpaceNeedleHeroModel.svelte';
 
 	interface HomeBlockProps {
 		class?: string;
@@ -9,13 +10,14 @@
 
 	let { class: className }: HomeBlockProps = $props();
 	let isDark = $derived($theme === 'dark');
+	let reflectionImage = $derived(isDark ? seattleNightPlate : seattleDayPlate);
 </script>
 
 <div
 	class="home-block relative overflow-hidden rounded-lg border border-(--border-color) {className}"
 >
 	<img
-		src={seattleDay}
+		src={seattleDayPlate}
 		alt="Seattle skyline during daytime"
 		class="home-image"
 		class:visible={!isDark}
@@ -23,18 +25,22 @@
 	/>
 
 	<img
-		src={seattleNight}
+		src={seattleNightPlate}
 		alt="Seattle skyline at night"
 		class="home-image"
 		class:visible={isDark}
 		aria-hidden={!isDark}
 	/>
 
+	<div class="home-model" aria-label="Interactive Space Needle model">
+		<SpaceNeedleHeroModel variant="overlay" {reflectionImage} reflectionIsDark={isDark} />
+	</div>
+
 	<div
-		class="absolute inset-0 z-10 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
+		class="pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
 	></div>
 
-	<div class="absolute inset-0 z-20 flex items-end justify-between p-5">
+	<div class="pointer-events-none absolute inset-0 z-30 flex items-end justify-between p-5">
 		<span class="font-serif text-xl text-white drop-shadow-lg">Home</span>
 		<span class="font-serif text-lg text-white/90 drop-shadow-lg">Seattle, WA</span>
 	</div>
@@ -73,5 +79,14 @@
 
 	.home-image.visible {
 		opacity: 1;
+	}
+
+	.home-model {
+		position: absolute;
+		inset: 0;
+		z-index: 10;
+		opacity: 1;
+		filter: drop-shadow(0 2rem 2.5rem rgb(0 0 0 / 0.32));
+		pointer-events: auto;
 	}
 </style>

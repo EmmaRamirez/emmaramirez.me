@@ -3,7 +3,7 @@
 	import type { ClassValue } from 'clsx';
 	import { resolve } from '$app/paths';
 	import { cn } from '$lib/utils';
-	import { Tooltip } from '$lib/components/ui';
+	import Tooltip from '$lib/components/ui/Tooltip.svelte';
 	import { onDestroy } from 'svelte';
 	import HeaderLogoMark from './HeaderLogoMark.svelte';
 
