@@ -11,6 +11,15 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
+/output
+
+# Local agent/browser artifacts
+/.codex
+/.playwright-cli
+/.cursor/settings.json
+
+# Archived locally before .graveyard was introduced
+/src/lib/archive
 
 # OS
 .DS_Store
