@@ -43,11 +43,12 @@
 		"globals": "^16.5.0",
 		"mdsvex": "^0.12.6",
 		"playwright": "^1.56.1",
+		"portless": "^0.13.0",
 		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
 		"prettier-plugin-tailwindcss": "^0.7.1",
 		"prisma": "^7.7.0",
-		"svelte": "^5.43.8",
+		"svelte": "^5.53.0",
 		"svelte-check": "^4.3.4",
 		"tailwindcss": "^4.1.17",
 		"typescript": "^5.9.3",
@@ -74,6 +75,7 @@
 		"three": "^0.182.0"
 	},
 	"overrides": {
-		"estree-walker": "^2.0.2"
+		"estree-walker": "^2.0.2",
+		"svelte": "$svelte"
 	}
 }
