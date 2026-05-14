@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { asset, resolve } from '$app/paths';
+	import StaticDoricColumn from '$lib/components/art/StaticDoricColumn.svelte';
+	import oliveBranch from '$lib/images/photos/olive-branch.png';
 	import DoricColumnStage from './DoricColumnStage.svelte';
 
 	type Props = {
@@ -23,7 +25,6 @@
 	let isOpening = $state(false);
 
 	const articleHref = resolve('/article/redesigning-article');
-	const homeHref = resolve('/');
 	const textureImage = asset('/article-concrete-texture.png');
 	const isPage = $derived(mode === 'page');
 
@@ -73,12 +74,15 @@
 		aria-labelledby="redesigning-title"
 		style:--texture-image={`url("${textureImage}")`}
 	>
-		<DoricColumnStage mode="page" />
+		<div class="redesigning__page-column redesigning__page-column--left" aria-hidden="true">
+			<DoricColumnStage mode="page" side="left" />
+		</div>
+		<div class="redesigning__page-column redesigning__page-column--right" aria-hidden="true">
+			<DoricColumnStage mode="page" side="right" />
+		</div>
 
 		<div class="redesigning__page-shell">
 			<header class="redesigning__page-header">
-				<a class="redesigning__home-link style-none" href={homeHref}>Home</a>
-				<p class="redesigning__eyebrow">Article</p>
 				<h1 id="redesigning-title">Redesigning This Website, Again</h1>
 				<p class="redesigning__dek">
 					A route-scoped article concept about starting over, keeping the strange parts, and letting
@@ -121,10 +125,32 @@
 			onfocus={() => (tooltipVisible = true)}
 			onblur={() => (tooltipVisible = false)}
 		>
-			<DoricColumnStage />
+			<div class="redesigning__card">
+				<div class="redesigning__frame" aria-hidden="true"></div>
 
-			<span class="redesigning__eyebrow">Article</span>
-			<h2 id="redesigning-tile-title">Redesigning This Website, Again</h2>
+				<div class="redesigning__stage redesigning__stage--left" aria-hidden="true">
+					<StaticDoricColumn side="left" />
+				</div>
+				<div class="redesigning__tile-copy">
+					<h2 id="redesigning-tile-title">Redesigning This Website, Again</h2>
+				</div>
+				<div class="redesigning__stage redesigning__stage--right" aria-hidden="true">
+					<StaticDoricColumn side="right" />
+				</div>
+			</div>
+
+			<img
+				class="redesigning__olive redesigning__olive--top"
+				src={oliveBranch}
+				alt=""
+				aria-hidden="true"
+			/>
+			<img
+				class="redesigning__olive redesigning__olive--bottom"
+				src={oliveBranch}
+				alt=""
+				aria-hidden="true"
+			/>
 		</a>
 	</article>
 
@@ -187,21 +213,28 @@
 	}
 
 	.redesigning--tile {
-		min-height: min(14rem, calc(100vw - 2rem));
+		align-self: center;
+		height: clamp(14rem, 22vw, 15.625rem);
+		min-height: 0;
 		border-radius: 1.5rem;
+		background: none;
+		box-shadow: none;
+		overflow: visible;
+		z-index: 6;
+	}
+
+	.redesigning--tile::before,
+	.redesigning--tile::after {
+		content: none;
 	}
 
 	.redesigning__hitbox {
 		position: relative;
 		z-index: 3;
-		display: grid;
+		display: block;
 		width: 100%;
 		height: 100%;
-		min-height: inherit;
-		place-items: center;
-		grid-template-rows: 1fr auto auto 1fr;
-		gap: clamp(0.85rem, 2.4vw, 1.25rem);
-		padding: clamp(1.4rem, 4vw, 2.4rem);
+		border-radius: inherit;
 		text-align: center;
 		text-decoration: none;
 		cursor: inherit;
@@ -217,43 +250,143 @@
 		outline: none;
 	}
 
-	.redesigning__hitbox:focus-visible {
-		box-shadow: inset 0 0 0 0.2rem rgba(82, 104, 61, 0.42);
-	}
-
 	.redesigning--opening .redesigning__hitbox {
 		filter: saturate(1.14) brightness(1.03);
 		transform: scale(1.035);
 	}
 
-	.redesigning__eyebrow {
+	.redesigning__card {
+		--redesigning-card-shadow:
+			inset 0 0 0 1px rgba(82, 59, 28, 0.16), inset 0 0 4rem rgba(89, 59, 19, 0.16),
+			0 1rem 2.6rem rgba(58, 39, 17, 0.14);
+
 		position: relative;
-		z-index: 4;
-		display: inline-grid;
+		display: grid;
+		grid-template-columns:
+			minmax(clamp(5rem, 18vw, 7rem), 0.72fr) minmax(0, 1.8fr)
+			minmax(clamp(5rem, 18vw, 7rem), 0.72fr);
+		grid-template-rows: repeat(1, minmax(0, 1fr));
+		width: 100%;
+		height: 100%;
 		place-items: center;
-		margin: 0;
-		color: var(--green);
-		font-size: 0.68rem;
-		font-weight: 850;
-		letter-spacing: 0.26em;
-		line-height: 1;
-		text-align: center;
-		text-transform: uppercase;
+		overflow: hidden;
+		padding-block: clamp(1rem, 2.6vw, 1.55rem);
+		padding-inline: clamp(0.8rem, 2vw, 1.3rem);
+		background:
+			radial-gradient(circle at 18% 16%, rgba(188, 142, 46, 0.26), transparent 14rem),
+			radial-gradient(circle at 82% 84%, rgba(76, 103, 60, 0.2), transparent 13rem),
+			linear-gradient(145deg, hsl(40, 66%, 88%), var(--paper) 48%, var(--paper-deep));
+		border-radius: inherit;
+		box-shadow: var(--redesigning-card-shadow);
 	}
 
-	.redesigning--tile .redesigning__eyebrow {
-		align-self: end;
-		padding: 0.42rem 0.68rem;
-		background: rgba(251, 241, 203, 0.58);
-		border: 1px solid rgba(83, 55, 19, 0.16);
-		border-radius: 999px;
+	.redesigning__card::before,
+	.redesigning__card::after {
+		position: absolute;
+		inset: 0;
+		content: '';
+		pointer-events: none;
+	}
+
+	.redesigning__card::before {
+		z-index: 1;
+		background:
+			var(--texture-image) center / cover,
+			linear-gradient(90deg, rgba(255, 255, 255, 0.14), transparent 28%, rgba(60, 40, 15, 0.12));
+		filter: contrast(1.18) sepia(0.18);
+		mix-blend-mode: multiply;
+		opacity: 0.3;
+	}
+
+	.redesigning__card::after {
+		z-index: 4;
+		border: 1px solid rgba(83, 55, 19, 0.18);
+		border-radius: inherit;
+		box-shadow: inset 0 0 0 0.35rem rgba(255, 248, 225, 0.16);
+	}
+
+	.redesigning__hitbox:focus-visible .redesigning__card {
+		box-shadow:
+			var(--redesigning-card-shadow),
+			inset 0 0 0 0.2rem rgba(82, 104, 61, 0.42);
+	}
+
+	.redesigning__stage {
+		position: relative;
+		z-index: 2;
+		width: 100%;
+		height: 100%;
+		min-height: 100%;
+		min-width: 0;
+		align-self: stretch;
+		justify-self: stretch;
+		overflow: hidden;
+		pointer-events: none;
+		filter: drop-shadow(0 1.1rem 1.3rem rgba(52, 34, 12, 0.18));
+	}
+
+	.redesigning__stage--left {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	.redesigning__stage--right {
+		grid-column: 3;
+		grid-row: 1;
+	}
+
+	.redesigning__frame {
+		position: absolute;
+		z-index: 3;
+		inset: clamp(0.8rem, 1.8vw, 1.1rem) clamp(2.25rem, 5.5vw, 3.2rem);
+		border: 1px solid rgba(57, 38, 15, 0.56);
+		border-radius: clamp(0.9rem, 1.6vw, 1.3rem);
+		box-shadow: inset 0 0 0 0.14rem rgba(255, 243, 212, 0.4);
+		pointer-events: none;
+	}
+
+	.redesigning__olive {
+		position: absolute;
+		z-index: 8;
+		width: clamp(7rem, 20vw, 10.2rem);
+		pointer-events: none;
+		user-select: none;
+		opacity: 0.9;
+		filter: saturate(0.78) contrast(1.05);
+		mix-blend-mode: multiply;
+	}
+
+	.redesigning__olive--top {
+		top: clamp(-2.4rem, -2vw, -1.3rem);
+		left: clamp(0.6rem, 2.8vw, 1.8rem);
+		transform: rotate(-12deg);
+		transform-origin: 20% 40%;
+	}
+
+	.redesigning__olive--bottom {
+		right: clamp(0.6rem, 2.9vw, 1.8rem);
+		bottom: clamp(-2.35rem, -1.8vw, -1.2rem);
+		transform: scaleX(-1) rotate(-10deg);
+		transform-origin: 78% 60%;
+	}
+
+	.redesigning__tile-copy {
+		position: relative;
+		z-index: 5;
+		grid-column: 2;
+		grid-row: 1;
+		display: grid;
+		width: min(100%, 31.25rem);
+		gap: clamp(0.7rem, 1.8vw, 1rem);
+		place-items: center;
+		align-self: center;
+		justify-self: center;
 	}
 
 	.redesigning h1,
 	.redesigning h2 {
 		position: relative;
 		z-index: 4;
-		max-width: 12ch;
 		margin: 0 auto;
 		color: var(--ink);
 		font-family: 'DM Serif Text', serif;
@@ -263,9 +396,19 @@
 	}
 
 	.redesigning h2 {
-		align-self: center;
-		font-size: clamp(2.05rem, 7.6vw, 4.25rem);
-		line-height: 0.93;
+		width: 100%;
+		max-width: 100%;
+		font-size: clamp(1.85rem, 5.25vw, 3.3rem);
+		line-height: 0.95;
+		overflow-wrap: break-word;
+	}
+
+	.redesigning--tile h2 {
+		width: min(100%, 31.25rem);
+		max-width: 31.25rem;
+		font-family: 'IM Fell English', serif;
+		font-size: clamp(2.1rem, 5.6vw, 3.5rem);
+		line-height: 1.08;
 	}
 
 	.redesigning__tooltip {
@@ -305,6 +448,25 @@
 		border-radius: 0;
 	}
 
+	.redesigning__page-column {
+		position: absolute;
+		z-index: 6;
+		top: clamp(4.5rem, 10vh, 7rem);
+		width: clamp(18rem, 30vw, 28rem);
+		height: clamp(28rem, 66vh, 44rem);
+		pointer-events: none;
+		opacity: 0.84;
+		filter: drop-shadow(0 2rem 2.4rem rgba(52, 34, 12, 0.22));
+	}
+
+	.redesigning__page-column--left {
+		left: clamp(-2rem, 2vw, 2rem);
+	}
+
+	.redesigning__page-column--right {
+		right: clamp(-2rem, 2vw, 2rem);
+	}
+
 	.redesigning__page-shell {
 		position: relative;
 		z-index: 4;
@@ -327,20 +489,11 @@
 		text-align: center;
 	}
 
-	.redesigning__home-link {
-		justify-self: center;
-		color: var(--green);
-		font-size: 0.78rem;
-		font-weight: 800;
-		letter-spacing: 0.12em;
-		text-decoration: none;
-		text-transform: uppercase;
-	}
-
-	.redesigning h1 {
-		max-width: 10ch;
-		font-size: clamp(2.75rem, 9vw, 6.75rem);
-		line-height: 0.9;
+	.redesigning--page h1 {
+		max-width: 13ch;
+		font-size: clamp(2.65rem, 7.4vw, 5.9rem);
+		line-height: 0.98;
+		letter-spacing: -0.024em;
 	}
 
 	.redesigning__dek {
@@ -370,13 +523,28 @@
 		.redesigning--tile {
 			grid-column: span 3;
 			grid-row: span 1;
-			min-height: 100%;
 		}
 	}
 
 	@media (max-width: 42rem) {
 		.redesigning h2 {
 			font-size: clamp(2.15rem, 12vw, 3.4rem);
+		}
+
+		.redesigning__page-column {
+			top: clamp(4rem, 11vh, 6rem);
+			width: clamp(13rem, 52vw, 18rem);
+			height: clamp(22rem, 58vh, 30rem);
+			opacity: 0.2;
+			filter: blur(0.5px) saturate(0.8);
+		}
+
+		.redesigning__page-column--left {
+			left: clamp(-7rem, -24vw, -5rem);
+		}
+
+		.redesigning__page-column--right {
+			right: clamp(-7rem, -24vw, -5rem);
 		}
 
 		.redesigning__page-shell {

@@ -5,55 +5,97 @@
 
 	type Props = {
 		mode?: 'tile' | 'page';
+		side?: 'left' | 'right' | 'both';
 	};
 
 	type ColumnAnimation = {
 		basePosition: THREE.Vector3;
 		bob: number;
 		group: THREE.Group;
-		spin: THREE.Vector3;
+		spinX: number;
 	};
 
-	let { mode = 'tile' }: Props = $props();
+	let { mode = 'tile', side = 'both' }: Props = $props();
 	let hasScene = $state(false);
 	let loadFailed = $state(false);
 
 	const columnModel = asset('/greek_doric_column.glb');
+	const isAnimated = $derived(mode === 'page');
 
 	const columnConfigs = $derived(
 		mode === 'page'
-			? [
-					{
-						position: new THREE.Vector3(-3.9, -0.2, -0.2),
-						rotation: new THREE.Euler(0.16, -0.42, -0.13),
-						scale: 4.9,
-						spin: new THREE.Vector3(0.13, 0.46, 0.08),
-						bob: 0.2
-					},
-					{
-						position: new THREE.Vector3(3.9, -0.35, -0.5),
-						rotation: new THREE.Euler(-0.08, 0.58, 0.14),
-						scale: 5.15,
-						spin: new THREE.Vector3(-0.1, -0.38, 0.1),
-						bob: 0.16
-					}
-				]
-			: [
-					{
-						position: new THREE.Vector3(-2.2, -0.18, -0.15),
-						rotation: new THREE.Euler(0.18, -0.5, -0.18),
-						scale: 3.35,
-						spin: new THREE.Vector3(0.12, 0.5, 0.08),
-						bob: 0.13
-					},
-					{
-						position: new THREE.Vector3(2.2, -0.28, -0.35),
-						rotation: new THREE.Euler(-0.1, 0.62, 0.18),
-						scale: 3.55,
-						spin: new THREE.Vector3(-0.08, -0.42, 0.1),
-						bob: 0.12
-					}
-				]
+			? side === 'left'
+				? [
+						{
+							position: new THREE.Vector3(0, 0.35, -0.18),
+							rotation: new THREE.Euler(0.1, 0.08, -0.28),
+							scale: 2.9,
+							spinX: 0.018,
+							bob: 0.052
+						}
+					]
+				: side === 'right'
+					? [
+							{
+								position: new THREE.Vector3(0, 0.35, -0.18),
+								rotation: new THREE.Euler(-0.08, -0.08, 0.28),
+								scale: 2.9,
+								spinX: -0.018,
+								bob: 0.052
+							}
+						]
+					: [
+							{
+								position: new THREE.Vector3(-1.9, 0.24, -0.24),
+								rotation: new THREE.Euler(0.08, 0.04, -0.24),
+								scale: 3,
+								spinX: 0.024,
+								bob: 0.075
+							},
+							{
+								position: new THREE.Vector3(1.9, 0.22, -0.3),
+								rotation: new THREE.Euler(-0.06, -0.04, 0.24),
+								scale: 3.04,
+								spinX: -0.022,
+								bob: 0.068
+							}
+						]
+			: side === 'left'
+				? [
+						{
+							position: new THREE.Vector3(0, -0.24, -0.24),
+							rotation: new THREE.Euler(0.08, 0.03, -0.08),
+							scale: 3.28,
+							spinX: 0,
+							bob: 0
+						}
+					]
+				: side === 'right'
+					? [
+							{
+								position: new THREE.Vector3(0, -0.24, -0.24),
+								rotation: new THREE.Euler(0.08, -0.03, 0.08),
+								scale: 3.28,
+								spinX: 0,
+								bob: 0
+							}
+						]
+					: [
+							{
+								position: new THREE.Vector3(-2.25, -0.24, -0.24),
+								rotation: new THREE.Euler(0.08, 0.03, -0.08),
+								scale: 3.28,
+								spinX: 0,
+								bob: 0
+							},
+							{
+								position: new THREE.Vector3(2.25, -0.24, -0.24),
+								rotation: new THREE.Euler(0.08, -0.03, 0.08),
+								scale: 3.28,
+								spinX: 0,
+								bob: 0
+							}
+						]
 	);
 
 	function addUnique<T>(items: T[], item: T) {
@@ -115,7 +157,7 @@
 	}
 
 	function setupDoricStage(canvas: HTMLCanvasElement) {
-		let frame = 0;
+		let frame: number | undefined;
 		let lastTime = performance.now();
 		let disposed = false;
 		let sourceModel: THREE.Group | null = null;
@@ -123,7 +165,7 @@
 
 		const scene = new THREE.Scene();
 		const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
-		camera.position.set(0, 0.2, mode === 'page' ? 9.8 : 7);
+		camera.position.set(0, 0.2, mode === 'page' ? 9.8 : 8.25);
 
 		const renderer = new THREE.WebGLRenderer({
 			alpha: true,
@@ -136,6 +178,10 @@
 
 		const root = new THREE.Group();
 		scene.add(root);
+
+		const renderScene = () => {
+			renderer.render(scene, camera);
+		};
 
 		const ambientLight = new THREE.HemisphereLight('#fff4d3', '#657957', 2.6);
 		scene.add(ambientLight);
@@ -156,6 +202,8 @@
 			renderer.setSize(width, height, false);
 			camera.aspect = width / height;
 			camera.updateProjectionMatrix();
+
+			if (!isAnimated) renderScene();
 		};
 
 		const resizeObserver = new ResizeObserver(resize);
@@ -189,11 +237,12 @@
 						basePosition: config.position.clone(),
 						bob: config.bob,
 						group,
-						spin: config.spin.clone()
+						spinX: config.spinX
 					});
 				}
 
 				hasScene = true;
+				if (!isAnimated) renderScene();
 			},
 			undefined,
 			() => {
@@ -209,20 +258,20 @@
 			for (const [index, column] of animatedColumns.entries()) {
 				column.group.position.y =
 					column.basePosition.y + Math.sin(seconds * 0.7 + index * 1.7) * column.bob;
-				column.group.rotation.x += column.spin.x * delta;
-				column.group.rotation.y += column.spin.y * delta;
-				column.group.rotation.z += column.spin.z * delta;
+				column.group.rotation.x += column.spinX * delta;
 			}
 
 			renderer.render(scene, camera);
 			frame = requestAnimationFrame(render);
 		};
 
-		frame = requestAnimationFrame(render);
+		if (isAnimated) {
+			frame = requestAnimationFrame(render);
+		}
 
 		return () => {
 			disposed = true;
-			cancelAnimationFrame(frame);
+			if (frame !== undefined) cancelAnimationFrame(frame);
 			resizeObserver.disconnect();
 			disposeObject(root);
 			if (sourceModel) disposeObject(sourceModel);
