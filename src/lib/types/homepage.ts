@@ -1,5 +1,6 @@
 export type HomepageBlockKind =
 	| 'disco'
+	| 'doodle'
 	| 'empty'
 	| 'home'
 	| 'houston'

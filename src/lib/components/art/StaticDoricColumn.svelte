@@ -36,8 +36,11 @@
 		width: 100%;
 		height: 100%;
 		min-height: 0;
+		animation: doric-column-x-tilt 22s ease-in-out infinite;
+		filter: drop-shadow(0 0.55rem 0.7rem rgba(67, 45, 18, 0.1));
 		place-items: end center;
-		transform: perspective(28rem) rotateY(var(--turn)) rotateZ(var(--lean));
+		transform: perspective(28rem) rotateX(0deg) rotateY(var(--turn)) rotateZ(var(--lean));
+		transform-style: preserve-3d;
 		transform-origin: center bottom;
 	}
 
@@ -167,5 +170,24 @@
 	.doric-column__step--c {
 		top: 58%;
 		width: 100%;
+	}
+
+	@keyframes doric-column-x-tilt {
+		0%,
+		100% {
+			filter: drop-shadow(0 0.48rem 0.68rem rgba(67, 45, 18, 0.09));
+			transform: perspective(28rem) rotateX(-7deg) rotateY(var(--turn)) rotateZ(var(--lean));
+		}
+
+		50% {
+			filter: drop-shadow(0 0.72rem 0.9rem rgba(67, 45, 18, 0.14));
+			transform: perspective(28rem) rotateX(7deg) rotateY(var(--turn)) rotateZ(var(--lean));
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.doric-column {
+			animation: none;
+		}
 	}
 </style>

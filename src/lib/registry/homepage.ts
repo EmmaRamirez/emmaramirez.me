@@ -127,5 +127,21 @@ export const homepageBlocks: HomepageBlock[] = [
 		settings: {
 			ariaLabel: 'Home location in Houston'
 		}
+	},
+	{
+		id: 'doodle',
+		kind: 'doodle',
+		layout: {
+			desktop: {
+				columnStart: 3,
+				columnSpan: 2,
+				rowStart: 4,
+				rowSpan: 2
+			},
+			mobileMinHeight: 'min(34rem, calc(140vw - 2rem))'
+		},
+		settings: {
+			ariaLabel: 'Doodle pad'
+		}
 	}
 ];

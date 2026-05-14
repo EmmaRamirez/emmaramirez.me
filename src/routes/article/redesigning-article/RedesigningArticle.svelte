@@ -126,8 +126,6 @@
 			onblur={() => (tooltipVisible = false)}
 		>
 			<div class="redesigning__card">
-				<div class="redesigning__frame" aria-hidden="true"></div>
-
 				<div class="redesigning__stage redesigning__stage--left" aria-hidden="true">
 					<StaticDoricColumn side="left" />
 				</div>
@@ -246,7 +244,6 @@
 	.redesigning__hitbox:hover,
 	.redesigning__hitbox:focus-visible {
 		filter: saturate(1.08);
-		transform: scale(1.015);
 		outline: none;
 	}
 
@@ -323,6 +320,13 @@
 		overflow: hidden;
 		pointer-events: none;
 		filter: drop-shadow(0 1.1rem 1.3rem rgba(52, 34, 12, 0.18));
+		transform: scale(1);
+		transition: transform 220ms ease;
+	}
+
+	.redesigning__hitbox:hover .redesigning__stage,
+	.redesigning__hitbox:focus-visible .redesigning__stage {
+		transform: scale(1.045);
 	}
 
 	.redesigning__stage--left {
@@ -335,16 +339,6 @@
 		grid-row: 1;
 	}
 
-	.redesigning__frame {
-		position: absolute;
-		z-index: 3;
-		inset: clamp(0.8rem, 1.8vw, 1.1rem) clamp(2.25rem, 5.5vw, 3.2rem);
-		border: 1px solid rgba(57, 38, 15, 0.56);
-		border-radius: clamp(0.9rem, 1.6vw, 1.3rem);
-		box-shadow: inset 0 0 0 0.14rem rgba(255, 243, 212, 0.4);
-		pointer-events: none;
-	}
-
 	.redesigning__olive {
 		position: absolute;
 		z-index: 8;
@@ -354,6 +348,7 @@
 		opacity: 0.9;
 		filter: saturate(0.78) contrast(1.05);
 		mix-blend-mode: multiply;
+		transition: transform 220ms ease;
 	}
 
 	.redesigning__olive--top {
@@ -363,11 +358,21 @@
 		transform-origin: 20% 40%;
 	}
 
+	.redesigning__hitbox:hover .redesigning__olive--top,
+	.redesigning__hitbox:focus-visible .redesigning__olive--top {
+		transform: rotate(-12deg) scale(1.08);
+	}
+
 	.redesigning__olive--bottom {
 		right: clamp(0.6rem, 2.9vw, 1.8rem);
 		bottom: clamp(-2.35rem, -1.8vw, -1.2rem);
 		transform: scaleX(-1) rotate(-10deg);
 		transform-origin: 78% 60%;
+	}
+
+	.redesigning__hitbox:hover .redesigning__olive--bottom,
+	.redesigning__hitbox:focus-visible .redesigning__olive--bottom {
+		transform: scaleX(-1) rotate(-10deg) scale(1.08);
 	}
 
 	.redesigning__tile-copy {
@@ -418,6 +423,7 @@
 		left: var(--tooltip-x, 50%);
 		padding: 0.45rem 0.68rem;
 		color: hsl(42, 59%, 91%);
+		font-family: var(--font-sans);
 		font-size: 0.72rem;
 		font-weight: 850;
 		letter-spacing: 0.1em;
@@ -568,6 +574,8 @@
 
 	@media (prefers-reduced-motion: reduce) {
 		.redesigning__hitbox,
+		.redesigning__stage,
+		.redesigning__olive,
 		.redesigning__tooltip {
 			transition: none;
 		}

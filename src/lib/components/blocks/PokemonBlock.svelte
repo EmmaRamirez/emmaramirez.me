@@ -15,7 +15,6 @@
 		id: number;
 		name: string;
 		sprite: string | null;
-		speciesSprite: string | null;
 		types: string[];
 		weightKilograms: number;
 	};
@@ -137,7 +136,6 @@
 			id: data.id,
 			name: formatPokemonName(data.name),
 			sprite,
-			speciesSprite: data.sprites.front_default,
 			types: data.types.map((type) => type.type.name),
 			weightKilograms: data.weight / 10
 		};
@@ -182,7 +180,7 @@
 	</div>
 
 	<div class="pokemon-block__title">
-		<p>Pokemon Registration Complete</p>
+		<p>The Emma Dex</p>
 		<div class="pokemon-block__ball" aria-hidden="true"></div>
 	</div>
 
@@ -254,15 +252,6 @@
 			</section>
 
 			<section class="pokemon-block__flavor-panel" aria-label="Pokedex description">
-				{#if selectedDetails?.speciesSprite}
-					<img
-						class="pokemon-block__mini-sprite"
-						src={selectedDetails.speciesSprite}
-						alt=""
-						loading="lazy"
-						aria-hidden="true"
-					/>
-				{/if}
 				<p>
 					{selectedDetails?.flavorText ||
 						'Choose a teammate to open the regional Pokedex registration file.'}
@@ -310,12 +299,7 @@
 		overflow: hidden;
 		border: 0.16rem solid #1d3432;
 		border-radius: 0.35rem;
-		background:
-			linear-gradient(90deg, rgb(16 79 58 / 0.36) 1px, transparent 1px) 0 0 / 0.58rem 0.58rem,
-			linear-gradient(180deg, rgb(16 79 58 / 0.34) 1px, transparent 1px) 0 0 / 0.58rem 0.58rem,
-			linear-gradient(135deg, rgb(188 255 204 / 0.18) 0 24%, transparent 24% 50%) 0 0 /
-				1.16rem 1.16rem,
-			linear-gradient(180deg, #74d485 0%, #3da66b 48%, #167152 100%);
+		background: linear-gradient(180deg, #74d485 0%, #3da66b 48%, #167152 100%);
 		color: #0d221b;
 		font-family:
 			'Courier New',
@@ -330,34 +314,34 @@
 	.pokemon-block::before {
 		position: absolute;
 		inset: 0;
-		z-index: -1;
+		z-index: 0;
 		background-image:
-			radial-gradient(circle, rgb(211 255 200 / 0.5) 0 0.045rem, transparent 0.055rem),
-			linear-gradient(90deg, transparent 0 46%, rgb(223 255 209 / 0.28) 46% 54%, transparent 54%),
-			linear-gradient(180deg, rgb(7 45 35 / 0) 0%, rgb(7 45 35 / 0.3) 100%);
+			linear-gradient(90deg, rgb(16 79 58 / 0.36) 1px, transparent 1px),
+			linear-gradient(180deg, rgb(16 79 58 / 0.34) 1px, transparent 1px),
+			radial-gradient(circle, rgb(211 255 200 / 0.42) 0 0.045rem, transparent 0.055rem),
+			linear-gradient(135deg, rgb(188 255 204 / 0.16) 0 24%, transparent 24% 50%);
 		background-size:
+			0.58rem 0.58rem,
+			0.58rem 0.58rem,
 			0.55rem 0.55rem,
-			100% 100%,
-			100% 100%;
+			1.16rem 1.16rem;
 		content: '';
-		opacity: 0.58;
+		opacity: 0.72;
+		pointer-events: none;
+	}
+
+	.pokemon-block > * {
+		position: relative;
+		z-index: 1;
 	}
 
 	.pokemon-block__topbar,
 	.pokemon-block__title {
 		position: relative;
 		border: 0.12rem solid #183432;
-		background:
-			repeating-linear-gradient(
-				60deg,
-				#071c1d 0 0.18rem,
-				#071c1d 0.18rem 0.32rem,
-				#26dd89 0.32rem 0.5rem,
-				#0f8f68 0.5rem 0.66rem
-			),
-			linear-gradient(180deg, #23db89 0%, #0a9d67 100%);
+		background: rgb(9 44 38 / 0.36);
 		box-shadow:
-			inset 0 0.08rem 0 rgb(255 255 255 / 0.45),
+			inset 0 0.08rem 0 rgb(255 255 255 / 0.32),
 			0 0.16rem 0 #0c2020;
 	}
 
@@ -370,7 +354,7 @@
 
 	.pokemon-block__topbar span {
 		width: 22%;
-		background: linear-gradient(180deg, transparent 48%, #0b2324 48% 100%);
+		background: linear-gradient(180deg, transparent 48%, rgb(11 35 36 / 0.72) 48% 100%);
 		clip-path: polygon(0 0, 88% 0, 100% 100%, 0 100%);
 	}
 
@@ -420,15 +404,10 @@
 	.pokemon-block__flavor-panel {
 		position: relative;
 		border: 0.13rem solid #183a2f;
-		background:
-			linear-gradient(90deg, rgb(31 104 69 / 0.28) 1px, transparent 1px) 0 0 / 0.48rem 0.48rem,
-			linear-gradient(180deg, rgb(31 104 69 / 0.24) 1px, transparent 1px) 0 0 / 0.48rem 0.48rem,
-			radial-gradient(circle, rgb(220 255 207 / 0.34) 0 0.045rem, transparent 0.055rem) 0 0 /
-				0.42rem 0.42rem,
-			linear-gradient(180deg, #b6e7a6 0%, #7fcf7b 52%, #4ba967 100%);
+		background: rgb(224 255 209 / 0.18);
 		box-shadow:
-			inset 0.12rem 0.12rem 0 rgb(238 255 228 / 0.64),
-			inset -0.12rem -0.12rem 0 rgb(15 62 46 / 0.22);
+			inset 0.12rem 0.12rem 0 rgb(238 255 228 / 0.4),
+			inset -0.12rem -0.12rem 0 rgb(15 62 46 / 0.2);
 	}
 
 	.pokemon-block__portrait-panel {
@@ -436,14 +415,7 @@
 		min-height: 10rem;
 		place-items: center;
 		overflow: hidden;
-		background:
-			linear-gradient(90deg, rgb(16 103 66 / 0.52) 1px, transparent 1px) 0 0 / 0.82rem 0.82rem,
-			linear-gradient(180deg, rgb(16 103 66 / 0.48) 1px, transparent 1px) 0 0 / 0.82rem 0.82rem,
-			linear-gradient(90deg, rgb(229 255 211 / 0.4) 0 0.12rem, transparent 0.12rem 100%) 0 0 /
-				3.28rem 100%,
-			radial-gradient(circle at 50% 42%, rgb(219 255 206 / 0.78) 0 0.12rem, transparent 0.13rem)
-				0 0 / 1.64rem 1.64rem,
-			linear-gradient(180deg, #c3efaa 0%, #82d17e 54%, #3b9b62 100%);
+		background: rgb(224 255 209 / 0.14);
 	}
 
 	.pokemon-block__scanline {
@@ -470,12 +442,7 @@
 		gap: 0;
 		border: 0.12rem solid #253338;
 		border-radius: 0;
-		background:
-			linear-gradient(90deg, rgb(25 93 62 / 0.2) 1px, transparent 1px) 0 0 / 0.42rem 0.42rem,
-			linear-gradient(180deg, rgb(25 93 62 / 0.18) 1px, transparent 1px) 0 0 / 0.42rem 0.42rem,
-			radial-gradient(circle, rgb(231 255 222 / 0.3) 0 0.04rem, transparent 0.05rem) 0 0 /
-				0.4rem 0.4rem,
-			linear-gradient(180deg, #c7eca5 0%, #8acc7b 100%);
+		background: rgb(229 255 209 / 0.18);
 		color: #0d221b;
 		cursor: pointer;
 		font: inherit;
@@ -486,7 +453,7 @@
 		text-shadow: 0.04rem 0.04rem 0 rgb(255 255 255 / 0.62);
 		text-transform: capitalize;
 		box-shadow:
-			inset 0.08rem 0.08rem 0 rgb(255 255 255 / 0.68),
+			inset 0.08rem 0.08rem 0 rgb(255 255 255 / 0.38),
 			inset -0.08rem -0.08rem 0 rgb(0 0 0 / 0.18);
 		transition:
 			transform 140ms ease,
@@ -506,12 +473,12 @@
 	}
 
 	.pokemon-block__sprite-button--selected {
-		background:
-			linear-gradient(90deg, rgb(15 84 56 / 0.26) 1px, transparent 1px) 0 0 / 0.42rem 0.42rem,
-			linear-gradient(180deg, rgb(15 84 56 / 0.24) 1px, transparent 1px) 0 0 / 0.42rem 0.42rem,
-			radial-gradient(circle, rgb(243 255 232 / 0.38) 0 0.045rem, transparent 0.055rem) 0 0 /
-				0.4rem 0.4rem,
-			linear-gradient(180deg, #c8ff9c 0%, #31d28d 100%);
+		border-color: #102d28;
+		background: rgb(201 255 155 / 0.3);
+		box-shadow:
+			inset 0 0 0 0.08rem rgb(255 255 255 / 0.38),
+			inset 0 0 0 0.18rem rgb(49 210 141 / 0.22),
+			0 0 0.42rem rgb(201 255 155 / 0.26);
 	}
 
 	.pokemon-block__sprite {
@@ -590,7 +557,7 @@
 	.pokemon-block__types span {
 		min-width: 3.1rem;
 		border: 0.1rem solid #24383a;
-		background: linear-gradient(180deg, #7ce99c 0%, #20a962 100%);
+		background: rgb(124 233 156 / 0.24);
 		color: #112020;
 		font-size: clamp(0.54rem, 1.8vw, 0.68rem);
 		font-weight: 900;
@@ -630,8 +597,8 @@
 
 	.pokemon-block__flavor-panel {
 		display: grid;
-		grid-template-columns: auto minmax(0, 1fr);
-		align-items: start;
+		grid-template-columns: minmax(0, 1fr);
+		align-items: center;
 		gap: 0.35rem;
 		min-height: 4rem;
 		padding: 0.42rem 0.5rem;
@@ -639,17 +606,13 @@
 
 	.pokemon-block__flavor-panel p {
 		margin: 0;
-		font-size: clamp(0.62rem, 2.2vw, 0.78rem);
+		min-width: 0;
+		max-width: 100%;
+		font-size: clamp(0.84rem, 3.2vw, 1.08rem);
 		font-weight: 900;
-		line-height: 1.22;
+		line-height: 1.12;
+		overflow-wrap: break-word;
 		text-shadow: 0.04rem 0.04rem 0 rgb(255 255 255 / 0.58);
-	}
-
-	.pokemon-block__mini-sprite {
-		width: 2.6rem;
-		height: 2.6rem;
-		object-fit: contain;
-		image-rendering: pixelated;
 	}
 
 	@media (min-width: 48rem) {
@@ -698,7 +661,7 @@
 		}
 
 		.pokemon-block__flavor-panel p {
-			font-size: clamp(0.58rem, 1.3vw, 0.72rem);
+			font-size: clamp(0.84rem, 1.72vw, 1rem);
 		}
 	}
 

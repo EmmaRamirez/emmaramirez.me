@@ -31,6 +31,7 @@
 	}
 
 	.welcome-internet__intro {
+		font-family: var(--font-sans);
 		color: rgb(232 197 71 / 0.92);
 	}
 </style>

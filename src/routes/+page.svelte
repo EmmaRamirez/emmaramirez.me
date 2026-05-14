@@ -1,5 +1,6 @@
 <script lang="ts">
 	import DiscoBlock from '$lib/components/blocks/DiscoBlock.svelte';
+	import DoodleBlock from '$lib/components/blocks/DoodleBlock.svelte';
 	import HoustonBlock from '$lib/components/blocks/HoustonBlock.svelte';
 	import PokemonBlock from '$lib/components/blocks/PokemonBlock.svelte';
 	import SubgridBlock from '$lib/components/blocks/SubgridBlock.svelte';
@@ -73,6 +74,8 @@
 					<SubgridBlock class={getContentClass(block)} />
 				{:else if block.kind === 'houston'}
 					<HoustonBlock class={getContentClass(block)} />
+				{:else if block.kind === 'doodle'}
+					<DoodleBlock class={getContentClass(block)} />
 				{/if}
 			</svelte:element>
 		{/each}
