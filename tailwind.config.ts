@@ -67,7 +67,8 @@ const config: Config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: ['Noto Sans', ...fontFamily.sans]
+				sans: ['Noto Sans', ...fontFamily.sans],
+				serif: ['Libre Baskerville', ...fontFamily.serif]
 			},
 			keyframes: {
 				'accordion-down': {

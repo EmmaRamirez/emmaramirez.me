@@ -394,7 +394,7 @@
 		z-index: 4;
 		margin: 0 auto;
 		color: var(--ink);
-		font-family: 'DM Serif Text', serif;
+		font-family: var(--font-serif);
 		font-weight: 400;
 		letter-spacing: -0.045em;
 		text-wrap: balance;
