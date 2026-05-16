@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
+
 	type BasicColor = {
 		name: string;
 		value: string;
@@ -38,11 +40,72 @@
 	let selectedColor = $state(colors[0].value);
 	let selectedTool = $state<DrawingTool>('pencil');
 	let hasDrawing = $state(false);
+	let isPeeling = $state(false);
+	let drawingCanvas: HTMLCanvasElement | undefined;
+	let peelCompletionTimer: ReturnType<typeof globalThis.setTimeout> | undefined;
+
+	function clearPeelCompletionTimer() {
+		if (peelCompletionTimer === undefined) return;
+
+		globalThis.clearTimeout(peelCompletionTimer);
+		peelCompletionTimer = undefined;
+	}
+
+	function prefersReducedMotion() {
+		return (
+			typeof window !== 'undefined' &&
+			typeof window.matchMedia === 'function' &&
+			window.matchMedia('(prefers-reduced-motion: reduce)').matches
+		);
+	}
+
+	function getPixelRatio() {
+		if (typeof window === 'undefined') return 1;
+
+		return Math.min(window.devicePixelRatio || 1, 3);
+	}
+
+	function clearDrawingCanvas() {
+		const canvas = drawingCanvas;
+		if (!canvas) return;
+
+		const context = canvas.getContext('2d');
+		if (!context) return;
+
+		context.save();
+		context.setTransform(1, 0, 0, 1, 0, 0);
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		context.restore();
+		hasDrawing = false;
+	}
+
+	function finishSubmitArt() {
+		isPeeling = false;
+		clearDrawingCanvas();
+		peelCompletionTimer = undefined;
+	}
+
+	function handleSubmitArt() {
+		if (isPeeling) return;
+
+		clearPeelCompletionTimer();
+		isPeeling = true;
+
+		peelCompletionTimer = globalThis.setTimeout(
+			finishSubmitArt,
+			prefersReducedMotion() ? 120 : 920
+		);
+	}
+
+	onDestroy(() => {
+		clearPeelCompletionTimer();
+	});
 
 	function setupDrawingPad(canvas: HTMLCanvasElement) {
 		const context = canvas.getContext('2d');
 		if (!context) return;
 		const drawingContext = context;
+		drawingCanvas = canvas;
 
 		let activePointerId: number | null = null;
 		let lastPoint: Point | null = null;
@@ -69,7 +132,7 @@
 			const { width, height } = canvas.getBoundingClientRect();
 			if (width <= 0 || height <= 0) return;
 
-			const nextPixelRatio = Math.min(window.devicePixelRatio || 1, 3);
+			const nextPixelRatio = getPixelRatio();
 			const nextWidth = Math.round(width * nextPixelRatio);
 			const nextHeight = Math.round(height * nextPixelRatio);
 			if (nextWidth === canvasWidth && nextHeight === canvasHeight) return;
@@ -160,6 +223,10 @@
 		canvas.addEventListener('lostpointercapture', finishStroke);
 
 		return () => {
+			if (drawingCanvas === canvas) {
+				drawingCanvas = undefined;
+			}
+
 			resizeObserver.disconnect();
 			canvas.removeEventListener('pointerdown', handlePointerDown);
 			canvas.removeEventListener('pointermove', handlePointerMove);
@@ -173,33 +240,38 @@
 <div class={['doodle-block', className]}>
 	<div class="doodle-block__header">
 		{#if hasDrawing}
-			<button type="button" class="doodle-block__submit">Submit My Art</button>
+			<button
+				type="button"
+				class="doodle-block__submit"
+				disabled={isPeeling}
+				onclick={handleSubmitArt}
+			>
+				Submit My Art
+			</button>
 		{/if}
 
 		<div class="doodle-block__tools" aria-label="Drawing tools">
 			<button
 				type="button"
 				class={['doodle-block__tool', selectedTool === 'pencil' && 'doodle-block__tool--selected']}
+				style:--pencil-color={selectedColor}
 				aria-pressed={selectedTool === 'pencil'}
 				aria-label="Use pencil tool"
 				onclick={() => (selectedTool = 'pencil')}
 			>
-				<svg class="doodle-block__tool-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+				<svg
+					class="doodle-block__tool-icon doodle-block__pencil-icon"
+					viewBox="0 0 24 24"
+					aria-hidden="true"
+					focusable="false"
+				>
 					<path
+						class="doodle-block__pencil-stroke"
 						d="M4 20l4.7-1.1L19.8 7.8a2 2 0 0 0 0-2.8l-.8-.8a2 2 0 0 0-2.8 0L5.1 15.3 4 20z"
-						fill="none"
-						stroke="currentColor"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
 					/>
 					<path
+						class="doodle-block__pencil-stroke"
 						d="M14.8 5.6l3.6 3.6M5.1 15.3l3.6 3.6"
-						fill="none"
-						stroke="currentColor"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
 					/>
 				</svg>
 			</button>
@@ -232,7 +304,12 @@
 		</div>
 	</div>
 
-	<div class="doodle-block__paper">
+	<div
+		class={[
+			'doodle-block__paper',
+			isPeeling && 'doodle-block__paper--peeling'
+		]}
+	>
 		<canvas
 			{@attach setupDrawingPad}
 			class="doodle-block__canvas"
@@ -246,10 +323,7 @@
 		{#each colors as color (color.name)}
 			<button
 				type="button"
-				class={[
-					'doodle-block__swatch',
-					selectedColor === color.value && 'doodle-block__swatch--selected'
-				]}
+				class="doodle-block__swatch"
 				style:--swatch-color={color.value}
 				aria-label={`Select ${color.name}`}
 				aria-pressed={selectedColor === color.value}
@@ -315,6 +389,11 @@
 		box-shadow: 0 0.25rem 0 rgb(15 23 42 / 0.08);
 	}
 
+	.doodle-block__submit:disabled {
+		cursor: wait;
+		opacity: 0.62;
+	}
+
 	.doodle-block__tool,
 	.doodle-block__swatch {
 		border: 1px solid rgb(15 23 42 / 0.14);
@@ -342,16 +421,32 @@
 		height: 1.15rem;
 	}
 
+	.doodle-block__pencil-icon {
+		color: var(--pencil-color, #000000);
+	}
+
+	.doodle-block__pencil-stroke {
+		fill: none;
+		stroke: currentColor;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 2.25
+	}
+
 	.doodle-block__tool--selected {
-		border-color: rgb(23 32 51 / 0.72);
-		background: #172033;
-		color: #ffffff;
+		border-color: #172033;
+		background: rgb(15 23 42 / 0.04);
+		color: #172033;
+		box-shadow:
+			inset 0 0 0 1px #172033,
+			0 0.25rem 0 rgb(15 23 42 / 0.08);
 	}
 
 	.doodle-block__paper {
 		position: relative;
 		min-height: 12rem;
 		overflow: hidden;
+		transform-origin: 92% 8%;
 		border: 1px solid rgb(15 23 42 / 0.14);
 		border-radius: 1.05rem;
 		background:
@@ -362,6 +457,36 @@
 		box-shadow:
 			inset 0 0 0 1px rgb(255 255 255 / 0.9),
 			inset 0 -0.8rem 2rem rgb(15 23 42 / 0.035);
+	}
+
+	.doodle-block__paper::after {
+		content: '';
+		position: absolute;
+		inset: -8% -18% -8% auto;
+		width: 38%;
+		border-radius: 55% 0 0 55%;
+		background:
+			linear-gradient(90deg, rgb(255 255 255 / 0), rgb(255 255 255 / 0.9) 42%, rgb(207 216 228 / 0.82)),
+			linear-gradient(180deg, rgb(255 255 255 / 0.75), rgb(143 155 177 / 0.24) 56%, rgb(15 23 42 / 0.18));
+		box-shadow:
+			-1.4rem 0 2.2rem rgb(15 23 42 / 0.16),
+			inset 0.55rem 0 0.8rem rgb(255 255 255 / 0.75),
+			inset -0.4rem 0 0.7rem rgb(15 23 42 / 0.12);
+		opacity: 0;
+		pointer-events: none;
+		transform: translateX(58%) rotateY(-20deg) skewY(-4deg);
+		transform-origin: right center;
+	}
+
+	.doodle-block__paper--peeling {
+		pointer-events: none;
+		animation: doodle-paper-peel 900ms cubic-bezier(0.18, 0.72, 0.18, 1) forwards;
+		will-change: transform, opacity, filter;
+	}
+
+	.doodle-block__paper--peeling::after {
+		animation: doodle-paper-curl 900ms cubic-bezier(0.18, 0.72, 0.18, 1) forwards;
+		will-change: transform, opacity, filter;
 	}
 
 	.doodle-block__canvas {
@@ -388,12 +513,6 @@
 		box-shadow: none;
 	}
 
-	.doodle-block__swatch--selected {
-		border-color: #172033;
-		outline: 2px solid #172033;
-		outline-offset: 2px;
-	}
-
 	.doodle-block__swatch-label {
 		position: absolute;
 		width: 1px;
@@ -402,6 +521,78 @@
 		clip: rect(0 0 0 0);
 		white-space: nowrap;
 		clip-path: inset(50%);
+	}
+
+	@keyframes doodle-paper-peel {
+		0% {
+			opacity: 1;
+			filter: drop-shadow(0 0 0 rgb(15 23 42 / 0));
+			transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+		}
+
+		32% {
+			opacity: 1;
+			filter: drop-shadow(-0.8rem 0.9rem 1.2rem rgb(15 23 42 / 0.12));
+			transform: perspective(50rem) translate3d(0.45rem, -0.35rem, 0) rotateX(3deg)
+				rotateY(-9deg) rotateZ(1deg) scale(0.995);
+		}
+
+		68% {
+			opacity: 0.9;
+			filter: drop-shadow(-1.2rem 1.4rem 1.7rem rgb(15 23 42 / 0.16));
+			transform: perspective(50rem) translate3d(42%, -10%, 0) rotateX(4deg) rotateY(-18deg)
+				rotateZ(5deg) scale(0.96);
+		}
+
+		100% {
+			opacity: 0;
+			filter: drop-shadow(-1rem 1.2rem 1.5rem rgb(15 23 42 / 0.08));
+			transform: perspective(50rem) translate3d(115%, -22%, 0) rotateX(5deg) rotateY(-24deg)
+				rotateZ(9deg) scale(0.92);
+		}
+	}
+
+	@keyframes doodle-paper-curl {
+		0% {
+			opacity: 0;
+			filter: blur(0);
+			transform: translateX(58%) rotateY(-20deg) skewY(-4deg);
+		}
+
+		20% {
+			opacity: 0.95;
+			filter: blur(0);
+			transform: translateX(24%) rotateY(-36deg) skewY(-6deg);
+		}
+
+		64% {
+			opacity: 0.9;
+			filter: blur(0.01rem);
+			transform: translateX(-10%) rotateY(-48deg) skewY(-8deg) scaleX(1.16);
+		}
+
+		100% {
+			opacity: 0;
+			filter: blur(0.03rem);
+			transform: translateX(-22%) rotateY(-56deg) skewY(-10deg) scaleX(1.24);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.doodle-block__paper--peeling {
+			animation: doodle-paper-fade 120ms ease-out forwards;
+		}
+
+		.doodle-block__paper--peeling::after {
+			animation: none;
+		}
+
+	}
+
+	@keyframes doodle-paper-fade {
+		to {
+			opacity: 0;
+		}
 	}
 
 	@media (min-width: 48rem) {
