@@ -1,4 +1,5 @@
 export type HomepageBlockKind =
+	| 'achievement'
 	| 'disco'
 	| 'doodle'
 	| 'empty'
@@ -6,7 +7,9 @@ export type HomepageBlockKind =
 	| 'houston'
 	| 'pokemon'
 	| 'redesigning-article'
+	| 'sticker'
 	| 'subgrid'
+	| 'three-moats-article'
 	| 'welcome-internet';
 
 export type HomepageGridColumnSpan = 1 | 2 | 3 | 4;

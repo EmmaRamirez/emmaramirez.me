@@ -143,5 +143,48 @@ export const homepageBlocks: HomepageBlock[] = [
 		settings: {
 			ariaLabel: 'Doodle pad'
 		}
+	},
+	{
+		id: 'sticker',
+		kind: 'sticker',
+		layout: {
+			desktop: {
+				columnStart: 1,
+				columnSpan: 1,
+				rowStart: 5,
+				rowSpan: 2
+			},
+			mobileMinHeight: 'min(34rem, calc(140vw - 2rem))'
+		},
+		settings: {
+			ariaLabel: 'Sticker tray'
+		}
+	},
+	{
+		id: 'achievement',
+		kind: 'achievement',
+		layout: {
+			desktop: {
+				columnStart: 2,
+				columnSpan: 1,
+				rowStart: 5,
+				rowSpan: 1
+			}
+		},
+		settings: {
+			ariaLabel: 'Achievement unlocked'
+		}
+	},
+	{
+		id: 'three-moats-article',
+		kind: 'three-moats-article',
+		layout: {
+			desktop: {
+				columnStart: 2,
+				columnSpan: 1,
+				rowStart: 6,
+				rowSpan: 2
+			}
+		}
 	}
 ];

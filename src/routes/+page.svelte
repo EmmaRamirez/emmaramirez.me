@@ -1,14 +1,17 @@
 <script lang="ts">
+	import AchievementBlock from '$lib/components/blocks/AchievementBlock.svelte';
 	import DiscoBlock from '$lib/components/blocks/DiscoBlock.svelte';
 	import DoodleBlock from '$lib/components/blocks/DoodleBlock.svelte';
 	import HoustonBlock from '$lib/components/blocks/HoustonBlock.svelte';
 	import PokemonBlock from '$lib/components/blocks/PokemonBlock.svelte';
+	import StickerBlock from '$lib/components/blocks/StickerBlock.svelte';
 	import SubgridBlock from '$lib/components/blocks/SubgridBlock.svelte';
 	import WelcomeInternetBlock from '$lib/components/blocks/WelcomeInternetBlock.svelte';
 	import HomeBlock from '$lib/components/blocks/site/HomeBlock.svelte';
 	import { homepageBlocks } from '$lib/registry/homepage';
 	import type { HomepageBlock, HomepageBlockPlacement } from '$lib/types/homepage';
 	import RedesigningArticle from './article/redesigning-article/RedesigningArticle.svelte';
+	import ThreeMoatsArticle from './article/the-three-moats/ThreeMoatsArticle.svelte';
 
 	function getGridLine({ columnSpan, columnStart }: HomepageBlockPlacement) {
 		return columnStart && columnStart !== 'auto'
@@ -21,7 +24,11 @@
 	}
 
 	function getBlockElement(block: HomepageBlock): 'article' | 'div' {
-		return block.kind === 'redesigning-article' ? 'div' : 'article';
+		return isHomepageArticleBlock(block) ? 'div' : 'article';
+	}
+
+	function isHomepageArticleBlock(block: HomepageBlock) {
+		return block.kind === 'redesigning-article' || block.kind === 'three-moats-article';
 	}
 
 	function getContentClass(block: HomepageBlock, baseClass = 'h-full w-full') {
@@ -42,7 +49,7 @@
 				class={['home-grid__block', block.settings?.className]}
 				aria-hidden={block.settings?.decorative ? 'true' : undefined}
 				aria-label={
-					block.kind === 'redesigning-article' || block.settings?.decorative
+					isHomepageArticleBlock(block) || block.settings?.decorative
 						? undefined
 						: block.settings?.ariaLabel
 				}
@@ -59,6 +66,8 @@
 					<HomeBlock class={getContentClass(block)} />
 				{:else if block.kind === 'redesigning-article'}
 					<RedesigningArticle />
+				{:else if block.kind === 'three-moats-article'}
+					<ThreeMoatsArticle />
 				{:else if block.kind === 'disco'}
 					<DiscoBlock
 						class={getContentClass(block, '')}
@@ -67,7 +76,7 @@
 						caption={block.settings.caption}
 					/>
 				{:else if block.kind === 'empty'}
-					<div class="home-grid__empty-card" aria-hidden="true"></div>
+					<div class="home-grid__empty-card" aria-hidden="true">FREE SPACE</div>
 				{:else if block.kind === 'pokemon'}
 					<PokemonBlock class={getContentClass(block)} />
 				{:else if block.kind === 'subgrid'}
@@ -76,6 +85,10 @@
 					<HoustonBlock class={getContentClass(block)} />
 				{:else if block.kind === 'doodle'}
 					<DoodleBlock class={getContentClass(block)} />
+				{:else if block.kind === 'sticker'}
+					<StickerBlock class={getContentClass(block)} />
+				{:else if block.kind === 'achievement'}
+					<AchievementBlock class={getContentClass(block)} />
 				{/if}
 			</svelte:element>
 		{/each}
@@ -114,6 +127,8 @@
 	}
 
 	.home-grid__empty-card {
+		display: grid;
+		place-items: center;
 		height: 100%;
 		min-height: inherit;
 		border: 1px solid color-mix(in srgb, var(--border-color) 58%, transparent);

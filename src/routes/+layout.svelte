@@ -8,6 +8,7 @@
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
+	import StickerLayer from '$lib/components/stickers/StickerLayer.svelte';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
 	import ThemeToggle from '$lib/components/ui/ThemeToggle.svelte';
 	import { dev } from '$app/environment';
@@ -69,6 +70,8 @@
 		</div>
 	{/key}
 </main>
+
+<StickerLayer />
 
 <style>
 	.page-transition-wrapper {
