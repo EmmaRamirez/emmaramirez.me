@@ -393,24 +393,23 @@
 		--moats-ink: var(--text-primary);
 		--moats-blue: var(--caroline-blue-500);
 		--moats-yellow: var(--transit-yellow-500);
-		--moats-yellow-soft: var(--transit-yellow-100);
 
 		position: fixed;
 		z-index: 2147483647;
 		top: var(--tooltip-y, 50%);
 		left: var(--tooltip-x, 50%);
 		padding: 0.45rem 0.68rem;
-		color: var(--moats-yellow-soft);
+		color: var(--moats-ink);
 		font-family: var(--font-sans);
 		font-size: 0.72rem;
 		font-weight: 850;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		white-space: nowrap;
-		background: color-mix(in srgb, var(--moats-ink) 88%, var(--moats-blue));
-		border: 1px solid color-mix(in srgb, var(--moats-yellow) 58%, transparent);
+		background: var(--card-bg);
+		border: 1px solid color-mix(in srgb, var(--moats-yellow) 58%, var(--border-color));
 		border-radius: 999px;
-		box-shadow: 0 0.8rem 1.8rem color-mix(in srgb, var(--moats-blue) 24%, transparent);
+		box-shadow: 0 0.8rem 1.8rem color-mix(in srgb, var(--moats-blue) 22%, transparent);
 		opacity: 0;
 		pointer-events: none;
 		transform: translate(0.85rem, 0.85rem) scale(0.96);
