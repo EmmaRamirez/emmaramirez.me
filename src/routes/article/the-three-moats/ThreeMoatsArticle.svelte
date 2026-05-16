@@ -137,16 +137,16 @@
 				</div>
 			</div>
 		</a>
-
-		<span
-			class={['three-moats__tooltip', tooltipVisible && 'three-moats__tooltip--visible']}
-			style:--tooltip-x={`${tooltipX}px`}
-			style:--tooltip-y={`${tooltipY}px`}
-			aria-hidden="true"
-		>
-			Read Article
-		</span>
 	</article>
+
+	<span
+		class={['three-moats__tooltip', tooltipVisible && 'three-moats__tooltip--visible']}
+		style:--tooltip-x={`${tooltipX}px`}
+		style:--tooltip-y={`${tooltipY}px`}
+		aria-hidden="true"
+	>
+		Read Article
+	</span>
 {/if}
 
 <style>
@@ -390,6 +390,11 @@
 	}
 
 	.three-moats__tooltip {
+		--moats-ink: var(--text-primary);
+		--moats-blue: var(--caroline-blue-500);
+		--moats-yellow: var(--transit-yellow-500);
+		--moats-yellow-soft: var(--transit-yellow-100);
+
 		position: fixed;
 		z-index: 2147483647;
 		top: var(--tooltip-y, 50%);
