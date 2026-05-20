@@ -38,9 +38,12 @@
 	bind:this={itemRef}
 	{href}
 	class={cn(
-		'style-none px-2 py-1.5 text-sm font-medium whitespace-nowrap md:px-4 md:py-2',
-		'transition-all duration-200',
-		active ? 'text-(--text-primary)' : 'text-(--text-secondary) hover:text-(--text-primary)',
+		'style-none inline-flex items-center rounded-full border-2 border-(--border-color) bg-(--page-bg-subtle) px-3 py-1.5 text-sm font-medium whitespace-nowrap md:px-4 md:py-2',
+		'transition-[background-color,border-color,color,box-shadow] duration-200',
+		'focus:outline-none focus-visible:ring-2 focus-visible:ring-(--caroline-blue-600)',
+		active
+			? 'bg-(--page-bg-muted) text-(--text-primary)'
+			: 'text-(--text-secondary) hover:bg-(--page-bg-muted) hover:text-(--text-primary)',
 		className
 	)}
 	aria-current={active ? 'page' : undefined}
