@@ -228,7 +228,7 @@
 	<div class="houston-block__scrim" aria-hidden="true"></div>
 
 	<div class="houston-block__label">
-		<span class="font-serif text-xl text-white drop-shadow-lg">Home</span>
+		<span class="font-serif text-xl text-white drop-shadow-lg">From</span>
 		<span class="font-serif text-lg text-white/90 drop-shadow-lg">Houston, TX</span>
 	</div>
 </div>

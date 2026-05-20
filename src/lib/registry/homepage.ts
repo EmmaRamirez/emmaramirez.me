@@ -91,7 +91,7 @@ export const homepageBlocks: HomepageBlock[] = [
 				columnStart: 2,
 				columnSpan: 2,
 				rowStart: 3,
-				rowSpan: 1
+				rowSpan: 2
 			}
 		},
 		settings: {
@@ -99,18 +99,39 @@ export const homepageBlocks: HomepageBlock[] = [
 		}
 	},
 	{
-		id: 'subgrid',
-		kind: 'subgrid',
+		id: 'pokemon-color-one',
+		kind: 'decorative',
 		layout: {
 			desktop: {
 				columnStart: 4,
 				columnSpan: 1,
 				rowStart: 3,
 				rowSpan: 1
-			}
+			},
+			minHeight: '100%',
+			mobileMinHeight: 'min(16rem, calc(100vw - 2rem))'
 		},
 		settings: {
-			ariaLabel: 'Two little rooms'
+			backgroundColor: 'var(--light-rose-500)',
+			decorative: true
+		}
+	},
+	{
+		id: 'pokemon-color-two',
+		kind: 'decorative',
+		layout: {
+			desktop: {
+				columnStart: 4,
+				columnSpan: 1,
+				rowStart: 4,
+				rowSpan: 1
+			},
+			minHeight: '100%',
+			mobileMinHeight: 'min(16rem, calc(100vw - 2rem))'
+		},
+		settings: {
+			backgroundColor: 'var(--magic-mint-500)',
+			decorative: true
 		}
 	},
 	{
@@ -118,9 +139,9 @@ export const homepageBlocks: HomepageBlock[] = [
 		kind: 'houston',
 		layout: {
 			desktop: {
-				columnStart: 2,
+				columnStart: 1,
 				columnSpan: 1,
-				rowStart: 4,
+				rowStart: 7,
 				rowSpan: 1
 			}
 		},
@@ -135,7 +156,7 @@ export const homepageBlocks: HomepageBlock[] = [
 			desktop: {
 				columnStart: 3,
 				columnSpan: 2,
-				rowStart: 4,
+				rowStart: 5,
 				rowSpan: 2
 			},
 			mobileMinHeight: 'min(34rem, calc(140vw - 2rem))'
@@ -185,6 +206,22 @@ export const homepageBlocks: HomepageBlock[] = [
 				rowStart: 6,
 				rowSpan: 2
 			}
+		}
+	},
+	{
+		id: 'wide-background',
+		kind: 'wide-background',
+		layout: {
+			desktop: {
+				columnStart: 3,
+				columnSpan: 2,
+				rowStart: 7,
+				rowSpan: 1
+			},
+			mobileMinHeight: 'min(20rem, calc(80vw - 2rem))'
+		},
+		settings: {
+			decorative: true
 		}
 	}
 ];

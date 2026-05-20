@@ -5,8 +5,8 @@
 	import HoustonBlock from '$lib/components/blocks/HoustonBlock.svelte';
 	import PokemonBlock from '$lib/components/blocks/PokemonBlock.svelte';
 	import StickerBlock from '$lib/components/blocks/StickerBlock.svelte';
-	import SubgridBlock from '$lib/components/blocks/SubgridBlock.svelte';
 	import WelcomeInternetBlock from '$lib/components/blocks/WelcomeInternetBlock.svelte';
+	import WideBackgroundBlock from '$lib/components/blocks/WideBackgroundBlock.svelte';
 	import HomeBlock from '$lib/components/blocks/site/HomeBlock.svelte';
 	import { homepageBlocks } from '$lib/registry/homepage';
 	import type { HomepageBlock, HomepageBlockPlacement } from '$lib/types/homepage';
@@ -48,17 +48,18 @@
 				this={getBlockElement(block)}
 				class={['home-grid__block', block.settings?.className]}
 				aria-hidden={block.settings?.decorative ? 'true' : undefined}
-				aria-label={
-					isHomepageArticleBlock(block) || block.settings?.decorative
-						? undefined
-						: block.settings?.ariaLabel
-				}
+				aria-label={isHomepageArticleBlock(block) || block.settings?.decorative
+					? undefined
+					: block.settings?.ariaLabel}
 				aria-labelledby={block.settings?.labelledBy}
 				style:--home-block-column={getGridLine(block.layout.desktop)}
 				style:--home-block-row={getGridRow(block.layout.desktop)}
 				style:--home-block-min-height={block.layout.minHeight ?? 'auto'}
 				style:--home-block-mobile-min-height={block.layout.mobileMinHeight ?? 'auto'}
 				style:--home-block-overflow={block.layout.overflow ?? 'hidden'}
+				style:--home-block-background-color={block.kind === 'decorative'
+					? block.settings.backgroundColor
+					: undefined}
 			>
 				{#if block.kind === 'welcome-internet'}
 					<WelcomeInternetBlock class={getContentClass(block)} />
@@ -75,12 +76,12 @@
 						alt={block.settings.alt}
 						caption={block.settings.caption}
 					/>
+				{:else if block.kind === 'decorative'}
+					<div class="home-grid__decorative-card" aria-hidden="true"></div>
 				{:else if block.kind === 'empty'}
 					<div class="home-grid__empty-card" aria-hidden="true">FREE SPACE</div>
 				{:else if block.kind === 'pokemon'}
 					<PokemonBlock class={getContentClass(block)} />
-				{:else if block.kind === 'subgrid'}
-					<SubgridBlock class={getContentClass(block)} />
 				{:else if block.kind === 'houston'}
 					<HoustonBlock class={getContentClass(block)} />
 				{:else if block.kind === 'doodle'}
@@ -89,6 +90,8 @@
 					<StickerBlock class={getContentClass(block)} />
 				{:else if block.kind === 'achievement'}
 					<AchievementBlock class={getContentClass(block)} />
+				{:else if block.kind === 'wide-background'}
+					<WideBackgroundBlock class={getContentClass(block)} />
 				{/if}
 			</svelte:element>
 		{/each}
@@ -108,7 +111,7 @@
 		grid-auto-rows: minmax(12rem, auto);
 		gap: 1.5rem;
 		align-items: stretch;
-		font-family: 'Pixelify Sans', var(--font-sans);
+		font-family: var(--font-pixel), var(--font-sans);
 	}
 
 	.home-grid__block {
@@ -134,6 +137,13 @@
 		border: 1px solid color-mix(in srgb, var(--border-color) 58%, transparent);
 		border-radius: 1.5rem;
 		background: var(--card-bg);
+	}
+
+	.home-grid__decorative-card {
+		height: 100%;
+		min-height: inherit;
+		border-radius: inherit;
+		background-color: var(--home-block-background-color);
 	}
 
 	@media (min-width: 48rem) {

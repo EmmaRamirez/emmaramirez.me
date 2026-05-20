@@ -2,14 +2,15 @@ export type HomepageBlockKind =
 	| 'achievement'
 	| 'disco'
 	| 'doodle'
+	| 'decorative'
 	| 'empty'
 	| 'home'
 	| 'houston'
 	| 'pokemon'
 	| 'redesigning-article'
 	| 'sticker'
-	| 'subgrid'
 	| 'three-moats-article'
+	| 'wide-background'
 	| 'welcome-internet';
 
 export type HomepageGridColumnSpan = 1 | 2 | 3 | 4;
@@ -54,8 +55,17 @@ export interface HomepageDiscoBlock extends HomepageBaseBlock {
 	};
 }
 
+export interface HomepageDecorativeBlock extends HomepageBaseBlock {
+	kind: 'decorative';
+	settings: HomepageBlockSettings & {
+		backgroundColor: string;
+		decorative: true;
+	};
+}
+
 export type HomepageBlock =
 	| HomepageDiscoBlock
+	| HomepageDecorativeBlock
 	| (HomepageBaseBlock & {
-			kind: Exclude<HomepageBlockKind, 'disco'>;
+			kind: Exclude<HomepageBlockKind, 'decorative' | 'disco'>;
 	  });
