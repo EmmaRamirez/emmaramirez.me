@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { asset } from '$app/paths';
 	import { onMount } from 'svelte';
 
 	type Pokemon = {
@@ -61,10 +62,20 @@
 	const pokeApiBaseUrl = 'https://pokeapi.co/api/v2/pokemon';
 	const pokeApiSpeciesBaseUrl = 'https://pokeapi.co/api/v2/pokemon-species';
 	const preferredFlavorTextVersions = ['black', 'white', 'black-2', 'white-2'];
+	const pokemonCryUrls: Partial<Record<number, string>> = {
+		123: asset('/audio/pokemon-cries/123.ogg'),
+		193: asset('/audio/pokemon-cries/193.ogg'),
+		261: asset('/audio/pokemon-cries/261.ogg'),
+		446: asset('/audio/pokemon-cries/446.ogg'),
+		453: asset('/audio/pokemon-cries/453.ogg'),
+		719: asset('/audio/pokemon-cries/719.ogg')
+	};
+	const pokemonCryCursor = `url("${asset('/cursors/audio-speaker.svg')}") 16 16, pointer`;
 
 	let { class: className = '', team = defaultPokemonTeam }: Props = $props();
 
 	const detailsCache = $state<Record<number, PokemonDetails>>({});
+	let activeCry: HTMLAudioElement | null = null;
 	let selectedPokemonId = $state<number | null>(null);
 	let loadingId = $state<number | null>(null);
 	let error = $state<string | null>(null);
@@ -111,6 +122,19 @@
 
 	function getGenus(data: PokemonSpeciesApiResponse): string {
 		return data.genera.find((entry) => entry.language.name === 'en')?.genus ?? 'Pokemon';
+	}
+
+	function playPokemonCry(button: HTMLButtonElement) {
+		const cry = button.querySelector<HTMLAudioElement>('[data-pokemon-cry]');
+
+		if (!cry) {
+			return;
+		}
+
+		activeCry?.pause();
+		activeCry = cry;
+		cry.currentTime = 0;
+		void cry.play().catch(() => {});
 	}
 
 	async function fetchPokemonDetails(id: number): Promise<PokemonDetails> {
@@ -161,6 +185,11 @@
 		}
 	}
 
+	function activatePokemon(id: number, button: HTMLButtonElement) {
+		void selectPokemon(id);
+		playPokemonCry(button);
+	}
+
 	onMount(() => {
 		for (const pokemon of team) {
 			if (detailsCache[pokemon.id]) continue;
@@ -173,7 +202,11 @@
 	});
 </script>
 
-<div class={['pokemon-block', className]} aria-label="Pokemon team block">
+<div
+	class={['pokemon-block', className]}
+	style:--pokemon-cry-cursor={pokemonCryCursor}
+	aria-label="Pokemon team block"
+>
 	<div class="pokemon-block__topbar" aria-hidden="true">
 		<span></span>
 		<span></span>
@@ -270,7 +303,7 @@
 				]}
 				aria-pressed={activePokemonId === pokemon.id}
 				aria-label={`Show ${pokemon.name} details`}
-				onclick={() => selectPokemon(pokemon.id)}
+				onclick={(event) => activatePokemon(pokemon.id, event.currentTarget)}
 				onfocus={() => selectPokemon(pokemon.id)}
 				onpointerenter={() => selectPokemon(pokemon.id)}
 			>
@@ -282,6 +315,14 @@
 					aria-hidden="true"
 				/>
 				<span>{pokemon.name}</span>
+				{#if pokemonCryUrls[pokemon.id]}
+					<audio
+						data-pokemon-cry
+						src={pokemonCryUrls[pokemon.id]}
+						preload="auto"
+						aria-hidden="true"
+					></audio>
+				{/if}
 			</button>
 		{/each}
 	</div>
@@ -465,6 +506,10 @@
 	.pokemon-block__sprite-button--selected {
 		filter: brightness(1.08) saturate(1.1);
 		transform: translateY(-0.08rem);
+	}
+
+	.pokemon-block__sprite-button:hover {
+		cursor: var(--pokemon-cry-cursor, pointer);
 	}
 
 	.pokemon-block__sprite-button:focus-visible {

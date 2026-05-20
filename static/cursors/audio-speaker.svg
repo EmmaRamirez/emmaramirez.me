@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 64 64">
+	<path
+		fill="#7aa2f7"
+		fill-opacity=".32"
+		d="M9 39.5V24.5h10.9L36 11.7v40.6L19.9 39.5H9Z"
+		transform="translate(3 3)"
+	/>
+	<path
+		fill="#fff3dc"
+		d="M9 39.5V24.5h10.9L36 11.7v40.6L19.9 39.5H9Z"
+	/>
+	<path
+		stroke="#010101"
+		stroke-linejoin="round"
+		stroke-width="5"
+		d="M9 39.5V24.5h10.9L36 11.7v40.6L19.9 39.5H9Z"
+	/>
+	<path
+		stroke="#010101"
+		stroke-linecap="round"
+		stroke-width="5"
+		d="M43 21.5c3 2.5 4.8 6.3 4.8 10.5S46 40 43 42.5"
+	/>
+	<path
+		stroke="#010101"
+		stroke-linecap="round"
+		stroke-width="5"
+		d="M49.5 14.5C54.8 18.9 58 25.2 58 32s-3.2 13.1-8.5 17.5"
+	/>
+	<path
+		stroke="#ed9cef"
+		stroke-linecap="round"
+		stroke-width="3"
+		d="M42.2 20.8c3.4 2.5 5.4 6.6 5.4 11.2s-2 8.7-5.4 11.2"
+	/>
+</svg>
