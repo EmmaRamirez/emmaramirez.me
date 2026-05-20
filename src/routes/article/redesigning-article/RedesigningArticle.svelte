@@ -75,36 +75,43 @@
 		style:--texture-image={`url("${textureImage}")`}
 	>
 		<div class="redesigning__page-column redesigning__page-column--left" aria-hidden="true">
+			<div class="redesigning__page-column-art">
+				<StaticDoricColumn side="left" variant="page" />
+			</div>
 			<DoricColumnStage mode="page" side="left" />
 		</div>
 		<div class="redesigning__page-column redesigning__page-column--right" aria-hidden="true">
+			<div class="redesigning__page-column-art">
+				<StaticDoricColumn side="right" variant="page" />
+			</div>
 			<DoricColumnStage mode="page" side="right" />
 		</div>
 
 		<div class="redesigning__page-shell">
+			<img
+				class="redesigning__olive redesigning__olive--page-top"
+				src={oliveBranch}
+				alt=""
+				aria-hidden="true"
+			/>
+			<img
+				class="redesigning__olive redesigning__olive--page-bottom"
+				src={oliveBranch}
+				alt=""
+				aria-hidden="true"
+			/>
+
 			<header class="redesigning__page-header">
 				<h1 id="redesigning-title">Redesigning This Website, Again</h1>
 				<p class="redesigning__dek">
-					A route-scoped article concept about starting over, keeping the strange parts, and letting
-					the site feel handmade.
+					I have an actual problem.
 				</p>
 			</header>
 
 			<div class="redesigning__article-body">
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent non nulla quam. Integer
-					id sem at sapien fringilla viverra. Donec vitae tellus vel nibh facilisis luctus in non
-					enim.
-				</p>
-				<p>
-					Suspendisse potenti. Curabitur tempus, lacus at efficitur posuere, erat metus interdum
-					massa, a fermentum mauris est sed justo. Sed porta velit ac ante dictum, vitae congue
-					lectus placerat.
-				</p>
-				<p>
-					Aliquam erat volutpat. Maecenas eu lacus sit amet est varius pretium. Duis ornare, sapien
-					sed pulvinar cursus, sem mi cursus magna, in pretium arcu ligula at lorem.
-				</p>
+				Redesigning things is fun. It's basically the easiest way to achieve literally nothing while feeling amazing about it.
+
+				I've been redesiging my personal website since December after deciding I was better off succumbing to my AI psychosis and shitting out tokens into the ether.
 			</div>
 		</div>
 	</article>
@@ -457,27 +464,37 @@
 	.redesigning__page-column {
 		position: absolute;
 		z-index: 6;
-		top: clamp(4.5rem, 10vh, 7rem);
-		width: clamp(18rem, 30vw, 28rem);
-		height: clamp(28rem, 66vh, 44rem);
+		top: clamp(6rem, 14vh, 8rem);
+		width: clamp(7.5rem, 12vw, 10rem);
+		height: clamp(24rem, 56vh, 34rem);
 		pointer-events: none;
-		opacity: 0.84;
+		opacity: 0.72;
 		filter: drop-shadow(0 2rem 2.4rem rgba(52, 34, 12, 0.22));
 	}
 
 	.redesigning__page-column--left {
-		left: clamp(-2rem, 2vw, 2rem);
+		left: clamp(1rem, 4vw, 3rem);
 	}
 
 	.redesigning__page-column--right {
-		right: clamp(-2rem, 2vw, 2rem);
+		right: clamp(1rem, 4vw, 3rem);
+	}
+
+	.redesigning__page-column-art {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		filter: saturate(0.82) sepia(0.16);
 	}
 
 	.redesigning__page-shell {
 		position: relative;
 		z-index: 4;
+		isolation: isolate;
 		display: grid;
-		width: min(100%, 56rem);
+		grid-template-rows: auto minmax(0, 1fr);
+		width: min(80vw, 72rem);
+		min-height: min(80vh, 54rem);
 		gap: clamp(2rem, 5vw, 4rem);
 		padding: clamp(2rem, 6vw, 5rem);
 		background: rgba(250, 237, 198, 0.76);
@@ -487,17 +504,45 @@
 			inset 0 0 3rem rgba(91, 61, 20, 0.08),
 			0 1.6rem 4rem rgba(49, 33, 12, 0.22);
 		backdrop-filter: blur(12px);
+		transform: translateY(clamp(-3rem, -5vh, -1.5rem));
+	}
+
+	.redesigning__olive--page-top,
+	.redesigning__olive--page-bottom {
+		z-index: 1;
+		width: clamp(8rem, 17vw, 14rem);
+		opacity: 0.58;
+		filter: saturate(0.68) contrast(1.03) sepia(0.18)
+			drop-shadow(0 0.8rem 1rem rgba(52, 34, 12, 0.12));
+	}
+
+	.redesigning__olive--page-top {
+		top: clamp(-3.4rem, -4vw, -1.8rem);
+		left: clamp(-2.6rem, -2.8vw, -0.9rem);
+		transform: rotate(-16deg);
+		transform-origin: 24% 42%;
+	}
+
+	.redesigning__olive--page-bottom {
+		right: clamp(-2.8rem, -3vw, -1rem);
+		bottom: clamp(-3.2rem, -4vw, -1.6rem);
+		transform: scaleX(-1) rotate(-14deg);
+		transform-origin: 76% 58%;
 	}
 
 	.redesigning__page-header {
+		position: relative;
+		z-index: 2;
 		display: grid;
 		gap: clamp(0.85rem, 2vw, 1.25rem);
 		text-align: center;
 	}
 
 	.redesigning--page h1 {
-		max-width: 13ch;
-		font-size: clamp(2.65rem, 7.4vw, 5.9rem);
+		width: 100%;
+		max-width: none;
+		font-family: 'IM Fell English', serif;
+		font-size: clamp(2rem, 5.2vw, 4rem);
 		line-height: 0.98;
 		letter-spacing: -0.024em;
 	}
@@ -512,17 +557,19 @@
 	}
 
 	.redesigning__article-body {
+		position: relative;
+		z-index: 2;
 		display: grid;
-		max-width: 42rem;
+		align-content: start;
+		width: 100%;
+		max-width: none;
+		min-height: 0;
 		gap: 1.15rem;
 		margin: 0 auto;
+		overflow: auto;
 		color: hsla(20, 20%, 18%, 0.84);
 		font-size: clamp(1rem, 1.6vw, 1.18rem);
 		line-height: 1.8;
-	}
-
-	.redesigning__article-body p {
-		margin: 0;
 	}
 
 	@media (min-width: 48rem) {
@@ -538,23 +585,42 @@
 		}
 
 		.redesigning__page-column {
-			top: clamp(4rem, 11vh, 6rem);
-			width: clamp(13rem, 52vw, 18rem);
-			height: clamp(22rem, 58vh, 30rem);
+			top: clamp(5rem, 12vh, 6rem);
+			width: clamp(5.5rem, 20vw, 7rem);
+			height: clamp(20rem, 50vh, 26rem);
 			opacity: 0.2;
 			filter: blur(0.5px) saturate(0.8);
 		}
 
 		.redesigning__page-column--left {
-			left: clamp(-7rem, -24vw, -5rem);
+			left: clamp(0.35rem, 3vw, 1rem);
 		}
 
 		.redesigning__page-column--right {
-			right: clamp(-7rem, -24vw, -5rem);
+			right: clamp(0.35rem, 3vw, 1rem);
 		}
 
 		.redesigning__page-shell {
+			width: min(100%, 56rem);
+			min-height: auto;
 			border-radius: 1.4rem;
+			transform: translateY(clamp(-1.5rem, -3vh, -0.75rem));
+		}
+
+		.redesigning__olive--page-top,
+		.redesigning__olive--page-bottom {
+			width: clamp(6.5rem, 36vw, 9rem);
+			opacity: 0.22;
+		}
+
+		.redesigning__olive--page-top {
+			top: -1.6rem;
+			left: -1.8rem;
+		}
+
+		.redesigning__olive--page-bottom {
+			right: -1.8rem;
+			bottom: -1.6rem;
 		}
 	}
 

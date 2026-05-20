@@ -1,12 +1,13 @@
 <script lang="ts">
 	type Props = {
 		side?: 'left' | 'right';
+		variant?: 'tile' | 'page';
 	};
 
-	let { side = 'left' }: Props = $props();
+	let { side = 'left', variant = 'tile' }: Props = $props();
 </script>
 
-<div class={['doric-column', `doric-column--${side}`]} aria-hidden="true">
+<div class={['doric-column', `doric-column--${side}`, `doric-column--${variant}`]} aria-hidden="true">
 	<div class="doric-column__top"></div>
 	<div class="doric-column__capital">
 		<div class="doric-column__abacus"></div>
@@ -47,6 +48,36 @@
 	.doric-column--right {
 		--turn: 10deg;
 		--lean: 1.5deg;
+	}
+
+	.doric-column--page .doric-column__top,
+	.doric-column--page .doric-column__capital,
+	.doric-column--page .doric-column__shaft,
+	.doric-column--page .doric-column__stylobate {
+		position: absolute;
+		left: 50%;
+		margin: 0;
+		transform: translateX(-50%);
+	}
+
+	.doric-column--page .doric-column__top {
+		top: 0;
+		height: 10%;
+	}
+
+	.doric-column--page .doric-column__capital {
+		top: 7%;
+		height: 25%;
+	}
+
+	.doric-column--page .doric-column__shaft {
+		top: 25%;
+		height: 57%;
+	}
+
+	.doric-column--page .doric-column__stylobate {
+		top: 80%;
+		height: 20%;
 	}
 
 	.doric-column > * {
