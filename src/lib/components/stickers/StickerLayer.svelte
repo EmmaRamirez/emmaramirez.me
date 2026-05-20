@@ -84,7 +84,7 @@
 		background: rgb(255 255 255 / 0.92);
 		color: #111827;
 		cursor: pointer;
-		font-family: 'Pixelify Sans', var(--font-sans);
+		font-family: var(--font-sans);
 		font-size: 0.95rem;
 		font-weight: 700;
 		letter-spacing: 0.02em;

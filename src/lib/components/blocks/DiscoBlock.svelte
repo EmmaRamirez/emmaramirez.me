@@ -512,11 +512,10 @@
 		bottom: 0.9rem;
 		left: 1rem;
 		color: white;
-		font-family: 'Pixelify Sans', var(--font-sans);
+		font-family: var(--font-pixel), var(--font-sans);
 		font-size: clamp(1.35rem, 4vw, 2.6rem);
 		line-height: 0.9;
 		text-align: center;
-		text-shadow: 0 0.16rem 1rem rgba(0, 0, 0, 0.5);
 	}
 
 	@media (min-width: 48rem) {
