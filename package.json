@@ -8,7 +8,9 @@
 		"build": "vite build",
 		"postinstall": "svelte-kit sync && prisma generate",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
+		"prepare": "husky && (svelte-kit sync || true)",
+		"commit": "cz",
+		"commitlint": "commitlint",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
@@ -23,6 +25,8 @@
 		"db:studio": "prisma studio"
 	},
 	"devDependencies": {
+		"@commitlint/cli": "^21.0.1",
+		"@commitlint/config-conventional": "^21.0.1",
 		"@eslint/compat": "^1.4.0",
 		"@eslint/js": "^9.39.1",
 		"@playwright/test": "^1.56.1",
@@ -36,11 +40,14 @@
 		"@types/mapbox-gl": "^3.4.1",
 		"@types/node": "^24",
 		"@vitest/browser-playwright": "^4.0.10",
+		"commitizen": "^4.3.1",
+		"cz-conventional-changelog": "^3.3.0",
 		"dotenv": "^17.2.3",
 		"eslint": "^9.39.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.13.0",
 		"globals": "^16.5.0",
+		"husky": "^9.1.7",
 		"mdsvex": "^0.12.6",
 		"playwright": "^1.56.1",
 		"portless": "^0.13.0",
@@ -77,5 +84,10 @@
 	"overrides": {
 		"estree-walker": "^2.0.2",
 		"svelte": "$svelte"
+	},
+	"config": {
+		"commitizen": {
+			"path": "cz-conventional-changelog"
+		}
 	}
 }
