@@ -1,4 +1,6 @@
 import { browser } from '$app/environment';
+import { achievementsStore } from '$lib/stores/achievementsStore.svelte';
+import type { AchievementId } from '$lib/types/achievements';
 
 export type StickerId = string;
 
@@ -39,6 +41,7 @@ type DragState = {
 	offsetY: number;
 	width: number;
 	height: number;
+	isNewPlacement: boolean;
 };
 
 type ResizeState = {
@@ -52,6 +55,10 @@ type ResizeState = {
 const STORAGE_KEY = 'emzinnia:stickers';
 const DEFAULT_Z_INDEX = 20;
 const STORED_STATE_VERSION = 4;
+
+const LOCKED_STICKER_SOURCES: Partial<Record<string, AchievementId>> = {
+	'pokemon-professor': 'pokemon-professor'
+};
 const STICKER_SCALES = [1, 1.33, 1.66, 2] as const;
 const MIN_PLACED_SCALE = 0.5;
 const MAX_PLACED_SCALE = 4;
@@ -94,10 +101,111 @@ function getStickerNumber(id: string, salt: string, min: number, max: number) {
 }
 
 function getStickerRotation(id: string) {
-	return Math.round(getStickerNumber(id, 'rotation', -28, 28));
+	return Math.round(getStickerNumber(id, 'rotation', -24, 24));
 }
 
-const stickerDefinitions: StickerDefinition[] = Object.entries(stickerImageModules)
+function getStickerSourceId(id: string) {
+	return id.replace(/-\d+$/, '');
+}
+
+function isStickerSourceUnlocked(sourceId: string) {
+	const requiredAchievement = LOCKED_STICKER_SOURCES[sourceId];
+	if (!requiredAchievement) return true;
+
+	return achievementsStore.hasUnlocked(requiredAchievement);
+}
+
+function createSeededRandom(seed: string) {
+	let state = 0;
+	for (const character of seed) {
+		state = (state * 31 + character.charCodeAt(0)) >>> 0;
+	}
+
+	return () => {
+		state = (state * 1_664_525 + 1_013_904_223) >>> 0;
+		return state / 0x1_0000_0000;
+	};
+}
+
+function shuffleWithSeed<T>(items: T[], seed: string) {
+	const shuffled = [...items];
+	const random = createSeededRandom(seed);
+
+	for (let index = shuffled.length - 1; index > 0; index -= 1) {
+		const swapIndex = Math.floor(random() * (index + 1));
+		[shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+	}
+
+	return shuffled;
+}
+
+function spreadStickersBySource<T extends { id: string }>(stickers: T[]) {
+	const groups = new Map<string, T[]>();
+
+	for (const sticker of stickers) {
+		const sourceId = getStickerSourceId(sticker.id);
+		const group = groups.get(sourceId) ?? [];
+		group.push(sticker);
+		groups.set(sourceId, group);
+	}
+
+	for (const group of groups.values()) {
+		group.sort((a, b) => a.id.localeCompare(b.id));
+	}
+
+	const sources = [...groups.keys()].sort((a, b) => a.localeCompare(b));
+	const spread: T[] = [];
+
+	while (spread.length < stickers.length) {
+		for (const sourceId of sources) {
+			const group = groups.get(sourceId);
+			const next = group?.shift();
+			if (next) spread.push(next);
+		}
+	}
+
+	return spread;
+}
+
+function buildTraySlots(count: number) {
+	const columns = Math.ceil(Math.sqrt(count));
+	const rows = Math.ceil(count / columns);
+	const slots: Array<{ x: number; y: number }> = [];
+
+	for (let row = 0; row < rows; row += 1) {
+		for (let column = 0; column < columns; column += 1) {
+			if (slots.length >= count) break;
+
+			const slotIndex = slots.length;
+			const random = createSeededRandom(`tray-slot-${slotIndex}`);
+			const cellWidth = 100 / columns;
+			const cellHeight = 100 / rows;
+			const jitterX = (random() - 0.5) * cellWidth * 0.42;
+			const jitterY = (random() - 0.5) * cellHeight * 0.42;
+
+			slots.push({
+				x: (column + 0.5) * cellWidth + jitterX,
+				y: (row + 0.5) * cellHeight + jitterY
+			});
+		}
+	}
+
+	return slots;
+}
+
+function assignTrayLayout<T extends { id: string; rotation: number }>(stickers: T[]) {
+	const spread = spreadStickersBySource(stickers);
+	const shuffledSlots = shuffleWithSeed(buildTraySlots(spread.length), 'emzinnia-tray-shuffle');
+
+	return spread.map((sticker, index) => ({
+		...sticker,
+		trayX: shuffledSlots[index].x,
+		trayY: shuffledSlots[index].y,
+		trayZIndex: index + 1
+	}));
+}
+
+const baseStickerDefinitions = Object.entries(stickerImageModules)
 	.flatMap(([path, image]) => {
 		const sourceId = getStickerId(path);
 		return STICKER_SCALES.map((scale, index) => {
@@ -107,14 +215,13 @@ const stickerDefinitions: StickerDefinition[] = Object.entries(stickerImageModul
 				label: getStickerLabel(sourceId, scale),
 				image,
 				rotation: getStickerRotation(id),
-				scale,
-				trayX: getStickerNumber(id, 'x', 24, 76),
-				trayY: getStickerNumber(id, 'y', 22, 78),
-				trayZIndex: Math.round(getStickerNumber(id, 'z', 1, 20))
+				scale
 			};
 		});
 	})
 	.sort((a, b) => a.id.localeCompare(b.id));
+
+const stickerDefinitions: StickerDefinition[] = assignTrayLayout(baseStickerDefinitions);
 
 function isStickerId(value: string): value is StickerId {
 	return stickerDefinitions.some((sticker) => sticker.id === value);
@@ -200,7 +307,11 @@ class StickerBoard {
 	}
 
 	getTrayStickers() {
-		return this.stickers.filter((sticker) => !this.placements[sticker.id]);
+		return this.stickers.filter(
+			(sticker) =>
+				!this.placements[sticker.id] &&
+				isStickerSourceUnlocked(getStickerSourceId(sticker.id))
+		);
 	}
 
 	clearPlacedStickers() {
@@ -211,6 +322,7 @@ class StickerBoard {
 	}
 
 	startDrag(id: StickerId, rect: DOMRect, pointerX: number, pointerY: number) {
+		const isNewPlacement = !this.placements[id];
 		const sticker = this.getSticker(id);
 		const placement = this.placements[id] ?? {
 			id,
@@ -228,7 +340,8 @@ class StickerBoard {
 			offsetX: pointerX - placement.x,
 			offsetY: pointerY - placement.y,
 			width: rect.width,
-			height: rect.height
+			height: rect.height,
+			isNewPlacement
 		};
 		this.moveDrag(pointerX, pointerY);
 	}
@@ -284,6 +397,12 @@ class StickerBoard {
 
 	endDrag() {
 		if (!this.activeDrag) return;
+
+		if (this.activeDrag.isNewPlacement) {
+			achievementsStore.unlock('sticky-icky', {
+				animateIfPriorUnlocks: true
+			});
+		}
 
 		this.activeDrag = null;
 		this.persist();

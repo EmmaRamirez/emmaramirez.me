@@ -38,7 +38,7 @@
 		background:
 			radial-gradient(circle at 28% 18%, rgb(255 255 255 / 0.9), transparent 8rem),
 			linear-gradient(135deg, #fff7ed, #fdf2f8 48%, #eef2ff);
-		padding: 0.9rem;
+		padding: 0;
 		box-shadow:
 			inset 0 0 0 1px rgb(255 255 255 / 0.8),
 			0 1rem 2rem rgb(17 24 39 / 0.08);
@@ -46,17 +46,17 @@
 
 	.sticker-block__tray {
 		position: relative;
+		width: 100%;
+		height: 100%;
 		min-height: 100%;
 		overflow: hidden;
-		border: 1px dashed rgb(17 24 39 / 0.16);
-		border-radius: 1.05rem;
+		border-radius: 1.5rem;
 		background:
 			linear-gradient(rgb(255 255 255 / 0.58), rgb(255 255 255 / 0.58)),
 			radial-gradient(circle at 0.75rem 0.75rem, rgb(17 24 39 / 0.1) 1px, transparent 1.5px);
 		background-size:
 			auto,
 			1rem 1rem;
-		padding: clamp(0.85rem, 5vw, 1.25rem);
 	}
 
 	.sticker-block__tray :global(.sticker-button) {
