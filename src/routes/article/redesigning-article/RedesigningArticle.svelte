@@ -119,11 +119,15 @@
 					The most previous iteration of this website was a much more simplistic list of articles. I actually wrote stuff back then. It was all a custom rolled microframework that rendered all sorts of markdown and configuration files. I honestly didn't hate it. I feel like rolling your own framework is the kind of trite, eternal toiling they speak of in the The Old Testament.
 				</p>
 				<p>
+					This site is Sveltekit and some threejs. I will probably have to defend my usage of standard CSS. I think it's good. I'd pick tailwind for a team of 2 or more, but enough of the modern css features are ergonomically annoying to express that I'd rather use css here. I think the problem is that once you're writing css, everything can get really fragmented and deliver bloat.
+				</p>
+				<p>
 					Anywho, this website should feel like I have too many ideas. I think that's both a weapon and a liability in the age of AI. Restraint is a virtue. At the same time, I think we are entering an era of fun. We need to evolve past the sick stagnation of the corporate Memphis era. I think we got to be more destined than that.
 				</p>
 				<p>
-					I kind of think some people will hate the AI generated art on here. A lot of it is my own art, or art I fed into AI and mangled to my heart's content.
+					I kind of think some people will hate the AI generated art on here. A lot of it is my own art, or art I fed into AI and mangled to my heart's content. I kind of like the give and take here, I think it's a central thesis in some way to how I wanted to make this website.
 				</p>
+				
 			</div>
 		</div>
 	</article>

@@ -22,3 +22,7 @@ codebase
 - isn't pure slopium Z
 - shills my projects ig
 
+building out more bs
+
+- anything that isn't ready for prime time should be hideable
+
