@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { asset } from '$app/paths';
+	import { achievementsStore } from '$lib/stores/achievementsStore.svelte';
 	import { onMount } from 'svelte';
 
 	type Pokemon = {
@@ -128,13 +129,20 @@
 		const cry = button.querySelector<HTMLAudioElement>('[data-pokemon-cry]');
 
 		if (!cry) {
-			return;
+			return false;
 		}
 
 		activeCry?.pause();
 		activeCry = cry;
 		cry.currentTime = 0;
 		void cry.play().catch(() => {});
+		return true;
+	}
+
+	function rewardPokemonProfessorSticker() {
+		achievementsStore.unlock('pokemon-professor', {
+			animateIfPriorUnlocks: true
+		});
 	}
 
 	async function fetchPokemonDetails(id: number): Promise<PokemonDetails> {
@@ -187,7 +195,10 @@
 
 	function activatePokemon(id: number, button: HTMLButtonElement) {
 		void selectPokemon(id);
-		playPokemonCry(button);
+
+		if (playPokemonCry(button)) {
+			rewardPokemonProfessorSticker();
+		}
 	}
 
 	onMount(() => {

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
+	import { achievementsStore } from '$lib/stores/achievementsStore.svelte';
 
 	type BasicColor = {
 		name: string;
@@ -87,6 +88,10 @@
 
 	function handleSubmitArt() {
 		if (isPeeling) return;
+
+		achievementsStore.unlock('doodle-artist', {
+			animateIfPriorUnlocks: true
+		});
 
 		clearPeelCompletionTimer();
 		isPeeling = true;

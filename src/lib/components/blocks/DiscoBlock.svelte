@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { achievementsStore } from '$lib/stores/achievementsStore.svelte';
+
 	type LightBeam = {
 		baseAngle: number;
 		brightness: number;
@@ -371,6 +373,10 @@
 		}
 
 		function handleClick(event: PointerEvent) {
+			achievementsStore.unlock('boogie-all-night-long', {
+				animateIfPriorUnlocks: true
+			});
+
 			const x = event.clientX - containerBounds.left;
 			const y = event.clientY - containerBounds.top;
 			discoBalls = [
