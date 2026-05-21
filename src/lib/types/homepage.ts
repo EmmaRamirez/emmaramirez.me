@@ -4,6 +4,7 @@ export type HomepageBlockKind =
 	| 'doodle'
 	| 'decorative'
 	| 'empty'
+	| 'gallery'
 	| 'home'
 	| 'houston'
 	| 'pokemon'

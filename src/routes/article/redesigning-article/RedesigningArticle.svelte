@@ -109,9 +109,21 @@
 			</header>
 
 			<div class="redesigning__article-body">
-				Redesigning things is fun. It's basically the easiest way to achieve literally nothing while feeling amazing about it.
-
-				I've been redesiging my personal website since December after deciding I was better off succumbing to my AI psychosis and shitting out tokens into the ether.
+				<p>
+					Redesigning things is fun. It's basically the easiest way to achieve literally nothing while feeling amazing about it.
+				</p>
+				<p>
+					I've been redesiging my personal website since December. AI has given my ADHD too much power, honestly. I redesigned it dozens of times, I tweaked every thing every day for an eternity.
+				</p>
+				<p>
+					The most previous iteration of this website was a much more simplistic list of articles. I actually wrote stuff back then. It was all a custom rolled microframework that rendered all sorts of markdown and configuration files. I honestly didn't hate it. I feel like rolling your own framework is the kind of trite, eternal toiling they speak of in the The Old Testament.
+				</p>
+				<p>
+					Anywho, this website should feel like I have too many ideas. I think that's both a weapon and a liability in the age of AI. Restraint is a virtue. At the same time, I think we are entering an era of fun. We need to evolve past the sick stagnation of the corporate Memphis era. I think we got to be more destined than that.
+				</p>
+				<p>
+					I kind of think some people will hate the AI generated art on here. A lot of it is my own art, or art I fed into AI and mangled to my heart's content.
+				</p>
 			</div>
 		</div>
 	</article>
@@ -464,12 +476,15 @@
 	.redesigning__page-column {
 		position: absolute;
 		z-index: 6;
-		top: clamp(6rem, 14vh, 8rem);
-		width: clamp(7.5rem, 12vw, 10rem);
-		height: clamp(24rem, 56vh, 34rem);
+		top: 50%;
+		width: clamp(5rem, 6vw, 6.5rem);
+		aspect-ratio: 5 / 18;
+		height: auto;
+		overflow: hidden;
 		pointer-events: none;
 		opacity: 0.72;
 		filter: drop-shadow(0 2rem 2.4rem rgba(52, 34, 12, 0.22));
+		transform: translateY(-50%);
 	}
 
 	.redesigning__page-column--left {
@@ -572,6 +587,10 @@
 		line-height: 1.8;
 	}
 
+	.redesigning__article-body p {
+		margin: 0;
+	}
+
 	@media (min-width: 48rem) {
 		.redesigning--tile {
 			grid-column: span 3;
@@ -585,9 +604,7 @@
 		}
 
 		.redesigning__page-column {
-			top: clamp(5rem, 12vh, 6rem);
-			width: clamp(5.5rem, 20vw, 7rem);
-			height: clamp(20rem, 50vh, 26rem);
+			width: clamp(4rem, 12vw, 5rem);
 			opacity: 0.2;
 			filter: blur(0.5px) saturate(0.8);
 		}

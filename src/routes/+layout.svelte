@@ -15,6 +15,7 @@
 
 	let { children } = $props();
 	const isHomeRoute = $derived(page.url.pathname === '/');
+	const isEditorRoute = $derived(page.url.pathname.startsWith('/editor'));
 
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
 	injectSpeedInsights();
@@ -55,6 +56,9 @@
 	<HeaderLogo />
 	<HeaderNav>
 		<HeaderNavItem href="/" active={isHomeRoute}>Home</HeaderNavItem>
+		{#if dev}
+			<HeaderNavItem href="/editor" active={isEditorRoute}>Editor</HeaderNavItem>
+		{/if}
 		<ThemeToggle class="ml-2" />
 	</HeaderNav>
 </Header>

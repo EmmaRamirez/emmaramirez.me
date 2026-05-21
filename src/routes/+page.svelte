@@ -2,6 +2,7 @@
 	import AchievementBlock from '$lib/components/blocks/AchievementBlock.svelte';
 	import DiscoBlock from '$lib/components/blocks/DiscoBlock.svelte';
 	import DoodleBlock from '$lib/components/blocks/DoodleBlock.svelte';
+	import GalleryBlock from '$lib/components/blocks/GalleryBlock.svelte';
 	import HoustonBlock from '$lib/components/blocks/HoustonBlock.svelte';
 	import PokemonBlock from '$lib/components/blocks/PokemonBlock.svelte';
 	import StickerBlock from '$lib/components/blocks/StickerBlock.svelte';
@@ -77,7 +78,7 @@
 						caption={block.settings.caption}
 					/>
 				{:else if block.kind === 'decorative'}
-					<div class="home-grid__decorative-card" aria-hidden="true"></div>
+					<div class="home-grid__decorative-card" aria-hidden="true">quote of the month</div>
 				{:else if block.kind === 'empty'}
 					<div class="home-grid__empty-card" aria-hidden="true">FREE SPACE</div>
 				{:else if block.kind === 'pokemon'}
@@ -92,6 +93,8 @@
 					<AchievementBlock class={getContentClass(block)} />
 				{:else if block.kind === 'wide-background'}
 					<WideBackgroundBlock class={getContentClass(block)} />
+				{:else if block.kind === 'gallery'}
+					<GalleryBlock class={getContentClass(block)} />
 				{/if}
 			</svelte:element>
 		{/each}
@@ -140,6 +143,8 @@
 	}
 
 	.home-grid__decorative-card {
+		display: grid;
+		place-items: center;
 		height: 100%;
 		min-height: inherit;
 		border-radius: inherit;

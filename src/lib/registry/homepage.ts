@@ -223,5 +223,23 @@ export const homepageBlocks: HomepageBlock[] = [
 		settings: {
 			decorative: true
 		}
+	},
+	{
+		id: 'gallery',
+		kind: 'gallery',
+		layout: {
+			desktop: {
+				columnStart: 1,
+				columnSpan: 2,
+				rowStart: 8,
+				rowSpan: 1
+			},
+			minHeight: '100%',
+			mobileMinHeight: 'min(22rem, calc(100vw - 2rem))'
+		},
+		settings: {
+			ariaLabel: 'The Gallery',
+			labelledBy: 'gallery-block-heading'
+		}
 	}
 ];
