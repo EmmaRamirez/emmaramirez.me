@@ -1,5 +1,9 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import AchievementBlock from '$lib/components/blocks/AchievementBlock.svelte';
+	import AchievementInterlude from '$lib/components/blocks/AchievementInterlude.svelte';
+	import ComponentLibraryBlock from '$lib/components/blocks/ComponentLibraryBlock.svelte';
+	import ComponentLibraryOverlay from '$lib/components/blocks/ComponentLibraryOverlay.svelte';
 	import DiscoBlock from '$lib/components/blocks/DiscoBlock.svelte';
 	import DoodleBlock from '$lib/components/blocks/DoodleBlock.svelte';
 	import GalleryBlock from '$lib/components/blocks/GalleryBlock.svelte';
@@ -7,12 +11,23 @@
 	import PokemonBlock from '$lib/components/blocks/PokemonBlock.svelte';
 	import StickerBlock from '$lib/components/blocks/StickerBlock.svelte';
 	import WelcomeInternetBlock from '$lib/components/blocks/WelcomeInternetBlock.svelte';
-	import WideBackgroundBlock from '$lib/components/blocks/WideBackgroundBlock.svelte';
+	import ChangelogBlock from '$lib/components/blocks/ChangelogBlock.svelte';
 	import HomeBlock from '$lib/components/blocks/site/HomeBlock.svelte';
-	import { homepageBlocks } from '$lib/registry/homepage';
+	import { achievementsStore } from '$lib/stores/achievementsStore.svelte';
+	import { homepageBlocksStore } from '$lib/stores/homepageBlocksStore.svelte';
 	import type { HomepageBlock, HomepageBlockPlacement } from '$lib/types/homepage';
 	import RedesigningArticle from './article/redesigning-article/RedesigningArticle.svelte';
 	import ThreeMoatsArticle from './article/the-three-moats/ThreeMoatsArticle.svelte';
+
+	onMount(() => {
+		achievementsStore.init();
+		homepageBlocksStore.init();
+	});
+
+	const visibleBlocks = $derived.by(() => {
+		const hidden = homepageBlocksStore.hiddenIds;
+		return homepageBlocksStore.getBlocksInDisplayOrder().filter((block) => !hidden.has(block.id));
+	});
 
 	function getGridLine({ columnSpan, columnStart }: HomepageBlockPlacement) {
 		return columnStart && columnStart !== 'auto'
@@ -44,7 +59,7 @@
 
 <section class="home-page" aria-label="Homepage highlights">
 	<div class="home-grid">
-		{#each homepageBlocks as block (block.id)}
+		{#each visibleBlocks as block (block.id)}
 			<svelte:element
 				this={getBlockElement(block)}
 				class={['home-grid__block', block.settings?.className]}
@@ -58,9 +73,6 @@
 				style:--home-block-min-height={block.layout.minHeight ?? 'auto'}
 				style:--home-block-mobile-min-height={block.layout.mobileMinHeight ?? 'auto'}
 				style:--home-block-overflow={block.layout.overflow ?? 'hidden'}
-				style:--home-block-background-color={block.kind === 'decorative'
-					? block.settings.backgroundColor
-					: undefined}
 			>
 				{#if block.kind === 'welcome-internet'}
 					<WelcomeInternetBlock class={getContentClass(block)} />
@@ -77,10 +89,17 @@
 						alt={block.settings.alt}
 						caption={block.settings.caption}
 					/>
-				{:else if block.kind === 'decorative'}
-					<div class="home-grid__decorative-card" aria-hidden="true">quote of the month</div>
+				{:else if block.kind === 'component-library'}
+					<ComponentLibraryBlock
+						blockId={block.id}
+						class={getContentClass(block)}
+						backgroundColor={block.settings.backgroundColor}
+						ariaLabel={block.settings.ariaLabel}
+					/>
 				{:else if block.kind === 'empty'}
 					<div class="home-grid__empty-card" aria-hidden="true">FREE SPACE</div>
+				{:else if block.kind === 'spacer'}
+					<div class="home-grid__spacer" aria-hidden="true"></div>
 				{:else if block.kind === 'pokemon'}
 					<PokemonBlock class={getContentClass(block)} />
 				{:else if block.kind === 'houston'}
@@ -91,14 +110,23 @@
 					<StickerBlock class={getContentClass(block)} />
 				{:else if block.kind === 'achievement'}
 					<AchievementBlock class={getContentClass(block)} />
-				{:else if block.kind === 'wide-background'}
-					<WideBackgroundBlock class={getContentClass(block)} />
+				{:else if block.kind === 'changelog'}
+					<ChangelogBlock class={getContentClass(block)} />
 				{:else if block.kind === 'gallery'}
 					<GalleryBlock class={getContentClass(block)} />
 				{/if}
 			</svelte:element>
 		{/each}
 	</div>
+
+	<ComponentLibraryOverlay />
+
+	{#if achievementsStore.activeInterlude}
+		<AchievementInterlude
+			achievementName={achievementsStore.getName(achievementsStore.activeInterlude.id)}
+			interludeKey={achievementsStore.activeInterlude.key}
+		/>
+	{/if}
 </section>
 
 <style>
@@ -106,6 +134,7 @@
 		width: min(100%, 72rem);
 		margin: 0 auto;
 		padding: 2rem 1rem 4rem;
+		scroll-margin-top: var(--site-header-height, 5rem);
 	}
 
 	.home-grid {
@@ -142,13 +171,9 @@
 		background: var(--card-bg);
 	}
 
-	.home-grid__decorative-card {
-		display: grid;
-		place-items: center;
+	.home-grid__spacer {
 		height: 100%;
 		min-height: inherit;
-		border-radius: inherit;
-		background-color: var(--home-block-background-color);
 	}
 
 	@media (min-width: 48rem) {

@@ -100,7 +100,7 @@ export const homepageBlocks: HomepageBlock[] = [
 	},
 	{
 		id: 'pokemon-color-one',
-		kind: 'decorative',
+		kind: 'component-library',
 		layout: {
 			desktop: {
 				columnStart: 4,
@@ -112,13 +112,13 @@ export const homepageBlocks: HomepageBlock[] = [
 			mobileMinHeight: 'min(16rem, calc(100vw - 2rem))'
 		},
 		settings: {
-			backgroundColor: 'var(--light-rose-500)',
-			decorative: true
+			ariaLabel: 'Browse the component library',
+			backgroundColor: 'var(--light-rose-500)'
 		}
 	},
 	{
 		id: 'pokemon-color-two',
-		kind: 'decorative',
+		kind: 'spacer',
 		layout: {
 			desktop: {
 				columnStart: 4,
@@ -130,7 +130,6 @@ export const homepageBlocks: HomepageBlock[] = [
 			mobileMinHeight: 'min(16rem, calc(100vw - 2rem))'
 		},
 		settings: {
-			backgroundColor: 'var(--magic-mint-500)',
 			decorative: true
 		}
 	},
@@ -209,19 +208,19 @@ export const homepageBlocks: HomepageBlock[] = [
 		}
 	},
 	{
-		id: 'wide-background',
-		kind: 'wide-background',
+		id: 'changelog',
+		kind: 'changelog',
 		layout: {
 			desktop: {
 				columnStart: 3,
-				columnSpan: 2,
+				columnSpan: 1,
 				rowStart: 7,
-				rowSpan: 1
+				rowSpan: 4
 			},
 			mobileMinHeight: 'min(20rem, calc(80vw - 2rem))'
 		},
 		settings: {
-			decorative: true
+			ariaLabel: 'Recent project changelog'
 		}
 	},
 	{

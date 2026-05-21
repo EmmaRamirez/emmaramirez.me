@@ -2,20 +2,21 @@ export type HomepageBlockKind =
 	| 'achievement'
 	| 'disco'
 	| 'doodle'
-	| 'decorative'
+	| 'component-library'
 	| 'empty'
 	| 'gallery'
 	| 'home'
 	| 'houston'
 	| 'pokemon'
 	| 'redesigning-article'
+	| 'spacer'
 	| 'sticker'
 	| 'three-moats-article'
-	| 'wide-background'
+	| 'changelog'
 	| 'welcome-internet';
 
 export type HomepageGridColumnSpan = 1 | 2 | 3 | 4;
-export type HomepageGridRowSpan = 1 | 2;
+export type HomepageGridRowSpan = 1 | 2 | 4;
 export type HomepageGridLine = 'auto' | number;
 
 export interface HomepageBlockPlacement {
@@ -56,17 +57,17 @@ export interface HomepageDiscoBlock extends HomepageBaseBlock {
 	};
 }
 
-export interface HomepageDecorativeBlock extends HomepageBaseBlock {
-	kind: 'decorative';
+export interface HomepageComponentLibraryBlock extends HomepageBaseBlock {
+	kind: 'component-library';
 	settings: HomepageBlockSettings & {
+		ariaLabel: string;
 		backgroundColor: string;
-		decorative: true;
 	};
 }
 
 export type HomepageBlock =
 	| HomepageDiscoBlock
-	| HomepageDecorativeBlock
+	| HomepageComponentLibraryBlock
 	| (HomepageBaseBlock & {
-			kind: Exclude<HomepageBlockKind, 'decorative' | 'disco'>;
+			kind: Exclude<HomepageBlockKind, 'component-library' | 'disco'>;
 	  });
