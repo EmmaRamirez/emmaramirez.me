@@ -1,12 +1,12 @@
 <script lang="ts">
 	import '../app.css';
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
 	import { theme } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { fade } from 'svelte/transition';
+	import { asset } from '$app/paths';
 	import { page } from '$app/state';
 	import StickerLayer from '$lib/components/stickers/StickerLayer.svelte';
 	import { Header, HeaderLogo, HeaderNav, HeaderNavItem } from '$lib/components/ui/header';
@@ -26,7 +26,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" type="image/png" href={asset('/favicon.png')} />
 	<script>
 		(function () {
 			const settingsKey = 'emzinnia:user-settings';

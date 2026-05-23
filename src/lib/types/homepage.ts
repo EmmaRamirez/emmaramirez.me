@@ -1,5 +1,6 @@
 export type HomepageBlockKind =
 	| 'achievement'
+	| 'artwork'
 	| 'disco'
 	| 'doodle'
 	| 'component-library'
@@ -57,6 +58,15 @@ export interface HomepageDiscoBlock extends HomepageBaseBlock {
 	};
 }
 
+export interface HomepageArtworkBlock extends HomepageBaseBlock {
+	kind: 'artwork';
+	settings: HomepageBlockSettings & {
+		alt: string;
+		image: string;
+		title: string;
+	};
+}
+
 export interface HomepageComponentLibraryBlock extends HomepageBaseBlock {
 	kind: 'component-library';
 	settings: HomepageBlockSettings & {
@@ -67,7 +77,8 @@ export interface HomepageComponentLibraryBlock extends HomepageBaseBlock {
 
 export type HomepageBlock =
 	| HomepageDiscoBlock
+	| HomepageArtworkBlock
 	| HomepageComponentLibraryBlock
 	| (HomepageBaseBlock & {
-			kind: Exclude<HomepageBlockKind, 'component-library' | 'disco'>;
+			kind: Exclude<HomepageBlockKind, 'artwork' | 'component-library' | 'disco'>;
 	  });

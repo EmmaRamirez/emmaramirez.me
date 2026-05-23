@@ -3,6 +3,7 @@ import type { HomepageBlock, HomepageBlockKind, HomepageGridLine } from '$lib/ty
 
 const homepageBlockLabels: Record<HomepageBlockKind, string> = {
 	'welcome-internet': 'Welcome to the Internet',
+	artwork: 'Artwork',
 	home: 'Home',
 	'redesigning-article': 'Redesigning Article',
 	disco: 'Disco',

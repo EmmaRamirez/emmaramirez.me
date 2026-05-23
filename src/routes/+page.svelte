@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import AchievementBlock from '$lib/components/blocks/AchievementBlock.svelte';
 	import AchievementInterlude from '$lib/components/blocks/AchievementInterlude.svelte';
+	import ArtworkBlock from '$lib/components/blocks/ArtworkBlock.svelte';
 	import ComponentLibraryBlock from '$lib/components/blocks/ComponentLibraryBlock.svelte';
 	import ComponentLibraryOverlay from '$lib/components/blocks/ComponentLibraryOverlay.svelte';
 	import DiscoBlock from '$lib/components/blocks/DiscoBlock.svelte';
@@ -114,6 +115,13 @@
 					<ChangelogBlock class={getContentClass(block)} />
 				{:else if block.kind === 'gallery'}
 					<GalleryBlock class={getContentClass(block)} />
+				{:else if block.kind === 'artwork'}
+					<ArtworkBlock
+						class={getContentClass(block)}
+						image={block.settings.image}
+						alt={block.settings.alt}
+						title={block.settings.title}
+					/>
 				{/if}
 			</svelte:element>
 		{/each}

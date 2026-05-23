@@ -14,37 +14,21 @@ function mountDesignSystemBrowser(props: {
 }
 
 describe('DesignSystemBrowser', () => {
-	it('opens a detailed view for documented components', async () => {
+	it('renders the popup chrome with a blank workspace', async () => {
 		mountDesignSystemBrowser({ open: true, inline: true });
 
-		await page.getByRole('tab', { name: 'Components' }).click();
-		await page.getByRole('button', { name: 'View Container details' }).click();
-
-		await expect.element(page.getByRole('heading', { name: 'Container' })).toBeVisible();
 		await expect
-			.element(page.getByText('Constrains page width and horizontal padding for readable layouts.'))
+			.element(page.getByRole('heading', { name: 'EMZINNIA Design System' }))
 			.toBeVisible();
-		await expect.element(page.getByText('$lib/components/ui/Container.svelte')).toBeVisible();
-		await expect.element(page.getByText('Controls horizontal gutter spacing.')).toBeVisible();
+		await expect.element(page.getByLabelText('Design system workspace')).toBeVisible();
+		await expect.element(page.getByRole('tab', { name: 'Overview' })).not.toBeInTheDocument();
+		await expect.element(page.getByText('Featured Components')).not.toBeInTheDocument();
 	});
 
-	it('closes detail before closing the explorer on Escape', async () => {
+	it('closes the browser on Escape', async () => {
 		const onclose = vi.fn();
 
 		mountDesignSystemBrowser({ open: true, inline: true, onclose });
-
-		await page.getByRole('tab', { name: 'Components' }).click();
-		await page.getByRole('button', { name: 'View Button details' }).click();
-
-		await expect.element(page.getByRole('button', { name: 'Close details' })).toBeVisible();
-		await expect.element(page.getByText('Documentation status')).toBeVisible();
-
-		window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-
-		await expect
-			.element(page.getByRole('button', { name: 'Close details' }))
-			.not.toBeInTheDocument();
-		expect(onclose).not.toHaveBeenCalled();
 
 		window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
 
