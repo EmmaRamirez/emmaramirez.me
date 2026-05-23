@@ -1,8 +1,21 @@
 {
-	"mcpServers": {
-		"svelte": {
-			"command": "npx",
-			"args": ["-y", "@sveltejs/mcp"]
-		}
-	}
+  "mcpServers": {
+    "svelte": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@sveltejs/mcp"
+      ]
+    },
+    "codegraph": {
+      "type": "stdio",
+      "command": "codegraph",
+      "args": [
+        "serve",
+        "--mcp",
+        "--path",
+        "/Users/emma/Code/emzinnia.dev"
+      ]
+    }
+  }
 }

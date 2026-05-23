@@ -127,7 +127,9 @@
 				<p>
 					I kind of think some people will hate the AI generated art on here. A lot of it is my own art, or art I fed into AI and mangled to my heart's content. I kind of like the give and take here, I think it's a central thesis in some way to how I wanted to make this website.
 				</p>
-				
+				<p>
+					
+				</p>
 			</div>
 		</div>
 	</article>

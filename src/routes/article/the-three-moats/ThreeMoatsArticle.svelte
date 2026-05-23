@@ -424,6 +424,8 @@
 	}
 
 	.three-moats--page {
+		--moats-measure: min(100%, 38rem);
+
 		display: grid;
 		min-height: 100vh;
 		place-items: center;
@@ -459,9 +461,10 @@
 		position: relative;
 		z-index: 2;
 		display: grid;
-		width: min(100%, 58rem);
-		gap: clamp(2rem, 5vw, 3.8rem);
-		padding: clamp(1.5rem, 5vw, 4.8rem);
+		justify-items: center;
+		width: min(100%, calc(var(--moats-measure) + clamp(2.5rem, 7vw, 6rem)));
+		gap: clamp(1.75rem, 4vw, 2.75rem);
+		padding: clamp(2rem, 5vw, 3.5rem);
 		background: color-mix(in srgb, var(--card-bg) 88%, transparent);
 		border: 1px solid color-mix(in srgb, var(--border-color) 68%, transparent);
 		border-radius: 1.5rem;
@@ -471,23 +474,30 @@
 		backdrop-filter: blur(14px);
 	}
 
+	.three-moats--page .three-moats__page-header {
+		width: var(--moats-measure);
+		gap: clamp(0.75rem, 1.8vw, 1.1rem);
+	}
+
 	.three-moats--page h1 {
-		max-width: 12ch;
-		font-size: clamp(3rem, 9vw, 7rem);
-		line-height: 0.88;
+		max-width: none;
+		width: 100%;
+		font-size: clamp(2.35rem, 6vw, 4.75rem);
+		line-height: 0.94;
 		text-align: center;
 	}
 
 	.three-moats--page .three-moats__subtitle {
-		font-size: clamp(1.05rem, 2.2vw, 1.45rem);
-		line-height: 1.45;
+		max-width: none;
+		width: 100%;
+		font-size: clamp(1rem, 2vw, 1.32rem);
+		line-height: 1.5;
 	}
 
 	.three-moats__body {
 		display: grid;
-		max-width: 42rem;
-		gap: 1.2rem;
-		margin: 0 auto;
+		width: var(--moats-measure);
+		gap: 1.1rem;
 		color: color-mix(in srgb, var(--moats-ink) 84%, var(--moats-blue));
 		font-size: clamp(1rem, 1.55vw, 1.18rem);
 		line-height: 1.85;

@@ -240,5 +240,59 @@ export const homepageBlocks: HomepageBlock[] = [
 			ariaLabel: 'The Gallery',
 			labelledBy: 'gallery-block-heading'
 		}
+	},
+	{
+		id: 'empty-one',
+		kind: 'empty',
+		layout: {
+			desktop: {
+				columnStart: 4,
+				columnSpan: 1,
+				rowStart: 7,
+				rowSpan: 1
+			},
+			minHeight: '100%',
+			mobileMinHeight: 'min(16rem, calc(100vw - 2rem))'
+		},
+		settings: {
+			className: 'home-grid__block--empty',
+			decorative: true
+		}
+	},
+	{
+		id: 'empty-two',
+		kind: 'empty',
+		layout: {
+			desktop: {
+				columnStart: 4,
+				columnSpan: 1,
+				rowStart: 8,
+				rowSpan: 1
+			},
+			minHeight: '100%',
+			mobileMinHeight: 'min(16rem, calc(100vw - 2rem))'
+		},
+		settings: {
+			className: 'home-grid__block--empty',
+			decorative: true
+		}
+	},
+	{
+		id: 'empty-three',
+		kind: 'empty',
+		layout: {
+			desktop: {
+				columnStart: 1,
+				columnSpan: 1,
+				rowStart: 9,
+				rowSpan: 1
+			},
+			minHeight: '100%',
+			mobileMinHeight: 'min(16rem, calc(100vw - 2rem))'
+		},
+		settings: {
+			className: 'home-grid__block--empty',
+			decorative: true
+		}
 	}
 ];

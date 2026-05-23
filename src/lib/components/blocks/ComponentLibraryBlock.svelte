@@ -11,12 +11,12 @@
 	let { ariaLabel, backgroundColor, blockId, class: className = '' }: Props = $props();
 	let rootEl = $state<HTMLButtonElement | null>(null);
 
-	const isHidden = $derived(
+	const isOverlayActive = $derived(
 		componentLibraryStore.isOpen && componentLibraryStore.activeBlockId === blockId
 	);
 
 	function handleClick() {
-		if (!rootEl || componentLibraryStore.isOpen) {
+		if (!rootEl) {
 			return;
 		}
 
@@ -27,7 +27,13 @@
 <button
 	bind:this={rootEl}
 	type="button"
-	class={['component-library-block', className, isHidden && 'component-library-block--hidden']}
+	class={[
+		'component-library-block',
+		className,
+		isOverlayActive && 'component-library-block--inactive'
+	]}
+	aria-hidden={isOverlayActive ? 'true' : undefined}
+	tabindex={isOverlayActive ? -1 : undefined}
 	style:--component-library-bg={backgroundColor}
 	aria-label={ariaLabel}
 	onclick={handleClick}
@@ -68,8 +74,8 @@
 		outline-offset: 3px;
 	}
 
-	.component-library-block--hidden {
-		visibility: hidden;
+	.component-library-block--inactive {
+		pointer-events: none;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
